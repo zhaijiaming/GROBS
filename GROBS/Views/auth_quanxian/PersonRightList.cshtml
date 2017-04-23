@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "个人功能清单";
+    Layout = "~/Views/Shared/EmptyView.cshtml";
+}
+<script type="text/javascript">
+    $(window).load(function () {
+        document.getElementById("myReport").src = "../../reports/ReportNow.aspx?pid=personrights";
+        $("#autoUpdate").show();
+    });
+</script>
+<div id="autoUpdate" style="display:none; overflow-y: auto;background-color:white">
+    <table style="height:100%;width:100%">
+        <tr>
+            <td>
+            </td>
+        </tr>
+        <tr><td class="center"><iframe id="myReport" style="width:830px;height:630px;"></iframe></td></tr>
+    </table>
+</div>
+

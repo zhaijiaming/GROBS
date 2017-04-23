@@ -1,0 +1,855 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props" Condition="Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" />
+  <Import Project="..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{31A9C73B-5CCB-4206-816B-30FAFFFD5B46}</ProjectGuid>
+    <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GROBS</RootNamespace>
+    <AssemblyName>GROBS</AssemblyName>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>true</UseIISExpress>
+    <IISExpressSSLPort />
+    <IISExpressAnonymousAuthentication />
+    <IISExpressWindowsAuthentication />
+    <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ExcludeGeneratedDebugSymbol>false</ExcludeGeneratedDebugSymbol>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="GROBS.BSL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\GROBS.BSL.dll</HintPath>
+    </Reference>
+    <Reference Include="GROBS.Common, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\GROBS.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="GROBS.DAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\GROBS.DAL.dll</HintPath>
+    </Reference>
+    <Reference Include="GROBS.EFModels, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\GROBS.EFModels.dll</HintPath>
+    </Reference>
+    <Reference Include="GROBS.IBSL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\GROBS.IBSL.dll</HintPath>
+    </Reference>
+    <Reference Include="GROBS.IDAL, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Dlls\GROBS.IDAL.dll</HintPath>
+    </Reference>
+    <Reference Include="log4net, Version=1.2.15.0, Culture=neutral, PublicKeyToken=669e0ddf0bb1aa2a, processorArchitecture=MSIL">
+      <HintPath>..\packages\log4net.2.0.5\lib\net45-full\log4net.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Agent.Intercept, Version=1.2.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Agent.Intercept.1.2.1\lib\net45\Microsoft.AI.Agent.Intercept.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.DependencyCollector, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.DependencyCollector.2.1.0\lib\net45\Microsoft.AI.DependencyCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.PerfCounterCollector, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.PerfCounterCollector.2.1.0\lib\net45\Microsoft.AI.PerfCounterCollector.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.ServerTelemetryChannel, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.TelemetryChannel.2.1.0\lib\net45\Microsoft.AI.ServerTelemetryChannel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Web.2.1.0\lib\net45\Microsoft.AI.Web.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.AI.WindowsServer, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.WindowsServer.2.1.0\lib\net45\Microsoft.AI.WindowsServer.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.2.1.0\lib\net45\Microsoft.ApplicationInsights.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.ApplicationInsights.Log4NetAppender, Version=2.1.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ApplicationInsights.Log4NetAppender.2.1.0\lib\net45\Microsoft.ApplicationInsights.Log4NetAppender.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Azure.AppService.ApiApps.Service, Version=0.9.16.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Azure.AppService.ApiApps.Service.0.9.16\lib\net45\Microsoft.Azure.AppService.ApiApps.Service.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="Microsoft.ReportViewer.WebForms, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Microsoft.Threading.Tasks.Extensions.Desktop, Version=1.0.168.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.Bcl.Async.1.0.168\lib\net40\Microsoft.Threading.Tasks.Extensions.Desktop.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.6.9.8\lib\net45\MySql.Data.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="MySql.Data.Entity.EF6, Version=6.9.8.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
+      <HintPath>..\packages\MySql.Data.Entity.6.9.8\lib\net45\MySql.Data.Entity.EF6.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Swashbuckle.Core, Version=1.0.0.0, Culture=neutral, PublicKeyToken=cd1bb07a5ac7c7bc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Swashbuckle.Core.5.0.0\lib\net40\Swashbuckle.Core.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.IdentityModel.Tokens.Jwt, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.IdentityModel.Tokens.Jwt.4.0.0\lib\net45\System.IdentityModel.Tokens.Jwt.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http.Formatting, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Client.5.2.3\lib\net45\System.Net.Http.Formatting.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Web.Http, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.Core.5.2.3\lib\net45\System.Web.Http.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Web.Http.WebHost, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.AspNet.WebApi.WebHost.5.2.3\lib\net45\System.Web.Http.WebHost.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="Microsoft.Web.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.Web.Infrastructure.1.0.0.0\lib\net40\Microsoft.Web.Infrastructure.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Net.Http">
+    </Reference>
+    <Reference Include="System.Net.Http.WebRequest">
+    </Reference>
+    <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.Helpers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Mvc, Version=5.2.3.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Mvc.5.2.3\lib\net45\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Optimization">
+      <HintPath>..\packages\Microsoft.AspNet.Web.Optimization.1.1.3\lib\net40\System.Web.Optimization.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.Razor.3.2.3\lib\net45\System.Web.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Deployment, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Deployment.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Web.WebPages.Razor, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\packages\Microsoft.AspNet.WebPages.3.2.3\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
+    </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>..\packages\WebActivatorEx.2.0.6\lib\net40\WebActivatorEx.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="WebGrease">
+      <Private>True</Private>
+      <HintPath>..\packages\WebGrease.1.5.2\lib\WebGrease.dll</HintPath>
+    </Reference>
+    <Reference Include="Antlr3.Runtime">
+      <Private>True</Private>
+      <HintPath>..\packages\Antlr.3.4.1.9004\lib\Antlr3.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="X.PagedList, Version=5.1.0.33787, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\X.PagedList.5.1.0.5000\lib\portable-net45+wp8+win8\X.PagedList.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="X.PagedList.Mvc, Version=5.1.0.33787, Culture=neutral, PublicKeyToken=abbb863e9397c5e1, processorArchitecture=MSIL">
+      <HintPath>..\packages\X.PagedList.Mvc.5.1.0.5000\lib\net45\X.PagedList.Mvc.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\packages\Newtonsoft.Json.6.0.4\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="EntityFramework.SqlServer">
+      <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Core.2.2.1\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Owin">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.Owin.2.2.1\lib\net45\Microsoft.AspNet.Identity.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.EntityFramework">
+      <HintPath>..\packages\Microsoft.AspNet.Identity.EntityFramework.2.2.1\lib\net45\Microsoft.AspNet.Identity.EntityFramework.dll</HintPath>
+    </Reference>
+    <Reference Include="Owin">
+      <HintPath>..\packages\Owin.1.0\lib\net40\Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin">
+      <HintPath>..\packages\Microsoft.Owin.3.0.1\lib\net45\Microsoft.Owin.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Host.SystemWeb">
+      <HintPath>..\packages\Microsoft.Owin.Host.SystemWeb.3.0.1\lib\net45\Microsoft.Owin.Host.SystemWeb.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security">
+      <HintPath>..\packages\Microsoft.Owin.Security.3.0.1\lib\net45\Microsoft.Owin.Security.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Facebook">
+      <HintPath>..\packages\Microsoft.Owin.Security.Facebook.3.0.1\lib\net45\Microsoft.Owin.Security.Facebook.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Cookies">
+      <HintPath>..\packages\Microsoft.Owin.Security.Cookies.3.0.1\lib\net45\Microsoft.Owin.Security.Cookies.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.OAuth">
+      <HintPath>..\packages\Microsoft.Owin.Security.OAuth.3.0.1\lib\net45\Microsoft.Owin.Security.OAuth.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Google">
+      <HintPath>..\packages\Microsoft.Owin.Security.Google.3.0.1\lib\net45\Microsoft.Owin.Security.Google.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.Twitter">
+      <HintPath>..\packages\Microsoft.Owin.Security.Twitter.3.0.1\lib\net45\Microsoft.Owin.Security.Twitter.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Owin.Security.MicrosoftAccount">
+      <HintPath>..\packages\Microsoft.Owin.Security.MicrosoftAccount.3.0.1\lib\net45\Microsoft.Owin.Security.MicrosoftAccount.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Common\BarcodeRead.cs" />
+    <Compile Include="Common\ExportNow.cs" />
+    <Compile Include="Common\PageMenu.cs" />
+    <Compile Include="Controllers\auth_gongsiController.cs" />
+    <Compile Include="Controllers\auth_kehuController.cs" />
+    <Compile Include="Controllers\base_bumenController.cs" />
+    <Compile Include="Controllers\base_feiyongxmController.cs" />
+    <Compile Include="Controllers\base_huobiController.cs" />
+    <Compile Include="Controllers\base_quyuController.cs" />
+    <Compile Include="Controllers\base_shangpinjgController.cs" />
+    <Compile Include="Controllers\base_taobaoController.cs" />
+    <Compile Include="Controllers\base_taobaospController.cs" />
+    <Compile Include="Controllers\base_yunshugsController.cs" />
+    <Compile Include="Controllers\base_zhucezhengjlController.cs" />
+    <Compile Include="Controllers\ord_dingdanController.cs" />
+    <Compile Include="Controllers\ord_dingdanmxController.cs" />
+    <Compile Include="Controllers\ord_fanliController.cs" />
+    <Compile Include="Controllers\ord_jixiaoController.cs" />
+    <Compile Include="Controllers\ord_xiaoshouController.cs" />
+    <Compile Include="Controllers\ord_xiaoshoumxController.cs" />
+    <Compile Include="Controllers\rmd_myreminderController.cs" />
+    <Compile Include="Models\auth_gongsiViewModel.cs" />
+    <Compile Include="Models\auth_kehuViewModel.cs" />
+    <Compile Include="Models\base_bumenViewModel.cs" />
+    <Compile Include="Models\base_feiyongxmViewModel.cs" />
+    <Compile Include="Models\base_huobiViewModel.cs" />
+    <Compile Include="Models\base_kaipiaoxxViewModel.cs" />
+    <Compile Include="Models\base_quyuViewModel.cs" />
+    <Compile Include="Models\base_shangpinjgViewModel.cs" />
+    <Compile Include="Models\base_taobaospViewModel.cs" />
+    <Compile Include="Models\base_taobaoViewModel.cs" />
+    <Compile Include="Models\base_yunshugsViewModel.cs" />
+    <Compile Include="Models\base_zhucezhengjlViewModel.cs" />
+    <Compile Include="Models\ord_dingdanmxViewModel.cs" />
+    <Compile Include="Models\ord_dingdanViewModel.cs" />
+    <Compile Include="Models\ord_fanliViewModel.cs" />
+    <Compile Include="Models\ord_jixiaoViewModel.cs" />
+    <Compile Include="Models\ord_xiaoshoumxViewModel.cs" />
+    <Compile Include="Models\ord_xiaoshouViewModel.cs" />
+    <Compile Include="Models\rmd_myreminderViewModel.cs" />
+    <Compile Include="Models\rmd_remindlistViewModel.cs" />
+    <Compile Include="reports\ReportDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ReportDataSet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="reports\ReportNow.aspx.cs">
+      <DependentUpon>ReportNow.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="reports\ReportNow.aspx.designer.cs">
+      <DependentUpon>ReportNow.aspx</DependentUpon>
+    </Compile>
+    <Content Include="App_Code\HtmlHelperExtensions.cs" />
+    <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\FilterConfig.cs" />
+    <Compile Include="App_Start\IdentityConfig.cs" />
+    <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="App_Code\UrlHelperExtensions.cs" />
+    <Compile Include="App_Start\SwaggerConfig.cs" />
+    <Compile Include="Common\SearchGroup.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\auth_gongnengController.cs" />
+    <Compile Include="Controllers\auth_jueseController.cs" />
+    <Compile Include="Controllers\auth_juesemxController.cs" />
+    <Compile Include="Controllers\auth_quanxianController.cs" />
+    <Compile Include="Controllers\base_chanpinxianController.cs" />
+    <Compile Include="Controllers\base_gongyingshangController.cs" />
+    <Compile Include="Controllers\base_gongyingshouquanController.cs" />
+    <Compile Include="Controllers\base_huozhushouquanController.cs" />
+    <Compile Include="Controllers\base_jiliangdwController.cs" />
+    <Compile Include="Controllers\base_qixiemuluController.cs" />
+    <Compile Include="Controllers\base_renyuanxxController.cs" />
+    <Compile Include="Controllers\base_shangpinxxController.cs" />
+    <Compile Include="Controllers\base_shangpinzczController.cs" />
+    <Compile Include="Controllers\base_shengchanqiyeController.cs" />
+    <Compile Include="Controllers\base_shouhuodanweiController.cs" />
+    <Compile Include="Controllers\base_shouhuomingxiController.cs" />
+    <Compile Include="Controllers\base_weituokehuController.cs" />
+    <Compile Include="Controllers\base_xiaoshouController.cs" />
+    <Compile Include="Controllers\base_yonghuController.cs" />
+    <Compile Include="Controllers\base_zhucezhengggController.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\operatelogController.cs" />
+    <Compile Include="Controllers\searchconditionController.cs" />
+    <Compile Include="Controllers\ServiceController.cs" />
+    <Compile Include="Controllers\UploadController.cs" />
+    <Compile Include="Controllers\userinfoController.cs" />
+    <Compile Include="Filters\YaoAuthorizeAttribute.cs" />
+    <Compile Include="Filters\YaoLog.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\auth_authorizeViewModel.cs" />
+    <Compile Include="Models\auth_gongnengViewModel.cs" />
+    <Compile Include="Models\auth_juesemxViewModel.cs" />
+    <Compile Include="Models\auth_jueseViewModel.cs" />
+    <Compile Include="Models\auth_quanxianViewModel.cs" />
+    <Compile Include="Models\BasePageModel.cs" />
+    <Compile Include="Models\base_chanpinxianViewModel.cs" />
+    <Compile Include="Models\base_gongyingshangViewModel.cs" />
+    <Compile Include="Models\base_gongyingshouquanViewModel.cs" />
+    <Compile Include="Models\base_huozhushouquanViewModel.cs" />
+    <Compile Include="Models\base_jiliangdwViewModel.cs" />
+    <Compile Include="Models\base_qixiemuluViewModel.cs" />
+    <Compile Include="Models\base_renyuanxxViewModel.cs" />
+    <Compile Include="Models\base_shangpinxxViewModel.cs" />
+    <Compile Include="Models\base_shangpinzczViewModel.cs" />
+    <Compile Include="Models\base_shengchanqiyeViewModel.cs" />
+    <Compile Include="Models\base_shouhuodanweiViewModel.cs" />
+    <Compile Include="Models\base_shouhuomingxiViewModel.cs" />
+    <Compile Include="Models\base_shouyingsqViewModel.cs" />
+    <Compile Include="Models\base_weituokehuViewModel.cs" />
+    <Compile Include="Models\base_xiaoshouViewModel.cs" />
+    <Compile Include="Models\base_yonghuViewModel.cs" />
+    <Compile Include="Models\base_zhucezhengggViewModel.cs" />
+    <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\operatelogViewModel.cs" />
+    <Compile Include="Models\SearchConditionModel.cs" />
+    <Compile Include="Models\searchconditionViewModel.cs" />
+    <Compile Include="Models\userinfoViewModel.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Startup.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App_Data\aspnet-CKWMS-20160526025717.mdf" />
+    <Content Include="App_Data\aspnet-CKWMS-20160526025717_log.ldf">
+      <DependentUpon>aspnet-CKWMS-20160526025717.mdf</DependentUpon>
+    </Content>
+    <Content Include="assets\avatars\avatar.png" />
+    <Content Include="assets\avatars\avatar1.png" />
+    <Content Include="assets\avatars\avatar2.png" />
+    <Content Include="assets\avatars\avatar3.png" />
+    <Content Include="assets\avatars\avatar4.png" />
+    <Content Include="assets\avatars\avatar5.png" />
+    <Content Include="assets\avatars\profile-pic.jpg" />
+    <Content Include="assets\avatars\user.jpg" />
+    <Content Include="assets\css\ace-ie.min.css" />
+    <Content Include="assets\css\ace-rtl.min.css" />
+    <Content Include="assets\css\ace-skins.min.css" />
+    <Content Include="assets\css\ace.min.css" />
+    <Content Include="assets\css\bootstrap-editable.css" />
+    <Content Include="assets\css\bootstrap-timepicker.css" />
+    <Content Include="assets\css\bootstrap.min.css" />
+    <Content Include="assets\css\chosen.css" />
+    <Content Include="assets\css\colorbox.css" />
+    <Content Include="assets\css\colorpicker.css" />
+    <Content Include="assets\css\datepicker.css" />
+    <Content Include="assets\css\daterangepicker.css" />
+    <Content Include="assets\css\dropzone.css" />
+    <Content Include="assets\css\font-awesome-ie7.min.css" />
+    <Content Include="assets\css\font-awesome.min.css" />
+    <Content Include="assets\css\fullcalendar.css" />
+    <Content Include="assets\css\images\bg-all.jpg" />
+    <Content Include="assets\css\images\loading.gif" />
+    <Content Include="assets\css\jquery-ui-1.10.3.custom.min.css" />
+    <Content Include="assets\css\jquery-ui-1.10.3.full.min.css" />
+    <Content Include="assets\css\jquery.gritter.css" />
+    <Content Include="assets\css\select2.css" />
+    <Content Include="assets\css\ui.jqgrid.css" />
+    <Content Include="assets\images\gallery\image-1.jpg" />
+    <Content Include="assets\images\gallery\image-2.jpg" />
+    <Content Include="assets\images\gallery\image-3.jpg" />
+    <Content Include="assets\images\gallery\image-4.jpg" />
+    <Content Include="assets\images\gallery\image-5.jpg" />
+    <Content Include="assets\images\gallery\image-6.jpg" />
+    <Content Include="assets\images\gallery\thumb-1.jpg" />
+    <Content Include="assets\images\gallery\thumb-2.jpg" />
+    <Content Include="assets\images\gallery\thumb-3.jpg" />
+    <Content Include="assets\images\gallery\thumb-4.jpg" />
+    <Content Include="assets\images\gallery\thumb-5.jpg" />
+    <Content Include="assets\images\gallery\thumb-6.jpg" />
+    <Content Include="assets\js\ace-elements.min.js" />
+    <Content Include="assets\js\ace-extra.min.js" />
+    <Content Include="assets\js\ace.min.js" />
+    <Content Include="assets\js\additional-methods.min.js" />
+    <Content Include="assets\js\bootbox.min.js" />
+    <Content Include="assets\js\bootstrap-colorpicker.min.js" />
+    <Content Include="assets\js\bootstrap-tag.min.js" />
+    <Content Include="assets\js\bootstrap-wysiwyg.min.js" />
+    <Content Include="assets\js\bootstrap.min.js" />
+    <Content Include="assets\js\chosen.jquery.min.js" />
+    <Content Include="assets\js\date-time\bootstrap-datepicker.min.js" />
+    <Content Include="assets\js\date-time\bootstrap-timepicker.min.js" />
+    <Content Include="assets\js\date-time\daterangepicker.min.js" />
+    <Content Include="assets\js\date-time\moment.min.js" />
+    <Content Include="assets\js\dropzone.min.js" />
+    <Content Include="assets\js\excanvas.min.js" />
+    <Content Include="assets\js\flot\jquery.flot.min.js" />
+    <Content Include="assets\js\flot\jquery.flot.pie.min.js" />
+    <Content Include="assets\js\flot\jquery.flot.resize.min.js" />
+    <Content Include="assets\js\fuelux\data\fuelux.tree-sampledata.js" />
+    <Content Include="assets\js\fuelux\fuelux.spinner.min.js" />
+    <Content Include="assets\js\fuelux\fuelux.tree.min.js" />
+    <Content Include="assets\js\fuelux\fuelux.wizard.min.js" />
+    <Content Include="assets\js\fullcalendar.min.js" />
+    <Content Include="assets\js\html5shiv.js" />
+    <Content Include="assets\js\jqGrid\i18n\grid.locale-en.js" />
+    <Content Include="assets\js\jqGrid\jquery.jqGrid.min.js" />
+    <Content Include="assets\js\jquery-1.10.2.min.js" />
+    <Content Include="assets\js\jquery-2.0.3.min.js" />
+    <Content Include="assets\js\jquery-ui-1.10.3.custom.min.js" />
+    <Content Include="assets\js\jquery-ui-1.10.3.full.min.js" />
+    <Content Include="assets\js\jquery.autosize.min.js" />
+    <Content Include="assets\js\jquery.colorbox-min.js" />
+    <Content Include="assets\js\jquery.dataTables.bootstrap.js" />
+    <Content Include="assets\js\jquery.dataTables.min.js" />
+    <Content Include="assets\js\jquery.easy-pie-chart.min.js" />
+    <Content Include="assets\js\jquery.gritter.min.js" />
+    <Content Include="assets\js\jquery.hotkeys.min.js" />
+    <Content Include="assets\js\jquery.inputlimiter.1.3.1.min.js" />
+    <Content Include="assets\js\jquery.knob.min.js" />
+    <Content Include="assets\js\jquery.maskedinput.min.js" />
+    <Content Include="assets\js\jquery.mobile.custom.min.js" />
+    <Content Include="assets\js\jquery.nestable.min.js" />
+    <Content Include="assets\js\jquery.slimscroll.min.js" />
+    <Content Include="assets\js\jquery.sparkline.min.js" />
+    <Content Include="assets\js\jquery.ui.touch-punch.min.js" />
+    <Content Include="assets\js\jquery.validate.min.js" />
+    <Content Include="assets\js\markdown\bootstrap-markdown.min.js" />
+    <Content Include="assets\js\markdown\markdown.min.js" />
+    <Content Include="assets\js\respond.min.js" />
+    <Content Include="assets\js\select2.min.js" />
+    <Content Include="assets\js\typeahead-bs2.min.js" />
+    <Content Include="assets\js\x-editable\ace-editable.min.js" />
+    <Content Include="assets\js\x-editable\bootstrap-editable.min.js" />
+    <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\js\Common.js" />
+    <Content Include="Content\FrameworkList.css" />
+    <Content Include="Content\PagedList.css" />
+    <Content Include="cssview\ace.css" />
+    <Content Include="cssview\fontawesome.css" />
+    <Content Include="cssview\StyleSheet1.css" />
+    <Content Include="Dlls\GROBS.BSL.dll" />
+    <Content Include="Dlls\GROBS.BSL.pdb" />
+    <Content Include="Dlls\GROBS.Common.dll" />
+    <Content Include="Dlls\GROBS.Common.pdb" />
+    <Content Include="Dlls\GROBS.DAL.dll" />
+    <Content Include="Dlls\GROBS.DAL.dll.config" />
+    <Content Include="Dlls\GROBS.DAL.pdb" />
+    <Content Include="Dlls\GROBS.EFModels.dll" />
+    <Content Include="Dlls\GROBS.EFModels.dll.config" />
+    <Content Include="Dlls\GROBS.EFModels.pdb" />
+    <Content Include="Dlls\GROBS.IBSL.dll" />
+    <Content Include="Dlls\GROBS.IBSL.pdb" />
+    <Content Include="Dlls\GROBS.IDAL.dll" />
+    <Content Include="Dlls\GROBS.IDAL.pdb" />
+    <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Imgs\20140321021230992.jpg" />
+    <Content Include="Imgs\bg-cloud.png" />
+    <Content Include="Imgs\cachet0.png" />
+    <Content Include="Imgs\ck1.jpg" />
+    <Content Include="Imgs\ckflow.jpg" />
+    <Content Include="Imgs\LOADING.gif" />
+    <Content Include="Imgs\page1_pic4.jpg" />
+    <Content Include="Imgs\wait.gif" />
+    <Content Include="reports\ReportNow.aspx" />
+    <Content Include="Scripts\ai.0.15.0-build58334.js" />
+    <Content Include="Scripts\ai.0.15.0-build58334.min.js" />
+    <Content Include="Scripts\bootstrap.js" />
+    <Content Include="Scripts\bootstrap.min.js" />
+    <Content Include="ApplicationInsights.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="assets\avatars\Thumbs.db" />
+    <Content Include="assets\css\images\Thumbs.db" />
+    <Content Include="assets\font\fontawesome-webfont.woff" />
+    <Content Include="App_Code\HelpersView.cshtml" />
+    <Content Include="CommonValue.json" />
+    <Content Include="Metadata\deploymentTemplates\apiappconfig.azureresource.json" />
+    <Content Include="apiapp.json" />
+    <None Include="Properties\PublishProfiles\davis-ck.pubxml" />
+    <None Include="Properties\PublishProfiles\davis-ck1.pubxml" />
+    <None Include="Properties\PublishProfiles\davis-ck2.pubxml" />
+    <None Include="Properties\PublishProfiles\davis1.pubxml" />
+    <Content Include="reports\ReportDataSet.xsc">
+      <DependentUpon>ReportDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="reports\ReportDataSet.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>ReportDataSet.Designer.cs</LastGenOutput>
+    </None>
+    <Content Include="reports\ReportDataSet.xss">
+      <DependentUpon>ReportDataSet.xsd</DependentUpon>
+    </Content>
+    <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\davisfunction.js" />
+    <Content Include="Scripts\jquery-1.10.2.js" />
+    <Content Include="Scripts\jquery-1.10.2.min.js" />
+    <None Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.ui.datepicker-zh.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\modernizr-2.6.2.js" />
+    <Content Include="Scripts\respond.js" />
+    <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Shared\_Layout1.cshtml" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Home\About.cshtml" />
+    <Content Include="Views\Home\Contact.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
+    <Content Include="Views\Account\ConfirmEmail.cshtml" />
+    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
+    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
+    <Content Include="Views\Account\ForgotPassword.cshtml" />
+    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\ResetPassword.cshtml" />
+    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
+    <Content Include="Views\Account\SendCode.cshtml" />
+    <Content Include="Views\Account\VerifyCode.cshtml" />
+    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
+    <Content Include="Views\Manage\ChangePassword.cshtml" />
+    <Content Include="Views\Manage\Index.cshtml" />
+    <Content Include="Views\Manage\ManageLogins.cshtml" />
+    <Content Include="Views\Manage\SetPassword.cshtml" />
+    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
+    <Content Include="Views\Shared\Lockout.cshtml" />
+    <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\userinfo\Add.cshtml" />
+    <Content Include="Views\userinfo\Edit.cshtml" />
+    <Content Include="Views\userinfo\Index.cshtml" />
+    <Content Include="Views\base_chanpinxian\Add.cshtml" />
+    <Content Include="Views\base_chanpinxian\Edit.cshtml" />
+    <Content Include="Views\base_chanpinxian\Index.cshtml" />
+    <Content Include="Views\base_gongyingshouquan\Add.cshtml" />
+    <Content Include="Views\base_gongyingshouquan\Edit.cshtml" />
+    <Content Include="Views\base_gongyingshouquan\Index.cshtml" />
+    <Content Include="Views\base_huozhushouquan\Add.cshtml" />
+    <Content Include="Views\base_huozhushouquan\Edit.cshtml" />
+    <Content Include="Views\base_huozhushouquan\Index.cshtml" />
+    <Content Include="Views\base_jiliangdw\Add.cshtml" />
+    <Content Include="Views\base_jiliangdw\Edit.cshtml" />
+    <Content Include="Views\base_jiliangdw\Index.cshtml" />
+    <Content Include="Views\base_qixiemulu\Add.cshtml" />
+    <Content Include="Views\base_qixiemulu\Edit.cshtml" />
+    <Content Include="Views\base_qixiemulu\Index.cshtml" />
+    <Content Include="Views\base_renyuanxx\Add.cshtml" />
+    <Content Include="Views\base_renyuanxx\Edit.cshtml" />
+    <Content Include="Views\base_renyuanxx\Index.cshtml" />
+    <Content Include="Views\base_shangpinxx\Add.cshtml" />
+    <Content Include="Views\base_shangpinxx\Edit.cshtml" />
+    <Content Include="Views\base_shangpinxx\Index.cshtml" />
+    <Content Include="Views\base_shangpinzcz\Add.cshtml" />
+    <Content Include="Views\base_shangpinzcz\Edit.cshtml" />
+    <Content Include="Views\base_shangpinzcz\Index.cshtml" />
+    <Content Include="Views\base_shengchanqiye\Add.cshtml" />
+    <Content Include="Views\base_shengchanqiye\Edit.cshtml" />
+    <Content Include="Views\base_shengchanqiye\Index.cshtml" />
+    <Content Include="Views\base_shouhuodanwei\Add.cshtml" />
+    <Content Include="Views\base_shouhuodanwei\Edit.cshtml" />
+    <Content Include="Views\base_shouhuodanwei\Index.cshtml" />
+    <Content Include="Views\base_shouhuomingxi\Add.cshtml" />
+    <Content Include="Views\base_shouhuomingxi\Edit.cshtml" />
+    <Content Include="Views\base_shouhuomingxi\Index.cshtml" />
+    <Content Include="Views\base_weituokehu\Add.cshtml" />
+    <Content Include="Views\base_weituokehu\Edit.cshtml" />
+    <Content Include="Views\base_weituokehu\Index.cshtml" />
+    <Content Include="Views\base_xiaoshou\Add.cshtml" />
+    <Content Include="Views\base_xiaoshou\Edit.cshtml" />
+    <Content Include="Views\base_xiaoshou\Index.cshtml" />
+    <Content Include="Views\base_yonghu\Add.cshtml" />
+    <Content Include="Views\base_yonghu\Edit.cshtml" />
+    <Content Include="Views\base_yonghu\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutView0.cshtml" />
+    <Content Include="Views\Shared\_LayoutView1.cshtml" />
+    <Content Include="Views\Shared\_LayoutView2.cshtml" />
+    <Content Include="Views\base_gongyingshang\Add.cshtml" />
+    <Content Include="Views\base_gongyingshang\Edit.cshtml" />
+    <Content Include="Views\base_gongyingshang\Index.cshtml" />
+    <Content Include="Views\Shared\UploadView.cshtml" />
+    <Content Include="Views\Upload\Index.cshtml" />
+    <Content Include="Views\Shared\BasePageView.cshtml" />
+    <Content Include="Views\Service\Index.cshtml" />
+    <Content Include="Views\userinfo\Index000.cshtml" />
+    <Content Include="Views\Shared\EmptyView.cshtml" />
+    <Content Include="Views\Upload\uploadnow.cshtml" />
+    <Content Include="Views\userinfo\Add1.cshtml" />
+    <Content Include="Views\userinfo\Edit1.cshtml" />
+    <Content Include="Views\operatelog\Add.cshtml" />
+    <Content Include="Views\operatelog\Edit.cshtml" />
+    <Content Include="Views\operatelog\Index.cshtml" />
+    <Content Include="Views\searchcondition\Add.cshtml" />
+    <Content Include="Views\searchcondition\Edit.cshtml" />
+    <Content Include="Views\searchcondition\Index.cshtml" />
+    <Content Include="Views\auth_gongneng\Add.cshtml" />
+    <Content Include="Views\auth_gongneng\Edit.cshtml" />
+    <Content Include="Views\auth_gongneng\Index.cshtml" />
+    <Content Include="Views\auth_juesemx\Add.cshtml" />
+    <Content Include="Views\auth_juesemx\Edit.cshtml" />
+    <Content Include="Views\auth_juesemx\Index.cshtml" />
+    <Content Include="Views\auth_juese\Add.cshtml" />
+    <Content Include="Views\auth_juese\Edit.cshtml" />
+    <Content Include="Views\auth_juese\Index.cshtml" />
+    <Content Include="Views\auth_quanxian\Add.cshtml" />
+    <Content Include="Views\auth_quanxian\Edit.cshtml" />
+    <Content Include="Views\auth_quanxian\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\auth_quanxian\Authority1.cshtml" />
+    <Content Include="Views\auth_juesemx\RoleDetail.cshtml" />
+    <Content Include="Views\auth_quanxian\Authority.cshtml" />
+    <Content Include="Views\base_zhucezhenggg\Add.cshtml" />
+    <Content Include="Views\base_zhucezhenggg\Edit.cshtml" />
+    <Content Include="Views\base_zhucezhenggg\Index.cshtml" />
+    <Content Include="Views\auth_quanxian\PersonRightList.cshtml" />
+    <Content Include="Views\base_shouhuomingxi\GetDetail.cshtml" />
+    <Content Include="Views\auth_gongsi\Add.cshtml" />
+    <Content Include="Views\auth_gongsi\Edit.cshtml" />
+    <Content Include="Views\auth_gongsi\Index.cshtml" />
+    <Content Include="Views\base_bumen\Add.cshtml" />
+    <Content Include="Views\base_bumen\Edit.cshtml" />
+    <Content Include="Views\base_bumen\Index.cshtml" />
+    <Content Include="Views\base_feiyongxm\Add.cshtml" />
+    <Content Include="Views\base_feiyongxm\Edit.cshtml" />
+    <Content Include="Views\base_feiyongxm\Index.cshtml" />
+    <Content Include="Views\base_huobi\Add.cshtml" />
+    <Content Include="Views\base_huobi\Edit.cshtml" />
+    <Content Include="Views\base_huobi\Index.cshtml" />
+    <Content Include="Views\base_quyu\Add.cshtml" />
+    <Content Include="Views\base_quyu\Edit.cshtml" />
+    <Content Include="Views\base_quyu\Index.cshtml" />
+    <Content Include="Views\base_shouhuomingxi\ShdwIndex.cshtml" />
+    <Content Include="Views\base_shangpinzcz\RegistrationExport.cshtml" />
+    <Content Include="Views\base_gongyingshang\SupplierExport.cshtml" />
+    <Content Include="Views\base_shangpinxx\CommodityExport.cshtml" />
+    <Content Include="Views\base_shangpinxx\PrintSpxx.cshtml" />
+    <Content Include="Views\base_shouhuodanwei\RecipientEntityExport.cshtml" />
+    <Content Include="Views\Shared\WinCEView.cshtml" />
+    <Content Include="Views\base_yunshugs\Add.cshtml" />
+    <Content Include="Views\base_yunshugs\Edit.cshtml" />
+    <Content Include="Views\base_yunshugs\Index.cshtml" />
+    <Content Include="Views\rmd_myreminder\Add.cshtml" />
+    <Content Include="Views\rmd_myreminder\Edit.cshtml" />
+    <Content Include="Views\rmd_myreminder\Index.cshtml" />
+    <Content Include="Views\rmd_myreminder\ReminderList.cshtml" />
+    <Content Include="Views\base_shangpinzcz\Overdue.cshtml" />
+    <Content Include="Views\base_shangpinzcz\OverdueExport.cshtml" />
+    <Content Include="Views\base_huozhushouquan\Overdue.cshtml" />
+    <Content Include="Views\base_weituokehu\Overdue.cshtml" />
+    <Content Include="Views\base_zhucezhengjl\Add.cshtml" />
+    <Content Include="Views\base_zhucezhengjl\Edit.cshtml" />
+    <Content Include="Views\base_zhucezhengjl\Index.cshtml" />
+    <Content Include="Views\auth_kehu\Add.cshtml" />
+    <Content Include="Views\auth_kehu\Edit.cshtml" />
+    <Content Include="Views\auth_kehu\Index.cshtml" />
+    <Content Include="Views\base_shangpinjg\Add.cshtml" />
+    <Content Include="Views\base_shangpinjg\Edit.cshtml" />
+    <Content Include="Views\base_shangpinjg\Index.cshtml" />
+    <Content Include="Views\base_taobaosp\Add.cshtml" />
+    <Content Include="Views\base_taobaosp\Edit.cshtml" />
+    <Content Include="Views\base_taobaosp\Index.cshtml" />
+    <Content Include="Views\base_taobao\Add.cshtml" />
+    <Content Include="Views\base_taobao\Edit.cshtml" />
+    <Content Include="Views\base_taobao\Index.cshtml" />
+    <Content Include="Views\ord_dingdanmx\Add.cshtml" />
+    <Content Include="Views\ord_dingdanmx\Edit.cshtml" />
+    <Content Include="Views\ord_dingdanmx\Index.cshtml" />
+    <Content Include="Views\ord_dingdan\Add.cshtml" />
+    <Content Include="Views\ord_dingdan\Edit.cshtml" />
+    <Content Include="Views\ord_dingdan\Index.cshtml" />
+    <Content Include="Views\ord_fanli\Add.cshtml" />
+    <Content Include="Views\ord_fanli\Edit.cshtml" />
+    <Content Include="Views\ord_fanli\Index.cshtml" />
+    <Content Include="Views\ord_jixiao\Add.cshtml" />
+    <Content Include="Views\ord_jixiao\Edit.cshtml" />
+    <Content Include="Views\ord_jixiao\Index.cshtml" />
+    <Content Include="Views\ord_xiaoshoumx\Add.cshtml" />
+    <Content Include="Views\ord_xiaoshoumx\Edit.cshtml" />
+    <Content Include="Views\ord_xiaoshoumx\Index.cshtml" />
+    <Content Include="Views\ord_xiaoshou\Add.cshtml" />
+    <Content Include="Views\ord_xiaoshou\Edit.cshtml" />
+    <Content Include="Views\ord_xiaoshou\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="packages.config" />
+    <None Include="Project_Readme.html" />
+    <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="files\other\" />
+    <Folder Include="files\yewu\" />
+    <Folder Include="files\zhengzhao\" />
+    <Folder Include="logs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="reports\daviskw.rdlc" />
+  </ItemGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>True</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>6446</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:6446/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>此项目引用这台计算机上缺少的 NuGet 程序包。使用 NuGet 程序包还原可下载这些程序包。有关详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkID=322105。缺少的文件是 {0}。</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.1.0.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.0\build\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
+  </Target>
+  <Import Project="..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
+  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
+    <Error Condition="!Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
+    <Error Condition="Exists('..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
+  </Target>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+</Project>

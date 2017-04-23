@@ -1,0 +1,25 @@
+INFO  2017-04-23 21:46:43,258 16244ms 1                      MoveNext           - yao.davis login at 2017/4/23 21:46:43!
+INFO  2017-04-23 21:46:47,157 20143ms 1                      LogOut             - yao.davis log out at 2017/4/23 21:46:47
+INFO  2017-04-23 21:46:53,210 26197ms 1                      MoveNext           - yao.davis login at 2017/4/23 21:46:53!
+INFO  2017-04-23 22:02:23,938 20256ms 1                      MoveNext           - yao.davis login at 2017/4/23 22:02:23!
+INFO  2017-04-23 22:05:29,868 20252ms 1                      MoveNext           - yao.davis login at 2017/4/23 22:05:29!
+INFO  2017-04-23 22:05:45,897 36281ms 1                      LogOut             - yao.davis log out at 2017/4/23 22:05:45
+INFO  2017-04-23 22:05:55,988 46372ms 1                      MoveNext           - yao.davis login at 2017/4/23 22:05:55!
+INFO  2017-04-23 22:12:11,983 40982ms -1                     MoveNext           - yao.davis login at 2017/4/23 22:12:11!
+INFO  2017-04-23 22:22:42,917 21749ms -1                     MoveNext           - yao.davis login at 2017/4/23 22:22:42!
+INFO  2017-04-23 22:28:46,621 385453ms -1                     LogOut             - yao.davis log out at 2017/4/23 22:28:46
+INFO  2017-04-23 22:29:10,218 409050ms 2                      LogOut             - yaowenhua log out at 2017/4/23 22:29:10
+INFO  2017-04-23 22:29:16,415 415247ms -1                     MoveNext           - yao.davis login at 2017/4/23 22:29:16!
+INFO  2017-04-23 22:29:29,440 428272ms -1                     LogOut             - yao.davis log out at 2017/4/23 22:29:29
+INFO  2017-04-23 22:29:40,589 439421ms 2                      MoveNext           - yaowenhua login at 2017/4/23 22:29:40!
+INFO  2017-04-23 22:42:05,327 28494ms 2                      MoveNext           - yaowenhua login at 2017/4/23 22:42:05!
+INFO  2017-04-23 22:45:38,424 63043ms 2                      MoveNext           - yaowenhua login at 2017/4/23 22:45:38!
+INFO  2017-04-23 22:49:14,393 19185ms 2                      MoveNext           - yaowenhua login at 2017/4/23 22:49:14!
+INFO  2017-04-23 22:52:17,936 202728ms 2                      LogOut             - yaowenhua log out at 2017/4/23 22:52:17
+INFO  2017-04-23 22:52:29,454 214247ms 2                      MoveNext           - yaowenhua login at 2017/4/23 22:52:29!
+INFO  2017-04-23 22:53:57,231 20864ms 2                      MoveNext           - yaowenhua login at 2017/4/23 22:53:57!
+INFO  2017-04-23 22:56:19,933 21009ms 2                      MoveNext           - yaowenhua login at 2017/4/23 22:56:19!
+INFO  2017-04-23 23:05:24,775 47192ms 2                      MoveNext           - yaowenhua login at 2017/4/23 23:05:24!
+INFO  2017-04-23 23:09:37,216 19347ms 2                      MoveNext           - yaowenhua login at 2017/4/23 23:09:37!
+INFO  2017-04-23 23:12:56,112 56096ms 2                      MoveNext           - yaowenhua login at 2017/4/23 23:12:56!
+INFO  2017-04-23 23:13:26,605 86589ms 2                      LogOut             - yaowenhua log out at 2017/4/23 23:13:26

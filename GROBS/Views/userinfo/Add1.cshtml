@@ -1,0 +1,79 @@
+﻿@{ViewBag.Title = "用户信息添加";}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/userinfo">用户信息</a>
+        </li>
+        <li class="active"> 新增</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <form role="form" action="/userinfo/Save" method="post">
+        <div class="page-header">
+            <p>
+                <button type="submit" class="btn btn-default"><i class="icon-save"></i>保存</button>
+                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1); "><i class="icon-hand-left"></i>返回</button>
+            </p>
+        </div>
+        <div class="container">
+            <div class="form-group">
+                <label for="name">序号</label>
+                <input type="text" class="form-control" name="ob_userinfo_id" readonly>
+            </div>
+            <div class="form-group">
+                <label for="name">账号</label>
+                <input type="text" class="form-control" name="ob_userinfo_account">
+            </div>
+            <div class="form-group">
+                <label for="name">密码</label>
+                <input type="text" class="form-control" name="ob_userinfo_password">
+            </div>
+            <div class="form-group">
+                <label for="name">全名</label>
+                <input type="text" class="form-control" name="ob_userinfo_fullname">
+            </div>
+            <div class="form-group">
+                <label for="name">员工号</label>
+                <input type="text" class="form-control" name="ob_userinfo_employeeid">
+            </div>
+            <div class="form-group">
+                <label for="name">类型</label>
+                <input type="text" class="form-control" name="ob_userinfo_accounttype">
+            </div>
+            <div class="form-group">
+                <label for="name">备注</label>
+                <input type="text" class="form-control" name="ob_userinfo_remark">
+            </div>
+            <div class="form-group">
+                <label for="name">状态</label>
+                <input type="text" class="form-control" name="ob_userinfo_status">
+            </div>
+            <div class="form-group">
+                <label for="name">输入人</label>
+                <input type="text" class="form-control" name="ob_userinfo_inputman">
+            </div>
+            <div class="form-group">
+                <label for="name">输入日期</label>
+                <input type="text" class="form-control" name="ob_userinfo_inputdate">
+            </div>
+            <div class="form-group">
+                <label for="name">修改人</label>
+                <input type="text" class="form-control" name="ob_userinfo_modifyman">
+            </div>
+            <div class="form-group">
+                <label for="name">修改日期</label>
+                <input type="text" class="form-control" name="ob_userinfo_modifydate">
+            </div>
+        </div>
+    </form>
+</div>
+

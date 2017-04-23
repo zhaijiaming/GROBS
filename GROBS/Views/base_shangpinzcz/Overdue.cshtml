@@ -1,0 +1,178 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "注册证近效期列表";
+    string _searchcondition = ViewBag.SearchCondition;
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        var _zczid = $("#zczbh").val();
+        $("#pl_guige").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        $(".guige").click(function () {
+            _zczid=$(this).parent().parent().find("input[type=checkbox]").val();
+            getGuiGe(_zczid);
+            $("#pl_guige").show();
+        });
+        $("#pl_close").click(function () {
+            $("#pl_guige").hide();
+        });
+        //判断照片是否存在
+        var num = $("#mydatatable tr").length -1;
+        for (var i = 0; i < num; i++) {
+            var val_zczTP = $(".val_zczTP").eq(i).val();
+            if (val_zczTP == "" || val_zczTP == null) {
+                $(".ZhucezhengTP").eq(i).removeAttr("href");
+                $(".ZhucezhengTP").eq(i).html("暂无");
+            } else {
+                $(".ZhucezhengTP").eq(i).html("浏览");
+            }
+        }
+
+    });
+    function getGuiGe(zczid) {
+        //var _zczid = $("#zczbh").val();
+        var _zczid = zczid;
+        var filltable = "";
+        $.post(
+            "/base_zhucezhenggg/getdetail",
+            {
+                zczbh: _zczid
+            },
+            function (data) {
+                for (var i in data) {
+                    filltable = filltable + '<tr><td style="width:40px"><div class="checkbox"><label><input class="checkbox_guige" type="checkbox" value="';
+                    filltable = filltable + data[i].ID;
+                    filltable = filltable + '"></label></div></td><td style="width:150px">';
+                    filltable = filltable + data[i].Guige;
+                    filltable = filltable + '</td><td style="width:150px">';
+                    filltable = filltable + data[i].Memo;
+                    filltable = filltable + '</td><td style="width:150px">';
+                    filltable = filltable + data[i].Makedate;
+                    filltable = filltable + '</td><td style="width:150px">';
+                    filltable = filltable + data[i].Makeman;
+                    filltable = filltable + '</td></tr>';
+                }
+                $("#pl_guige tbody").html(filltable);
+            });
+    }
+
+</script>
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/rmd_myreminder/ReminderList">我的提醒</a>
+        </li>
+        <li class="active">注册证</li>
+    </ul>
+</div>
+<div class="page-content">
+    <input type="hidden" id="period" value="@ViewBag.period" />
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+            <button type="button" class="btn btn-default " id="bt_export" onclick="javascript: window.open('/base_shangpinzcz/overdueexport?period=@ViewBag.period')"><i class="icon-inbox"></i>导出</button>
+        </p>
+    </div>
+    <div style="overflow:auto;max-height:480px;">
+        <div class="table-responsive">
+            <table class="table" id="mydatatable">
+                <caption></caption>
+                <thead style="white-space: nowrap;">
+                    <tr>
+                        <td></td>
+                        <td>注册证编号</td>
+                        <td>商品名称</td>
+                        <td>规格</td>
+                        <td>产品标准</td>
+                        <td>注册证有效期</td>
+                        <td>批准日期</td>
+                        @*<td>录入日期</td>*@
+                        <td>中文编号</td>
+                        <td>产地</td>
+                        <td>生产企业</td>
+                        <td>服务机构</td>
+                        <td>注册证照片</td>
+                        @*<td>输入人</td>
+                            <td>备注</td>*@
+                        @*<td>是否失效</td>
+                            <td>适用范围</td>
+                            <td>注册代理</td>*@
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.base_shangpinzcz)
+                    {
+                        <tr>
+                            <td>
+                                <div class="checkbox">
+                                    <label><input type="checkbox" value="@item.ID"></label>
+                                </div>
+                            </td>
+                            <td>@item.Bianhao</td>
+                            <td>@item.Mingcheng</td>
+                            @*规格*@
+                            <td><a class="guige">浏览</a></td>
+                            <td>@item.Bianzhun</td>
+                            <td>@item.ZhucezhengYXQ.ToString("yyyy-MM-dd")</td>
+                            <td>@string.Format("{0:yyyy-MM-dd}", item.PizhunRQ == null ? "" : item.PizhunRQ)</td>
+                            @*<td>@item.MakeDate.ToString("yyyy-MM-dd")</td>*@
+                            <td>@item.BianhaoZW</td>
+                            <td>@item.Chandi</td>
+                            <td>@Html.GetDataValue_ID("生产企业", "名称", (int)item.ShengchanqiyeID)</td>
+                            <td>@item.ShouhuoJG</td>
+                            <td>
+                                <a href="/files/zhengzhao/@item.ZhucezhengTP" target="_blank" class="ZhucezhengTP"></a>
+                                <label><input type="hidden" class="val_zczTP" value="@item.ZhucezhengTP"></label>
+                            </td>
+                            @*<td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                <td>@item.Beizhu</td>*@
+                            @*<td id="changeText">@item.ShixiaoSF</td>
+                                <td>@item.ShiyongFW</td>
+                                <td>@item.ZhuceDL</td>*@
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+            <div class="pager">
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Overdue", new { page }))
+            </div>
+
+        </div>
+    </div>
+</div>
+<div id="pl_guige" class="panel panel-primary" hidden style="position:fixed;top:100px;left:200px;width:600px;height:600px;z-index:999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title">规格管理<button id="pl_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <table class="table" id="ggdatatable">
+                <caption></caption>
+                <thead style="display:inline-block">
+                    <tr>
+                        <td style="width:40px"></td>
+                        <td style="width:160px">规格</td>
+                        <td style="width:155px">说明</td>
+                        <td style="width:140px">制单日期</td>
+                        <td style="width:190px">制单人</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block;max-height:465px;min-height:465px;width:572px;overflow:scroll;"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+

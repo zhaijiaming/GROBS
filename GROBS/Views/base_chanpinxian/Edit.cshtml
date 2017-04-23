@@ -1,0 +1,117 @@
+﻿@using GROBS.App_Code;
+@using GROBS.EFModels
+@model base_chanpinxian
+@{
+    ViewBag.Title = "产品线修改";
+    base_chanpinxian item = ViewBag.base_chanpinxian;
+}
+
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        $("#ob_base_chanpinxian_makedate").datepicker();//时间
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+        });
+    });
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_chanpinxian">产品线</a>
+        </li>
+        <li class="active"> 编辑</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+            <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
+        </p>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>产品线信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                <form class="form-horizontal" id="form" role="form" action="/base_chanpinxian/Update" method="post">
+                                    <input type="hidden" name="ob_base_chanpinxian_id" value="@item.ID" />
+                                    <input type="hidden" name="ob_base_chanpinxian_makeman" value=@Session["user_id"] />
+                                    <input type="hidden" name="ob_base_chanpinxian_makedate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <fieldset>
+                                        @*货主*@
+                                        <div class="form-group">
+                                            <label for="ob_base_chanpinxian_huozhuxuhao" class="col-sm-2 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>货主</b></label>
+                                            <div class="col-sm-9">
+                                                @Html.SelectList_Auto("ob_base_chanpinxian_huozhuxuhao", "货主", "名称", (int)item.Huozhuxuhao)
+                                            </div>
+                                        </div>
+                                        @*名称*@
+                                        <div class="form-group">
+                                            <label for="ob_base_chanpinxian_mingcheng" class="col-sm-2 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>名称</b></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" placeholder="必填项,请填写名称" name="ob_base_chanpinxian_mingcheng" value="@item.Mingcheng">
+                                            </div>
+                                        </div>
+                                        @*说明*@
+                                        <div class="form-group">
+                                            <label for="ob_base_chanpinxian_miaoshu" class="col-sm-2 control-label"><b>说明</b></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" class="form-control" placeholder="请填写说明" name="ob_base_chanpinxian_miaoshu" value="@item.Miaoshu">
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="makedate"><b>录入日期</b></label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",item.MakeDate)" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>更新</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,1006 @@
+﻿@using GROBS.App_Code;
+@using GROBS.EFModels
+
+@model base_shouhuodanwei
+@{
+    ViewBag.Title = "收货单位修改";
+    base_shouhuodanwei item = ViewBag.base_shouhuodanwei;
+}
+@Html.GetFileUpload("yingyezhizhaotp", "yyzz", "z", "cus", 3, 0, new Dictionary<string, string>() { { "yyzz", "yingyezhizhaotp" }, { "xktp", "jingyingxuketp" }, { "batp", "beiantp" } })
+@*收货明细*@
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        if (eval($("#shouyid").val()) > 1) {
+            $("#pl_fun").hide();
+            $("#pl_fun_dizhi").hide();
+        }
+        //时间
+        $("#date_yingyezhizhaoyxq").datepicker();
+        $("#date_jingyingxukeyxq").datepicker();
+        $("#date_beianyxq").datepicker();
+        $("#date_beianpzrq").datepicker();
+        $("#date_xukepzrq").datepicker();
+        $("#date_makedate").datepicker();
+        //获取收货明细信息
+        var shdw_id = $("#shdw_id").val();
+        var huozhuid = $("#huozhuid").val();
+        if (shdw_id.length > 0) {
+            GetShouhuomingxiData(shdw_id);
+        };
+        //之前只有'默认地址'字段，没有'联系人'&'联系电话',这段代码用于匹配之前数据的'联系人'&'联系电话'.
+        //$("#shouhuomingxi_shdw tbody tr").each(function () {
+        //    var mxdizhi = $(this).find(".dizhi").text();
+        //    var dwdizhi = $("#songhuodz").val();
+        //    if (mxdizhi == dwdizhi) {
+        //        $("#Lianxiren").val($("#get_Lianxiren").val());
+        //        $("#LianxiDH").val($("#get_Lianxidianhua").val());
+        //    }
+        //});
+        //默认地址打钩
+        Dizhi_Check();
+        //添加地址
+        $("#btn_shdwAdd").click(function () {
+            window.open("/base_shouhuomingxi/Add?getId=" + shdw_id + "&" + "huozhuid=" + huozhuid, "_self");
+        });
+        //地址编辑
+        $("#btn_shdwEdit").click(function () {
+            var num = $("#shouhuomingxi_shdw input[type=checkbox]:checked").length;
+            if (num > 1) {
+                alert("您只能选取一个地址进行编辑！");
+            } else if (num == "0") {
+                alert("您没有选择，请选取一个进行编辑！");
+            } else {
+                $("#shouhuomingxi_shdw tr input[type=checkbox]").each(function () {
+                    //对默认地址的操作
+                    if (this.checked) {
+                        var mxdizhi = $(this).parent().parent().parent().siblings().find(".dizhi").text();
+                        var dwdizhi = $("#songhuodz").val();
+                        if (mxdizhi == dwdizhi) {
+                            var biaoshi = 1;
+                            window.open("/base_shouhuomingxi/Edit/" + $(this).val() + "?biaoshi=" + biaoshi, "_self");
+                        } else {
+                            window.open("/base_shouhuomingxi/Edit/" + $(this).val(), "_self");
+                        }
+                    }
+                });
+            }
+        });
+        //默认地址删除
+        $("#btn_shdwDel").click(function () {
+            var _shmx = "";
+            $("#shouhuomingxi_shdw tr input[type = checkbox]").each(function () {
+                if (this.checked) {
+                    _shmx = _shmx + $(this).val() + ",";
+                    //默认地址删除
+                    var mxdizhi = $(this).parent().parent().parent().siblings().find(".dizhi").text();
+                    var dwdizhi = $("#songhuodz").val();
+                    if (mxdizhi == dwdizhi) {
+                        $("#songhuodz").val("");
+                        $("#Lianxiren").val("");
+                        $("#LianxiDH").val("");
+                    }
+                }
+            });
+            if (_shmx.length > 0) {
+                var _delok = confirm("确定要删除这些信息吗？");
+                if (_delok) {
+                    $.post(
+                    "/base_shouhuomingxi/deletenow",
+                    {
+                        del: _shmx
+                    },
+                    function (data) {
+                        if (data == 1) {
+                            var shdw_id = $("#shdw_id").val();
+                            GetShouhuomingxiData(shdw_id);
+                            $("#form").submit();
+                        }
+                        else
+                            alert("删除失败，请重试！");
+                    }
+                );
+                }
+            }
+        });
+        //默认地址
+        $("#btn_Default").click(function () {
+            var flag = 0;
+            var num = $("#shouhuomingxi_shdw input[type=checkbox]:checked").length;
+            if (num > 1) {
+                alert("您只能选取一个地址做为默认地址！");
+            } else if (num == "0") {
+                alert("您没有选择的默认地址！");
+            } else {
+                $("#shouhuomingxi_shdw tr input[type = checkbox]").each(function () {
+                    if (this.checked) {
+                        var mxdizhi = $(this).parent().parent().parent().siblings().find(".dizhi").text();
+                        var get_Lianxiren = $(this).parent().parent().parent().siblings().find(".get_Lianxiren").text();
+                        var get_Lianxidianhua = $(this).parent().parent().parent().siblings().find(".get_Lianxidianhua").text();
+                        $("#songhuodz").val(mxdizhi);
+                        $("#Lianxiren").val(get_Lianxiren);
+                        $("#LianxiDH").val(get_Lianxidianhua);
+                        flag = 1;
+                    };
+                });
+                $("#form").submit();
+            }
+        });
+
+        //经营范围
+        $("#pl_Fanwei").draggable({ handle: '.tuodong' });
+        $("#pl_Quyu").draggable({ handle: '.tuodong' });
+        var bj = 0;
+        GetFanwei1(bj);
+        Getquyu();
+
+        //显示全部
+        $("#bt_fanwei_showall").click(function () {
+            var bj = 1;
+            var tempid = "";
+            $("#qxdatatable tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    tempid = tempid + $(this).parent().find(".xulieid").val() + ";";
+                }
+            });
+            var fw = document.getElementsByClassName('xulieid');
+            var i = $("#jingyingfanweidm").val();
+            var ti = i.split(";");
+            //ti.splice(ti.length - 1);
+            var xiaolei = new Array();
+            var x = 0;
+            for (var k = 0; k < ti.length; k++, x = 0) {
+                for (var l = 0; l < fw.length; l++) {
+                    if (ti[k] == $(".xulieid").eq(l).val()) {
+                        x = 1;
+                    }
+                }
+                if (x != 1) {
+                    xiaolei.push(ti[k]);
+                }
+            }
+            for (k = 0; k < xiaolei.length; k++) {
+                tempid = tempid + xiaolei[k] + ";";
+            }
+            tempid = tempid.substring(0, tempid.length - 1);
+            GetFanwei(bj, tempid);
+        });
+
+        //显示大类
+        $("#bt_fanwei_showdalei").click(function () {
+            var bj = 1;
+            var tempid = "";
+            $("#qxdatatable tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    tempid = tempid + $(this).parent().find(".xulieid").val() + ";";
+                }
+            });
+            GetFanwei1(bj, tempid);
+        });
+
+        //关闭窗口
+        $("#pl_close").click(function () {
+            $("#pl_Fanwei").hide();
+            var bj = 0;
+            $("#guanlifenlei").val("全部");
+            GetFanwei1(bj);
+        });
+
+        //添加范围
+        $("#bt_fanwei_add").click(function () {
+            var _jyfw = "";
+            var _jyfw1 = "";
+            var _jyfw2 = "";
+            var _jyfw3 = "";
+            var _jyfwjm = "";
+            var t = document.getElementsByClassName('xulieid');
+            $("#qxdatatable tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    switch ($(this).parent().parent().parent().siblings().find(".glfl").html()) {
+                        case "1": _jyfw1 = _jyfw1 + $(this).parent().parent().parent().siblings().find(".bh").html() + "," + $(this).parent().parent().parent().siblings().find(".mc").html() + ";";
+                            break;
+                        case "2": _jyfw2 = _jyfw2 + $(this).parent().parent().parent().siblings().find(".bh").html() + "," + $(this).parent().parent().parent().siblings().find(".mc").html() + ";";
+                            break;
+                        case "3": _jyfw3 = _jyfw3 + $(this).parent().parent().parent().siblings().find(".bh").html() + "," + $(this).parent().parent().parent().siblings().find(".mc").html() + ";";
+                            break;
+                    }
+                    //_jyfw = _jyfw + $(this).parent().parent().parent().siblings().find(".glfl").html() + "," + $(this).parent().parent().parent().siblings().find(".bh").html() + "," + $(this).parent().parent().parent().siblings().find(".mc").html() + ";";
+                    _jyfwjm = _jyfwjm + $(this).parent().find(".xulieid").val() + ";";
+                }
+            });
+            _jyfw = "三类:" + _jyfw3 + "\n" + "二类:" + _jyfw2 + "\n" + "一类:" + _jyfw1;
+            if (_jyfw3 == "")
+                _jyfw = _jyfw.replace("三类:\n", "");
+            if (_jyfw2 == "")
+                _jyfw = _jyfw.replace("二类:\n", "");
+            if (_jyfw1 == "")
+                _jyfw = _jyfw.replace("一类:", "");
+
+            var _addok = confirm("确定要修改经营范围吗？");
+            if (_addok) {
+                if (_jyfw.length >= 512) {
+                    alert("所选数据超过范围，请重新选择。")
+                }
+                else {
+                    $("#jingyingfanwei").val(_jyfw);
+                    $("#jingyingfanweidm").val(_jyfwjm);
+                    $("#pl_Fanwei").hide();
+                    var bj = "0";
+                }
+                $("#guanlifenlei").val("全部");
+                GetFanwei1(bj);
+            }
+
+        });
+        //全选
+        $("#bt_fanwei_all").click(function () {
+            $(".xulieid").prop("checked", true);
+        })
+        //全部取消
+        $("#bt_fanwei_clear").click(function () {
+            $(".xulieid").prop("checked", false);
+        })
+        //选择管理分类
+        $("#guanlifenlei").change(function () {
+            var fl = document.getElementsByClassName('glfl');
+            var lb = $("#guanlifenlei").find("option:selected").text();
+            if (lb == "一类") {
+                for (var i = 0; i < fl.length; i++) {
+                    if ($(".glfl").eq(i).text() == "1") {
+                        $(".bg").eq(i).show();
+                    }
+                    else { $(".bg").eq(i).hide(); }
+                }
+            }
+            if (lb == "二类") {
+                for (var i = 0; i < fl.length; i++) {
+                    if ($(".glfl").eq(i).text() == "2") {
+                        $(".bg").eq(i).show();
+                    }
+                    else { $(".bg").eq(i).hide(); }
+                }
+            }
+            if (lb == "三类") {
+                for (var i = 0; i < fl.length; i++) {
+                    if ($(".glfl").eq(i).text() == "3") {
+                        $(".bg").eq(i).show();
+                    }
+                    else { $(".bg").eq(i).hide(); }
+                }
+            }
+            if (lb == "全部") {
+                $(".bg").show();
+            }
+        });
+        //区域
+        $("#qy_close").click(function () {
+            $("#pl_Quyu").hide();
+            Getqy();
+        });
+        $("#rydatatable").on("dblclick", "tr", function () {
+            $("#quyu").val($(this).find(".qymingcheng").html());
+            $("#pl_Quyu").hide();
+        });
+        $("#bt_quyu_add").click(function () {
+            var valqy = $('input:radio[name="radiobox"]:checked').parent().parent().parent().siblings().find(".qymingcheng").html();
+            if (valqy == null) {
+                alert("没有选择区域哦")
+            }
+            else {
+                $("#quyu").val(valqy);
+                $("#pl_Quyu").hide();
+            }
+        });
+        //单击tr打钩，双击取值
+        $("#rydatatable").on("dblclick", "tr", function () {
+            $("#quyu").val($(this).find(".qymingcheng").html());
+            $("#pl_Quyu").hide();
+        });
+        $("#rydatatable").on("click", "tr", function () {
+            if ($(this).find(":radio").is(':checked')) {
+                $(this).find(":radio").prop("checked", false);
+            } else {
+                $(this).find(":radio").prop("checked", true);
+            }
+        });
+        $("#qxdatatable").on("click", "tr", function () {
+            if ($(this).find(":checkbox").is(':checked')) {
+                $(this).find(":checkbox").prop("checked", false);
+            } else {
+                $(this).find(":checkbox").prop("checked", true);
+            }
+        });
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+        });
+        //'是否合作'绑定值
+        $("#HezuoSF").change(function () {
+            if ($("#HezuoSF").is(":checked")) {
+                $("#HezuoSF").val("true");//选中=true
+            } else {
+                $("#HezuoSF").val("false");//不选中=false
+            }
+        });
+        //'是否合作'赋值
+        var HezuoSF = "@item.HezuoSF";
+        if (HezuoSF == "True") {
+            $("#HezuoSF").attr("checked", true);
+            $("#HezuoSF").val("true");
+        } else {
+            $("#HezuoSF").attr("checked", false);
+            $("#HezuoSF").val("false");
+        }
+        //'是否审查'绑定值
+        $("#ShenchaSF").change(function () {
+            if ($("#ShenchaSF").is(":checked")) {
+                $("#ShenchaSF").val("true");//选中=true
+            } else {
+                $("#ShenchaSF").val("false");//不选中=false
+            }
+        });
+        //'是否审查'赋值
+        var ShenchaSF = "@item.ShenchaSF";
+        if (ShenchaSF == "True") {
+            $("#ShenchaSF").attr("checked", true);
+            $("#ShenchaSF").val("true");
+        } else {
+            $("#ShenchaSF").attr("checked", false);
+            $("#ShenchaSF").val("false");
+        }
+        //照片的点击事件
+        $(".yyzz_browse").click(function () {
+            var yyzz = "@item.YingyezhizhaoTP";
+            var img_url = $("#yyzz a").attr('href');
+            if (img_url != null && img_url != "") {
+                window.open(img_url);
+            } else if (yyzz != null && yyzz != "") {
+                window.open("/files/zhengzhao/@item.YingyezhizhaoTP");
+            }
+        });
+        $(".xktp_browse").click(function () {
+            var xktp = "@item.JingyingxukeTP";
+            var img_url = $("#xktp a").attr('href');
+            if (img_url != null && img_url != "") {
+                window.open(img_url);
+            } else if (xktp != null && xktp != "") {
+                window.open("/files/zhengzhao/@item.JingyingxukeTP");
+            }
+        });
+        $(".batp_browse").click(function () {
+            var batp = "@item.BeianTP";
+            var img_url = $("#batp a").attr('href');
+            if (img_url != null && img_url != "") {
+                window.open(img_url);
+            } else if (batp != null && batp != "") {
+                window.open("/files/zhengzhao/@item.BeianTP");
+            }
+        });
+    });
+    //默认地址打钩
+    function Dizhi_Check() {
+        var shdw_dizhi = $("#songhuodz").val();
+        $("#shouhuomingxi_shdw #mydatatable tr").each(function () {
+            if ($(this).find(".dizhi").text() == shdw_dizhi) {
+                $(this).find(":checkbox").prop("checked", true);
+            }
+        });
+    }
+    //点击修改or增加
+    function Bt_Fanweiadd() {
+        document.getElementById("pl_Fanwei").removeAttribute("hidden");
+        $("#pl_Fanwei").show();
+    }
+    function GetFanwei1(a, b) {
+        var bj = a;
+        var tempid = b;
+        var filltable = "";
+        $.post(
+                "/base_qixiemulu/GetQixiemulu1",
+                {
+
+                },
+                function (data) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr class="bg"><td><div class="checkbox"><label><input type="checkbox" class ="xulieid" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></div></td><td style="width:80px"><span class="bh">';
+                        filltable = filltable + data[i].Bianhao;
+                        filltable = filltable + '</span></td><td style="width:150px"><span class="mc">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td style="width:800px">';
+                        filltable = filltable + data[i].Miaoshu;
+                        filltable = filltable + '</td><td style="width:100px"><span class="glfl">';
+                        filltable = filltable + data[i].GuanliFL;
+                        filltable = filltable + '</span></td></tr>';
+                    }
+                    $("#pl_Fanwei tbody").html(filltable);
+                    GetData(bj, tempid)
+                });
+    }
+    function GetFanwei(a, b) {
+        var bj = a;
+        var tempid = b;
+        var filltable = "";
+        $.post(
+                "/base_qixiemulu/GetQixiemulu",
+                {
+                    //qxml: _qxmlid
+                },
+                function (data) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr class="bg"><td><div class="checkbox"><label><input type="checkbox" class ="xulieid" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></div></td><td style="width:80px"><span class="bh">';
+                        filltable = filltable + data[i].Bianhao;
+                        filltable = filltable + '</span></td><td style="width:150px"><span class="mc">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td style="width:800px">';
+                        filltable = filltable + data[i].Miaoshu;
+                        filltable = filltable + '</td><td style="width:100px"><span class="glfl">';
+                        filltable = filltable + data[i].GuanliFL;
+                        filltable = filltable + '</span></td></tr>';
+                    }
+                    $("#pl_Fanwei tbody").html(filltable);
+                    GetData(bj, tempid)
+                });
+    }
+
+    function Bt_Quyuadd() {
+        Getquyu();
+        document.getElementById("pl_Quyu").removeAttribute("hidden");
+        $("#pl_Quyu").show();
+    }
+
+    function Getquyu() {
+        var filltable = "";
+        $.post(
+            "/base_quyu/GetQuyu",
+            {
+
+            },
+            function (data) {
+                for (var i in data) {
+                    filltable = filltable + '<tr style="display:table;width:100%;table-layout:fixed"><td style="width:5%"><div class="radio" ><label><input name="radiobox" type="radio" class="radioid" value="';
+                    filltable = filltable + data[i].ID;
+                    filltable = filltable + '"></label></div></td><td style="width:15%">';
+                    filltable = filltable + data[i].Bianhao;
+                    filltable = filltable + '</td><td style="width:20%"><span class="qymingcheng">';
+                    filltable = filltable + data[i].Mingcheng;
+                    filltable = filltable + '</td><td>';
+                    filltable = filltable + data[i].Miaoshu;
+                    filltable = filltable + '</td></tr>';
+                }
+                $("#pl_Quyu tbody").html(filltable);
+                Getqy();
+            });
+    }
+    //打勾
+    function GetData(a, tempid) {
+        var fw = document.getElementsByClassName('xulieid');
+        var bj = a;
+        var i = tempid;
+        if (bj == 0) {
+            var i = $("#jingyingfanweidm").val();
+        }
+        if (i != null) {
+            var t = i.split(";");
+        } else { t = "" }
+        for (var k = 0; k < t.length; k++) {
+            for (var l = 0; l < fw.length; l++) {
+                if (t[k] == $(".xulieid").eq(l).val())
+                    $("#qxdatatable tr input[type=checkbox]").eq(l).attr("checked", true);
+            }
+        }
+    }
+    function Getqy() {
+        var qymc = document.getElementsByClassName('qymingcheng');
+        var tempqy = $("#quyu").val();
+        for (var i = 0; i < qymc.length; i++) {
+            if (tempqy == $(".qymingcheng").eq(i).html())
+                $("#rydatatable tr input[type=radio]").eq(i).prop("checked", true);
+        }
+    }
+    //收货明细
+    function GetShouhuomingxiData(shdw_id) {
+        var shmxdata = "";
+        $.post(
+            "/base_shouhuomingxi/getmingxidetail",
+                {
+                    shdw_id: shdw_id
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       for (var i in data) {
+                           shmxdata = shmxdata + '<tr><td><div class="checkbox"><label><input type="checkbox" value="';
+                           shmxdata = shmxdata + data[i].ID;
+                           shmxdata = shmxdata + '"></label></div></td>';
+                           shmxdata = shmxdata + '<td><span class="dizhi">';
+                           //shmxdata = shmxdata + data[i].ShouhuofangID;
+                           //shmxdata = shmxdata + '</td><td>';
+                           shmxdata = shmxdata + data[i].Dizhi;
+                           shmxdata = shmxdata + '</span></td><td><span class="get_Lianxiren">';
+                           shmxdata = shmxdata + data[i].Lianxiren;
+                           shmxdata = shmxdata + '</span></td><td><span class="get_Lianxidianhua">';
+                           shmxdata = shmxdata + data[i].Lianxidianhua;
+                           shmxdata = shmxdata + '</span></td><td>';
+                           //shmxdata = shmxdata + data[i].XiaoshouID;
+                           //shmxdata = shmxdata + '</td><td>';
+                           shmxdata = shmxdata + data[i].Xiaoshouren;
+                           //shmxdata = shmxdata + '</td><td>';
+                           //shmxdata = shmxdata + data[i].MakeDate;
+                           //shmxdata = shmxdata + '</td><td>';
+                           //shmxdata = shmxdata + data[i].MakeMan;
+                           shmxdata = shmxdata + '</td></tr>';
+                       }
+                       $("#shouhuomingxi_shdw tbody").html(shmxdata);
+                       Dizhi_Check();
+                   } else {
+                       $("#shouhuomingxi_shdw tbody").empty();
+                   }
+               }
+            );
+    }
+
+
+
+    function GetExistingData() {
+        //var fw = $("input[type=checkbox]").val();
+
+        text = $("input:checkbox").map(function (index, elem) {
+            return $(elem).val();
+        }).get().join(',');
+        //alert("选中的checkbox的值为："+text);
+        var d = text.split(",");
+        //alert(d[0]);
+
+        var i = $("#jingyingfanweidm").val();
+        if (i != null) {
+            var t = i.split(";");
+        };
+
+        for (var k = 0; k < t.length; k++) {
+            for (var l = 0; l < d.length; l++) {
+                if (t[k] == d[l])
+                    $("input:checkbox").eq(l).attr("checked", true);
+            }
+        }
+    };
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_shouhuodanwei">收货单位</a>
+        </li>
+        <li class="active"> 编辑</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <div id="pl_fun" class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container-fluid">
+            <div class="row">
+                    <div class="col-sm-6 col-sm-offset-1">
+                        <div class="widget-box radius-4">
+                            <div class="widget-header">
+                                <h4><b>收货单位信息</b></h4>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main no-padding">
+                                    @using (Html.BeginForm("Update", "base_shouhuodanwei", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                    {
+                                        @Html.AntiForgeryToken()
+                                        <input type="hidden" id="shdw_id" name="id" value="@item.ID" />
+                                        <input type="hidden" id="btnSelect" value="" />
+                                        <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                        <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                        <input type="hidden" name="huozhuid" id="huozhuid" value="@item.HuozhuID" />
+                                        <input type="hidden" id="shouyid" value="@item.Shouying" />
+                                        <fieldset>
+                                            @*货主*@
+                                            <div class="form-group">
+                                                <label for="huozhuid" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>货主</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" readonly class="form-control" value="@Html.GetDataValue_ID( "货主", "名称",(int)item.HuozhuID)" />
+                                                </div>
+                                            </div>
+                                            @*单位名称*@
+                                            <div class="form-group">
+                                                <label for="Mingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>单位名称</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请输入单位名称" value="@item.Mingcheng" />
+                                                </div>
+                                            </div>
+                                            @*营业执照编号*@
+                                            <div class="form-group">
+                                                <label for="yingyezhizhaobh" class="col-sm-3 control-label"><b>营业执照编号</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="yingyezhizhaobh" name="yingyezhizhaobh" class="form-control" placeholder="请输入营业执照编号" value="@item.YingyezhizhaoBH" />
+                                                </div>
+                                            </div>
+                                            @*营业执照有效期*@
+                                            <div class="form-group">
+                                                <label for="date_yingyezhizhaoyxq" class="col-sm-3 control-label"><b>营业执照有效期</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="date_yingyezhizhaoyxq" name="yingyezhizhaoyxq" placeholder="请填写营业执照有效期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",item.YingyezhizhaoYXQ)" type="date">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-calendar bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*营业执照照片*@
+                                            <div class="form-group">
+                                                <label for="YingyezhizhaoTP" class="col-sm-3 control-label"><b>营业执照照片</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="yingyezhizhaotp" name="yingyezhizhaotp" readonly placeholder="请上传照片" class="form-control" type="text" value="@item.YingyezhizhaoTP">
+                                                        <span class="input-group-btn">
+                                                            <button type="button" data-toggle="modal" data-target="#myModalUpload" onclick="btn1()" class="btn btn-primary btn-sm">
+                                                                <b>上传</b>
+                                                                <i class="icon-cloud-upload icon-on-right bigger-110"></i>
+                                                            </button>
+                                                            <span hidden id="yyzz"></span>
+                                                            <button type="button" class="btn btn-primary btn-sm yyzz_browse">
+                                                                <b>浏览</b>
+                                                                <i class="icon-camera icon-on-right bigger-110"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*经营许可编号*@
+                                            <div class="form-group">
+                                                <label for="jingyingxukebh" class="col-sm-3 control-label"><b>经营许可编号</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="jingyingxukebh" class="form-control" placeholder="请填写经营许可编号" value="@item.JingyingxukeBH" />
+                                                </div>
+                                            </div>
+                                            @*经营许可有效期*@
+                                            <div class="form-group">
+                                                <label for="date_jingyingxukeyxq" class="col-sm-3 control-label"><b>经营许可有效期</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="date_jingyingxukeyxq" name="jingyingxukeyxq" placeholder="经营许可有效期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",item.JingyingxukeYXQ)" type="date">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-calendar bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*经营许可照片*@
+                                            <div class="form-group">
+                                                <label for="ShengchanxukeTP" class="col-sm-3 control-label"><b>经营许可照片</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="jingyingxuketp" name="jingyingxuketp" readonly placeholder="请上传照片" class="form-control" type="text" value="@item.JingyingxukeTP" />
+                                                        <span class="input-group-btn">
+                                                            <button type="button" data-toggle="modal" data-target="#myModalUpload" onclick="btn2()" class="btn btn-primary btn-sm">
+                                                                <b>上传</b>
+                                                                <i class="icon-cloud-upload icon-on-right bigger-110"></i>
+                                                            </button>
+                                                            <span hidden id="xktp"></span>
+                                                            <button type="button" class="btn btn-primary btn-sm xktp_browse">
+                                                                <b>浏览</b>
+                                                                <i class="icon-camera icon-on-right bigger-110"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*经营许可发证机关*@
+                                            <div class="form-group">
+                                                <label for="xukefzjg" class="col-sm-3 control-label"><b>经营许可发证机关</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="xukefzjg" class="form-control" placeholder="请填写经营许可发证机关" value="@item.XukeFZJG" />
+                                                </div>
+                                            </div>
+                                            @*经营许可批准日期*@
+                                            <div class="form-group">
+                                                <label for="date_xukepzrq" class="col-sm-3 control-label"><b>经营许可批准日期</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="date_xukepzrq" name="xukepzrq" placeholder="经营许可批准日期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",item.XukePZRQ)" type="date">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-calendar bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*经营范围*@
+                                            <div class="form-group">
+                                                <label for="ob_base_gongyingshang_jingyingfanwei" class="col-sm-3 control-label"><b>经营范围</b></label>
+                                                <div class="col-sm-8">
+                                                    <button type="button" class="btn btn-primary btn-sm" id="bt_Fanweiadd" onclick="Bt_Fanweiadd()" disabled="disabled">
+                                                        <b>增加</b>
+                                                        <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                    </button>
+                                                    <textarea type="text" style="resize:vertical;" rows="6" class="form-control" readonly id="jingyingfanwei" name="jingyingfanwei">@item.Jingyinfanwei</textarea>
+                                                </div>
+                                            </div>
+                                            @*经营范围代码*@
+                                            <div class="form-group" style="display:none">
+                                                <label for="name" class="col-sm-2">经营范围代码</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" readonly class="form-control" id="jingyingfanweidm" name="jingyingfanweidm" value="@item.JingyinfanweiDM" />
+                                                </div>
+                                            </div>
+                                            @*区域*@
+                                            <div class="form-group">
+                                                <label for="quyu" class="col-sm-3 control-label"><b>区域</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="quyu" name="quyu" placeholder="请选择区域" class="form-control" type="text" value="@item.Quyu">
+                                                        <span class="input-group-btn">
+                                                            <button id="bt_Quyuadd" type="button" class="btn btn-primary btn-sm" onclick="Bt_Quyuadd()">
+                                                                <b>选择</b>
+                                                                <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*备案编号*@
+                                            <div class="form-group">
+                                                <label for="beianbh" class="col-sm-3 control-label"><b>备案编号</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="beianbh" class="form-control" placeholder="请填写备案编号" value="@item.BeianBH" />
+                                                </div>
+                                            </div>
+                                            @*备案有效期*@
+                                            <div class="form-group">
+                                                <label for="date_beianyxq" class="col-sm-3 control-label"><b>备案有效期</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="date_beianyxq" name="beianyxq" placeholder="备案有效期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",item.BeianYXQ)" type="date" style="z-index:1000;position:relative;">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-calendar bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*备案照片*@
+                                            <div class="form-group">
+                                                <label for="beiantp" class="col-sm-3 control-label"><b>备案照片</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="beiantp" name="beiantp" readonly placeholder="请上传照片" class="form-control" type="text" value="@item.BeianTP">
+                                                        <span class="input-group-btn">
+                                                            <button type="button" data-toggle="modal" data-target="#myModalUpload" onclick="btn3()" class="btn btn-primary btn-sm">
+                                                                <b>上传</b>
+                                                                <i class="icon-cloud-upload icon-on-right bigger-110"></i>
+                                                            </button>
+                                                            <span hidden id="batp"></span>
+                                                            <button type="button" class="btn btn-primary btn-sm batp_browse">
+                                                                <b>浏览</b>
+                                                                <i class="icon-camera icon-on-right bigger-110"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*备案批准日期*@
+                                            <div class="form-group">
+                                                <label for="date_beianpzrq" class="col-sm-3 control-label"><b>备案批准日期</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="date_beianpzrq" name="beianpzrq" placeholder="备案批准日期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",item.BeianPZRQ)" type="date" style="z-index:1000;position:relative;">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-calendar bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*备案发证机关*@
+                                            <div class="form-group">
+                                                <label for="beianfzjg" class="col-sm-3 control-label"><b>备案发证机关</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="beianfzjg" name="beianfzjg" class="form-control" placeholder="请填写备案发证机关" value="@item.BeianFZJG" />
+                                                </div>
+                                            </div>
+                                            @*是否合作*@
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label" for="HezuoSF"><b>是否合作</b></label>
+                                                <div class="col-sm-8">
+                                                    <label class="control-group">
+                                                        <input name="HezuoSF" id="HezuoSF" class="ace ace-switch ace-switch-7" type="checkbox">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @*是否审查*@
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label" for="ShenchaSF"><b>是否审查</b></label>
+                                                <div class="col-sm-8">
+                                                    <label class="control-group">
+                                                        <input name="ShenchaSF" id="ShenchaSF" class="ace ace-switch ace-switch-7" type="checkbox">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            @*首营状态*@
+                                            <div class="form-group" style="display:none">
+                                                <label for="name" class="col-sm-2">首营状态</label>
+                                                <div class="col-sm-10">
+                                                    <input type="text" class="form-control" name="ob_base_shouhuodanwei_shouying">
+                                                    @Html.SelectList_Common("ob_base_shouhuodanwei_shouying", "首营状态", (int)item.Shouying)
+                                                </div>
+                                            </div>
+                                            @*企业地址*@
+                                            <div class="form-group">
+                                                <label for="qiyedz" class="col-sm-3 control-label"><b>企业地址</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" name="qiyedz" class="form-control" placeholder="请填写备案编号" value="@item.QiyeDZ" />
+                                                </div>
+                                            </div>
+                                            @*送货地址*@
+                                            <div class="form-group">
+                                                <label for="qiyedz" class="col-sm-3 control-label"><b>送货地址</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" readonly id="songhuodz" name="songhuodz" class="form-control" placeholder="请填写送货地址" value="@item.SonghuoDZ" />
+                                                </div>
+                                            </div>
+                                            @*联系人*@
+                                            <div class="form-group">
+                                                <label for="Lianxiren" class="col-sm-3 control-label"><b>联系人</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="Lianxiren" name="Lianxiren" class="form-control" placeholder="请填写联系人" value="@item.Lianxiren" />
+                                                </div>
+                                            </div>
+                                            @*联系电话*@
+                                            <div class="form-group">
+                                                <label for="LianxiDH" class="col-sm-3 control-label"><b>联系电话</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="LianxiDH" name="LianxiDH" class="form-control" placeholder="请填写联系电话" value="@item.LianxiDH" />
+                                                </div>
+                                            </div>
+                                            @*录入日期*@
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input id="MakeDate" disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",item.MakeDate)" type="text">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-calendar bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*录入人*@
+                                            <div class="form-group">
+                                                <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                                <div class="col-sm-8">
+                                                    <div class="input-group">
+                                                        <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-user bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div class="form-actions center">
+                                            <button id="save_bottom" class="btn btn-primary" type="button">
+                                                <b>更新</b>
+                                                <i class="icon-save bigger-110"></i>
+                                            </button>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @*默认地址*@
+                    <div class="col-sm-4" style="position:relative;">
+                        <div style="position:fixed;max-width:530px;min-width:500px;">
+                            <div class="widget-box radius-4">
+                                <div class="widget-header">
+                                    <h4><b>收货地址信息</b></h4>
+                                </div>
+                                <div class="widget-body">
+                                    <div class="widget-main">
+                                        <div class="row" id="pl_fun_dizhi">
+                                            <div class="col-sm-12">
+                                                <button type="button" id="btn_Default" class="btn btn-white"><i class="icon-location-arrow  bigger-120 green"></i>设为默认</button>
+                                                <button type="button" id="btn_shdwAdd" class="btn btn-white"><i class="icon-adn  bigger-120 blue"></i>添加</button>
+                                                <button type="button" id="btn_shdwEdit" class="btn btn-white"><i class="icon-edit  bigger-120"></i>编辑</button>
+                                                <button type="button" id="btn_shdwDel" class="btn btn-white"><i class="icon-remove red bigger-120"></i>删除</button>
+                                            </div>
+                                        </div>
+                                        <div class="space-18"></div>
+                                        @*收货明细列表*@
+                                        <div id="shouhuomingxi_shdw" class="container">
+                                            <table class="table table-hover" id="mydatatable">
+                                                <thead>
+                                                    <tr style="font-weight:bolder;">
+                                                        <td></td>
+                                                        <td>地址</td>
+                                                        <td>联系人</td>
+                                                        <td>联系电话</td>
+                                                        <td>销售人</td>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="pl_Fanwei" class="panel panel-primary" hidden style="display:none;position:fixed;top:100px;left:200px;width:1100px;height:600px;z-index:1001;">
+    <div class="tuodong panel-heading">
+        <h3 class="panel-title">经营范围管理<button id="pl_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body" @*style="width:1090px;height:550px;z-index:999;overflow:scroll"*@>
+        <div class="center">
+            <button type="button" class="btn btn-default " id="bt_fanwei_add"><i class="icon-add"></i>确定</button>
+            <button type="button" class="btn btn-default " id="bt_fanwei_all">全选</button>
+            <button type="button" class="btn btn-default " id="bt_fanwei_clear">全部取消</button>
+            <button type="button" class="btn btn-default " id="bt_fanwei_showdalei">显示大类</button>
+            <button type="button" class="btn btn-default " id="bt_fanwei_showall">显示全部</button>
+            <label>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;管理类别</label>
+            <select name="guanlifenlei" id="guanlifenlei">
+                <option value="全部">全部</option>
+                <option value="一类">一类</option>
+                <option value="二类">二类</option>
+                <option value="三类">三类</option>
+            </select>
+            <table class="table" id="qxdatatable">
+                <caption></caption>
+                <thead style="display:block" class="tuodong">
+                    <tr>
+                        <td></td>
+                        <td style="width:120px">编号</td>
+                        <td style="width:80px">名称</td>
+                        <td style="width:930px">描述</td>
+                        <td style="width:100px">管理分类</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block; max-height:460px;width:1070px;overflow:scroll"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="pl_Quyu" class="panel panel-primary" hidden style="display:none;position:fixed;top:100px;left:200px;width:640px;height:400px;z-index:1002;">
+    <div class="tuodong panel-heading">
+        <h3 class="panel-title">区域信息<button id="qy_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body" @*style="width:630px;height:350px;z-index:999;overflow:scroll"*@>
+        <div class="center">
+            <button type="button" class="btn btn-default " id="bt_quyu_add"><i class="icon-add"></i>确定</button>
+            <table class="table" id="rydatatable">
+                <caption></caption>
+                <thead class="tuodong" style="display:table;width:100%;table-layout:fixed;width: calc( 100% - 1em )">
+                    <tr style="display:table;width:100%;table-layout:fixed">
+                        <td style="width:5%"></td>
+                        <td style="width:15%">编号</td>
+                        <td style="width:20%">名称</td>
+                        <td>描述</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block;max-height:265px;width:620px;overflow:scroll"></tbody>
+            </table>
+        </div>
+    </div>
+</div>

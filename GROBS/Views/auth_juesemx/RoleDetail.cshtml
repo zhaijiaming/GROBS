@@ -1,0 +1,165 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@using GROBS.EFModels
+
+@{
+    ViewBag.Title = "角色定义";
+}
+
+<script type="text/javascript">
+    @Html.GetTreeData((string)ViewBag.fundata )
+
+    jQuery(function ($) {
+        var treeDataSource11 = new DataSourceTree({ data: tree_data11 });
+
+        $('#tree1').ace_tree({
+            dataSource: treeDataSource11,
+            multiSelect: true,
+
+            loadingHTML: '<div class="tree-loading"><i class="icon-refresh icon-spin blue"></i></div>',
+            'open-icon': 'icon-minus',
+            'close-icon': 'icon-plus',
+            'selectable': true,
+            'selected-icon': 'icon-ok',
+            'unselected-icon': 'icon-ok'
+        });
+
+        $("#tree1").on("loaded", function (evt, data) {
+            if (!Array.indexOf) {
+                Array.prototype.indexOf = function (obj) {
+                    for (var i = 0; i < this.length; i++) {
+                        if (this[i] == obj) {
+                            return i;
+                        }
+                    }
+                    return -1;
+                }
+            }
+            $("#tree1").find("div.tree-item").each(function () {
+                var funid = $(this).find(".tree-item-name").text();
+                var fid = funid.substr(funid.indexOf("(") + 1, funid.indexOf(")") - funid.indexOf("(") - 1);
+                if ($("#funs").val().indexOf(funid) > 0)
+                    $(this).addClass("tree-selected");
+            });
+
+        });
+
+        $("#bt_addInfo").click(function () {
+
+            var output = "";
+            var sels = $('#tree1').find('div.tree-selected');
+            var selval = "";
+            var fid = "";
+            var exval = false;
+            for (var x = 0; x < $(sels).length; x++) {
+                exval = false;
+                selval = $(sels[x]).find(".tree-item-name").text();
+                fid = selval.substr(selval.indexOf("(") + 1, selval.indexOf(")") - selval.indexOf("(") - 1);
+                $("#funs li input[type=checkbox]").each(function () {
+                    if (fid == $(this).val())
+                        exval = true;
+                });
+                if (!exval) {
+                    var addstr = '<li id="" class="item-red clearfix" style="position: relative; opacity: 1; z-index: auto;"><label class="inline">';
+                    addstr = addstr + '<input id="' + selval + '" type="checkbox" class="ace" value="' + fid + '">';
+                    addstr = addstr + '<span class="lbl">' + selval + '</span></label></li>';
+                    addstr = addstr + '<div class="pull-right">';
+                    addstr = addstr + '<span class="lbl"></span></div>';
+                    $("#funs ul").append(addstr);
+                }
+            }
+        });
+        $("#bt_deleteInfo").click(function () {
+            $("#funs li input[type=checkbox]").each(function () {
+                if (this.checked)
+                    $(this).parent().parent().remove();
+            });
+        });
+        $("#bt_save").click(function () {
+            var sid = "";
+            $("#funs li input[type=checkbox]").each(function () {
+                sid = sid + "," + $(this).val();
+            });
+            $("#funsave").val(sid);
+            $("form").submit();
+        });
+    });
+
+</script>
+
+
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/auth_juese">角色</a>
+        </li>
+        <li class="active">定义</li>
+    </ul>
+</div>
+<div class="page-content">
+    @using (Html.BeginForm("UpdateMX", "auth_juesemx", FormMethod.Post, new { @role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="funids" id="funs" value="@ViewBag.funs" />
+        <input type="hidden" name="jsid" id="js" value="@ViewBag.jsid" />
+        <input type="hidden" name="funsave" id="funsave" value="" />
+        <div class="page-header">
+            <p class="center">
+                <button type="button" class="btn btn-default " id="bt_addInfo"><i class="icon-adn"></i>添加</button>
+                <button type="button" class="btn btn-default " id="bt_save"><i class="icon-save"></i>保存</button>
+                <button type="button" class="btn btn-default " id="bt_deleteInfo"><i class="icon-remove"></i>删除</button>
+                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1); "><i class="icon-hand-left"></i>返回</button>
+            </p>
+        </div>
+        <div class="row">
+            <div class="col-sm-6 overflow-auto" style="height:500px">
+                <div class="widget-box">
+                    <div class="widget-header header-color-blue2">
+                        <h4 class="lighter smaller center">功能清单</h4>
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="widget-main padding-8">
+                            <div id="tree1" class="tree"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-6 overflow-auto" style="height:500px">
+                <div class="widget-box">
+                    <div class="widget-header header-color-green2">
+                        <h4 class="lighter smaller center">角色功能</h4>
+                    </div>
+
+                    <div id="funs" class="widget-body">
+                        <ul class="item-list ui-sortable">
+                            @foreach (auth_roledetail rd in ViewBag.roledetails)
+                            {
+                                <li class="item-green clearfix" style="position: relative; opacity: 1; z-index: auto;">
+                                    <label class="inline">
+                                        <input type="checkbox" class="ace" value="@rd.funid">
+                                        <span class="lbl">@rd.name</span>
+                                    </label>
+                                    <div class="pull-right">
+                                        <span class="lbl">@rd.module</span>
+                                    </div>
+                                </li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

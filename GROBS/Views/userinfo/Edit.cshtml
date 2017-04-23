@@ -1,0 +1,130 @@
+﻿@using GROBS.Models
+@using GROBS.App_Code
+@using GROBS.EFModels
+@*@model userinfo*@
+@model userinfoViewModel
+@{
+    ViewBag.Title = "用户信息修改";
+    userinfo item = ViewBag.userinfo;
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active"> 编辑</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    @*<form role="form" action="/userinfo/Update" method="post">*@
+    @using (Html.BeginForm("update", "userinfo", FormMethod.Post, new { @role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="ID" name="ID" value="@ViewData.Model.ID"/>
+        <div class="page-header">
+            <p>
+                <button type="submit" class="btn btn-default"><i class="icon-save"></i>更新</button>
+                <button type="button" class="btn btn-default" onclick="javascript: history.back(-1); "><i class="icon-hand-left"></i>返回</button>
+            </p>
+        </div>
+
+        <div class="container">
+            <div class="form-group">
+                <a href="/service/getspellcode?yourwords=嘉事堂">嘉事堂</a>
+                @ViewData.Model.ID
+                </div>
+            @*<div class="form-group">
+                @Html.LabelFor(m => m.ID, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10" >
+                    @Html.TextBoxFor(m => m.ID, new { @class = "form-control", @readonly = "true" })
+                    @Html.ValidationMessageFor(m => m.ID, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.Account, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Account, new { @class = "form-control",@readonly="true" })
+                @Html.ValidationMessageFor(m => m.Account, "", new { @class = "text-danger" })
+                @*<label for="name">账号</label>
+                    <input type="text" class="form-control" name="ob_userinfo_account" value="@item.Account">*@
+            </div>
+            @*<div class="form-group">
+                @Html.LabelFor(m => m.Password, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Password, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                <label for="name">密码</label>
+                    <input type="text" class="form-control" name="ob_userinfo_password" value="@item.Password">
+            </div>*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.FullName, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.FullName, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.FullName, "", new { @class = "text-danger" })
+                @*<label for="name">全名</label>
+                    <input type="text" class="form-control" name="ob_userinfo_fullname" value="@item.FullName">*@
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.EmployeeID, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.EmployeeID, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.EmployeeID, "", new { @class = "text-danger" })
+                @*<label for="name">员工号</label>
+                    <input type="text" class="form-control" name="ob_userinfo_employeeid" value="@item.EmployeeID">*@
+            </div>
+            @*<div class="form-group">
+                @Html.LabelFor(m => m.AccountType, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.AccountType, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.AccountType, "", new { @class = "text-danger" })
+                <label for="name">类型</label>
+                    <input type="text" class="form-control" name="ob_userinfo_accounttype" value="@item.AccountType">
+            </div>*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.Remark, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Remark, new { @class = "form-control" })
+                @*<label for="name">备注</label>
+                    <input type="text" class="form-control" name="ob_userinfo_remark" value="@item.Remark">*@
+            </div>
+            @*<div class="form-group">
+                @Html.LabelFor(m => m.Status, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.Status, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.Status, "", new { @class = "text-danger" })
+                <label for="name">状态</label>
+                    <input type="text" class="form-control" name="ob_userinfo_status" value="@item.Status">
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.InputMan, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.InputMan, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.InputMan, "", new { @class = "text-danger" })
+                <label for="name">输入人</label>
+                    <input type="text" class="form-control" name="ob_userinfo_inputman" value="@item.InputMan">
+            </div>*@
+            @*<div class="form-group">
+                @Html.LabelFor(m => m.InputDate, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.InputDate, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.InputDate, "", new { @class = "text-danger" })
+                <label for="name">输入日期</label>
+                    <input type="text" class="form-control" name="ob_userinfo_inputdate" value="@item.InputDate">
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.ModifyMan, new { @class = "control-label" })
+                @Html.TextBoxFor(m => m.ModifyMan, new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.ModifyMan, "", new { @class = "text-danger" })
+                <label for="name">修改人</label>
+                    <input type="text" class="form-control" name="ob_userinfo_modifyman" value="@item.ModifyMan">
+            </div>*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.ModifyDate, new { @class = "control-label" })
+                @*@Html.TextBoxFor(m => m.ModifyDate, new { @class = "form-control" })*@
+                @Html.ValidationMessageFor(m => m.ModifyDate, "", new { @class = "text-danger" })
+                @*<label for="name">修改日期</label>*@
+                    <input type="text" class="form-control" id="ModifyDate" name="ModifyDate" value="@DateTime.Now">
+            </div>
+        </div>
+
+    }
+    @*</form>*@
+</div>
+

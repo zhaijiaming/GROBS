@@ -1,0 +1,397 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 嘉和诚康作业管理平台</title>
+    <!-- basic styles -->
+
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
+
+    <!--[if IE 7]>
+      <link rel="stylesheet" href="~/assets/css/font-awesome-ie7.min.css" />
+    <![endif]-->
+    <!-- page specific plugin styles -->
+
+    <link rel="stylesheet" href="~/assets/css/select2.css">
+
+    <!-- fonts -->
+
+    <link rel='stylesheet' href='http://fonts.useso.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="~/assets/css/ace.min.css">
+    <link rel="stylesheet" href="~/assets/css/ace-rtl.min.css">
+    <link rel="stylesheet" href="~/assets/css/ace-skins.min.css">
+
+    <!--[if lte IE 8]>
+      <link rel="stylesheet" href="~/assets/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <script src="~/assets/js/jquery-2.0.3.min.js"></script>
+    @*<script src="~/assets/js/jquery.validate.min.js"></script>*@
+    <!--script src="~/assets/js/jquery-1.10.2.min.js"></script-->
+    <script src="~/assets/js/bootstrap.min.js"></script>
+    <!-- ace settings handler -->
+
+    <script src="~/assets/js/ace-extra.min.js"></script>
+
+    <script src="/Scripts/jquery.validate.js"></script>
+    <script src="/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/davisfunction.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="~/assets/js/html5shiv.js"></script>
+    <script src="~/assets/js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+<body>
+    <div class="navbar navbar-collapse" id="navbar">
+        <script type="text/javascript">
+            try { ace.settings.check('navbar', 'fixed') } catch (e) { }
+        </script>
+
+        <div class="navbar-container" id="navbar-container">
+            <div class="navbar-header pull-left">
+                <a href="http://www.cachet.com.cn/" class="navbar-brand">
+                    <img style="width:66px; height:33px; top:0px; left:0px;" src="~/Imgs/cachet0.png" alt="Catche's icon" />
+                    <small>
+                        上海嘉和诚康医疗器械有限公司
+                    </small>
+                </a><!-- /.brand -->
+            </div><!-- /.navbar-header -->
+
+            <div class="navbar-header pull-right" role="navigation">
+                <ul class="nav">
+                    <li>
+                        <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                            <img class="nav-user-photo" src="~/assets/avatars/avatar2.png" alt="Yao's Photo">
+                            <span class="white">
+                                <small>文华，欢迎您！</small>
+                            </span>
+
+                            <i class="icon-caret-down"></i>
+                        </a>
+
+                        <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                            <li>
+                                <a href="\defineinfo">
+                                    <i class="icon-cog"></i>
+                                    设置
+                                </a>
+                            </li>
+
+                            <li>
+                                <a href="\userinfo\Edit\1">
+                                    <i class="icon-user"></i>
+                                    资料
+                                </a>
+                            </li>
+
+                            <li class="divider"></li>
+
+                            <li>
+                                @*<button type="button" class="btn-block" onclick="javascript:window.close()"><i class="icon-off"></i>退出</button>*@
+                                <a href="/Account/LogOut"><i class="icon-eye-close"></i>退出</a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul><!-- /.ace-nav -->
+            </div><!-- /.navbar-header -->
+        </div>
+    </div>
+    <div class="main-container" id="main-container">
+        <script type="text/javascript">
+            try { ace.settings.check('main-container', 'fixed') } catch (e) { }
+        </script>
+
+        <div class="main-container-inner">
+            <a class="menu-toggler" id="menu-toggler" href="#">
+                <span class="menu-text"></span>
+            </a>
+
+            <div class="sidebar" id="sidebar">
+                <script type="text/javascript">
+                    try { ace.settings.check('sidebar', 'fixed') } catch (e) { }
+                </script>
+
+                <ul class="nav nav-list">
+                    <li class="active">
+                        <a href="/Home">
+                            <i class="icon-dashboard"></i>
+                            <span class="menu-text">我的首页</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-check"></i>
+                            <span class="menu-text">首营管理 </span>
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li>
+                                <i class="icon-double-angle-right"></i>
+                                @Html.ActionLink("委托客户", "Index", "base_weituokehu")
+
+                            </li>
+
+                            <li>
+                                <i class="icon-double-angle-right"></i>
+                                @Html.ActionLink("供应商", "Index", "base_gongyingshang")
+                            </li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("生产企业", "Index", "base_shengchanqiye")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("收货单位", "Index", "base_shouhuodanwei")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("商品资料", "Index", "base_shangpinxx")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("商品注册证", "Index", "base_shangpinzcz")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("首营申请", "Index", "base_shouyingsq")</li>
+                            <li>
+
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-bookmark"></i>
+                            <span class="menu-text"> 基础数据 </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("产品线", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("医疗器械目录", "Index", "base_qixiemulu")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("计量单位", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("人员信息", "Index", "base_renyuanxx")</li>
+
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-move"></i>
+                            <span class="menu-text">
+                                仓库操作
+                            </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("入库计划", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("入库操作", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("当前库存", "Index", "base_renyuanxx")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("出库计划", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("出库操作", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("库内移位", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("货物盘点", "Index", "base_jiliangdw")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-gear"></i>
+                            <span class="menu-text">
+                                仓库设置
+                            </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("仓库", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("库位", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("员工", "Index", "base_renyuanxx")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("计费", "Index", "base_chanpinxian")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-check-minus"></i>
+                            <span class="menu-text"> 质量管理 </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("入库验收", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("出库验收", "Index", "base_qixiemulu")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("设备检测", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("质量跟踪", "Index", "base_renyuanxx")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("用户投诉", "Index", "base_renyuanxx")</li>
+                        </ul>
+                    </li>
+                   <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-money"></i>
+                            <span class="menu-text">
+                                费用结算
+                            </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("结算", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("支付", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("内部", "Index", "base_renyuanxx")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-ban-circle"></i>
+                            <span class="menu-text">
+                                账户权限
+                            </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("登陆账号", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("系统角色", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("权限设定", "Index", "base_renyuanxx")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-fighter-jet"></i>
+                            <span class="menu-text">
+                                药监查核
+                            </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("委托方", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("委托产品", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("入库", "Index", "base_renyuanxx")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("出库", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("库存", "Index", "base_renyuanxx")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-bullseye"></i>
+                            <span class="menu-text">
+                                客户服务
+                            </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("当前库存", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("入库计划", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("出库计划", "Index", "base_renyuanxx")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("历史入库", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("历史出库", "Index", "base_renyuanxx")</li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="#" class="dropdown-toggle">
+                            <i class="icon-book"></i>
+                            <span class="menu-text">
+                                帐表查询
+                            </span>
+
+                            <b class="arrow icon-angle-down"></b>
+                        </a>
+
+                        <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("库存量明细", "Index", "base_chanpinxian")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("预警商品", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("不合格商品", "Index", "base_renyuanxx")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("退货明细", "Index", "base_jiliangdw")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("应收款催缴", "Index", "base_renyuanxx")</li>
+                        </ul>
+                        </li>
+                <li>
+                    <a href="#" class="dropdown-toggle">
+                        <i class="icon-book"></i>
+                        <span class="menu-text">
+                            系统管理
+                        </span>
+
+                        <b class="arrow icon-angle-down"></b>
+                    </a>
+                       <ul class="submenu">
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("日志信息", "Index", "operatelog")</li>
+                            <li><i class="icon-double-angle-right"></i>@Html.ActionLink("查询条件", "Index", "searchcondition")</li>
+                           <li><i class="icon-double-angle-right"></i>@Html.ActionLink("系统账号", "Index", "userinfo")</li>
+                           <li><i class="icon-double-angle-right"></i>@Html.ActionLink("用户信息", "Index", "base_yonghu")</li>
+                        </ul>
+                    </li>
+
+                </ul><!-- /.nav-list -->
+
+                <div class="sidebar-collapse" id="sidebar-collapse">
+                    <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+                </div>
+
+                <script type="text/javascript">
+                    try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
+                </script>
+            </div>
+
+            <div class="main-content">
+                @RenderBody()
+
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year 嘉和诚康</p>
+                </footer>
+
+            </div><!-- /.main-content -->
+
+        </div><!-- /.main-container-inner -->
+
+        <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+            <i class="icon-double-angle-up icon-only bigger-110"></i>
+        </a>
+    </div>
+
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <!--script-- type="text/javascript">
+        window.jQuery || document.write("<script src='~/assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+    </!--script-->
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script type="text/javascript">
+     window.jQuery || document.write("<script src='~/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+        </script>
+    <![endif]-->
+    <!--script type="text/javascript">
+        if ("ontouchend" in document) document.write("<script src='~/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </!--script-->
+
+    <script src="~/assets/js/typeahead-bs2.min.js"></script>
+
+    <!-- page specific plugin scripts -->
+    <!--[if lte IE 8]>
+          <script src="assets/js/excanvas.min.js"></script>
+        <![endif]-->
+    <script src="~/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="~/assets/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/assets/js/jquery.slimscroll.min.js"></script>
+    <script src="~/assets/js/fuelux/data/fuelux.tree-sampledata.js"></script>
+    <script src="~/assets/js/fuelux/fuelux.tree.min.js"></script>
+
+    <!-- ace scripts -->
+
+    <script src="~/assets/js/ace-elements.min.js"></script>
+    <script src="~/assets/js/ace.min.js"></script>
+
+    <!-- inline scripts related to this page -->
+
+
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

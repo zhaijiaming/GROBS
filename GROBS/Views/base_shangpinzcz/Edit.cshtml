@@ -1,0 +1,411 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model base_shangpinzczViewModel
+@{
+    ViewBag.Title = "注册证修改";
+}
+@Html.GetFileUpload("zhucezhengtp", "zcz", "z", "cus", 1, 0, new Dictionary<string, string>() { { "zcz", "zhucezhengtp" } })
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        $("#makedate").datepicker();//录入日期
+        $("#pizhunrq").datepicker();//批准日期
+        $("#ZhucezhengYXQ").datepicker();//注册证有效期
+        $("#pl_guige_add,#pl_guige").draggable({ handle: '.tuodong' }, { containment: "parent" });
+        //验证
+        $("#Bianhao").attr('required', 'required');
+        $("#Mingcheng").attr('required', 'required');
+        //规格管理
+        var _zczid = $("#zczbh").val();
+        $("#bt_guige").click(function () {
+            getGuiGe();
+            $("#pl_guige").show();
+        });
+        $("#pl_close").click(function () {
+            $("#pl_guige").hide();
+        });
+        $("#bt_guige_delete").click(function () {
+            var _ggdel = "";
+            $("#ggdatatable tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    _ggdel = _ggdel + $(this).val() + ",";
+                }
+            });
+            if (_ggdel.length > 0) {
+                var _delok = confirm("确定要删除这些规格吗？");
+                if (_delok) {
+                    $.post(
+                        "/base_zhucezhenggg/deletenow",
+                        {
+                            del: _ggdel
+                        },
+                        function (data) {
+                            if (data == 1)
+                                getGuiGe();
+                            else
+                                alert("删除失败，请重试！");
+                        }
+                    );
+                }
+            }
+        });
+        //刷新
+        $("#bt_guige_refresh").click(function () {
+            getGuiGe();
+        });
+        //添加规格
+        $("#bt_guige_add").click(function () {
+            $("#pl_guige_add").show();
+        });
+        $("#pl_add_close").click(function () {
+            $("#pl_guige_add").hide();
+        });
+        $("#bt_add_save").click(function () {
+            saveGuiGe(1);
+        });
+        $("#bt_add_save1").click(function () {
+            saveGuiGe(2);
+        });
+        //全部取消
+        $("#bt_guige_clear").click(function () {
+            $(".checkbox_guige").prop("checked", false);
+        });
+        //单击tr打钩
+        $("#ggdatatable").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD") {
+                if ($(this).find(":checkbox").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
+        });
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+        });
+        //照片的点击事件
+        $(".zcz_browse").click(function () {
+            var zcz = "@Model.ZhucezhengTP";
+            var img_url = $("#zcz a").attr('href');
+            if (img_url != null && img_url != "") {
+                window.open(img_url);
+            } else if (zcz != null && zcz != "") {
+                window.open("/files/zhengzhao/@Model.ZhucezhengTP");
+            }
+        });
+    });
+    function saveGuiGe(aftersave) {
+        var _fillall = true;
+        var _zczid = $("#zczbh").val();
+        var _guige = $("#pl_add_guige").val();
+        var _memo = $("#pl_add_memo").val();
+        if (_zczid == "")
+            _fillall = false;
+        if (_guige == "")
+            _fillall = false;
+        if (_fillall) {
+            $.post("/base_zhucezhenggg/addnow",
+                {
+                    addzcz: _zczid,
+                    addguige: _guige,
+                    addmemo: _memo
+                },
+                function (data, status) {
+                    if (data == 1) {
+                        if (aftersave == 1)
+                            $("#pl_guige_add").hide();
+                        if (aftersave == 2) {
+                            $("#pl_add_guige").val("");
+                            $("#pl_add_memo").val("");
+                        }
+                    }
+                    else
+                        alert("添加失败，请重新添加");
+                });
+        }
+        else
+            alert("规格信息必须填写！");
+    }
+    function getGuiGe() {
+        var _zczid = $("#zczbh").val();
+        var filltable = "";
+        $.post(
+            "/base_zhucezhenggg/getdetail",
+            {
+                zczbh: _zczid
+            },
+            function (data) {
+                for (var i in data) {
+                    filltable = filltable + '<tr><td><div class="checkbox"><label><input class="checkbox_guige" type="checkbox" value="';
+                    filltable = filltable + data[i].ID;
+                    filltable = filltable + '"></label></div></td><td style="width:150px">';
+                    filltable = filltable + data[i].Guige;
+                    filltable = filltable + '</td><td style="width:150px">';
+                    filltable = filltable + data[i].Memo;
+                    filltable = filltable + '</td><td style="width:150px">';
+                    filltable = filltable + data[i].Makedate;
+                    filltable = filltable + '</td><td style="width:150px">';
+                    filltable = filltable + data[i].Makeman;
+                    filltable = filltable + '</td></tr>';
+                }
+                $("#pl_guige tbody").html(filltable);
+            });
+    }
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_shangpinzcz">注册证</a>
+        </li>
+        <li class="active"> 编辑</li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i>返回</button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i>更新</button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>注册证信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Update", "base_shangpinzcz", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input id="zczbh" type="hidden" name="id" value="@ViewData.Model.ID" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <fieldset>
+                                        @*注册证编号*@
+                                        <div class="form-group">
+                                            <label for="Bianhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>注册证编号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Bianhao" name="Bianhao" class="form-control" placeholder="请填写注册证编号" value="@ViewData.Model.Bianhao"/>
+                                            </div>
+                                        </div>
+                                        @*商品名称*@
+                                        <div class="form-group">
+                                            <label for="Mingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品名称</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请填写商品名称" value="@ViewData.Model.Mingcheng"/>
+                                            </div>
+                                        </div>
+                                        @*规格*@
+                                        <div class="form-group">
+                                            <label for="Guige" class="col-sm-3 control-label"><b>规格</b></label>
+                                            <div class="col-sm-8">
+                                                <button type="button" class="btn btn-primary" id="bt_guige"><i class="icon-list"></i>浏览</button>
+                                                <button type="button" class="btn btn-primary" id="bt_guige_add"><i class="icon-adn"></i>添加</button>
+                                            </div>
+                                        </div>
+                                        @*产品标准*@
+                                        <div class="form-group">
+                                            <label for="Bianzhun" class="col-sm-3 control-label"><b>产品标准</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Bianzhun" name="Bianzhun" class="form-control" placeholder="请填写产品标准" value="@ViewData.Model.Bianzhun"/>
+                                            </div>
+                                        </div>
+                                        @*注册证有效期*@
+                                        <div class="form-group">
+                                            <label for="ZhucezhengYXQ" class="col-sm-3 control-label"><b>注册证有效期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="ZhucezhengYXQ" name="ZhucezhengYXQ" placeholder="请填写注册证有效期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.ZhucezhengYXQ)" type="date">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*批准日期*@
+                                        <div class="form-group">
+                                            <label for="PizhunRQ" class="col-sm-3 control-label"><b>批准日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="pizhunrq" name="pizhunrq" placeholder="请填写批准日期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.PizhunRQ)" type="date">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*中文编号*@
+                                        <div class="form-group">
+                                            <label for="BianhaoZW" class="col-sm-3 control-label"><b>中文编号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="BianhaoZW" name="BianhaoZW" class="form-control" placeholder="请填写中文编号" value="@ViewData.Model.BianhaoZW"/>
+                                            </div>
+                                        </div>
+                                        @*产地*@
+                                        <div class="form-group">
+                                            <label for="Chandi" class="col-sm-3 control-label"><b>产地</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Chandi" name="Chandi" class="form-control" placeholder="请填写产地" value="@ViewData.Model.Chandi"/>
+                                            </div>
+                                        </div>
+                                        @*生产企业*@
+                                        <div class="form-group">
+                                            <label for="ShengchanqiyeID" class="col-sm-3 control-label"><b>生产企业</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("Shengchanqiyeid", "厂家", "名称", (long)ViewData.Model.ShengchanqiyeID)
+                                            </div>
+                                        </div>
+                                        @*服务机构*@
+                                        <div class="form-group">
+                                            <label for="ShouhuoJG" class="col-sm-3 control-label"><b>服务机构</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="ShouhuoJG" name="ShouhuoJG" class="form-control" placeholder="请填写服务机构" value="@ViewData.Model.ShouhuoJG"/>
+                                            </div>
+                                        </div>
+                                        @*注册证照片*@
+                                        <div class="form-group">
+                                            <label for="ZhucezhengTP" class="col-sm-3 control-label"><b>注册证照片</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="zhucezhengtp" name="zhucezhengtp" readonly placeholder="请上传照片" class="form-control" type="text" value="@ViewData.Model.ZhucezhengTP">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" data-toggle="modal" data-target="#myModalUpload" onclick="btn1()" class="btn btn-primary btn-sm">
+                                                            <b>上传</b>
+                                                            <i class="icon-cloud-upload icon-on-right bigger-110"></i>
+                                                        </button>
+                                                        <span hidden id="zcz"></span>
+                                                        <button type="button" class="btn btn-primary btn-sm zcz_browse">
+                                                            <b>浏览</b>
+                                                            <i class="icon-camera icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*注册代理*@
+                                        <div class="form-group">
+                                            <label for="ZhuceDL" class="col-sm-3 control-label"><b>注册代理</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="ZhuceDL" name="ZhuceDL" class="form-control" placeholder="请填写注册代理" value="@ViewData.Model.ZhuceDL"/>
+                                            </div>
+                                        </div>
+                                        @*试用范围*@
+                                        <div class="form-group">
+                                            <label for="ShiyongFW" class="col-sm-3 control-label"><b>试用范围</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="ShiyongFW" name="ShiyongFW" class="form-control" placeholder="请填写试用范围" value="@ViewData.Model.ShiyongFW"/>
+                                            </div>
+                                        </div>
+                                        @*备注*@
+                                        <div class="form-group">
+                                            <label for="Beizhu" class="col-sm-3 control-label"><b>备注</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Beizhu" name="Beizhu" class="form-control" placeholder="请填写备注" value="@ViewData.Model.Beizhu"/>
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="ob_base_gongyingshang_makedate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*输入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="name"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewData.Model.MakeMan)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>更新</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_guige" class="panel panel-primary" hidden style="position:absolute;top:100px;left:200px;width:600px;height:600px;z-index:999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title">规格管理<button id="pl_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <button type="button" class="btn btn-default " id="bt_guige_clear">全部取消</button>
+            <button type="button" class="btn btn-default " id="bt_guige_delete"><i class="icon-remove"></i>删除</button>
+            <button type="button" class="btn btn-default " id="bt_guige_refresh"><i class="icon-refresh"></i>刷新</button>
+            <table class="table" id="ggdatatable">
+                <caption></caption>
+                <thead style="display:block">
+                    <tr>
+                        <td style="width:40px"></td>
+                        <td style="width:160px">规格</td>
+                        <td style="width:155px">说明</td>
+                        <td style="width:140px">制单日期</td>
+                        <td style="width:190px">制单人</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block;max-height:465px;min-height:465px;width:572px;overflow:scroll;"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="pl_guige_add" class="panel panel-primary" hidden style="position:absolute;top:200px;left:400px;width:400px;z-index:999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title">规格添加<button id="pl_add_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Guige">规格</label>
+                <div class="col-sm-10">
+                    @*<input class="form-control" id="pl_add_guige" name="Guige" type="text" value="" />*@
+                    <textarea class="form-control" id="pl_add_guige" name="Guige"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="Memo">说明</label>
+                <div class="col-sm-10">
+                    @*<input class="form-control" id="pl_add_memo" name="Memo" type="text" value="" />*@
+                    <textarea class="form-control" id="pl_add_memo" name="Memo"></textarea>
+                </div>
+            </div>
+            <br />
+            <div class="form-group">
+                <div class="col-sm-6">
+                    <p id="bt_add_save" class="btn btn-default">保存并关闭</p>
+                </div>
+                <div class="col-sm-6">
+                    <p id="bt_add_save1" class="btn btn-default">保存后继续</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

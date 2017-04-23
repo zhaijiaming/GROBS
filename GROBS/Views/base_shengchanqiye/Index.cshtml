@@ -1,0 +1,270 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{ ViewBag.Title = "生产企业清单";
+    string _searchcondition = ViewBag.SearchCondition;
+}
+@Html.GetFileUpload("item.YingyezhizhaoTP", "yyzz", "z", "cus", 2, 0, new Dictionary<string, string>() { { "yyzz", "item.YingyezhizhaoTP" }, { "xktp", "item.Shengchanxuketp" } })
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            if (u_id != null) {
+                var url_go = "/base_shengchanqiye/Edit/" + u_id;
+                location.href = url_go;
+            }
+        });
+        $("#bt_sendcheck").click(function () {
+            var sendval = "";
+            $("tr input[type=checkbox]").each(function () {
+                if (this.checked)
+                    sendval = sendval + $(this).val() + ",";
+            });
+            //$.post("/quan_shouyingsq/checkadd", { checkval: sendval, checktype: "5" }, function (data, status) {
+            //    if (data = "ok")
+            //        window.location.reload();
+            //    else
+            //        alert("送审失败，请重新上传！");
+            //});
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/quan_shouyingsq/checkadd",
+                data: {
+                    checkval: sendval,
+                    checktype: "5"
+                },
+                success: function (data) {
+                    if (data != "ok")
+                        alert("送审失败，请重新上传！");
+                    else
+                        window.location.reload();
+                }
+            });
+        });
+        var t = document.getElementsByClassName('yyzztp');
+
+        for (var i = 0; i < t.length; i++) {
+            if (t[i].href.length < 42) {
+                $(".yyzztp").eq(i).removeAttr("href")
+                $(".yyzztp").eq(i).html("暂无")
+            }
+            else {
+                $(".yyzztp").eq(i).html("浏览")
+            }
+        }
+
+        var t = document.getElementsByClassName('scxktp');
+
+        for (var i = 0; i < t.length; i++) {
+            if (t[i].href.length < 42) {
+                $(".scxktp").eq(i).removeAttr("href")
+                $(".scxktp").eq(i).html("暂无")
+            }
+            else {
+                $(".scxktp").eq(i).html("浏览")
+            }
+        }
+
+        var t = document.getElementsByClassName('hezuo');
+
+        for (var i = 0; i < t.length; i++) {
+            if ($(".hezuo").eq(i).html() == "True") {
+                $(".hezuo").eq(i).html("是")
+            }
+            else {
+                $(".hezuo").eq(i).html("否")
+            }
+        }
+        //table样式
+        table_config(mydatatable);
+        trResize();//初始化表头
+
+
+    });
+    function AddInfo() {
+        location.href = "/base_shengchanqiye/Add";
+    }
+    function EditInfo() {
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                location.href = "/base_shengchanqiye/Edit/" + $(this).val();
+        });
+    }
+    function DelInfo() {
+        var sDel = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                sDel = sDel + ", " + $(this).val()
+        });
+        if (sDel.length < 2)
+            return;
+        var url_go = "/base_shengchanqiye/Delete/?del=" + sDel;
+        location.href = url_go;
+    }
+
+
+
+</script>
+
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        //init
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "Daima";
+        scm.ItemTitle = "代码";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Qiyemingcheng";
+        scm.ItemTitle = "名称";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        //scm = new SearchConditionModel();
+        //scm.ItemCode = "Shouying";
+        //scm.ItemTitle = "首营状态";
+        //scm.ItemType = "首营状态.首营状态";
+        //scms.Add(scm);
+    }
+    else
+    {
+        //analysis condition
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "Daima";
+            scm.ItemTitle = "代码";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Qiyemingcheng";
+            scm.ItemTitle = "名称";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[1].Split(',')[1];
+                scm.ItemOpValue = scs[1].Split(',')[2];
+                scm.ItemJion = scs[1].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            //scm = new SearchConditionModel();
+            //scm.ItemCode = "Shouying";
+            //scm.ItemTitle = "首营状态";
+            //scm.ItemType = "首营状态.首营状态";
+            //if (scs.Length > 1)
+            //{
+            //    scm.ItemValue = scs[2].Split(',')[1];
+            //    scm.ItemOpValue = scs[2].Split(',')[2];
+            //    scm.ItemJion = scs[2].Split(',')[3];
+            //}
+            //scms.Add(scm);
+
+        }
+    }
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">生产企业</li>
+    </ul>
+</div>
+<div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "生产企业_条件组合查询", "/base_shengchanqiye/index", "base_shengchanqiyeindex", scms)
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+            @*<button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>*@
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_sendcheck"><i class="icon-check-sign"></i>送审</button>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="mydatatable">
+                        <tr>
+                            <th></th>
+                            <th>首营</th>
+                            <th>代码</th>
+                            <th>名称</th>
+                            <th>营业执照编号</th>
+                            <th>营业执照有效期</th>
+                            <th>营业执照图片</th>
+                            <th>生产许可编号</th>
+                            <th>生产许可有效期</th>
+                            <th>生产许可照片</th>
+                            <th>是否合作</th>
+                            @*<td>录入日期</td>
+                                <td>输入人</td>*@
+                            @*新增*@
+                            @*<td>企业地址</td>
+                                <td>生产地址</td>*@
+                        </tr>
+                        <tbody>
+                            @foreach (var item in ViewBag.base_shengchanqiye)
+                            {
+
+                                <tr>
+                                    <td>
+                                        <label><input type="checkbox" value="@item.ID"></label>
+                                    </td>
+                                    <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
+                                    <td>@item.Daima</td>
+                                    <td>@item.Qiyemingcheng</td>
+                                    <td>@item.YingyezhizhaoBH</td>
+                                    <td>@item.YingyezhizhaoYXQ.ToString("yyyy-MM-dd")</td>
+                                    <td><a href="/files/zhengzhao/@item.YingyezhizhaoTP" target="_blank" class="yyzztp">浏览</a></td>
+                                    <td>@item.ShengchanxukeBH</td>
+                                    <td>@item.ShengchanxukeYXQ.ToString("yyyy-MM-dd")</td>
+                                    <td><a href="/files/zhengzhao/@item.ShengchanxukeTP" target="_blank" class="scxktp">浏览</a></td>
+                                    <td><span class="hezuo">@item.HezuoSF</span></td>
+                                    @*<td>@item.Shouying</td>*@
+                                    @*<td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
+                                        <td>@item.MakeMan</td>
+                                        <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>*@
+                                    @*<td>@item.Qiyedizhi</td>
+                                        <td>@item.Shengchandizhi</td>*@
+                                    @*<td>@item.HezuoSF</td>*@
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span class="pager">
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+            </span>
+        </div>
+    </div>
+</div>

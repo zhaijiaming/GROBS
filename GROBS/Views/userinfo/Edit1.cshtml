@@ -1,0 +1,92 @@
+﻿@using GROBS.EFModels
+@model userinfo
+@{
+    ViewBag.Title = "用户信息修改";
+    userinfo item = ViewBag.userinfo;
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/userinfo">用户信息</a>
+        </li>
+        <li class="active"> 编辑</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <form role="form" action="/userinfo/Update" method="post">
+        <div class="page-header">
+            <p>
+                <button type="submit" class="btn btn-default"><i class="icon-save"></i>更新</button>
+                <button type="button" class="btn btn-default" onclick="javascript: history.back(-1); "><i class="icon-hand-left"></i>返回</button>
+            </p>
+        </div>
+
+        <div class="container">
+            <div class="form-group">
+                <a href="/service/getspellcode?yourwords=嘉事堂">嘉事堂</a>
+            </div>
+            <div class="form-group">
+                <input type="text" onchange="" onkeydown="" onkeyup="getPYCode(this.value,'lblResult')" />
+                <label id="lblResult" style="color:Red">davis</label>
+            </div>
+            <div class="form-group">
+                <label for="name">序号</label>
+                <input type="text" class="form-control" name="ob_userinfo_id" readonly value="@item.ID">
+            </div>
+            <div class="form-group">
+                <label for="name">账号</label>
+                <input type="text" class="form-control" name="ob_userinfo_account" value="@item.Account">
+            </div>
+            <div class="form-group">
+                <label for="name">密码</label>
+                <input type="text" class="form-control" name="ob_userinfo_password" value="@item.Password">
+            </div>
+            <div class="form-group">
+                <label for="name">全名</label>
+                <input type="text" class="form-control" name="ob_userinfo_fullname" value="@item.FullName">
+            </div>
+            <div class="form-group">
+                <label for="name">员工号</label>
+                <input type="text" class="form-control" name="ob_userinfo_employeeid" value="@item.EmployeeID">
+            </div>
+            <div class="form-group">
+                <label for="name">类型</label>
+                <input type="text" class="form-control" name="ob_userinfo_accounttype" value="@item.AccountType">
+            </div>
+            <div class="form-group">
+                <label for="name">备注</label>
+                <input type="text" class="form-control" name="ob_userinfo_remark" value="@item.Remark">
+            </div>
+            <div class="form-group">
+                <label for="name">状态</label>
+                <input type="text" class="form-control" name="ob_userinfo_status" value="@item.Status">
+            </div>
+            <div class="form-group">
+                <label for="name">输入人</label>
+                <input type="text" class="form-control" name="ob_userinfo_inputman" value="@item.InputMan">
+            </div>
+            <div class="form-group">
+                <label for="name">输入日期</label>
+                <input type="text" class="form-control" name="ob_userinfo_inputdate" value="@item.InputDate">
+            </div>
+            <div class="form-group">
+                <label for="name">修改人</label>
+                <input type="text" class="form-control" name="ob_userinfo_modifyman" value="@item.ModifyMan">
+            </div>
+            <div class="form-group">
+                <label for="name">修改日期</label>
+                <input type="text" class="form-control" name="ob_userinfo_modifydate" value="@item.ModifyDate">
+            </div>
+        </div>
+    </form>
+</div>
+

@@ -1,0 +1,103 @@
+﻿
+@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "收货地址";
+    string _searchcondition = ViewBag.SearchCondition;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            if (u_id != null) {
+                var url_go = "/base_shouhuomingxi/Edit/" + u_id;
+                location.href = url_go;
+            }
+        });
+    });
+    function AddInfo() {
+        location.href = "/base_shouhuomingxi/Add";
+    }
+    function EditInfo() {
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                location.href = "/base_shouhuomingxi/Edit/" + $(this).val();
+        });
+    }
+    function DelInfo() {
+        var sDel = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                sDel = sDel + ", " + $(this).val()
+        });
+        if (sDel.length < 2)
+            return;
+        var url_go = "/base_shouhuomingxi/Delete/?del=" + sDel;
+        location.href = url_go;
+    }
+</script>
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">收货地址</li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+            <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
+            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+        </p>
+    </div>
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>收货单位</td>
+                    @*<td>名称</td>*@
+                    <td>地址</td>
+                    <td>联系人</td>
+                    <td>联系电话</td>
+                    <td>货主的销售序号</td>
+                    <td>货主的销售姓名</td>
+                    <td>录入日期</td>
+                    <td>输入人</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.base_shouhuomingxi)
+                {
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label><input type="checkbox" value="@item.ID"></label>
+                            </div>
+                        </td>
+                        <td>@Html.GetDataValue_ID("收货单位", "", (int)item.ShouhuofangID)</td>
+                        @*<td>@item.Mingcheng</td>*@
+                        <td>@item.Dizhi</td>
+                        <td>@item.Lianxiren</td>
+                        <td>@item.Lianxidianhua</td>
+                        <td>@item.XiaoshouID</td>
+                        <td>@item.Xiaoshouren</td>
+                        <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
+                        <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

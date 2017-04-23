@@ -1,0 +1,209 @@
+﻿@using GROBS.App_Code
+@using GROBS.Common
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="renderer" content="webkit" />
+    <title>@ViewBag.Title - 嘉事国润订单系统</title>
+    <!-- basic styles -->
+
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
+
+    <!--[if IE7]>
+      <link rel="stylesheet" href="~/assets/css/font-awesome-ie7.min.css" />
+    <![endif]-->
+    <!-- page specific plugin styles -->
+
+    <link rel="stylesheet" href="~/assets/css/select2.css" />
+    <link rel="stylesheet" href="~/Content/FrameworkList.css" />
+    <!-- fonts -->
+    @*<link rel='stylesheet' href='http://fonts.gmirror.org/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>*@
+    @*<link rel='stylesheet' href='http://fonts.useso.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>*@
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="~/assets/css/ace.min.css">
+    <link rel="stylesheet" href="~/assets/css/ace-rtl.min.css">
+    <link rel="stylesheet" href="~/assets/css/ace-skins.min.css">
+
+    <!--[if lt IE8]>
+      <link rel="stylesheet" href="~/assets/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <script src="~/assets/js/jquery-2.0.3.min.js"></script>
+    @*<script src="~/assets/js/jquery.validate.min.js"></script>*@
+    <!--script src="~/assets/js/jquery-1.10.2.min.js"></script-->
+    <script src="~/assets/js/bootstrap.min.js"></script>
+    <!-- ace settings handler -->
+
+    <script src="~/assets/js/ace-extra.min.js"></script>
+
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/davisfunction.js"></script>
+    <script src="~/Scripts/jquery.ui.datepicker-zh.js"></script>
+    <script src="~/Content/js/Common.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE9]>
+    <script src="~/assets/js/html5shiv.js"></script>
+    <script src="~/assets/js/respond.min.js"></script>
+    <![endif]-->
+
+    @*<style type="text/css">
+        .davis-container {
+            max-width: 1500px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>*@
+</head>
+<body>
+    <div class="davis-container">
+        <div class="navbar navbar-collapse" id="navbar">
+            <script type="text/javascript">
+                try { ace.settings.check('navbar', 'fixed') } catch (e) { }
+            </script>
+
+            <div class="navbar-container" id="navbar-container">
+                <div class="navbar-header pull-left">
+                    <a href="http://www.cachet.com.cn/" class="navbar-brand">
+                        <img style="width:66px; height:33px; top:0px; left:0px;" src="~/Imgs/cachet0.png" alt="Catche's icon" />
+                        <small>
+                            嘉事国润（上海）医疗科技有限公司
+                        </small>
+                    </a><!-- /.brand -->
+                </div><!-- /.navbar-header -->
+
+                <div class="navbar-header pull-right" role="navigation">
+                    <ul class="nav">
+                        <li>
+                            <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                                <img class="nav-user-photo" src="~/assets/avatars/avatar2.png" alt="Yao's Photo">
+                                <span class="white">
+                                    <small>@Session["user_name"]，欢迎您！</small>
+                                </span>
+
+                                <i class="icon-caret-down"></i>
+                            </a>
+
+                            <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                                <li>
+                                    <a href="\home">
+                                        <i class="icon-cog"></i>
+                                        设置
+                                    </a>
+                                </li>
+
+                                <li>
+                                    <a href="\userinfo\Edit\@Session["user_id"]">
+                                        <i class="icon-user"></i>
+                                        资料
+                                    </a>
+                                </li>
+
+                                <li class="divider"></li>
+
+                                <li>
+                                    @*<button type="button" class="btn-block" onclick="javascript:window.close()"><i class="icon-off"></i>退出</button>*@
+                                    <a href="/Account/LogOut"><i class="icon-eye-close"></i>退出</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul><!-- /.ace-nav -->
+                </div><!-- /.navbar-header -->
+            </div>
+        </div>
+        <div class="main-container" id="main-container">
+            <script type="text/javascript">
+                try { ace.settings.check('main-container', 'fixed') } catch (e) { }
+            </script>
+
+            <div class="main-container-inner">
+                <a class="menu-toggler" id="menu-toggler" href="#">
+                    <span class="menu-text"></span>
+                </a>
+                <div class="sidebar" id="sidebar">
+                    <script type="text/javascript">
+                        try { ace.settings.check('sidebar', 'fixed') } catch (e) { }
+                    </script>
+
+                    <ul class="nav nav-list">
+                        <li class="active">
+                            <a href="/Home">
+                                <i class="icon-dashboard"></i>
+                                <span class="menu-text">我的首页</span>
+                            </a>
+                        </li>
+                        @Html.Search_UserRights((int)Session["user_id"], PageMenu.Current_Page, PageMenu.Current_Control, PageMenu.Current_Model)
+                    </ul><!-- /.nav-list -->
+
+                    <div class="sidebar-collapse" id="sidebar-collapse">
+                        <i class="icon-double-angle-left" data-icon1="icon-double-angle-left" data-icon2="icon-double-angle-right"></i>
+                    </div>
+
+                    <script type="text/javascript">
+                        try { ace.settings.check('sidebar', 'collapsed') } catch (e) { }
+                    </script>
+                </div>
+
+                <div class="main-content">
+                    @RenderBody()
+                    <hr />
+                    <footer>
+                        <p>&copy; @DateTime.Now.Year 嘉事国润</p>
+                    </footer>
+                    @PageMenu.Clear()
+                </div><!-- /.main-content -->
+            </div><!-- /.main-container-inner -->
+
+            <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+                <i class="icon-double-angle-up icon-only bigger-110"></i>
+            </a>
+        </div>
+
+        <!-- basic scripts -->
+        <!--[if !IE]> -->
+        <!--script-- type="text/javascript">
+            window.jQuery || document.write("<script src='~/assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+        </!--script-->
+        <!-- <![endif]-->
+        <!--[if IE]>
+        <script type="text/javascript">
+         window.jQuery || document.write("<script src='~/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+            </script>
+        <![endif]-->
+        <!--script type="text/javascript">
+            if ("ontouchend" in document) document.write("<script src='~/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+        </!--script-->
+        <script src="~/assets/js/typeahead-bs2.min.js"></script>
+
+        <!-- page specific plugin scripts -->
+        <!--[if lte IE 8]>
+              <script src="assets/js/excanvas.min.js"></script>
+            <![endif]-->
+        <script src="~/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+        <script src="~/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+        <script src="~/assets/js/jquery.ui.touch-punch.min.js"></script>
+        <script src="~/assets/js/jquery.slimscroll.min.js"></script>
+        <script src="~/assets/js/fuelux/data/fuelux.tree-sampledata.js"></script>
+        <script src="~/assets/js/fuelux/fuelux.tree.min.js"></script>
+
+        <!-- ace scripts -->
+
+        <script src="~/assets/js/ace-elements.min.js"></script>
+        <script src="~/assets/js/ace.min.js"></script>
+
+        <!-- inline scripts related to this page -->
+
+
+
+
+        @RenderSection("scripts", required: false)
+    </div>
+</body>
+</html>

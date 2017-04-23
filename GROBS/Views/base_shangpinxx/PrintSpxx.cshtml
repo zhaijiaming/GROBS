@@ -1,0 +1,19 @@
+﻿@{
+    ViewBag.Title = "首营品种审批记录表";
+    Layout = "~/Views/Shared/EmptyView.cshtml";
+}
+<script type="text/javascript">
+    $(window).load(function () {
+        document.getElementById("myReport").src = "../../reports/ReportZY.aspx?pid=shangpinxx_shouying";
+        $("#autoUpdate").show();
+    });
+</script>
+<div id="autoUpdate" style="display:none; overflow-y: auto;background-color:white">
+    @*<input type="hidden" id="spxx_huozhuid" value="@ViewBag.spxx_huozhuid" />*@
+    <table style="height:100%;width:100%">
+        <tr>
+            <td></td>
+        </tr>
+        <tr><td class="center"><iframe id="myReport" style="width:1080px;height:800px;"></iframe></td></tr>
+    </table>
+</div>

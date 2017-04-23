@@ -1,0 +1,117 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "委托客户近效期列表";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+        });
+        //判断照片是否存在
+        var num = $("#mydatatable tr").length -1;
+        for (var i = 0; i < num; i++) {
+            //营业执照
+            var val_yyzzTP = $(".val_yyzzTP").eq(i).val();
+            if (val_yyzzTP == "" || val_yyzzTP == null) {
+                $(".YingyezhizhaoTP").eq(i).removeAttr("href");
+                $(".YingyezhizhaoTP").eq(i).html("暂无");
+            } else {
+                $(".YingyezhizhaoTP").eq(i).html("浏览");
+            }
+            //经营许可
+            var val_jyxkTP = $(".val_jyxkTP").eq(i).val();
+            if (val_jyxkTP == "" || val_jyxkTP == null) {
+
+                $(".JingyingxukeTP").eq(i).removeAttr("href");
+                $(".JingyingxukeTP").eq(i).html("暂无");
+            } else {
+                $(".JingyingxukeTP").eq(i).html("浏览");
+            }
+        }
+
+    });
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/rmd_myreminder/ReminderList">我的提醒</a>
+        </li>
+        <li class="active">委托客户</li>
+    </ul>
+</div>
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
+<div class="page-content">
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>首营状态</td>
+                    <td>客户代码</td>
+                    <td>客户简称</td>
+                    <td>合同编号</td>
+                    <td>营业执照编号</td>
+                    <td>营业执照有效期</td>
+                    <td>营业执照照片</td>
+                    <td>经营许可编号</td>
+                    <td>经营许可有效期</td>
+                    <td>经营许可照片</td>
+                    <td>联系人</td>
+                    <td>联系电话</td>
+                    <td>备注</td>
+                    <td>录入日期</td>
+                    <td>录入人</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.base_weituokehu)
+                {
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label><input type="checkbox" value="@item.ID"></label>
+                            </div>
+                        </td>
+                        <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
+                        <td>@item.Daima</td>
+                        <td>@item.Jiancheng</td>
+                        <td>@item.Hetongbianhao</td>
+                        <td>@item.YingyezhizhaoBH</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}", item.YingyezhizhaoYXQ)</td>
+                        <td>
+                            <a href='/files/zhengzhao/@item.YingyezhizhaoTP' target='_blank' class="YingyezhizhaoTP"></a>
+                            <label><input type="hidden" class="val_yyzzTP" value="@item.YingyezhizhaoTP"></label>
+                        </td>
+                        <td>@item.JingyingxukeBH</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}", item.JingyingxukeYXQ)</td>
+                        <td>
+                            <a href='/files/zhengzhao/@item.JingyingxukeTP' target='_blank' class="JingyingxukeTP"></a>
+                            <label><input type="hidden" class="val_jyxkTP" value="@item.JingyingxukeTP"></label>
+                        </td>
+                        <td>@item.Lianxiren</td>
+                        <td>@item.Lianxidianhua</td>
+                        <td>@item.Beizhu</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
+                        <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @*<div class="pager">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+    </div>*@
+</div>
+
+

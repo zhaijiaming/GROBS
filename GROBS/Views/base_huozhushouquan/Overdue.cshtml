@@ -1,0 +1,83 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "货主授权书近效期列表";
+    string _searchcondition = ViewBag.SearchCondition;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+        });
+        //判断照片是否存在
+        var num = $("#mydatatable tr").length - 1;
+        for (var i = 0; i < num; i++) {
+            var val_sqsTP = $(".val_sqsTP").eq(i).val();
+            if (val_sqsTP == "" || val_sqsTP == null) {
+                $(".ShouquanshuTP").eq(i).removeAttr("href");
+                $(".ShouquanshuTP").eq(i).html("暂无");
+            } else {
+                $(".ShouquanshuTP").eq(i).html("浏览");
+            }
+        }
+    });
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/rmd_myreminder/ReminderList">我的提醒</a>
+        </li>
+        <li class="active">货主的授权书</li>
+    </ul>
+</div>
+<div class="page-content">
+    <div class="row">
+        <div style="overflow:auto;height:370px;">
+            <table class="table" id="mydatatable">
+                <caption></caption>
+                <thead style="white-space: nowrap;">
+                    <tr>
+                        <td></td>
+                        <td>货主</td>
+                        <td>授权单位</td>
+                        <td>授权书有效期</td>
+                        <td>授权书照片</td>
+                        <td>录入日期</td>
+                        <td>输入人</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.base_huozhushouquan)
+                    {
+                        <tr>
+                            <td>
+                                <label><input class="checkbox" type="checkbox" value="@item.ID"></label>
+                            </td>
+                            <td>@Html.GetDataValue_ID("货主", "名称", (int)item.HuozhuID)</td>
+                            <td>@Html.GetDataValue_ID("供应商", "", (int)item.ShouquanID)</td>
+                            <td>@string.Format("{0:yyyy-MM-dd}", item.ShouquanshuYXQ)</td>
+                            <td>
+                                <a href="/files/zhengzhao/@item.ShouquanshuTP" target="_blank" class="ShouquanshuTP"></a>
+                                <label><input type="hidden" class="val_sqsTP" value="@item.ShouquanshuTP"></label>
+                            </td>
+                            <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
+                            <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pager">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Overdue", new { page }))
+    </div>
+</div>

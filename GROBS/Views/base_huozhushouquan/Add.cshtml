@@ -1,0 +1,104 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model base_huozhushouquanViewModel
+@{
+    ViewBag.Title = "货主的授权书添加";
+}
+@Html.GetFileUpload("shouquanshutp", "sqstp", "z", "cus", 1, 0, new Dictionary<string, string>() { { "sqstp", "shouquanshutp" } })
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function(){
+        $(".ShouquanshuYXQ").datepicker();//ShouquanshuYXQ
+
+
+    });
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_huozhushouquan">货主的授权书</a>
+        </li>
+        <li class="active"> 新增</li>
+    </ul>
+</div>
+<div class="page-content">
+    @using (Html.BeginForm("Save", "base_huozhushouquan", FormMethod.Post, new { @role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" />
+        <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+        <div class="page-header">
+            <p>
+                <button type="submit" class="btn btn-default"><i class="icon-save"></i>保存</button>
+                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1); "><i class="icon-hand-left"></i>返回</button>
+            </p>
+        </div>
+        <div class="container">
+            @*货主*@
+            <div class="form-group">
+                <div class="control-label col-sm-2">
+                    <i class="icon-leaf red"></i>@Html.LabelFor(m => m.HuozhuID)
+                </div>
+                <div class="col-sm-10">
+                    @Html.SelectList_Auto("huozhuid", "货主", "名称")
+                </div>
+            </div>
+            @*类别*@
+            <div class="form-group" style="display:none;">
+                @Html.LabelFor(m => m.Leibie, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    <input type="text" name="Leibie" value="1" />
+                </div>
+            </div>        
+            @*供应商*@
+            <div class="form-group">
+                <div class="control-label col-sm-2">
+                    <i class="icon-leaf red"></i>@Html.LabelFor(m => m.ShouquanID)
+                </div>
+                <div class="col-sm-10">
+                    @Html.SelectList_Auto("ShouquanID", "供应商","")
+                </div>
+            </div>
+            @*授权有效期*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.ShouquanshuYXQ, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    <input type="date" class="ShouquanshuYXQ form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="ShouquanshuYXQ">
+                </div>
+            </div>
+            @*授权照片*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.ShouquanshuTP, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-6">
+                    <input type="text" class="form-control" readonly name="shouquanshutp" id="shouquanshutp">
+                </div>
+                <div class="col-sm-2">
+                    <button class="form-control" data-toggle="modal" data-target="#myModalUpload" onclick="btn1()">上传</button>
+                </div>
+                <div class="col-sm-2">
+                    <span class="form-control" id="sqstp">
+                        <a>浏览</a>
+                    </span>
+                </div>
+            </div>
+            @*录入日期*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.MakeDate, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    <input type="text" readonly class="form-control" name="makedate" value="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                </div>
+            </div>
+            @*录入人*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.MakeMan, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" readonly value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewBag.userid)" />
+                </div>
+            </div>
+        </div>
+    }
+</div>

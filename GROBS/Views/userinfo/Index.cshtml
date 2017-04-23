@@ -1,0 +1,255 @@
+﻿@using GROBS.App_Code;
+@using GROBS.Models;
+@using X.PagedList;
+@using X.PagedList.Mvc;
+@{
+    ViewBag.Title = "用户信息清单";
+    //List<SearchConditionModel> kkk=ViewBag.SearchCondition;
+    string _searchcondition = ViewBag.SearchCondition;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            if (u_id != null) {
+                var url_go = "/userinfo/Edit/" + u_id;
+                location.href = url_go;
+            }
+        });
+        $("#bt_cancelout").click(function () {
+            $("#pl_fun").show();
+            $("#chukuBH").val("");
+        });
+        $("#cancelbill").click(function () {
+            var chukuBH = $("#chukuBH").val().trim();//获取出库编号，去掉空格。
+            if (chukuBH.length > 0) {
+                //验证出库编号是否存在
+                $.post(
+                "/wms_chukudan/OutbillReverse",
+                {
+                    ckd: chukuBH
+                },
+                function (data) {
+                    if (data == -1) {
+                        alert("出现错误，请联系管理员！");
+                    }
+                    else if (data == -2)
+                        alert("无此单号！");
+                    else if (data == -3)
+                        alert("取消出库单前，必须清空拣货信息！");
+                    else if (data == -4)
+                        alert("更新失败，请马上联系开发人员！");
+                    else if(data==-5)
+                        alert("此状态下不能删除，请联络管理员！");
+                    else {
+                        alert("出库单已删除！");
+                        $("#chukuBH").val("");
+                    }
+                });
+            } else {
+                alert("请输入出库编号。");
+            }
+        });
+        $("#pl_fn_close").click(function () {
+            $("#pl_fun").hide();
+        });
+    });
+    function AddInfo() {
+        location.href = "/userinfo/Add";
+    }
+    function EditInfo() {
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                location.href = "/userinfo/Edit/" + $(this).val();
+        });
+    }
+    function DelInfo() {
+        var sDel = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                sDel = sDel + ", " + $(this).val()
+        });
+        if (sDel.length < 2)
+            return;
+        var url_go = "/userinfo/Delete/?del=" + sDel;
+        location.href = url_go;
+    }
+</script>
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "Account";
+        scm.ItemTitle = "账号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+        scm = new SearchConditionModel();
+        scm.ItemCode = "FullName";
+        scm.ItemTitle = "姓名";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+        scm = new SearchConditionModel();
+        scm.ItemCode = "EmployeeID";
+        scm.ItemTitle = "员工号";
+        scm.ItemType = "System.Int";
+        scms.Add(scm);
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Status";
+        scm.ItemTitle = "状态";
+        scm.ItemType = "System.Int";
+        scms.Add(scm);
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "Account";
+            scm.ItemTitle = "账号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+            scm = new SearchConditionModel();
+            scm.ItemCode = "FullName";
+            scm.ItemTitle = "姓名";
+            scm.ItemType = "System.String";
+            if (scs.Length > 2)
+            {
+                scm.ItemValue = scs[1].Split(',')[1];
+                scm.ItemOpValue = scs[1].Split(',')[2];
+                scm.ItemJion = scs[1].Split(',')[3];
+            }
+            scms.Add(scm);
+            scm = new SearchConditionModel();
+            scm.ItemCode = "EmployeeID";
+            scm.ItemTitle = "员工号";
+            scm.ItemType = "System.Int";
+            if (scs.Length > 3)
+            {
+                scm.ItemValue = scs[2].Split(',')[1];
+                scm.ItemOpValue = scs[2].Split(',')[2];
+                scm.ItemJion = scs[2].Split(',')[3];
+            }
+            scms.Add(scm);
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Status";
+            scm.ItemTitle = "状态";
+            scm.ItemType = "System.Int";
+            if (scs.Length > 4)
+            {
+                scm.ItemValue = scs[3].Split(',')[1];
+                scm.ItemOpValue = scs[3].Split(',')[2];
+                scm.ItemJion = scs[3].Split(',')[3];
+            }
+            scms.Add(scm);
+
+        }
+    }
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">用户信息</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "用户信息_条件组合查询", "/userinfo/index", "user_index", scms)
+    <script type="text/javascript">
+        function CleanCondition() {
+            $("Account").text("");
+            //$("#myModal :text").text("");
+            //$("#myModal :file").text("");
+            //$("#myModal :selected").val(0);
+        }
+    </script>
+
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+            <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+            <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
+            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+            <button type="button" class="btn btn-default " id="bt_cancelout"><i class="icon-remove"></i>出库单删除</button>
+        </p>
+    </div>
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>账号</td>
+                    <td>密码</td>
+                    <td>全名</td>
+                    <td>员工号</td>
+                    <td>类型</td>
+                    <td>备注</td>
+                    <td>状态</td>
+                    <td>输入人</td>
+                    <td>输入日期</td>
+                    <td>修改人</td>
+                    <td>修改日期</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label><input type="checkbox" value="@item.ID"></label>
+                            </div>
+                        </td>
+                        <td>@item.Account</td>
+                        <td>@item.Password</td>
+                        <td>@item.FullName</td>
+                        <td>@item.EmployeeID</td>
+                        <td>@item.AccountType</td>
+                        <td>@item.Remark</td>
+                        <td>@item.Status</td>
+                        <td>@item.InputMan</td>
+                        <td>@item.InputDate</td>
+                        <td>@item.ModifyMan</td>
+                        <td>@item.ModifyDate</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="pager">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+    </div>
+</div>
+<div id="pl_fun" class="panel panel-primary" style="display:none;position:fixed;top:200px;left:300px;overflow:auto;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title">出库单删除<button id="pl_fn_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="form-group">
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" id="chukuBH" placeholder="输入出库编号" />
+                </div>
+                <div class="col-sm-4">
+                    <input type="button" class="form-control btn btn-default" id="cancelbill" value="删除" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

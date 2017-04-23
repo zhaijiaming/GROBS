@@ -1,0 +1,497 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "商品资料清单";
+    string _searchcondition = ViewBag.SearchCondition;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            if (u_id != null) {
+                var url_go = "/base_shangpinxx/Edit/" + u_id;
+                location.href = url_go;
+            }
+        });
+        $("#pl_fun").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        $("#pl_imp").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#bt_cancel").click(function () {
+            $("#pl_imp").hide();
+        });
+        $("#pl_pk_close").click(function () {
+            $("#pl_imp").hide();
+        });
+        $("#bt_ok").click(function () {
+            var _info = $("#tximp").val();
+            var _hz = $("#huozhuid").val();
+            var _gys = $("#gongyingid").val();
+            if (_info == "")
+                alert("导入数据为空，不能导入！");
+            else {
+                $.ajax({
+                    async: true,
+                    beforeSend: function () {
+                        ShowWait();
+                    },
+                    complete: function () {
+                        HiddenWait();
+                    },
+                    type: "POST",
+                    url: "/base_shangpinxx/briefimport",
+                    data: {
+                        hz: _hz,
+                        gys: _gys,
+                        sp: _info
+                    },
+                    success: function (data) {
+                        if (data == -1)
+                            alert("导入失败，请重试！");
+                        if (data == 1) {
+                            alert("商品资料导入成功！");
+                            location.reload();
+                        }
+                    }
+                });
+
+            }
+        });
+        $("#bt_gspedit").click(function () {
+            var sendval = "";
+            var stateinfo = "";
+            $("tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    sendval = $(this).val();
+                    stateinfo = $(this).parent().parent().parent().find("td").eq(1).html();
+                }
+            });
+            if (sendval == "") {
+                alert("请选择需要进行修改的资料！");
+                return;
+            }
+            if (stateinfo !== "已通过") {
+                alert("未通过的信息，不能使用GSP进行修改！");
+                return;
+            }
+            window.open("/quan_gspspxx/edit/" + sendval);
+        });
+        $("#bt_sendcheck").click(function () {
+            var sendval = "";
+            $("#mydatatable tr input[type=checkbox]").each(function () {
+                if (this.checked)
+                    sendval = sendval + $(this).val() + ",";
+            });
+            //$.post("/quan_shouyingsq/checkadd", { checkval: sendval, checktype: "1" }, function (data, status) {
+            //    if (data = "ok")
+            //        window.location.reload();
+            //    else
+            //        alert("送审失败，请重新上传！");
+            //});
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/quan_shouyingsq/checkadd",
+                data: {
+                    checkval: sendval,
+                    checktype: "1"
+                },
+                success: function (data) {
+                    if (data != "ok")
+                        alert("送审失败，请重新上传！");
+                    else
+                        window.location.reload();
+                }
+            });
+        });
+        $("#bt_import").click(function () {
+            $("#pl_imp").show();
+        });
+        //‘首营品种审批记录’报表打印
+        $("#bt_print").click(function () {
+            var search_huozhuid = $(".modal-content #HuozhuID option:selected").text();
+            var search_shouying = $(".modal-content #Shouying option:selected").text();
+            var search_shenchasf = $(".modal-content #ShenchaSF option:selected").text();
+            if (search_huozhuid == "") {
+                alert("请选择货主！");
+            } else if (search_shouying != "已通过") {
+                alert("首营状态不为'已通过'，请重新选择！");
+            } else if (search_shenchasf != "是") {
+                alert("审查不为'是',请重新选择！");
+            } else {
+                window.open("/base_shangpinxx/PrintSpxx");
+            }
+            //$("#pl_fun").show();
+            //$("#spxx_huozhuid").val("");
+            //$("#Yes_print").click(function () {
+            //    var spxx_huozhuid = $("#spxx_huozhuid").val();
+            //    if (spxx_huozhuid != null && spxx_huozhuid !="") {
+            //window.open("/base_shangpinxx/PrintSpxx");
+            //    $("#pl_fun").hide();
+            //} else {
+            //    alert("请选择货主^_^！");
+            //}
+            //});
+        });
+        $("#pl_fn_close").click(function () {
+            $("#pl_fun").hide();
+        });
+        //table样式
+        table_config(mydatatable);
+        trResize();//初始化表头
+    });
+    function AddInfo() {
+        location.href = "/base_shangpinxx/Add";
+    }
+    function EditInfo() {
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                location.href = "/base_shangpinxx/Edit/" + $(this).val();
+        });
+    }
+    function DelInfo() {
+        var sDel = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                sDel = sDel + ", " + $(this).val()
+        });
+        if (sDel.length < 2)
+            return;
+        var url_go = "/base_shangpinxx/Delete/?del=" + sDel;
+        location.href = url_go;
+    }
+</script>
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "HuozhuID";
+        scm.ItemShowName = "huozhuid";
+        scm.ItemTitle = "货主";
+        scm.ItemType = "货主.简称";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Daima";
+        scm.ItemTitle = "商品代码";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Mingcheng";
+        scm.ItemTitle = "商品名称";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Guige";
+        scm.ItemTitle = "规格";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "ZhucezhengBH";
+        scm.ItemTitle = "注册证";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "GongyingID";
+        scm.ItemShowName = "gongyingid";
+        scm.ItemTitle = "供应商";
+        scm.ItemType = "供应商.供应商";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Shouying";
+        scm.ItemTitle = "首营状态";
+        scm.ItemType = "首营状态.首营状态";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "ShenchaSF";
+        scm.ItemShowName = "shenchasf";
+        scm.ItemTitle = "是否审查";
+        scm.ItemType = "是否.是否";
+        scms.Add(scm);
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "HuozhuID";
+            scm.ItemShowName = "huozhuid";
+            scm.ItemTitle = "货主";
+            scm.ItemType = "货主.简称";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Daima";
+            scm.ItemTitle = "商品代码";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[1].Split(',')[1];
+                scm.ItemOpValue = scs[1].Split(',')[2];
+                scm.ItemJion = scs[1].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Mingcheng";
+            scm.ItemTitle = "商品名称";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[2].Split(',')[1];
+                scm.ItemOpValue = scs[2].Split(',')[2];
+                scm.ItemJion = scs[2].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Guige";
+            scm.ItemTitle = "规格";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[3].Split(',')[1];
+                scm.ItemOpValue = scs[3].Split(',')[2];
+                scm.ItemJion = scs[3].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "ZhucezhengBH";
+            scm.ItemTitle = "注册证";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[4].Split(',')[1];
+                scm.ItemOpValue = scs[4].Split(',')[2];
+                scm.ItemJion = scs[4].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "GongyingID";
+            scm.ItemShowName = "gongyingid";
+            scm.ItemTitle = "供应商";
+            scm.ItemType = "供应商.供应商";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[5].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[5].Split(',')[2];
+                scm.ItemJion = scs[5].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Shouying";
+            scm.ItemTitle = "首营状态";
+            scm.ItemType = "首营状态.首营状态";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[6].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[6].Split(',')[2];
+                scm.ItemJion = scs[6].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "ShenchaSF";
+            scm.ItemShowName = "shenchasf";
+            scm.ItemTitle = "是否审查";
+            scm.ItemType = "是否.是否";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[7].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "-1";
+                }
+                if (scm.ItemValue == "false")
+                {
+                    scm.ItemValue = "2";
+                }
+                if (scm.ItemValue == "true")
+                {
+                    scm.ItemValue = "1";
+                }
+                scm.ItemOpValue = scs[7].Split(',')[2];
+                scm.ItemJion = scs[7].Split(',')[3];
+            }
+            scms.Add(scm);
+
+
+        }
+    }
+}
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">商品资料</li>
+    </ul>
+</div>
+<div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "商品资料_条件组合查询", "/base_shangpinxx/index", "base_shangpinxxindex", scms)
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i><b>查询</b></button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i><b>新增</b></button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i><b>编辑</b></button>
+            @*<button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>*@
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i><b>刷新</b></button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_sendcheck"><i class="icon-check-sign"></i><b>送审</b></button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_import"><i class="icon-inbox"></i><b>导入</b></button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_export" onclick="javascript: window.open('/base_shangpinxx/commodityexport')"><i class="icon-inbox"></i><b>导出</b></button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_print"><i class="icon-print"></i><b>打印</b></button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4 " id="bt_gspedit"><i class="icon-eraser"></i><b>GSP修改</b></button>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="mydatatable">
+                        <tr>
+                            <th></th>
+                            <th>首营状态</th>
+                            <th>货主</th>
+                            <th>商品代码</th>
+                            <th>注册证</th>
+                            <th>商品名称</th>
+                            <th>商品描述</th>
+                            <th>规格</th>
+                            <th>型号</th>
+                            <th>产品线</th>
+                            <th>分类目录</th>
+                            <th>管理分类</th>
+                            <th>包装要求</th>
+                            <th>存储条件</th>
+                            <th>生产企业</th>
+                            <th>供应商</th>
+                            <th>商品条码</th>
+                        </tr>
+                        <tbody>
+                            @foreach (var item in ViewBag.base_shangpinxx)
+                            {
+
+                                <tr>
+                                    <td>
+                                        <label><input class="checkbox" type="checkbox" value="@item.id"></label>
+                                    </td>
+                                    <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
+                                    @*<td>@Html.GetDataValue_ID("货主", "简称", (int)item.HuozhuID)</td>*@
+                                    <td>@item.Jiancheng</td>
+                                    <td>@item.daima</td>
+                                    @*<td>@Html.GetDataValue_ID("注册证", "编号", (int)item.ZhucezhengID)</td>*@
+                                    <td>@item.ZhucezhengBH </td>
+                                    <td>@item.mingcheng</td>
+                                    <td>@item.ShangpinMS</td>
+                                    <td>@item.Guige</td>
+                                    <td>@item.Xinghao</td>
+                                    @*<td>@Html.GetDataValue_ID("产品线","",(int)item.Chanpinxian)</td>*@
+                                    <td>@item.cpxmingcheng</td>
+                                    @*<td>@Html.GetDataValue_ID("分类目录","",(int)item.Muluxuhao)</td>*@
+                                    <td>@item.mlmingcheng</td>
+                                    <td>@Html.GetCommonValue_ID("医疗器械管理类别", (int)(item.guanlifenlei == null ? 0 : item.guanlifenlei))</td>
+                                    <td>@item.baozhuangyaoqiu</td>
+                                    <td>@item.Cunchutiaojian</td>
+                                    <td>@item.Qiyemingcheng</td>
+                                    @*<td>@Html.GetDataValue_ID("供应商", "", (int)item.GongyingID)</td>*@
+                                    <td>@item.gysmingcheng</td>
+                                    <td>@item.shangpintm</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span class="pager">
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+            </span>
+        </div>
+    </div>
+</div>
+<div id="pl_imp" class="panel panel-info" style="display:none;position:fixed;top:100px;left:200px;width:810px;overflow:auto;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">商品资料导入<button id="pl_pk_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-6 center"><p id="bt_ok" class="btn btn-default">保存</p></div>
+            <div class="col-sm-6 center"><p id="bt_cancel" class="btn btn-default">取消</p></div>
+        </div>
+        <div class="row">
+            <label for="name" class="col-sm-2">货主</label>
+            <div class="col-sm-10">
+                @Html.SelectList_Auto("huozhuid", "货主", "名称")
+            </div>
+        </div>
+        <div class="row">
+            <label for="name" class="col-sm-2">供应商</label>
+            <div class="col-sm-10">
+                @Html.SelectList_Auto("gongyingid", "供应商", "")
+            </div>
+        </div>
+        <div class="row">
+            <p><i class="icon-leaf red"></i>注意：导入的格式（注册证编号#商品名称#规格），其中#为分隔符，导入的信息中不能含有符号#，否则会有意想不到的错误！</p>
+            <textarea id="tximp" style="width:800px;height:360px;overflow:auto"></textarea>
+        </div>
+    </div>
+</div>
+@*<div id="pl_fun" class="panel panel-primary" style="display:none;position:fixed;top:200px;left:300px;overflow:auto;z-index:999;">
+        <div class="panel-heading tuodong">
+            <h3 class="panel-title">打印选项<button id="pl_fn_close" class="pull-right">X</button></h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class="form-group">
+                    <div class="col-sm-8">
+                        @Html.SelectList_Auto("spxx_huozhuid", "货主", "名称")
+                    </div>
+                    <div class="col-sm-4">
+                        <input type="button" class="form-control btn btn-default" id="Yes_print" value="打印" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>*@

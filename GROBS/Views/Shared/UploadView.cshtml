@@ -1,0 +1,16 @@
+﻿@model System.Web.HttpContextBase
+@{
+    ViewBag.Title = "UploadView";
+}
+
+<h2>UploadView</h2>
+<br />
+<br />
+@*new { enctype = "multipart/form-data" }比不可少，否则上传文件不会成功 *@
+@using (Html.BeginForm("Upload", "UploadFile", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <text>选择上传文件：</text><input name="file" type="file" id="file" />
+    <br />
+    <br />
+    <input type="submit" name="Upload" value="Upload" />
+}

@@ -1,0 +1,164 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model base_renyuanxxViewModel
+@{
+    ViewBag.Title = "人员信息修改";
+}
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        $("#Shengri").datepicker();
+        $("#makedate").datepicker();
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+        });
+    });
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_renyuanxx">人员信息</a>
+        </li>
+        <li class="active"> 编辑</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>人员信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Update", "base_renyuanxx", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@ViewData.Model.ID" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <fieldset>
+                                        @*账号*@
+                                        <div class="form-group">
+                                            <label for="userid" class="col-sm-2 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>账号</b></label>
+                                            <div class="col-sm-9">
+                                                @Html.SelectList_Auto("userid", "userinfo", "account", (long)ViewData.Model.UserID)
+                                            </div>
+                                        </div>
+                                        @*姓名*@
+                                        <div class="form-group">
+                                            <label for="Mingcheng" class="col-sm-2 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>姓名</b></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请填写姓名" value="@ViewData.Model.Mingcheng" />
+                                            </div>
+                                        </div>
+                                        @*性别*@
+                                        <div class="form-group">
+                                            <label for="xingbie" class="col-sm-2 control-label"><b>性别</b></label>
+                                            <div class="col-sm-9">
+                                                @Html.SelectList_Common("xingbie", "性别", (long)ViewData.Model.Xingbie)
+                                            </div>
+                                        </div>
+                                        @*电话*@
+                                        <div class="form-group">
+                                            <label for="Dianhua" class="col-sm-2 control-label"><b>电话</b></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="Dianhua" name="Dianhua" class="form-control" placeholder="请填写电话号码" value="@ViewData.Model.Dianhua" />
+                                            </div>
+                                        </div>
+                                        @*生日*@
+                                        <div class="form-group">
+                                            <label for="Shengri" class="col-sm-2 control-label"><b>生日</b></label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input id="Shengri" name="Shengri" placeholder="生日日期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.Shengri)" type="date" style="z-index:1000;position:relative;">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*部门*@
+                                        <div class="form-group">
+                                            <label for="Bumen" class="col-sm-2 control-label"><b>部门</b></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="Bumen" name="Bumen" class="form-control" placeholder="请填写部门" value="@ViewData.Model.Bumen" />
+                                            </div>
+                                        </div>
+                                        @*职位*@
+                                        <div class="form-group">
+                                            <label for="Zhiwei" class="col-sm-2 control-label"><b>职位</b></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="Zhiwei" name="Zhiwei" class="form-control" placeholder="请填写职位" value="@ViewData.Model.Zhiwei" />
+                                            </div>
+                                        </div>
+                                        @*职责*@
+                                        <div class="form-group">
+                                            <label for="Zhize" class="col-sm-2 control-label"><b>职责</b></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="Zhize" name="Zhize" class="form-control" placeholder="请填写职责" value="@ViewData.Model.Zhize" />
+                                            </div>
+                                        </div>
+                                        @*备注*@
+                                        <div class="form-group">
+                                            <label for="Beizhu" class="col-sm-2 control-label"><b>备注</b></label>
+                                            <div class="col-sm-9">
+                                                <input type="text" id="Beizhu" name="Beizhu" class="form-control" placeholder="请填写备注" value="@ViewData.Model.Beizhu" />
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="makedate"><b>录入日期</b></label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-9">
+                                                <div class="input-group">
+                                                    <input placeholder="MakeMan" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewData.Model.MakeMan)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>更新</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

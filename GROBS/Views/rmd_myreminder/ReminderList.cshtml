@@ -1,0 +1,31 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model rmd_remindlistViewModel
+
+@{ViewBag.Title = "提醒列表";}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/rmd_myreminder">我的提醒</a>
+        </li>
+        <li class="active"> 列表</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    @foreach (var item in ViewBag.RemindList)
+    {
+        <p>
+            <a href="@item.Ref">@item.Info</a>
+        </p>
+    }
+</div>
+

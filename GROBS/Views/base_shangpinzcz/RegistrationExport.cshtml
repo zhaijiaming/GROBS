@@ -1,0 +1,53 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "注册证清单";
+}
+<div class="page-content">
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td>注册证编号</td>
+                    <td>商品名称</td>
+                    <td>产品标准</td>
+                    <td>注册证有效期</td>
+                    <td>批准日期</td>
+                    <td>产地</td>
+                    <td>生产企业</td>
+                    <td>服务机构</td>
+                    <td>适用范围</td>
+                    <td>注册代理</td>
+                    <td>备注</td>
+                    <td>录入日期</td>
+                    <td>输入人</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.registration)
+                {
+                    <tr>
+                        <td>@item.Bianhao</td>
+                        <td>@item.Mingcheng</td>
+                        <td>@item.Bianzhun</td>
+                        <td>@item.ZhucezhengYXQ.ToString("yyyy-MM-dd")</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}", item.PizhunRQ == null ? "" : item.PizhunRQ)</td>
+                        <td>@item.Chandi</td>
+                        <td>@Html.GetDataValue_ID("生产企业", "名称", (int)item.ShengchanqiyeID)</td>
+                        <td>@item.ShouhuoJG</td>
+                        <td>@item.ShiyongFW</td>
+                        <td>@item.ZhuceDL</td>
+                        <td>@item.Beizhu</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate == null ? "" : item.MakeDate)</td>
+                        <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+

@@ -1,0 +1,159 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model base_gongyingshouquanViewModel
+@{ViewBag.Title = "供应商的授权书添加";}
+@Html.GetFileUpload("ShouquanshuTP", "sqstp", "z", "scqy", 1, 0, new Dictionary<string, string>() { { "sqstp", "ShouquanshuTP" } })
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        $("#ShouquanshuYXQ").datepicker();
+        $("#MakeDate").datepicker();
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+        });
+        //照片的点击事件
+        $(".sqstp_browse").click(function () {
+            var img_url = $("#sqstp a").attr('href');
+            if (img_url != null && img_url != "") {
+                //console.log(img_url);
+                window.open(img_url);
+            }
+        });
+    });
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_gongyingshouquan">供应商的授权书</a>
+        </li>
+        <li class="active"> 新增</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4">
+            <i class="icon-save"></i><b>保存</b>
+            <span class="badge badge-transparent">
+                <i class="light-red icon-asterisk"></i>
+            </span>
+        </button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>应商的授权书信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Save", "base_gongyingshouquan", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <fieldset>
+                                        @*供应商序号*@
+                                        <div class="form-group">
+                                            <label for="GongyingshangID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>供应商序号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="GongyingshangID" name="GongyingshangID" class="form-control" placeholder="请填写供应商序号" />
+                                            </div>
+                                        </div>
+                                        @*授权单位序号*@
+                                        <div class="form-group">
+                                            <label for="ShouquanID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>授权单位序号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="ShouquanID" name="ShouquanID" class="form-control" placeholder="请填写授权单位序号" />
+                                            </div>
+                                        </div>
+                                        @*授权单位名称*@
+                                        <div class="form-group">
+                                            <label for="Shouquanmingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>授权单位序号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Shouquanmingcheng" name="Shouquanmingcheng" class="form-control" placeholder="请填写授权单位名称" />
+                                            </div>
+                                        </div>
+                                        @*授权书有效期*@
+                                        <div class="form-group">
+                                            <label for="ShouquanshuYXQ" class="col-sm-3 control-label"><b>授权书有效期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="ShouquanshuYXQ" name="ShouquanshuYXQ" placeholder="请填写授权书有效期" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="date">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*授权书照片*@
+                                        <div class="form-group">
+                                            <label for="ShouquanshuTP" class="col-sm-3 control-label"><b>授权书照片</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="ShouquanshuTP" name="ShouquanshuTP" readonly placeholder="请上传照片" class="form-control" type="text">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" data-toggle="modal" data-target="#myModalUpload" onclick="btn1()" class="btn btn-primary btn-sm">
+                                                            <b>上传</b>
+                                                            <i class="icon-cloud-upload icon-on-right bigger-110"></i>
+                                                        </button>
+                                                        <span hidden id="sqstp"></span>
+                                                        <button type="button" class="btn btn-primary btn-sm sqstp_browse">
+                                                            <b>浏览</b>
+                                                            <i class="icon-camera icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input name="MakeDate" id="MakeDate" disabled="disabled" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewBag.userid)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>保存</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

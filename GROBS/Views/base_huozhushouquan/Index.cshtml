@@ -1,0 +1,150 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "货主的授权书清单";
+    string _searchcondition = ViewBag.SearchCondition;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            if (u_id != null) {
+                var url_go = "/base_huozhushouquan/Edit/" + u_id;
+                location.href = url_go;
+            }
+        });
+        //判断照片是否存在
+        var num = $("#mydatatable tr").length - 1;
+        for (var i = 0; i < num; i++) {
+            var val_sqsTP = $(".val_sqsTP").eq(i).val();
+            if (val_sqsTP == "" || val_sqsTP == null) {
+                $(".ShouquanshuTP").eq(i).removeAttr("href");
+                $(".ShouquanshuTP").eq(i).html("暂无");
+            } else {
+                $(".ShouquanshuTP").eq(i).html("浏览");
+            }
+        }
+    });
+    function AddInfo() {
+        location.href = "/base_huozhushouquan/Add";
+    }
+    function EditInfo() {
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                location.href = "/base_huozhushouquan/Edit/" + $(this).val();
+        });
+    }
+    function DelInfo() {
+        var sDel = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                sDel = sDel + ", " + $(this).val()
+        });
+        if (sDel.length < 2)
+            return;
+        var url_go = "/base_huozhushouquan/Delete/?del=" + sDel;
+        location.href = url_go;
+    }
+</script>
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "HuozhuID";
+        scm.ItemShowName = "huozhuid";
+        scm.ItemTitle = "货主";
+        scm.ItemType = "货主.都有";
+        scms.Add(scm);
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "HuozhuID";
+            scm.ItemShowName = "huozhuid";
+            scm.ItemTitle = "货主";
+            scm.ItemType = "货主.都有";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+        }
+    }
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">货主的授权书</li>
+    </ul>
+</div>
+<div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "货主的授权书_条件组合查询", "/base_huozhushouquan/index", "base_huozhushouquanindex", scms)
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+            <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+            <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
+            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+        </p>
+    </div>
+    <div class="row">
+        <div style="overflow:auto;height:370px;">
+            <table class="table" id="mydatatable">
+                <caption></caption>
+                <thead style="white-space: nowrap;">
+                    <tr>
+                        <td></td>
+                        <td>货主</td>
+                        <td>授权单位</td>
+                        <td>授权书有效期</td>
+                        <td>授权书照片</td>
+                        <td>录入日期</td>
+                        <td>输入人</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in ViewBag.base_huozhushouquan)
+                    {
+                        <tr>
+                            <td>
+                                <label><input class="checkbox" type="checkbox" value="@item.ID"></label>
+                            </td>
+                            <td>@Html.GetDataValue_ID("货主", "名称", (int)item.HuozhuID)</td>
+                            <td>@Html.GetDataValue_ID("供应商", "", (int)item.ShouquanID)</td>
+                            <td>@string.Format("{0:yyyy-MM-dd}", item.ShouquanshuYXQ)</td>
+                            <td>
+                                <a href="/files/zhengzhao/@item.ShouquanshuTP" target="_blank" class="ShouquanshuTP"></a>
+                                <label><input type="hidden" class="val_sqsTP" value="@item.ShouquanshuTP"></label>
+                            </td>
+                            <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
+                            <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="pager">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+    </div>
+</div>

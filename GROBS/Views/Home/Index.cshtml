@@ -1,0 +1,222 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model rmd_remindlistViewModel
+@{
+    ViewBag.Title = "嘉事国润订单服务平台";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        //$.get("/service/getspellcode?yourwords=嘉事堂", function (result) {
+        //    $(".widget-main p").text(result);
+        //});
+
+
+        //$(document).click(function () {
+        //    event = event || window.event;
+        //    var x = event.offsetX || event.originalEvent.layerX;
+        //    var y = event.offsetY || event.originalEvent.layerY;
+        //    if (x > 4 && x < 76 && y > 62 && y < 91) {
+        //        loadingShow_warp();
+        //        location.href = "/quan_shouyingsq/index";
+        //    }
+        //    else if (x > 4 && x < 76 && y > 130 && y < 157) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_rukudan/index";
+        //    }
+        //    else if (x > 4 && x < 76 && y > 185 && y < 213) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_rukudan/OperateList";
+        //    }
+        //    else if (x > 285 && x < 357 && y > 63 && y < 91) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_chukudan/index";
+        //    }
+        //    else if (x > 277 && x < 367 && y > 123 && y < 152) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_chukudan/outoperate";
+        //    }
+        //    else if (x > 285 && x < 356 && y > 180 && y < 206) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_chukudan/outoperate";
+        //    }
+        //    else if (x > 287 && x < 361 && y > 245 && y < 272) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_chukudan/outoperate";
+        //    }
+        //    else if (x > 4 && x < 76 && y > 249 && y < 279) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_rukudan/OperateList";
+        //    }
+        //    else if (x > 4 && x < 76 && y > 313 && y < 342) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_rukudan/OperateList";
+        //    }
+        //    else if (x > 147 && x < 218 && y > 313 && y < 343) {
+        //        loadingShow_warp();
+        //        location.href = "/wms_cunhuo/currentstorage";
+        //    }
+        //});
+    });
+
+    function loadingShow_warp() {
+        var loadingContainer = $("div.loading");
+        if (loadingContainer.length <= 0) {
+
+            loadingContainer = $("<div>", { Class: "loading", id: "loading" });
+            var img = $("<img>", { src: "/Imgs/LOADING.gif" });
+            loadingContainer.html("");
+            loadingContainer.append(img).css({
+                position: "fixed",
+                zIndex: "9999",
+                textAlign: "center",
+                top: "30%",
+                left: "40%",
+                height: "300px",
+                width: "400px"
+            });
+            loadingContainer.appendTo('body');
+            loadingContainer.append("<p>正在跳转，请耐心等待</p>");
+        }
+    }
+
+    function Finished() {
+        $("#loading").remove();
+    }
+    //a(document).on("click.ace.widget","[data-action]",
+    //    function(o){
+    //        o.preventDefault();
+    //        var n=a(this);
+    //        var p=n.data("action");
+    //        var b=n.closest(".widget-box");
+    //        if(b.hasClass("ui-sortable-helper"))
+    //        {return}
+    //        if(p=="collapse")
+    //        {
+    //            var j=b.hasClass("collapsed")?"show":"hide";
+    //            var f=j=="show"?"shown":"hidden";
+    //            var c;
+    //            b.trigger(c=a.Event(j+".ace.widget"));
+    //            if(c.isDefaultPrevented())
+    //            {return}
+    //            var g=b.find(".widget-body");
+    //            var m=n.find("[class*=icon-]").eq(0);
+    //            var h=m.attr("class").match(/icon\-(.*)\-(up|down)/);
+    //            var d="icon-"+h[1]+"-down";
+    //            var i="icon-"+h[1]+"-up";
+    //            var l=g.find(".widget-body-inner");
+    //            if(l.length==0)
+    //            {
+    //                g=g.wrapInner('<div class="widget-body-inner"></div>').find(":first-child").eq(0)
+    //            }
+    //            else{
+    //                g=l.eq(0)
+    //            }
+    //            var e=300;
+    //            var k=200;
+    //            if(j=="show"){
+    //                if(m){
+    //                    m.addClass(i).removeClass(d)
+    //                }
+    //                b.removeClass("collapsed");
+    //                g.slideUp(0,function(){
+    //                    g.slideDown(e,function(){
+    //                        b.trigger(c=a.Event(f+".ace.widget"))
+    //                    })
+    //                })
+    //            }
+    //            else{
+    //                if(m){
+    //                    m.addClass(d).removeClass(i)
+    //                }
+    //                g.slideUp(k,function(){
+    //                    b.addClass("collapsed");
+    //                    b.trigger(c=a.Event(f+".ace.widget"))
+    //                })}
+    //        }
+    //        else
+    //        {
+    //            if(p=="close"){
+    //                var c;
+    //                b.trigger(c=a.Event("close.ace.widget"));
+    //                if(c.isDefaultPrevented()){
+    //                    return
+    //                }
+    //                var r=parseInt(n.data("close-speed"))||300;
+    //                b.hide(r,function(){
+    //                    b.trigger(c=a.Event("closed.ace.widget"));
+    //                    b.remove()})
+    //            }
+    //            else
+    //            {
+    //                if(p=="reload"){
+    //                    var c;
+    //                    b.trigger(c=a.Event("reload.ace.widget"));
+    //                    if(c.isDefaultPrevented()){
+    //                        return
+    //                    }
+    //                    n.blur();
+    //                    var q=false;
+    //                    if(b.css("position")=="static"){
+    //                        q=true;
+    //                        b.addClass("position-relative")
+    //                    }
+    //                    b.append('<div class="widget-box-overlay"><i class="icon-spinner icon-spin icon-2x white"></i></div>');
+    //                    b.one("reloaded.ace.widget",function(){
+    //                        b.find(".widget-box-overlay").remove();
+    //                        if(q){
+    //                            b.removeClass("position-relative")}
+    //                    })
+    //                }
+    //                else{
+    //                    if(p=="settings"){
+    //                        var c=a.Event("settings.ace.widget");
+    //                        b.trigger(c)
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    }
+    //    )};
+</script>
+@*<div class="widget-box" style="opacity: 1; z-index: 0;">
+    <div class="widget-header widget-header-small header-color-orange">
+        <h6>
+            <i class="icon-sort"></i>
+            &amp;提醒
+        </h6>
+
+        <div class="widget-toolbar">
+            <a href="/service/getspellcode?yourwords=嘉事堂" data-action="reload">
+                <i class="icon-refresh"></i>
+            </a>
+
+            <a href="#" data-action="collapse">
+                <i class="icon-chevron-up"></i>
+            </a>
+
+            <a href="#" data-action="close">
+                <i class="icon-remove"></i>
+            </a>
+        </div>
+    </div>
+
+    <div class="widget-body">
+        <div class="widget-body-inner" style="display: block;">
+            <div class="widget-main">
+                @foreach (var item in ViewBag.RemindList)
+            {
+                    <p class="alert alert-info">
+                        <a href="@item.Ref">@item.Info</a>
+                    </p>
+                }
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="row center">
+    @*<h1>物流作业管理平台</h1>
+
+    <p><img src="~/Imgs/ckflow.jpg" /></p>*@
+</div>
+

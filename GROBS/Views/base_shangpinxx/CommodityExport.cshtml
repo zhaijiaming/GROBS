@@ -1,0 +1,65 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "商品资料清单";
+}
+<div class="page-content">
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td>首营状态</td>
+                    <td>货主</td>
+                    <td>商品代码</td>
+                    <td>注册证</td>
+                    <td>商品名称</td>
+                    <td>商品描述</td>
+                    <td>规格</td>
+                    <td>型号</td>
+                    <td>产品线</td>
+                    <td>分类目录</td>
+                    <td>管理分类</td>
+                    <td>包装要求</td>
+                    <td>存储条件</td>
+                    <td>生产企业</td>
+                    <td>供应商</td>
+                    <td>是否审查</td>
+                    <td>是否经营</td>
+                    <td>商品条码</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.commodity)
+                {
+
+                    <tr>
+                        <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
+                        <td>@item.Jiancheng</td>
+                        <td>@item.daima</td>
+                        <td>@item.ZhucezhengBH </td>
+                        <td>@item.mingcheng</td>
+                        <td>@item.ShangpinMS</td>
+                        <td>@item.Guige</td>
+                        <td>@item.Xinghao</td>
+                        <td>@item.cpxmingcheng</td>
+                        <td>@item.mlmingcheng</td>
+                        <td>@Html.GetCommonValue_ID("医疗器械管理类别", (int)(item.guanlifenlei == null ? 0 : item.guanlifenlei))</td>
+                        <td>@item.baozhuangyaoqiu</td>
+                        <td>@item.Cunchutiaojian</td>
+                        <td>@item.Qiyemingcheng</td>
+                        <td>@item.gysmingcheng</td>
+                        <td>@string.Format("{0}", item.ShenchaSF == true ? "是" : "否")</td>
+                        <td>@string.Format("{0}", item.jingyinsf == true ? "是" : "否")</td>
+                        <td>@item.shangpintm</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+

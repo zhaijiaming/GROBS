@@ -1,0 +1,146 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model auth_gongsiViewModel
+@{
+    ViewBag.Title = "作业公司修改";
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+
+        $(document).ready(function () {
+            $("#MakeDate").datepicker();
+            $("#YXQ").datepicker();
+        })
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/auth_gongsi">作业公司</a>
+        </li>
+        <li class="active"> 编辑</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    @using (Html.BeginForm("Update", "auth_gongsi", FormMethod.Post, new { @role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" name="id" value="@ViewData.Model.ID" />
+        <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+        <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+        <div class="page-header">
+            <p>
+                <button type="submit" class="btn btn-default"><i class="icon-save"></i>更新</button>
+                <button type="button" class="btn btn-default" onclick="javascript: history.back(-1); "><i class="icon-hand-left"></i>返回</button>
+            </p>
+        </div>
+        <div class="container">
+            <div class="form-group">
+                <div class="control-label col-sm-2">
+                    <i class="icon-leaf red"></i>@Html.LabelFor(m => m.Daima)
+                </div>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Daima, new { @class = "form-control" })
+                        @*@Html.ValidationMessageFor(m => m.Daima)*@
+                    </div>
+                </div>
+            <div class="form-group">
+                <div class="control-label col-sm-2">
+                    <i class="icon-leaf red"></i>@Html.LabelFor(m => m.Jiancheng)
+                </div>
+                    <div class="col-sm-10">
+                        @Html.TextBoxFor(m => m.Jiancheng, new { @class = "form-control" })
+                        @*@Html.ValidationMessageFor(m => m.Jiancheng)*@
+                    </div>
+                </div>
+            <div class="form-group">
+                <div class="control-label col-sm-2">
+                    <i class="icon-leaf red"></i>@Html.LabelFor(m => m.Mingcheng)
+                </div>
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Mingcheng, new { @class = "form-control" })
+                    @*@Html.ValidationMessageFor(m => m.Mingcheng)*@
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Biaozhi, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Biaozhi, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.HetongBH, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.HetongBH, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.YXQ, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    <input id="YXQ" type="date" class="form-control" name="YXQ" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.YXQ)">
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Leixing, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Leixing, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Lianxiren, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Lianxiren, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.LianxiDH, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.LianxiDH, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Beizhu, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Beizhu, new { @class = "form-control" })
+                </div>
+            </div>
+            @*<div class="form-group">
+                @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Col2, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Col2, new { @class = "form-control" })
+                </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.Col3, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @Html.TextBoxFor(m => m.Col3, new { @class = "form-control" })
+                </div>
+            </div>*@
+            <div class="form-group">
+                @Html.LabelFor(m => m.MakeDate, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @*<input id="MakeDate" type="date" class="form-control" name="MakeDate" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)">*@
+                    <input type="text" readonly class="form-control" value="@string.Format("{0:yyyy-MM-dd}", ViewData.Model.MakeDate)" />
+                 </div>
+            </div>
+            <div class="form-group">
+                @Html.LabelFor(m => m.MakeMan, new { @class = "control-label col-sm-2" })
+                <div class="col-sm-10">
+                    @*@Html.SelectList_Auto("MakeMan", "userinfo", "fullname", (long)ViewData.Model.MakeMan)*@
+                    <input type="text" readonly class="form-control" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewData.Model.MakeMan)" />
+                </div>
+            </div>
+        </div>
+    }
+</div>

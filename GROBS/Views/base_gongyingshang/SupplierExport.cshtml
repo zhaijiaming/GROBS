@@ -1,0 +1,73 @@
+﻿@using GROBS.App_Code;
+@using GROBS.Models;
+@using X.PagedList;
+@using X.PagedList.Mvc;
+@{
+    ViewBag.Title = "供应商清单";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        var HezuoSFs =  $(".HezuoSF").text();
+        for (var i = 0; i < HezuoSFs.length; i++) {
+            if ($(".HezuoSF").eq(i).html() == "TRUE") {
+                $(".HezuoSF").eq(i).html("是")
+            }
+            else {
+                $(".HezuoSF").eq(i).html("否")
+            }
+        }
+    });
+</script>
+<div class="page-content">
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td>代码</td>
+                    <td>名称</td>
+                    <td>营业执照编号</td>
+                    <td>营业执照有效期</td>
+                    <td>经营许可编号</td>
+                    <td>经营许可有效期</td>
+                    <td>经营许可批准日期</td>
+                    <td>经营许可发证机关</td>
+                    <td>经营范围</td>
+                    <td>备案编号</td>
+                    <td>备案有效期</td>
+                    <td>备案批准日期</td>
+                    <td>备案发证机关</td>
+                    <td>是否合作</td>
+                    <td>录入日期</td>
+                    <td>输入人</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.supplier)
+                {
+                    <tr>
+                        <td>@item.Daima</td>
+                        <td>@item.Mingcheng</td>
+                        <td>@item.YingyezhizhaoBH</td>
+                        <td>@item.YingyezhizhaoYXQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.JingyingxukeBH</td>
+                        <td>@item.JingyingxukeYXQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.XukePZRQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.XukeFZJG</td>
+                        <td>@item.Jingyingfanwei</td>
+                        <td>@item.BeianBH</td>
+                        <td>@item.BeianYXQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.BeianPZRQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.BeianFZJG</td>
+                        <td>@string.Format("{0}", item.HezuoSF == true ? "是" : "否")</td>
+                        <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
+                        <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+

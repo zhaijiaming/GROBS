@@ -1,0 +1,198 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "销售人员清单";
+    string _searchcondition = ViewBag.SearchCondition;
+}
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            if (u_id != null) {
+                var url_go = "/base_xiaoshou/Edit/" + u_id;
+                location.href = url_go;
+            }
+        });
+        //table样式
+        table_config(mydatatable);
+        trResize();//初始化表头
+
+        var t = document.getElementsByClassName('sfz0');
+
+        for (var i = 0; i < t.length; i++) {
+            if (t[i].href.length < 42) {
+                $(".sfz0").eq(i).removeAttr("href")
+                $(".sfz0").eq(i).html("暂无")
+            }
+            else {
+                $(".sfz0").eq(i).html("浏览")
+            }
+        }
+        var t = document.getElementsByClassName('sfz1');
+
+        for (var i = 0; i < t.length; i++) {
+            if (t[i].href.length < 42) {
+                $(".sfz1").eq(i).removeAttr("href")
+                $(".sfz1").eq(i).html("暂无")
+            }
+            else {
+                $(".sfz1").eq(i).html("浏览")
+            }
+        }
+        var t = document.getElementsByClassName('sqs');
+
+        for (var i = 0; i < t.length; i++) {
+            if (t[i].href.length < 42) {
+                $(".sqs").eq(i).removeAttr("href")
+                $(".sqs").eq(i).html("暂无")
+            }
+            else {
+                $(".sqs").eq(i).html("浏览")
+            }
+        }
+    });
+    function AddInfo() {
+        location.href = "/base_xiaoshou/Add";
+    }
+    function EditInfo() {
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                location.href = "/base_xiaoshou/Edit/" + $(this).val();
+        });
+    }
+    function DelInfo() {
+        var sDel = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                sDel = sDel + ", " + $(this).val()
+        });
+        if (sDel.length < 2)
+            return;
+        var url_go = "/base_xiaoshou/Delete/?del=" + sDel;
+        location.href = url_go;
+    }
+</script>
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "ShouquanID";
+        scm.ItemShowName = "shouquanid";
+        scm.ItemTitle = "货主";
+        scm.ItemType = "货主.都有";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Xingming";
+        scm.ItemTitle = "姓名";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "ShouquanID";
+            scm.ItemShowName = "shouquanid";
+            scm.ItemTitle = "货主";
+            scm.ItemType = "货主.都有";
+            if (scs.Length > 1)
+            {
+
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Xingming";
+            scm.ItemTitle = "姓名";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[1].Split(',')[1];
+                scm.ItemOpValue = scs[1].Split(',')[2];
+                scm.ItemJion = scs[1].Split(',')[3];
+            }
+            scms.Add(scm);
+        }
+    }
+}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">销售人员</li>
+    </ul>
+</div>
+<div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "销售人员_条件组合查询", "/base_xiaoshou/index", "base_xiaoshouindex", scms)
+    <div class="page-header">
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="mydatatable">
+                        <tr>
+                            <th></th>
+                            <th>货主</th>
+                            <th>姓名</th>
+                            <th>电话</th>
+                            <th>身份证编号</th>
+                            <th>身份证正面照片</th>
+                            <th>身份证背面照片</th>
+                            <th>授权书有效期</th>
+                            <th>授权书照片</th>
+                            <th>首营状态</th>
+                        </tr>
+                        <tbody>
+                            @foreach (var item in ViewBag.base_xiaoshou)
+                            {
+                                <tr>
+                                    <td>
+                                        <label><input type="checkbox" value="@item.ID"></label>
+                                    </td>
+                                    <td>@Html.GetDataValue_ID("货主", "名称", (int)item.ShouquanID)</td>
+                                    <td>@item.Xingming</td>
+                                    <td>@item.Dianhua</td>
+                                    <td>@item.ShenfenzhengBH</td>
+                                    <td><a href="/files/zhengzhao/@item.Shenfenzheng0TP" target="_blank" class="sfz0">浏览</a></td>
+                                    <td><a href="/files/zhengzhao/@item.Shenfenzheng1TP" target="_blank" class="sfz1">浏览</a></td>
+                                    <td>@item.ShouquanshuYXQ.ToString("yyyy-MM-dd")</td>
+                                    <td><a href="/files/zhengzhao/@item.ShouquanshuTP" target="_blank" class="sqs">浏览</a></td>
+                                    <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span class="pager">
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+            </span>
+        </div>
+    </div>
+</div>

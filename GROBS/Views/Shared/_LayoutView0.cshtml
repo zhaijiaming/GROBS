@@ -1,0 +1,66 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - 我的 ASP.NET 应用程序</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <!--div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("应用程序名称", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("主页", "Index", "Home")</li>
+                    <li>@Html.ActionLink("关于", "About", "Home")</li>
+                    <li>@Html.ActionLink("联系方式", "Contact", "Home")</li>
+                    <li>@Html.ActionLink("用户信息", "Index", "userinfo")</li>
+                    <li>@Html.ActionLink("数据结构", "Index", "defineinfo")</li>
+                </ul>
+                @Html.Partial("_LoginPartial")
+            </div>
+        </div>
+    </div-->
+    <div class="container col-md-12">
+        <div class="navbar-left col-md-2">
+            <ul>
+                <li>@Html.ActionLink("委托客户", "Index", "base_weituokehu")</li>
+                <li>@Html.ActionLink("供应商", "Index", "base_gongyingshang")</li>
+                <li>@Html.ActionLink("生产企业", "Index", "base_shengchanqiye")</li>
+                <li>@Html.ActionLink("收货单位", "Index", "base_shouhuodanwei")</li>
+                <li>@Html.ActionLink("商品资料", "Index", "base_shangpinxx")</li>
+                <li>@Html.ActionLink("商品注册证", "Index", "base_shangpinzcz")</li>
+                <li>@Html.ActionLink("医疗器械目录", "Index", "base_qixiemulu")</li>
+                <li>@Html.ActionLink("产品线", "Index", "base_chanpinxian")</li>
+                <li>@Html.ActionLink("计量单位", "Index", "base_jiliangdw")</li>
+                <li>@Html.ActionLink("人员信息", "Index", "base_renyuanxx")</li>
+                <li>@Html.ActionLink("首营申请", "Index", "base_shouyingsq")</li>
+            </ul>
+        </div>
+        <div class="container body-content col-md-10">
+
+            <div class="page-content">
+                @RenderBody()
+
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - 我的 ASP.NET 应用程序</p>
+                </footer>
+            </div>
+        </div>
+            @Scripts.Render("~/bundles/jquery")
+            @Scripts.Render("~/bundles/bootstrap") 
+            @RenderSection("scripts", required: false)
+</body>
+</html>

@@ -1,0 +1,70 @@
+﻿@using GROBS.App_Code;
+@using GROBS.Models;
+@using X.PagedList;
+@using X.PagedList.Mvc;
+@{
+    ViewBag.Title = "收货单位清单";
+}
+<div class="page-content">
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td>货主</td>
+                    <td>单位名称</td>
+                    <td>营业执照编号</td>
+                    <td>营业执照有效期</td>
+                    <td>经营许可编号</td>
+                    <td>经营许可有效期</td>
+                    <td>经营许可发证机关</td>
+                    <td>经营许可批准日期</td>
+                    <td>经营范围</td>
+                    <td>区域</td>
+                    <td>备案编号</td>
+                    <td>备案有效期</td>
+                    <td>备案批准日期</td>
+                    <td>备案发证机关</td>
+                    <td>是否审查</td>
+                    <td>是否合作</td>
+                    <td>企业地址</td>
+                    <td>送货地址</td>
+                    <td>联系人</td>
+                    <td>联系电话</td>
+                    <td>录入日期</td>
+                    <td>输入人</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.RecipientEntity)
+                {
+                    <tr>
+                        <td>@Html.GetDataValue_ID("货主", "简称", (int)item.HuozhuID)</td>
+                        <td>@item.Mingcheng</td>
+                        <td>@item.YingyezhizhaoBH</td>
+                        <td>@item.YingyezhizhaoYXQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.JingyingxukeBH</td>
+                        <td>@item.JingyingxukeYXQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.XukeFZJG</td>
+                        <td>@item.XukePZRQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.Jingyinfanwei</td>
+                        <td>@item.Quyu</td>
+                        <td>@item.BeianBH</td>
+                        <td>@item.BeianYXQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.BeianPZRQ.ToString("yyyy-MM-dd")</td>
+                        <td>@item.BeianFZJG</td>
+                        <td>@string.Format("{0}", item.ShenchaSF == true ? "是" : "否")</td>
+                        <td>@string.Format("{0}", item.HezuoSF == true ? "是" : "否")</td>
+                        <td>@item.QiyeDZ</td>
+                        <td>@item.SonghuoDZ</td>
+                        <td>@item.Lianxiren</td>
+                        <td>@item.LianxiDH</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
+                        <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+

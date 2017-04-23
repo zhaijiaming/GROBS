@@ -1,0 +1,197 @@
+﻿@{ ViewBag.Title = "用户信息清单";}
+@using GROBS.App_Code;
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            if (u_id != null) {
+                var url_go = "/userinfo/Edit/" + u_id;
+                location.href = url_go;
+            }
+        });
+    });
+    function AddInfo() {
+        location.href = "/userinfo/Add";
+    }
+    function EditInfo() {
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                location.href = "/userinfo/Edit/" + $(this).val();
+        });
+    }
+    function DelInfo() {
+        var sDel = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                sDel = sDel + ", " + $(this).val()
+        });
+        if (sDel.length < 2)
+            return;
+        var url_go = "/userinfo/Delete/?del=" + sDel;
+        location.href = url_go;
+    }
+</script>
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li class="active">用户信息</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <script type="text/javascript">
+        function CleanCondition() {
+            $("#Account").text = "";
+            $("#FullName").text = "";
+            $("#EmployeeID").text = "";
+        }
+    </script>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+         aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close"
+                            data-dismiss="modal" aria-hidden="true">
+                        &times;
+                    </button>
+                    <h5 class="modal-title center" id="myModalLabel">
+                        用户信息查询
+                    </h5>
+                </div>
+                <div class="modal-body">
+                    <form role="form" action="/userinfo/pagelist" method="post">
+                        @*<div class="form-group">
+                                <label for="Account">账号</label>
+                                <input type="text" class="form-control" name="Account" id="Account"
+                                       placeholder="请输入账号">
+                            </div>
+                            <div class="form-group">
+                                <label for="FullName">姓名</label>
+                                <input type="text" class="form-control" name="FullName" id="FullName"
+                                       placeholder="请输入名称">
+                            </div>
+                            <div class="form-group">
+                                <label for="EmployeeID">员工号</label>
+                                <input type="text" class="form-control" name="EmployeeID" id="EmployeeID"
+                                       placeholder="请输入员工号">
+                            </div>
+                            <div class="form-group">
+                                <label for="SelectUser">用户</label>
+                                @Html.SelectList_userinfo(5)
+                            </div>*@
+
+                        <ul class="list-unstyled">
+                            <li>
+                                <ul class="list-inline">
+                                    <li class="width-30"><label for="Account">账号</label></li>
+                                    <li class="width-20"><select name="AccountEqual" class="width-100"><option value="=" selected="selected">=</option><option value="like">包含</option></select></li>
+                                    <li class="width-30">
+                                        <input type="text" class="form-control" name="Account" id="Account"
+                                               placeholder="请输入账号">
+                                    </li>
+                                    <li class="width-10"><select name="AccountAnd" class="width-100"><option value="and" selected="selected">与</option><option value="or">或</option></select></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul class="list-inline">
+                                    <li class="width-30"><label for="FullName">姓名</label></li>
+                                    <li class="width-20"><select name="FullNameEqual" class="width-100"><option value="=" selected="selected">=</option><option value="like">包含</option></select></li>
+                                    <li class="width-30">
+                                        <input type="text" class="form-control" name="FullName" id="FullName"
+                                               placeholder="请输入名称">
+                                    </li>
+                                    <li class="width-10"><select name="FullNameAnd" class="width-100"><option value="and" selected="selected">与</option><option value="or">或</option></select></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <ul class="list-inline">
+                                    <li class="width-30"><label for="EmployeeID">员工号</label></li>
+                                    <li class="width-20"><select name="EmployeeIDEqual" class="width-100"><option value="=" selected="selected">=</option><option value=">">></option><option value="<"><</option></select></li>
+                                    <li class="width-30">
+                                        <input type="text" class="form-control" name="EmployeeID" id="EmployeeID"
+                                               placeholder="请输入员工号">
+                                    </li>
+                                    <li class="width-10"><select name="EmployeeIDAnd" class="width-100"><option value="and" selected="selected">与</option><option value="or">或</option></select></li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <div class="center">
+                            <button type="button" class="btn btn-default">
+                                重置
+                            </button>
+                            <button type="submit" class="btn btn-default">提交</button>
+                        </div>
+                    </form>
+                </div>
+                @*<div class="modal-footer"> data-dismiss="modal"
+                        <span class="small">user information</span>
+                    </div>*@
+            </div><!-- /.modal-content -->
+        </div>
+    </div>
+
+
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+            <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+            <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
+            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+        </p>
+    </div>
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>账号</td>
+                    <td>密码</td>
+                    <td>全名</td>
+                    <td>员工号</td>
+                    <td>类型</td>
+                    <td>备注</td>
+                    <td>状态</td>
+                    <td>输入人</td>
+                    <td>输入日期</td>
+                    <td>修改人</td>
+                    <td>修改日期</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.userinfo)
+                {
+                    <tr>
+                        <td>
+                            <div class="checkbox">
+                                <label><input type="checkbox" value="@item.ID"></label>
+                            </div>
+                        </td>
+                        <td>@item.Account</td>
+                        <td>@item.Password</td>
+                        <td>@item.FullName</td>
+                        <td>@item.EmployeeID</td>
+                        <td>@item.AccountType</td>
+                        <td>@item.Remark</td>
+                        <td>@item.Status</td>
+                        <td>@item.InputMan</td>
+                        <td>@item.InputDate</td>
+                        <td>@item.ModifyMan</td>
+                        <td>@item.ModifyDate</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

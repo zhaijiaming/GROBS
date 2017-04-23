@@ -1,0 +1,899 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model base_shangpinxxViewModel
+@{
+    ViewBag.Title = "商品资料修改";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        if (eval($("#syid").val()) > 1)
+            $("#pl_fun").hide();
+        $("#pl_jldw").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        $("#pl_Fanwei").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        $("#pl_Cunchu").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        var _ispack = false;
+        getCpx(@Model.HuozhuID);
+        //getZczgg(Model.ZhucezhengID);
+        $("#huozhuid").attr('required', 'required');
+        GetJldw();
+        GetFanwei();
+        $("#pl_zcz").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#pl_zcz_close").click(function () {
+            $("#pl_zcz").hide();
+        });
+        $("#pl_zcz_search").click(function () {
+            GetZCZNow();
+        });
+        $("#selzcz").click(function () {
+            if (eval($("#syid").val()) == 1)
+                $("#pl_zcz").show();
+        });
+        $("#dt_zcz tbody").on("dblclick", "tr", function () {
+            $("#zhucezhengid").val($(this).find("input").val());
+            $("#zhucezhengbh").val($(this).find("td").eq(1).html());
+            $("#zczbh").val($("#zhucezhengbh").val());
+            //$("#pl_gg").html('<select name="guige" id="select_gg" style="width:100%;"></select>');
+            getZCZ($("#zhucezhengid").val());
+            $("#pl_zcz").hide();
+            //$("#Daima").attr("placeholder", "请选择规格");
+            //$("#ShangpinTM").attr("placeholder", "请选择规格");
+            //$("#select_gg").change(function () {
+            //    var guige = $("#select_gg").find("option:selected").text();
+            //    $("#Daima").val(guige);
+            //    $("#ShangpinTM").val(guige);
+            //});
+        });
+        //分类目录
+        $("#bt_mulu").click(function () {
+            $("#pl_Fanwei").show();
+            $("#qxdatatable tr input[type=checkbox]").on('click', function () {
+                $("#qxdatatable tr input[type=checkbox]").not(this).attr("checked", false);
+            });
+        });
+        //选择管理分类
+        $("#cata_guanlifenlei").change(function () {
+            var fl = $('.glfl').text();
+            var lb = $("#cata_guanlifenlei").find("option:selected").text();
+            switch (lb) {
+                case "一类":
+                    for (var i = 0; i < fl.length; i++) {
+                        if ($(".glfl").eq(i).text() == "1") {
+                            $(".bg").eq(i).show();
+                        }
+                        else { $(".bg").eq(i).hide(); }
+                    }
+                    break;
+                case "二类":
+                    for (var i = 0; i < fl.length; i++) {
+                        if ($(".glfl").eq(i).text() == "2") {
+                            $(".bg").eq(i).show();
+                        }
+                        else { $(".bg").eq(i).hide(); }
+                    }
+                    break;
+                case "三类":
+                    for (var i = 0; i < fl.length; i++) {
+                        if ($(".glfl").eq(i).text() == "3") {
+                            $(".bg").eq(i).show();
+                        }
+                        else { $(".bg").eq(i).hide(); }
+                    }
+                    break;
+                default:
+                    $(".bg").show();
+                    break;
+            }
+        });
+        //分类目录添加事件
+        $("#bt_fanwei_add").click(function () {
+            var _mulu;
+            var _muluxh;
+            var _mlfind = false;
+            $("#qxdatatable tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    _mulu = $(this).parent().parent().siblings().find(".bh").html() + " " + $(this).parent().parent().siblings().find(".mc").html();
+                    _muluxh = $(this).val();
+                    _mlfind = true;
+                }
+            });
+            if (_mlfind) {
+                $("#Mulu").val(_mulu);
+                $("#muluxuhao").val(_muluxh);
+            }
+            $("#pl_Fanwei").hide();
+        });
+        $("#plfw_close").click(function () {
+            $("#pl_Fanwei").hide();
+        });
+        $("#makedate").datepicker();
+        $("#qxdatatable tbody").on("dblclick", "tr", function () {
+            $("#Mulu").val($(this).find(".bh").html() + " " + $(this).find(".mc").html());
+            $("#muluxuhao").val($(this).find("input[type=checkbox]").val());
+            $("#pl_Fanwei").hide();
+        });
+        //单击打钩
+        $("#qxdatatable").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find(":checkbox").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
+        });
+        //注册证规格→代码
+        $("#select_gg").change(function () {
+            var guige = $("#select_gg").find("option:selected").text();
+            $("#Daima").val(guige);
+        });
+        //货主ID→产品线名称
+        $("#huozhuid").change(function () {
+            var _huozhuid = $("#huozhuid").val();
+            if (_huozhuid == "") {
+                $("#select_cpx").text("");
+            } else {
+                getCpx(_huozhuid);
+            }
+        });
+        //注册证→获取其他信息
+        //$("#zhucezhengid").change(function () {
+        //    var _zczid = $("#zhucezhengid").val();
+        //    //$("#Daima").val("");
+        //    getZCZ(_zczid);
+        //});
+        //计量单位
+        $("#btn_jldw1").click(function () {
+            _ispack = true;
+            $("#pl_jldw .checkbox").prop("checked", false);
+            $("#pl_jldw").show();
+            $("#pl_jldw tbody").find("input[type=checkbox]").on('click', function () {
+                $("#pl_jldw tbody").find("input[type=checkbox]").not(this).attr("checked", false);
+            });
+        });
+        $("#btn_jldw").click(function () {
+            _ispack = false;
+            $("#pl_jldw .checkbox").prop("checked", false);
+            $("#pl_jldw").show();
+            $("#pl_jldw tbody").find("input[type=checkbox]").on('click', function () {
+                $("#pl_jldw tbody").find("input[type=checkbox]").not(this).attr("checked", false);
+            });
+        });
+        $("#pl_close").click(function () {
+            $("#pl_jldw").hide();
+        });
+        $("#bt_jldw_add").click(function () {
+            var _jldw = "";
+            $("#jldwdatatable tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    _jldw = $(this).parent().parent().siblings().find(".mc").html();
+                }
+            });
+            if (_ispack)
+                $("#BaozhuangDW").val(_jldw);
+            else
+                $("#Danwei").val(_jldw);
+            $("#pl_jldw").hide();
+        });
+        //双击取值
+        $("#jldwdatatable tbody").on("dblclick", "tr", function () {
+            if (_ispack)
+                $("#BaozhuangDW").val($(this).find(".mc").html());
+            else
+                $("#Danwei").val($(this).find(".mc").html());
+            $("#pl_jldw").hide();
+        });
+        //单击打钩
+        $("#jldwdatatable").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find(":checkbox").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
+        });
+        //存储条件
+        $("#ccdatatable tbody tr:first").hide();//第一行为空-->隐藏
+        $("#btn_cctj").click(function () {
+            $("#pl_Cunchu").removeAttr("hidden");
+            $("#pl_Cunchu").show();
+            $("#pl_Cunchu .checkbox").prop("checked", false);
+        });
+        $("#bt_cunchu_add").click(function () {
+            var _cctj = "";
+            $("#ccdatatable tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    _cctj = $(this).parent().parent().parent().find(".cctj_val").html();
+                }
+                $("#Cunchutiaojian").val(_cctj);
+            });
+            $("#pl_Cunchu").hide();
+        });
+        $("#plcc_close").click(function () {
+            $("#pl_Cunchu").hide();
+        });
+        $("#ccdatatable tbody").on("dblclick", "tr", function () {
+            $("#Cunchutiaojian").val($(this).find(".cctj_val").html());
+            $("#pl_Cunchu").hide();
+        });
+        //单击打钩
+        $("#ccdatatable").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find(":checkbox").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
+        });
+        //'审查'绑定值
+        $("#shenchasf").change(function () {
+            if ($("#shenchasf").is(":checked")) {
+                var muluxuhao = $("#muluxuhao").val();
+                if (muluxuhao == "0") {
+                    alert("分类目录为空，不能选择审查！");
+                    $("#shenchasf").attr("checked", false);
+                } else {
+                    $("#shenchasf").val("true");//选中=true
+                }
+            } else {
+                $("#shenchasf").val("false");//不选中=false
+            }
+        });
+        //'审查'赋值
+        var shenchasf = "@Model.ShenchaSF";
+        if (shenchasf == "True") {
+            $("#shenchasf").attr("checked", true);
+            $("#shenchasf").val("true");
+        } else {
+            $("#shenchasf").attr("checked", false);
+            $("#shenchasf").val("false");
+        }
+        //'是否经营'绑定值
+        $("#JingyinSF").change(function () {
+            if ($("#JingyinSF").is(":checked")) {
+                $("#JingyinSF").val("true");//选中=true
+            } else {
+                $("#JingyinSF").val("false");//不选中=false
+            }
+        });
+        //'是否经营'赋值
+        var JingyinSF = "@Model.JingyinSF";
+        if (JingyinSF == "True") {
+            $("#JingyinSF").attr("checked", true);
+            $("#JingyinSF").val("true");
+        } else {
+            $("#JingyinSF").attr("checked", false);
+            $("#JingyinSF").val("false");
+        }
+        //更新提交
+        var form = $("#spxx_form");
+        $("#btn_update").click(function () {
+            form.submit();
+        });
+        $("#btn_update_2").click(function () {
+            form.submit();
+        });
+    });
+    function GetFanwei() {
+        var filltable = "";
+        $.post(
+                "/base_qixiemulu/GetQixiemulu1",
+                {},
+                function (data) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr class="bg"><td style="width:4%"><label><input class="checkbox" type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></td><td style="width:10%"><span class="bh">';
+                        filltable = filltable + data[i].Bianhao;
+                        filltable = filltable + '</span></td><td style="width:30%"><span class="mc">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td style="width:30%">';
+                        filltable = filltable + data[i].Miaoshu;
+                        filltable = filltable + '</td><td style="width:10%"><span class="glfl">';
+                        filltable = filltable + data[i].GuanliFL;
+                        filltable = filltable + '</span></td></tr>';
+                    }
+                    $("#pl_Fanwei tbody").html(filltable);
+                });
+    }
+    function getCpx(huozhuid) {
+        var _huozhuid = huozhuid;
+        var filltable = '<option value="0"></option>';
+        $.post(
+            "/base_chanpinxian/getdetail",
+            {
+                cpxid: _huozhuid
+            },
+            function (data) {
+                var selval = $("#ocpx").val();
+                for (var i in data) {
+                    filltable = filltable + '<option value="';
+                    filltable = filltable + data[i].ID;
+                    if (data[i].ID == selval)
+                        filltable = filltable + '" selected="selected">';
+                    else
+                        filltable = filltable + '">';
+                    filltable = filltable + data[i].Mingcheng;
+                    filltable = filltable + '</option>';
+                }
+                $("#select_cpx").html(filltable);
+            });
+    }
+    function GetZCZNow() {
+        var filltable = "";
+        $.post(
+                "/base_shangpinzcz/getzcznow",
+                {
+                    bh: $("#pl_zcz_bh").val(),
+                    mc: $("#pl_zcz_mc").val(),
+                    gg: $("#pl_zcz_gg").val()
+                },
+                function (data) {
+                    if (data == 1)
+                        alert("必须通过编号或名称进行查询！");
+                    else {
+                        for (var i in data) {
+                            filltable = filltable + '<tr><td><label><input class="checkbox" type="checkbox" class ="checkbox" value="';
+                            filltable = filltable + data[i].ID;
+                            filltable = filltable + '"></label></td><td>';
+                            filltable = filltable + data[i].Bianhao;
+                            filltable = filltable + '</td><td>';
+                            filltable = filltable + data[i].Mingcheng;
+                            filltable = filltable + '</td><td>';
+                            filltable = filltable + data[i].ZhucezhengYXQ.toDate().Format("yyyy-MM-dd");
+                            filltable = filltable + '</td><td>';
+                            filltable = filltable + data[i].ShiyongFW;
+                            filltable = filltable + '</td></tr>';
+                        }
+                    }
+                    $("#pl_zcz tbody").html(filltable);
+                });
+    }
+    function getZCZ(zczid) {
+        var _zczid = zczid;
+        var filltable = "";
+        var fillmc = "";
+        $.post(
+            "/base_shangpinzcz/getdetail",
+            {
+                zczbh: _zczid
+            },
+            function (data) {
+                if (data != null) {
+                    $("#Mingcheng").val(data.Mingcheng);
+                    $("#Chandi").val(data.Chandi);
+                    $("#Qiyemingcheng").val(data.Shengchanqiye);
+                    $("#qiyeid").val(data.ShengchanqiyeID);
+                    $("#zhucezhengbh").val(data.Bianhao)
+                    for (var i in data.Guige) {
+                        filltable = filltable + '<option value="';
+                        filltable = filltable + data.Guige[i].Guige;
+                        filltable = filltable + '">';
+                        filltable = filltable + data.Guige[i].Guige;
+                        filltable = filltable + '</option>';
+                    }
+                    $("#select_gg").html(filltable);
+                    //GetFirstDaima();
+                }
+            });
+    }
+    function GetFirstDaima() {
+        var guige = $("#select_gg").find("option:selected").text();
+        $("#Daima").val(guige);
+    }
+    function getZczgg(zczid) {
+        var _zczid = zczid;
+        var filltable = "";
+        var fillmc = "";
+        $.post(
+            "/base_zhucezhenggg/getdetail",
+            {
+                zczbh: _zczid
+            },
+            function (data) {
+                var selval = $("#ogg").val();
+                for (var i in data) {
+                    filltable = filltable + '<option value="';
+                    filltable = filltable + data[i].Guige;
+                    if (data[i].Guige == selval)
+                        filltable = filltable + '" selected="selected">';
+                    else
+                        filltable = filltable + '">';
+                    filltable = filltable + data[i].Guige;
+                    filltable = filltable + '</option>';
+                }
+                $("#select_gg").html(filltable);
+            });
+    }
+    function GetJldw() {
+        var filltable = "";
+        $.post(
+            "/base_jiliangdw/GetJldw",
+            {
+            },
+                function (data) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr><td width="50px;"><label><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></td><td width="30%;"><span class="bh">';
+                        filltable = filltable + data[i].Bianhao;
+                        filltable = filltable + '</span></td><td width="30%;"><span class="mc">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td width="30%;">';
+                        filltable = filltable + data[i].Miaoshu;
+                        filltable = filltable + '</td></tr>';
+                    }
+                    $("#pl_jldw tbody").html(filltable);
+                });
+    }
+</script>
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_shangpinxx">商品资料</a>
+        </li>
+        <li class="active"> 编辑</li>
+    </ul>
+</div>
+<div class="page-content">
+    <div id="pl_fun" class="page-header">
+        <p>
+            <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+            <button type="button" id="btn_update" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
+        </p>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>商品信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Update", "base_shangpinxx", FormMethod.Post, new { @role = "form", id = "spxx_form", @class = "form-horizontal" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" id="spid" value="@Model.ID" />
+                                    <input type="hidden" name="qiyeid" id="qiyeid" value="@Model.QiyeID" />
+                                    <input type="hidden" name="Muluxuhao" id="muluxuhao" value="@Model.Muluxuhao" />
+                                    <input type="hidden" name="zhucezhengbh" id="zhucezhengbh" value="@Model.ZhucezhengBH" />
+                                    <input type="hidden" name="zhucezhengid" id="zhucezhengid" value="@Model.ZhucezhengID" />
+                                    <input type="hidden" id="ohzid" value="@Model.HuozhuID" />
+                                    <input type="hidden" id="ocpx" value="@Model.Chanpinxian" />
+                                    <input type="hidden" id="ogg" value="@Model.Guige" />
+                                    <input type="hidden" name="Shouying" id="syid" value="@ViewData.Model.Shouying" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <input type="hidden" name="huozhuid" value="@Model.HuozhuID" />
+                                    <fieldset>
+                                        @*货主*@
+                                        <div class="form-group">
+                                            <label for="huozhuid" class="control-label col-sm-3"><i class="red glyphicon glyphicon-asterisk"></i><b>货主</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" readonly class="form-control" value="@Html.GetDataValue_ID("货主", "简称", (int)Model.HuozhuID)" />
+                                            </div>
+                                        </div>
+                                        @*代码*@
+                                        <div class="form-group">
+                                            <label for="Daima" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i><b>代码</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.Daima, new { @class = "form-control", @placeholder = "必填，请先选择规格" })
+                                            </div>
+                                        </div>
+                                        @*注册证*@
+                                        <div class="form-group">
+                                            <label for="zczbh" class="col-sm-3 control-label"><b>注册证</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="zczbh" placeholder="请填写注册证" class="form-control" type="text" readonly value="@ViewData.Model.ZhucezhengBH">
+                                                    <span class="input-group-btn">
+                                                        <button id="selzcz" type="button" class="btn btn-grey btn-sm" disabled="disabled">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*商品名称*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Mingcheng"><b>商品名称</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.Mingcheng, new { @class = "form-control", @placeholder = "请填写商品名称" })
+                                            </div>
+                                        </div>
+                                        @*商品描述*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="ShangpinMS"><b>商品描述</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.ShangpinMS, new { @class = "form-control", @placeholder = "请填写商品描述" })
+                                            </div>
+                                        </div>
+                                        @*规格*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="guige"><b>规格</b></label>
+                                            <div id="pl_gg" class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.Guige, new { @class = "form-control", @readonly = "true" })
+                                            </div>
+                                        </div>
+                                        @*供应商*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="gongyingid"><b>供应商</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("gongyingid", "供应商", "", (long)ViewData.Model.GongyingID)
+                                            </div>
+                                        </div>
+                                        @*生产企业*@
+                                        <div class="form-group">
+                                            <label for="Qiyemingcheng" class="col-sm-3 control-label"><b>生产企业</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.Qiyemingcheng, new { @class = "form-control", @placeholder = "请填写生产企业" })
+                                            </div>
+                                        </div>
+                                        @*产地*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Chandi"><b>产地</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.Chandi, new { @class = "form-control", @placeholder = "请填写产地" })
+                                            </div>
+                                        </div>
+                                        @*型号*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Xinghao"><b>型号</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.Xinghao, new { @class = "form-control", @placeholder = "请填写型号" })
+                                            </div>
+                                        </div>
+                                        @*商品条码*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="ShangpinTM"><b>商品条码</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.ShangpinTM, new { @class = "form-control", @placeholder = "请填写商品条码" })
+                                            </div>
+                                        </div>
+                                        @*计量单位*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Danwei"><b>单位</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="Danwei" name="Danwei" placeholder="请选择单位" class="form-control" type="text" value="@ViewData.Model.Danwei">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_jldw" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*包装单位*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="BaozhuangDW"><b>包装单位</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="BaozhuangDW" name="BaozhuangDW" placeholder="请选择包装单位" class="form-control" type="text" value="@ViewData.Model.BaozhuangDW">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_jldw1" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*分类目录*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Guanlifenlei"><b>分类目录</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="Mulu" readonly class="form-control" type="text" value="@Html.GetDataValue_ID("分类目录", "", (int)Model.Muluxuhao)">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="bt_mulu" class="btn btn-grey btn-sm" disabled="disabled">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*换算率*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Huansuanlv"><b>换算率</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.Huansuanlv, new { @class = "form-control", @placeholder = "请填写换算率" })
+                                            </div>
+                                        </div>
+                                        @*长*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Volchang"><b>长</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="Volchang" name="Volchang" placeholder="请填写长" class="form-control col-sm-10" type="text" value="@ViewData.Model.Volchang">
+                                                    <span class="input-group-addon input-group-sm">米(m)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*宽*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Volkuan"><b>宽</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="Volkuan" name="Volkuan" placeholder="请填写宽" class="form-control col-sm-10" type="text" value="@ViewData.Model.Volkuan">
+                                                    <span class="input-group-addon input-group-sm">米(m)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*高*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Volgao"><b>高</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="Volgao" name="Volgao" placeholder="请填写高" class="form-control col-sm-10" type="text" value="@ViewData.Model.Volgao">
+                                                    <span class="input-group-addon input-group-sm">米(m)</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*产品线*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="chanpinxian"><b>产品线</b></label>
+                                            <div class="col-sm-8">
+                                                <select name="chanpinxian" id="select_cpx" style="width:100%;"></select>
+                                            </div>
+                                        </div>
+                                        @*管理分类*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="guanlifenlei"><b>管理分类</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Common("guanlifenlei", "医疗器械管理类别", (long)ViewData.Model.Guanlifenlei)
+                                            </div>
+                                        </div>
+                                        @*包装要求*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Baozhuangyaoqiu"><b>包装要求</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.TextBoxFor(m => m.Baozhuangyaoqiu, new { @class = "form-control", @placeholder = "请填写包装要求" })
+                                            </div>
+                                        </div>
+                                        @*存储条件*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Cunchutiaojian"><b>存储条件</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="Cunchutiaojian" name="cunchutiaojian" readonly class="form-control" type="text" value="@ViewData.Model.Cunchutiaojian">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_cctj" class="btn btn-grey btn-sm" disabled="disabled">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*温度上限*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="WenduSX"><b>温度上限</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="WenduSX" name="WenduSX" placeholder="请填写温度上限" class="form-control col-sm-10" type="text" value="@ViewData.Model.WenduSX">
+                                                    <span class="input-group-addon input-group-sm"><b>&#8451;</b></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*温度下限*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="WenduXX"><b>温度下限</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="WenduXX" name="WenduXX" placeholder="请填写温度下限" class="form-control col-sm-10" type="text" value="@ViewData.Model.WenduXX">
+                                                    <span class="input-group-addon input-group-sm"><b>&#8451;</b></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*是否审查*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="shenchasf"><b>是否审查</b></label>
+                                            <div class="col-sm-4">
+                                                <label class="control-group">
+                                                    <input name="shenchasf" id="shenchasf" class="ace ace-switch ace-switch-7" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*是否经营*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="JingyinSF"><b>是否经营</b></label>
+                                            <div class="col-sm-4">
+                                                <label class="control-group">
+                                                    <input name="JingyinSF" id="JingyinSF" class="ace ace-switch ace-switch-7" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*首营状态*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="Shouying"><b>首营状态</b></label>
+                                            <div class="col-sm-8">
+                                                <input class="form-control" disabled="disabled" type="text" value="@Html.GetCommonValue_ID("首营状态", (int)ViewData.Model.Shouying)">
+                                            </div>
+                                        </div>
+                                        @*输入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="makedate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewData.Model.MakeMan)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="btn_update_2" class="btn btn-primary" type="button">
+                                            <b>更新</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_jldw" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:400px;height:500px;z-index:99999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title">计量单位<button id="pl_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <button type="button" class="btn btn-default " id="bt_jldw_add"><i class="icon-add"></i>确定</button>
+            <table class="table" id="jldwdatatable" style="margin-top:10px;">
+                <caption></caption>
+                <thead style="display:block">
+                    <tr>
+                        <td width="50px;"></td>
+                        <td width="30%;">编号</td>
+                        <td width="30%;">名称</td>
+                        <td width="30%;">说明</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block; max-height:380px;overflow:auto;"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="pl_Fanwei" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:200px;z-index:999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title">分类目录<button id="plfw_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <button type="button" class="btn btn-default " id="bt_fanwei_add"><i class="icon-add"></i>确定</button>
+            <span class="gllb">
+                <span style="margin-left:10px;">管理类别</span>
+                <select name="cata_guanlifenlei" id="cata_guanlifenlei">
+                    <option value="全部">全部</option>
+                    <option value="一类">一类</option>
+                    <option value="二类">二类</option>
+                    <option value="三类">三类</option>
+                </select>
+            </span>
+            <table class="table" id="qxdatatable" style="margin-top:10px;">
+                <caption></caption>
+                <thead style="display:block">
+                    <tr>
+                        <td style="width:4%"></td>
+                        <td style="width:10%">编号</td>
+                        <td style="width:30%">名称</td>
+                        <td style="width:30%">描述</td>
+                        <td style="width:10%">管理分类</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block; max-height:330px;overflow:auto;"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+@*存储条件*@
+<div id="pl_Cunchu" class="panel panel-primary" hidden style="position:fixed;top:100px;left:240px;width:240px;height:auto;z-index:999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title">存储条件<button id="plcc_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <button type="button" class="btn btn-default " id="bt_cunchu_add"><i class="icon-add"></i>确定</button>
+            <table class="table" id="ccdatatable">
+                <caption></caption>
+                <thead style="display:block">
+                    <tr>
+                        <td width="40px"></td>
+                        <td width="95px">编号</td>
+                        <td width="100px">名称</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block; max-height:460px;overflow:auto;">
+                    @foreach (var dd in MvcApplication.TranCondition)
+                    {
+                        <tr>
+                            <td>
+                                <label><input class="checkbox" type="checkbox" value="" /></label>
+                            </td>
+                            <td width="90px">@dd.Key</td>
+                            <td width="100px" class="cctj_val">@dd.Value</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="pl_zcz" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:240px;width:800px;z-index:999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title">注册证<button id="pl_zcz_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <label class="col-sm-1"><i class="icon-leaf red"></i>编号</label>
+            <div class="col-sm-2">
+                <input type="text" id="pl_zcz_bh" size="20" />
+            </div>
+            <div class="col-sm-1">
+                <label><i class="icon-leaf red"></i>名称</label>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" id="pl_zcz_mc" size="20" />
+            </div>
+            <div class="col-sm-1">
+                <label><i class="icon-leaf red"></i>规格</label>
+            </div>
+            <div class="col-sm-2">
+                <input type="text" id="pl_zcz_gg" size="20" />
+            </div>
+            <div class="col-sm-3 center">
+                <button type="button" class="btn btn-default" id="pl_zcz_search"><i class="icon-search"></i>查询</button>
+            </div>
+        </div>
+        <div style="overflow:auto;height:500px;">
+            <table class="table table-condensed" id="dt_zcz">
+                <caption></caption>
+                <thead style="white-space: nowrap;">
+                    <tr>
+                        <td></td>
+                        <td>编号</td>
+                        <td>名称</td>
+                        <td>失效日期</td>
+                        <td>使用范围</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,115 @@
+﻿@using GROBS.App_Code
+@using GROBS.EFModels
+@using GROBS.Models
+@model auth_authorizeViewModel
+@{
+    ViewBag.Title = "用户授权";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#bt_addInfo").click(function () {
+            $("#yh li input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    var selval = $(this).val();
+                    var selname = $(this).parent().find('span').text();
+                    var selmail = $(this).parent().parent().find('div span').text();
+                    var exval = false;
+                    $("#qx li input[type=checkbox]").each(function () {
+                        if (selval == $(this).val())
+                            exval = true;
+                    });
+                    if (!exval) {
+                        var addstr = '<li id="" class="item-red clearfix" style="position: relative; opacity: 1; z-index: auto;"><label class="inline">';
+                        addstr = addstr + '<input id="' + selval + '" type="checkbox" class="ace" value="' + selval + '">';
+                        addstr = addstr + '<span class="lbl">' + selname + '</span></label>';
+                        addstr = addstr + '<div class="pull-right">';
+                        addstr = addstr + '<span class="lbl">' + selmail + '</span></div></li>';
+                        $("#qx ul").append(addstr);
+                    }
+                }
+            });
+            getusers();
+        });
+        $("#bt_deleteInfo").click(function () {
+            $("#qx li input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    $(this).parent().parent().remove();
+                }
+            });
+            getusers();
+        });
+    });
+    function getusers() {
+        var yhs = "";
+        $("#qx li input[type=checkbox]").each(function () {
+            yhs = yhs + "," + $(this).val();
+        });
+        $("#users").val(yhs);
+    }
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/auth_juese">角色</a>
+        </li>
+        <li class="active">授权</li>
+    </ul>
+</div>
+<div class="row">
+    @using (Html.BeginForm("AuthorityNow", "auth_quanxian", FormMethod.Post, new { @role = "form" }))
+    {
+        @Html.AntiForgeryToken()
+        <input type="hidden" id="jsid" name="jsid" value="@Model.RoleID" />
+        <input type="hidden" id="users" name="users" value="" />
+        <div class="page-content">
+            <div id="yh" class="col-sm-5 overflow-auto" style="height:500px">
+                <p><h3 class="center">用户列表</h3></p>
+                <ul class="item-list ui-sortable">
+                    @foreach (userinfo us in Model.AllUser)
+                {
+                        <li class="item-grey clearfix" style="position: relative; opacity: 1; z-index: auto;">
+                            <label class="inline">
+                                <input type="checkbox" class="ace" value="@us.ID">
+                                <span id="@us.ID" class="lbl">@us.FullName </span>
+                            </label>
+                            <div class="pull-right">
+                                <span class="lbl">@us.Account </span>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+            <div class="col-sm-2 align-center" style="height:300px">
+                <p><h1 class="center">@Model.RoleName</h1></p>
+                <p><button type="button" class="btn btn-default " id="bt_addInfo"><i class="icon-adn"></i>添加</button></p>
+                <p><button type="button" class="btn btn-default " id="bt_deleteInfo"><i class="icon-remove"></i>删除</button></p>
+                <p><button type="submit" class="btn btn-default " id="bt_saveinfo"><i class="icon-save"></i>保存</button></p>
+<p><button type="button" class="btn btn-default" onclick="javascript:history.back(-1); "><i class="icon-hand-left"></i>返回</button></p>
+            </div>
+            <div id="qx" class="col-sm-5 overflow-auto" style="height:500px">
+                <p><h3 class="center">授权用户</h3></p>
+                <ul class="item-list ui-sortable">
+                    @foreach (auth_quanxian qx in Model.AuthorizedUser)
+                {
+                        <li class="item-green clearfix" style="position: relative; opacity: 1; z-index: auto;">
+                            <label class="inline">
+                                <input id="@qx.RYID" type="checkbox" class="ace" value="@qx.RYID">
+                                <span class="lbl">@Html.GetDataValue_ID("userinfo", "全名", (int)qx.RYID) </span>
+                            </label>
+                            <div class="pull-right">
+                                <span class="lbl">@Html.GetDataValue_ID("userinfo", "账号", (int)qx.RYID)</span>
+                            </div>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    }
+</div>

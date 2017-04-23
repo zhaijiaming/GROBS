@@ -1,0 +1,234 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model base_shangpinzczViewModel
+@{ViewBag.Title = "注册证添加";}
+@Html.GetFileUpload("zhucezhengtp", "zcz", "z", "cus", 2, 0, new Dictionary<string, string>() { { "zcz", "zhucezhengtp" } })
+
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        $("#makedate").datepicker();//录入日期
+        $("#pizhunrq").datepicker();//批准日期
+        $("#ZhucezhengYXQ").datepicker();//注册证有效期
+        //验证
+        $("#Bianhao").attr('required', 'required');
+        $("#Mingcheng").attr('required', 'required');
+        $("#Bianhao").blur(function () {
+            $.post("/base_shangpinzcz/checklicensecode", { lc: $("#Bianhao").val() }, function (data) {
+                if (data == -1) {
+                    alert("此编号已经存在，请勿重复输入！");
+                    $("#Bianhao").val("");
+                }
+            });
+        });
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_buttom").bind("click", function () {
+            $("#form").submit();
+        });
+        //照片的点击事件
+        $(".zcz_browse").click(function () {
+            var img_url = $("#zcz a").attr('href');
+            if (img_url != null && img_url != "") {
+                //console.log(img_url);
+                window.open(img_url);
+            }
+        });
+    });
+</script>
+<div class="breadcrumbs" id="breadcrumbs">
+
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_shangpinzcz">注册证</a>
+        </li>
+        <li class="active">新增</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4">
+            <i class="icon-save"></i><b>保存</b>
+            <span class="badge badge-transparent">
+                <i class="light-red icon-asterisk"></i>
+            </span>
+        </button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>注册证信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Save", "base_shangpinzcz", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <fieldset>
+                                        @*注册证编号*@
+                                        <div class="form-group">
+                                            <label for="Bianhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>注册证编号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Bianhao" name="Bianhao" class="form-control" placeholder="请填写注册证编号" />
+                                            </div>
+                                        </div>
+                                        @*商品名称*@
+                                        <div class="form-group">
+                                            <label for="Mingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品名称</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请填写商品名称" />
+                                            </div>
+                                        </div>
+                                        @*产品标准*@
+                                        <div class="form-group">
+                                            <label for="Bianzhun" class="col-sm-3 control-label"><b>产品标准</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Bianzhun" name="Bianzhun" class="form-control" placeholder="请填写产品标准" />
+                                            </div>
+                                        </div>
+                                        @*注册证有效期*@
+                                        <div class="form-group">
+                                            <label for="ZhucezhengYXQ" class="col-sm-3 control-label"><b>注册证有效期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="ZhucezhengYXQ" name="ZhucezhengYXQ" placeholder="请填写注册证有效期" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="date">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*批准日期*@
+                                        <div class="form-group">
+                                            <label for="PizhunRQ" class="col-sm-3 control-label"><b>批准日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="pizhunrq" name="pizhunrq" placeholder="请填写批准日期" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="date">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*中文编号*@
+                                        <div class="form-group">
+                                            <label for="BianhaoZW" class="col-sm-3 control-label"><b>中文编号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="BianhaoZW" name="BianhaoZW" class="form-control" placeholder="请填写中文编号" />
+                                            </div>
+                                        </div>
+                                        @*产地*@
+                                        <div class="form-group">
+                                            <label for="Chandi" class="col-sm-3 control-label"><b>产地</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Chandi" name="Chandi" class="form-control" placeholder="请填写产地" />
+                                            </div>
+                                        </div>
+                                        @*生产企业*@
+                                        <div class="form-group">
+                                            <label for="ShengchanqiyeID" class="col-sm-3 control-label"><b>生产企业</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("Shengchanqiyeid", "厂家", "名称")
+                                            </div>
+                                        </div>
+                                        @*服务机构*@
+                                        <div class="form-group">
+                                            <label for="ShouhuoJG" class="col-sm-3 control-label"><b>服务机构</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="ShouhuoJG" name="ShouhuoJG" class="form-control" placeholder="请填写服务机构" />
+                                            </div>
+                                        </div>
+                                        @*注册证照片*@
+                                        <div class="form-group">
+                                            <label for="ZhucezhengTP" class="col-sm-3 control-label"><b>注册证照片</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="zhucezhengtp" name="zhucezhengtp" readonly placeholder="请上传照片" class="form-control" type="text">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" data-toggle="modal" data-target="#myModalUpload" onclick="btn1()" class="btn btn-primary btn-sm">
+                                                            <b>上传</b>
+                                                            <i class="icon-cloud-upload icon-on-right bigger-110"></i>
+                                                        </button>
+                                                        <span hidden id="zcz"></span>
+                                                        <button type="button" class="btn btn-primary btn-sm zcz_browse">
+                                                            <b>浏览</b>
+                                                            <i class="icon-camera icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*注册代理*@
+                                        <div class="form-group">
+                                            <label for="ZhuceDL" class="col-sm-3 control-label"><b>注册代理</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="ZhuceDL" name="ZhuceDL" class="form-control" placeholder="请填写注册代理" />
+                                            </div>
+                                        </div>
+                                        @*试用范围*@
+                                        <div class="form-group">
+                                            <label for="ShiyongFW" class="col-sm-3 control-label"><b>试用范围</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="ShiyongFW" name="ShiyongFW" class="form-control" placeholder="请填写试用范围" />
+                                            </div>
+                                        </div>
+                                        @*备注*@
+                                        <div class="form-group">
+                                            <label for="Beizhu" class="col-sm-3 control-label"><b>备注</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Beizhu" name="Beizhu" class="form-control" placeholder="请填写备注" />
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="ob_base_gongyingshang_makedate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input name="makedate" id="makedate" disabled="disabled" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*输入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="name"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewBag.userid)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_buttom" class="btn btn-primary" type="button">
+                                            <b>保存</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

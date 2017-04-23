@@ -1,0 +1,200 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@model base_shouhuomingxiViewModel
+@{ViewBag.Title = "收货地址添加";}
+
+<div class="breadcrumbs" id="breadcrumbs">
+    <script type="text/javascript">
+        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+        $(document).ready(function () {
+            $("#date_makedate").datepicker();
+            //设置默认地址
+            $("#Default_dizhi").click(function () {
+                var dizhi = $("#Dizhi").val();
+                var Lianxiren = $("#Lianxiren").val();
+                var Lianxidianhua = $("#Lianxidianhua").val();
+                var _id = $("#shouhuodanwei").val();
+                if (dizhi == "") {
+                    alert("您的地址为空，请重新填写！");
+                    return false;//不让保存
+                } else {
+                    $.post(
+                        "/base_shouhuodanwei/UpdateDz",
+                        {
+                            songhuodz: dizhi,
+                            Lianxiren: Lianxiren,
+                            Lianxidianhua: Lianxidianhua,
+                            id: _id
+                        },
+                        function (data) {
+                            if (data == 1) {
+                            }
+                        });
+                }
+            });
+
+            //销售人下拉
+            var huozhuid = $("#huozhuid").val();
+            $("#XiaoshouID").val(huozhuid);
+            getXiaoshouren(huozhuid);
+            //submit
+            $("#save_top").bind("click", function () {
+                $("#form").submit();
+            });
+            $("#Default_dizhi").bind("click", function () {
+                $("#form").submit();
+            });
+            $("#save_bottom").bind("click", function () {
+                $("#form").submit();
+            });
+        });
+        function getXiaoshouren(huozhuid) {
+            var _huozhuid = huozhuid;
+            var filltable = "";
+            $.post(
+                "/base_xiaoshou/GetSalesman",
+                {
+                    huozhu: _huozhuid
+                },
+                function (data) {
+                    for (var i in data) {
+                        filltable = filltable + '<option value="';
+                        filltable = filltable + data[i].Xingming;
+                        filltable = filltable + '">';
+                        filltable = filltable + data[i].Xingming;
+                        filltable = filltable + '</option>';
+                    }
+                    $("#select_xiaoshouren").html(filltable);
+                });
+        }
+    </script>
+    <ul class="breadcrumb">
+        <li>
+            <i class="icon-home home-icon"></i>
+            <a href="/Home">首页</a>
+        </li>
+        <li>
+            <a href="/base_shouhuodanwei/Edit/@ViewBag.id">收货单位</a>
+        </li>
+        <li class="active"> 新增</li>
+    </ul>
+</div>
+
+<div class="page-content">
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i>返回</button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4">
+            <i class="icon-save"></i>保存
+            <span class="badge badge-transparent">
+                <i class="light-red icon-asterisk"></i>
+            </span>
+        </button>
+        <button type="button" id="Default_dizhi" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-location-arrow"></i>默认地址</button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>收货地址信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Save", "base_shouhuomingxi", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" />
+                                    <input type="hidden" id="huozhuid" value="@ViewBag.huozhuid" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <input type="hidden" name="shouhuofangid" id="shouhuodanwei" value="@ViewBag.id">
+                                    <fieldset>
+                                        @*收货单位*@
+                                        <div class="form-group">
+                                            <label for="name" class="col-sm-3 control-label"><b>收货单位</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" class="form-control" readonly value="@Html.GetDataValue_ID("收货单位","", (int)ViewBag.id)" />
+                                            </div>
+                                        </div>
+                                        @*销售人*@
+                                        <div class="form-group">
+                                            <label for="name" class="col-sm-3 control-label"><b>销售人</b></label>
+                                            <div class="col-sm-8">
+                                                <select name="xiaoshouren" id="select_xiaoshouren" style="width:100%;"></select>
+                                            </div>
+                                        </div>
+                                        @*地址*@
+                                        <div class="form-group">
+                                            <label for="Dizhi" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>地址</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Dizhi" name="Dizhi" class="form-control" placeholder="请输入地址" />
+                                            </div>
+                                        </div>
+                                        @*默认地址标识*@
+                                        <div class="form-group" style="display:none;">
+                                            @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
+                                            <div class="col-sm-10">
+                                                @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        @*联系人*@
+                                        <div class="form-group">
+                                            <label for="Lianxiren" class="col-sm-3 control-label"><b>联系人</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Lianxiren" name="Lianxiren" class="form-control" placeholder="请输入联系人" />
+                                            </div>
+                                        </div>
+                                        @*联系电话*@
+                                        <div class="form-group">
+                                            <label for="Lianxidianhua" class="col-sm-3 control-label"><b>联系电话</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Lianxidianhua" name="Lianxidianhua" class="form-control" placeholder="请输入联系电话" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none">
+                                            @Html.LabelFor(m => m.XiaoshouID, new { @class = "control-label col-sm-2" })
+                                            <div class="col-sm-10">
+                                                @Html.TextBoxFor(m => m.XiaoshouID, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input name="MakeDate" id="MakeDate" disabled="disabled" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewBag.userid)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>保存</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
