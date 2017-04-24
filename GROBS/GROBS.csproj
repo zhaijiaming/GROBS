@@ -523,6 +523,10 @@
     <Content Include="cssview\ace.css" />
     <Content Include="cssview\fontawesome.css" />
     <Content Include="cssview\StyleSheet1.css" />
+    <Content Include="Dlls\EntityFramework.dll" />
+    <Content Include="Dlls\EntityFramework.SqlServer.dll" />
+    <Content Include="Dlls\EntityFramework.SqlServer.xml" />
+    <Content Include="Dlls\EntityFramework.xml" />
     <Content Include="Dlls\GROBS.BSL.dll" />
     <Content Include="Dlls\GROBS.BSL.pdb" />
     <Content Include="Dlls\GROBS.Common.dll" />
@@ -537,6 +541,8 @@
     <Content Include="Dlls\GROBS.IBSL.pdb" />
     <Content Include="Dlls\GROBS.IDAL.dll" />
     <Content Include="Dlls\GROBS.IDAL.pdb" />
+    <Content Include="Dlls\MySql.Data.dll" />
+    <Content Include="Dlls\MySql.Data.Entity.EF6.dll" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
