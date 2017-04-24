@@ -12,7 +12,7 @@
   <xs:element name="ReportDataSet" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="true" msprop:Generator_DataSetName="ReportDataSet" msprop:Generator_UserDSName="ReportDataSet">
     <xs:complexType>
       <xs:choice minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="Quanxian" msprop:Generator_TableClassName="QuanxianDataTable" msprop:Generator_TableVarName="tableQuanxian" msprop:Generator_TablePropName="Quanxian" msprop:Generator_RowDeletingName="QuanxianRowDeleting" msprop:Generator_RowChangingName="QuanxianRowChanging" msprop:Generator_RowEvHandlerName="QuanxianRowChangeEventHandler" msprop:Generator_RowDeletedName="QuanxianRowDeleted" msprop:Generator_UserTableName="Quanxian" msprop:Generator_RowChangedName="QuanxianRowChanged" msprop:Generator_RowEvArgName="QuanxianRowChangeEvent" msprop:Generator_RowClassName="QuanxianRow">
+        <xs:element name="Quanxian" msprop:Generator_TableClassName="QuanxianDataTable" msprop:Generator_TableVarName="tableQuanxian" msprop:Generator_RowChangedName="QuanxianRowChanged" msprop:Generator_TablePropName="Quanxian" msprop:Generator_RowDeletingName="QuanxianRowDeleting" msprop:Generator_RowChangingName="QuanxianRowChanging" msprop:Generator_RowEvHandlerName="QuanxianRowChangeEventHandler" msprop:Generator_RowDeletedName="QuanxianRowDeleted" msprop:Generator_RowClassName="QuanxianRow" msprop:Generator_UserTableName="Quanxian" msprop:Generator_RowEvArgName="QuanxianRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:string" />
@@ -25,7 +25,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="base_chanpinxian" msprop:Generator_TableClassName="base_chanpinxianDataTable" msprop:Generator_TableVarName="tablebase_chanpinxian" msprop:Generator_TablePropName="base_chanpinxian" msprop:Generator_RowDeletingName="base_chanpinxianRowDeleting" msprop:Generator_RowChangingName="base_chanpinxianRowChanging" msprop:Generator_RowEvHandlerName="base_chanpinxianRowChangeEventHandler" msprop:Generator_RowDeletedName="base_chanpinxianRowDeleted" msprop:Generator_UserTableName="base_chanpinxian" msprop:Generator_RowChangedName="base_chanpinxianRowChanged" msprop:Generator_RowEvArgName="base_chanpinxianRowChangeEvent" msprop:Generator_RowClassName="base_chanpinxianRow">
+        <xs:element name="base_chanpinxian" msprop:Generator_TableClassName="base_chanpinxianDataTable" msprop:Generator_TableVarName="tablebase_chanpinxian" msprop:Generator_RowChangedName="base_chanpinxianRowChanged" msprop:Generator_TablePropName="base_chanpinxian" msprop:Generator_RowDeletingName="base_chanpinxianRowDeleting" msprop:Generator_RowChangingName="base_chanpinxianRowChanging" msprop:Generator_RowEvHandlerName="base_chanpinxianRowChangeEventHandler" msprop:Generator_RowDeletedName="base_chanpinxianRowDeleted" msprop:Generator_RowClassName="base_chanpinxianRow" msprop:Generator_UserTableName="base_chanpinxian" msprop:Generator_RowEvArgName="base_chanpinxianRowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="id" msprop:Generator_ColumnVarNameInTable="columnid" msprop:Generator_ColumnPropNameInRow="id" msprop:Generator_ColumnPropNameInTable="idColumn" msprop:Generator_UserColumnName="id" type="xs:string" />
@@ -35,17 +35,7 @@
             </xs:sequence>
           </xs:complexType>
         </xs:element>
-        <xs:element name="davistest-kw" msprop:Generator_TableClassName="_davistest_kwDataTable" msprop:Generator_TableVarName="_tabledavistest_kw" msprop:Generator_RowChangedName="_davistest_kwRowChanged" msprop:Generator_TablePropName="_davistest_kw" msprop:Generator_RowDeletingName="_davistest_kwRowDeleting" msprop:Generator_RowChangingName="_davistest_kwRowChanging" msprop:Generator_RowEvHandlerName="_davistest_kwRowChangeEventHandler" msprop:Generator_RowDeletedName="_davistest_kwRowDeleted" msprop:Generator_RowClassName="_davistest_kwRow" msprop:Generator_UserTableName="davistest-kw" msprop:Generator_RowEvArgName="_davistest_kwRowChangeEvent">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="kuwei" msprop:Generator_ColumnVarNameInTable="columnkuwei" msprop:Generator_ColumnPropNameInRow="kuwei" msprop:Generator_ColumnPropNameInTable="kuweiColumn" msprop:Generator_UserColumnName="kuwei" type="xs:string" minOccurs="0" />
-              <xs:element name="huojia" msprop:Generator_ColumnVarNameInTable="columnhuojia" msprop:Generator_ColumnPropNameInRow="huojia" msprop:Generator_ColumnPropNameInTable="huojiaColumn" msprop:Generator_UserColumnName="huojia" type="xs:string" minOccurs="0" />
-              <xs:element name="lei" msprop:Generator_ColumnVarNameInTable="columnlei" msprop:Generator_ColumnPropNameInRow="lei" msprop:Generator_ColumnPropNameInTable="leiColumn" msprop:Generator_UserColumnName="lei" type="xs:string" minOccurs="0" />
-              <xs:element name="ceng" msprop:Generator_ColumnVarNameInTable="columnceng" msprop:Generator_ColumnPropNameInRow="ceng" msprop:Generator_ColumnPropNameInTable="cengColumn" msprop:Generator_UserColumnName="ceng" type="xs:string" minOccurs="0" />
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-        <xs:element name="DataTable1" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_UserTableName="DataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent" msprop:Generator_RowClassName="DataTable1Row">
+        <xs:element name="DataTable1" msprop:Generator_TableClassName="DataTable1DataTable" msprop:Generator_TableVarName="tableDataTable1" msprop:Generator_RowChangedName="DataTable1RowChanged" msprop:Generator_TablePropName="DataTable1" msprop:Generator_RowDeletingName="DataTable1RowDeleting" msprop:Generator_RowChangingName="DataTable1RowChanging" msprop:Generator_RowEvHandlerName="DataTable1RowChangeEventHandler" msprop:Generator_RowDeletedName="DataTable1RowDeleted" msprop:Generator_RowClassName="DataTable1Row" msprop:Generator_UserTableName="DataTable1" msprop:Generator_RowEvArgName="DataTable1RowChangeEvent">
           <xs:complexType>
             <xs:sequence>
               <xs:element name="data" msprop:Generator_ColumnVarNameInTable="columndata" msprop:Generator_ColumnPropNameInRow="data" msprop:Generator_ColumnPropNameInTable="dataColumn" msprop:Generator_UserColumnName="data" type="xs:string" minOccurs="0" />
@@ -61,10 +51,6 @@
     <xs:unique name="base_chanpinxianKey1" msdata:PrimaryKey="true">
       <xs:selector xpath=".//mstns:base_chanpinxian" />
       <xs:field xpath="mstns:id" />
-    </xs:unique>
-    <xs:unique name="davistest-kwKey1">
-      <xs:selector xpath=".//mstns:davistest-kw" />
-      <xs:field xpath="mstns:kuwei" />
     </xs:unique>
   </xs:element>
 </xs:schema>

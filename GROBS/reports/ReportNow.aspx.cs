@@ -28,24 +28,6 @@ namespace GROBS.reports
                     name = Request.QueryString["pid"];
                     switch (name)
                     {
-                        case "daviskw":
-                            rptView.Reset();
-                            rptView.LocalReport.ReportPath = "reports/daviskw.rdlc";
-                            rptView.LocalReport.DataSources.Clear();
-                            DataTable dtkw = _rds.Tables["davistest-kw"];
-                            //var _kws = ServiceFactory.wms_kuweiservice.LoadEntities(p => p.IsDelete == false);
-                            DataRow drkw;
-                            //foreach (wms_kuwei _pr in _kws)
-                            //{
-                            //    drkw = dtkw.NewRow();
-                            //    drkw["kuwei"] = _pr.Mingcheng;
-                            //    drkw["huojia"] = _pr.Huojia;
-                            //    drkw["lei"] = _pr.Lieshu;
-                            //    drkw["ceng"] = _pr.Censhu;
-                            //    dtkw.Rows.Add(drkw);
-                            //}
-                            rptView.LocalReport.DataSources.Add(new Microsoft.Reporting.WebForms.ReportDataSource("DataSet1", _rds.Tables["davistest-kw"]));
-                            break;
                         case "personrights":
                             rptView.Reset();
                             rptView.LocalReport.ReportPath = "reports/rptQuanxian.rdlc";

@@ -810,7 +810,7 @@
     <Folder Include="logs\" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="reports\daviskw.rdlc" />
+    <EmbeddedResource Include="reports\rptQuanxian.rdlc" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
