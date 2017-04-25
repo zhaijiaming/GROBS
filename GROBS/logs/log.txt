@@ -28,3 +28,13 @@ INFO  2017-04-24 11:28:31,695 714359ms 2                      LogOut            
 INFO  2017-04-24 11:28:50,212 732876ms 2                      MoveNext           - yaowenhua login at 2017/4/24 11:28:50!
 INFO  2017-04-24 12:51:18,243 5680907ms 2                      MoveNext           - yaowenhua login at 2017/4/24 12:51:18!
 INFO  2017-04-24 13:50:41,471 70426ms 2                      MoveNext           - yaowenhua login at 2017/4/24 13:50:41!
+INFO  2017-04-24 15:38:51,858 145744ms 3                      LogOut             - lawliet log out at 2017-04-24 15:38:51
+INFO  2017-04-24 15:45:34,253 76217ms 3                      MoveNext           - 林志勇 login at 2017-04-24 15:45:34!
+INFO  2017-04-24 15:51:48,143 450107ms 3                      LogOut             - 林志勇 log out at 2017-04-24 15:51:48
+INFO  2017-04-24 15:52:56,702 518666ms 3                      MoveNext           - 林志勇 login at 2017-04-24 15:52:56!
+INFO  2017-04-25 09:15:33,311 256886ms 3                      MoveNext           - 林志勇 login at 2017-04-25 09:15:33!
+INFO  2017-04-25 09:22:37,349 680923ms 3                      LogOut             - 林志勇 log out at 2017-04-25 09:22:37
+INFO  2017-04-25 15:44:08,880 8359016ms 3                      MoveNext           - 林志勇 login at 2017-04-25 15:44:08!
+INFO  2017-04-25 15:44:59,091 8409227ms 3                      MoveNext           - 林志勇 login at 2017-04-25 15:44:59!
+INFO  2017-04-25 16:14:59,111 461549ms 4                      LogOut             - registerLogin log out at 2017-04-25 16:14:59
+INFO  2017-04-25 16:15:07,784 470222ms 4                      MoveNext           - registerLogin login at 2017-04-25 16:15:07!

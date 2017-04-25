@@ -5,78 +5,80 @@
     Layout = "~/Views/Shared/EmptyView.cshtml";
 }
 <script type="text/javascript">
-    //$(document).ready(function () {
-    //    var thisOS = navigator.platform;
-    //    var os = new Array("iPhone", "iPod", "iPad", "android", "Nokia", "SymbianOS", "Symbian", "Windows Phone", "Phone", "Linux armv71", "MAUI", "UNTRUSTED/1.0", "Windows CE", "BlackBerry", "IEMobile");
-    //    for (var i = 0; i < os.length; i++) {
-    //        if (thisOS.match(os[i])) {
-    //            $("#smallscreen").val("1");
-    //        }
-    //    }
-    //});
+    $(document).ready(function () {
+        //    var thisOS = navigator.platform;
+        //    var os = new Array("iPhone", "iPod", "iPad", "android", "Nokia", "SymbianOS", "Symbian", "Windows Phone", "Phone", "Linux armv71", "MAUI", "UNTRUSTED/1.0", "Windows CE", "BlackBerry", "IEMobile");
+        //    for (var i = 0; i < os.length; i++) {
+        //        if (thisOS.match(os[i])) {
+        //            $("#smallscreen").val("1");
+        //        }
+        //    }
+        $("#login").bind("click", function () {
+            $("#form").submit();
+        });
+
+    });
 </script>
-<div class="row">
-    <div class="col-sm-1"></div>
-    <div class="col-sm-5">
-        <img src="~/Imgs/ck1.jpg" style="width:100%;height:100%" />
-    </div>
-    <div class="col-sm-4">
-        <span class="red">
-            <i class="icon-eye-open"></i>
-            <small>用账号登录，如没有请先注册！</small>
-        </span>
-        <hr />
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                @*<input type="hidden" name="smallscreen" id="smallscreen" value="0"/>*@
-                @*<h4>使用本地帐户登录。</h4>*@
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-3 control-label" })
-                    <div class="col-md-9">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+<div class="page-content" style="background:inherit;">
+    @*继承父的渐变色*@
+    <div class="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4" style="margin-top:100px;">
+                    <div class="center" style="font-family:Arial, Helvetica, sans-serif,;color:#fff;letter-spacing:5px;">
+                        <h1>登录</h1>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-heading center" style="padding:30px 0px;">
+                            <img src="~/Imgs/logo.png" alt="上海嘉和诚康医疗器械有限公司" title="上海嘉和诚康医疗器械有限公司" style="max-height:110px;max-width:180px;" />
+                        </div>
+                        <div class="panel-body">
+                            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form", @id = "form" }))
+                            {
+
+                                @Html.AntiForgeryToken()
+                                <fieldset>
+                                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                    @*邮箱*@
+                                    <label class="block clearfix">
+                                        <span class="block input-icon input-icon-right">
+                                            <input class="form-control" id="Email" name="Email" placeholder="请输入邮箱" type="text" style="border-radius:6px!important;background:#eaeaec;border:#eaeaec;">
+                                            <i class="icon-user"></i>
+                                        </span>
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                                    <div class="space-6"></div>
+                                    @*密码*@
+                                    <label class="block clearfix">
+                                        <span class="block input-icon input-icon-right">
+                                            <input class="form-control" id="Password" name="Password" placeholder="请输入密码" type="Password" style="border-radius:6px!important;background:#eaeaec;border:#eaeaec;">
+                                            <i class="icon-lock"></i>
+                                        </span>
+                                    </label>
+                                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                                    <div class="space-18"></div>
+                                    @*登录*@
+                                    <div class="clearfix">
+                                        <button id="login" type="button" class="btn btn-block " style="background-color:#56b18e!important;border:none;border-radius:6px;">
+                                            <i class="icon-ok btn-lg bigger-200"></i>
+                                        </button>
+                                    </div>
+                                </fieldset>
+                                <div class="space-10"></div>
+                                <div class="registration pull-right">
+                                    <h4>
+                                        <i class="icon-hand-right grey"></i>
+                                        &nbsp;
+                                        <a href="/Account/Register"><b style="color:#56b18e!important">注册</b></a>
+                                    </h4>
+                                </div>
+                            }
+                        </div>
                     </div>
                 </div>
-                    <div class="form-group">
-                        @Html.LabelFor(m => m.Password, new { @class = "col-md-3 control-label" })
-                        <div class="col-md-9">
-                            @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-3 col-md-9">
-                            @*<div class="checkbox">
-                                    @Html.CheckBoxFor(m => m.RememberMe)
-                                    @Html.LabelFor(m => m.RememberMe)
-                                </div>*@
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <div class="col-md-offset-2 col-md-10">
-                            <input type="submit" value="登录" class="btn btn-default" />
-                        </div>
-                    </div>
-                    <hr />
-                    <p>
-                        @Html.ActionLink("注册为新用户", "Register")
-                    </p>
-                    @*<p>
-                            在为密码重置功能启用帐户确认后启用此项
-                            @Html.ActionLink("忘记了密码?", "ForgotPassword")
-                        </p>*@
-            }
-        </section>
+            </div>
+        </div>
     </div>
-    <div class="col-sm-2"></div>
-    @*<div class="col-md-4">
-            <section id="socialLoginForm">
-                @Html.Partial("_ExternalLoginsListPartial", new ExternalLoginListViewModel { ReturnUrl = ViewBag.ReturnUrl })
-            </section>
-        </div>*@
 </div>
 
 @*@section Scripts {

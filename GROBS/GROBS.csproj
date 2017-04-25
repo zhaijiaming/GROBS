@@ -553,6 +553,7 @@
     <Content Include="Imgs\ck1.jpg" />
     <Content Include="Imgs\ckflow.jpg" />
     <Content Include="Imgs\LOADING.gif" />
+    <Content Include="Imgs\logo.png" />
     <Content Include="Imgs\page1_pic4.jpg" />
     <Content Include="Imgs\wait.gif" />
     <Content Include="reports\ReportNow.aspx" />

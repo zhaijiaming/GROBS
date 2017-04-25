@@ -3,50 +3,81 @@
     ViewBag.Title = "用户注册";
     Layout = "~/Views/Shared/EmptyView.cshtml";
 }
+<script  type="text/javascript">
+    $(document).ready(function () {
+        $("#register").bind("click", function () {
+            $("#form").submit();
+        });
+    });
+</script>
+<div class="page-content" style="background:inherit;">
+    @*继承父的渐变色*@
+    <div class="wrapper">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-4 col-sm-offset-4" style="margin-top:100px;">
+                    <div class="center" style="font-family:Arial, Helvetica, sans-serif;color:#fff;letter-spacing:5px;">
+                        <h1>注册</h1>
+                    </div>
+                    <div class="panel">
+                        <div class="panel-heading center" style="padding:30px 0px;">
+                            <img src="~/Imgs/logo.png" alt="上海嘉和诚康医疗器械有限公司" title="上海嘉和诚康医疗器械有限公司" style="max-height:110px;max-width:180px;" />
+                        </div>
+                        <div class="panel-body">
+                            @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form",@id = "form"}))
+                            {
 
-@*<h2>@ViewBag.Title。</h2>*@
-<div class="col-sm-3"></div>
-<div class="col-sm-6">
-    @using (Html.BeginForm("Register", "Account", FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <h4>创建新帐户</h4>
-        <hr />
-        @Html.ValidationSummary("", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
-            <div class="col-md-10">
-                @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
-            </div>
-        </div>
-        <div class="form-group">
-            <div class="center">
-                @*<input type="submit" class="btn btn-default" value="注册" />*@
-                <div class="col-sm-2">
-                    <a href="/account/login"><i class="icon-backward"></i>返回</a>
+                                @Html.AntiForgeryToken()
+                                <fieldset>
+                                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                                    @*邮箱*@
+                                    <label class="block clearfix">
+                                        <span class="block input-icon input-icon-right">
+                                            <input class="form-control" id="Email" name="Email" placeholder="请输入邮箱" type="text" style="border-radius:6px!important;background:#eaeaec;border:#eaeaec;">
+                                            <i class="icon-user"></i>
+                                        </span>
+                                    </label>
+                                    <div class="space-6"></div>
+
+                                    @*密码*@
+                                    <label class="block clearfix">
+                                        <span class="block input-icon input-icon-right">
+                                            <input class="form-control" id="Password" name="Password" placeholder="请输入密码" type="Password" style="border-radius:6px!important;background:#eaeaec;border:#eaeaec;">
+                                            <i class="icon-lock"></i>
+                                        </span>
+                                    </label>
+                                    <div class="space-6"></div>
+
+                                    @*确认密码*@
+                                    <label class="block clearfix">
+                                        <span class="block input-icon input-icon-right">
+                                            <input class="form-control" id="ConfirmPassword" name="ConfirmPassword" placeholder="再次输入密码" type="Password" style="border-radius:6px!important;background:#eaeaec;border:#eaeaec;">
+                                            <i class="icon-lock"></i>
+                                        </span>
+                                    </label>
+                                    <div class="space-18"></div>
+
+                                    @*注册按钮*@
+                                    <div class="clearfix">
+                                        <button id="register" type="button" class="btn btn-block " style="background-color:#56b18e!important;border:none;border-radius:6px;">
+                                            <i class="icon-ok btn-lg bigger-200"></i>
+                                        </button>
+                                    </div>
+                                </fieldset>
+                                <div class="space-10"></div>
+                                <div class="registration pull-left">
+                                    <h4>
+                                        <i class="icon-hand-left grey"></i>
+                                        &nbsp;
+                                        <a href="/account/login"><b style="color:#56b18e!important">登录</b></a>
+                                    </h4>
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
-                <div class="col-sm-10">
-                    <button type="submit" class="btn btn-default">
-                        <i class="icon-adn"></i>注册
-                    </button>
-                </div>
             </div>
         </div>
-    }
+    </div>
 </div>
-<div class="col-sm-3"></div>
-@*@section Scripts {
-        @Scripts.Render("~/bundles/jqueryval")
-    }*@
+
