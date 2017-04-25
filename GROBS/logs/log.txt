@@ -38,3 +38,10 @@ INFO  2017-04-25 15:44:08,880 8359016ms 3                      MoveNext         
 INFO  2017-04-25 15:44:59,091 8409227ms 3                      MoveNext           - 林志勇 login at 2017-04-25 15:44:59!
 INFO  2017-04-25 16:14:59,111 461549ms 4                      LogOut             - registerLogin log out at 2017-04-25 16:14:59
 INFO  2017-04-25 16:15:07,784 470222ms 4                      MoveNext           - registerLogin login at 2017-04-25 16:15:07!
+INFO  2017-04-25 16:36:00,972 470942ms 3                      MoveNext           - 林志勇 login at 2017-04-25 16:36:00!
+INFO  2017-04-25 16:44:18,296 968265ms 3                      MoveNext           - 林志勇 login at 2017-04-25 16:44:18!
+INFO  2017-04-25 16:56:13,357 1683326ms 3                      MoveNext           - 林志勇 login at 2017-04-25 16:56:13!
+INFO  2017-04-25 17:01:22,602 1992572ms 3                      MoveNext           - 林志勇 login at 2017-04-25 17:01:22!
+INFO  2017-04-25 17:23:45,320 190559ms 3                      MoveNext           - 林志勇 login at 2017-04-25 17:23:45!
+INFO  2017-04-25 17:24:00,451 205691ms 3                      MoveNext           - 林志勇 login at 2017-04-25 17:24:00!
+INFO  2017-04-25 17:24:46,072 251311ms 3                      MoveNext           - 林志勇 login at 2017-04-25 17:24:46!

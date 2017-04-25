@@ -7,6 +7,7 @@
     string _searchcondition = ViewBag.SearchCondition;
 }
 <script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
     $(document).ready(function () {
         $("tr").bind("dblclick", function () {
             var u_id = $(this).find('td').eq(0).find('input').val();
@@ -15,6 +16,9 @@
                 location.href = url_go;
             }
         });
+        //table样式
+        table_config(mydatatable);
+        trResize();//初始化表头
     });
     function AddInfo() {
         location.href = "/base_shangpinjg/Add";
@@ -68,9 +72,6 @@
 }
 
 <div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
@@ -82,47 +83,51 @@
 <div class="page-content">
     @Html.Search_Condition((int)Session["user_id"], "商品价格_条件组合查询", "/base_shangpinjg/index", "base_shangpinjg_index", scms)
     <div class="page-header">
-        <p>
-            <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
-            <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
-            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
-            <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
-            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-        </p>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
     </div>
     <div class="row">
-        <table class="table" id="mydatatable">
-            <caption></caption>
-            <thead>
-                <tr>
-                    <td></td>
-                    <td>商品序号</td>
-                    <td>销售价</td>
-                    <td>采购价</td>
-                    <td>内部价</td>
-                    <td>制单日期</td>
-                    <td>制单人</td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in ViewBag.base_shangpinjg)
-                {
-                    <tr>
-                        <td>
-                            <label><input type="checkbox" value="@item.ID"></label>
-                        </td>
-                        <td>@item.SPID</td>
-                        <td>@item.JiaXS</td>
-                        <td>@item.JiaCG</td>
-                        <td>@item.JiaNB</td>
-                        <td>@item.MakeDate</td>
-                        <td>@item.MakeMan</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="pager">
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="mydatatable">
+                        <tr>
+                            <th></th>
+                            <th>商品序号</th>
+                            <th>销售价</th>
+                            <th>采购价</th>
+                            <th>内部价</th>
+                            <th>制单日期</th>
+                            <th>制单人</th>
+                        </tr>
+                        <tbody>
+                            @foreach (var item in ViewBag.base_shangpinjg)
+                            {
+                                <tr>
+                                    <td>
+                                        <label><input type="checkbox" value="@item.ID"></label>
+                                    </td>
+                                    <td>@item.SPID</td>
+                                    <td>@item.JiaXS</td>
+                                    <td>@item.JiaCG</td>
+                                    <td>@item.JiaNB</td>
+                                    <td>@string.Format("{0:yyyy-MM-dd}",item.MakeDate)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span class="pager">
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+            </span>
+        </div>
     </div>
 </div>
