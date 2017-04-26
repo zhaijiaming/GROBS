@@ -187,6 +187,8 @@ namespace GROBS.Controllers
             string col1 = Request["col1"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
+            string kuaidigs = Request["kuaidigs"] ?? "";
+            string fayunfs = Request["fayunfs"] ?? "";
             try
             {
                 ord_xiaoshou ob_ord_xiaoshou = new ord_xiaoshou();
@@ -202,6 +204,8 @@ namespace GROBS.Controllers
                 ob_ord_xiaoshou.Col1 = col1.Trim();
                 ob_ord_xiaoshou.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_ord_xiaoshou.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
+                ob_ord_xiaoshou.KuaidiGS = kuaidigs.Trim();
+                ob_ord_xiaoshou.FayunFS = fayunfs.Trim();
                 ob_ord_xiaoshou = ob_ord_xiaoshouservice.AddEntity(ob_ord_xiaoshou);
                 ViewBag.ord_xiaoshou = ob_ord_xiaoshou;
             }
@@ -235,6 +239,8 @@ namespace GROBS.Controllers
                 ord_xiaoshouviewmodel.Col1 = tempData.Col1;
                 ord_xiaoshouviewmodel.MakeDate = tempData.MakeDate;
                 ord_xiaoshouviewmodel.MakeMan = tempData.MakeMan;
+                ord_xiaoshouviewmodel.KuaidiGS = tempData.KuaidiGS;
+                ord_xiaoshouviewmodel.FayunFS = tempData.FayunFS;
                 return View(ord_xiaoshouviewmodel);
             }
         }
@@ -256,6 +262,8 @@ namespace GROBS.Controllers
             string col1 = Request["col1"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
+            string kuaidigs = Request["kuaidigs"] ?? "";
+            string fayunfs = Request["fayunfs"] ?? "";
             int uid = int.Parse(id);
             try
             {
@@ -272,6 +280,8 @@ namespace GROBS.Controllers
                 p.Col1 = col1.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
+                p.KuaidiGS = kuaidigs.Trim();
+                p.FayunFS = fayunfs.Trim();
                 ob_ord_xiaoshouservice.UpdateEntity(p);
                 ViewBag.saveok = ViewAddTag.ModifyOk;
             }

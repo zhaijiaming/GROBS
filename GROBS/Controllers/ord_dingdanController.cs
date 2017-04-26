@@ -176,6 +176,7 @@ namespace GROBS.Controllers
             string col3 = Request["col3"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
+            string kehudm = Request["kehudm"] ?? "";
             try
             {
                 ord_dingdan ob_ord_dingdan = new ord_dingdan();
@@ -201,6 +202,7 @@ namespace GROBS.Controllers
                 ob_ord_dingdan.Col3 = col3.Trim();
                 ob_ord_dingdan.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_ord_dingdan.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
+                ob_ord_dingdan.KehuDM = kehudm.Trim();
                 ob_ord_dingdan = ob_ord_dingdanservice.AddEntity(ob_ord_dingdan);
                 ViewBag.ord_dingdan = ob_ord_dingdan;
             }
@@ -244,6 +246,7 @@ namespace GROBS.Controllers
                 ord_dingdanviewmodel.Col3 = tempData.Col3;
                 ord_dingdanviewmodel.MakeDate = tempData.MakeDate;
                 ord_dingdanviewmodel.MakeMan = tempData.MakeMan;
+                ord_dingdanviewmodel.KehuDM = tempData.KehuDM;
                 return View(ord_dingdanviewmodel);
             }
         }
@@ -275,6 +278,7 @@ namespace GROBS.Controllers
             string col3 = Request["col3"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
+            string kehudm = Request["kehudm"] ?? "";
             int uid = int.Parse(id);
             try
             {
@@ -301,6 +305,7 @@ namespace GROBS.Controllers
                 p.Col3 = col3.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
+                p.KehuDM = kehudm.Trim();
                 ob_ord_dingdanservice.UpdateEntity(p);
                 ViewBag.saveok = ViewAddTag.ModifyOk;
             }
@@ -327,6 +332,132 @@ namespace GROBS.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        [OutputCache(Duration =30)]
+        public ActionResult CustomerOrderList(string page)
+        {
+            if (string.IsNullOrEmpty(page))
+                page = "1";
+            int userid = (int)Session["user_id"];
+            string pagetag = "ord_dingdan_customerorderlist";
+            Expression<Func<ord_dingdan, bool>> where = PredicateExtensionses.True<ord_dingdan>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc != null && sc.ConditionInfo != null)
+            {
+                string[] sclist = sc.ConditionInfo.Split(';');
+                foreach (string scl in sclist)
+                {
+                    string[] scld = scl.Split(',');
+                    switch (scld[0])
+                    {
+                        case "bianhao":
+                            string bianhao = scld[1];
+                            string bianhaoequal = scld[2];
+                            string bianhaoand = scld[3];
+                            if (!string.IsNullOrEmpty(bianhao))
+                            {
+                                if (bianhaoequal.Equals("="))
+                                {
+                                    if (bianhaoand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                                }
+                                if (bianhaoequal.Equals("like"))
+                                {
+                                    if (bianhaoand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                ViewBag.SearchCondition = sc.ConditionInfo;
+            }
+
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
+
+            var tempData = ob_ord_dingdanservice.LoadSortEntities(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_dingdan = tempData;
+            return View(tempData);
+        }
+        [HttpPost]
+        [OutputCache(Duration =30)]
+        public ActionResult CustomerOrderList()
+        {
+            int userid = (int)Session["user_id"];
+            string pagetag = "ord_dingdan_customerorderlist";
+            string page = "1";
+            string bianhao = Request["bianhao"] ?? "";
+            string bianhaoequal = Request["bianhaoequal"] ?? "";
+            string bianhaoand = Request["bianhaoand"] ?? "";
+            Expression<Func<ord_dingdan, bool>> where = PredicateExtensionses.True<ord_dingdan>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc == null)
+            {
+                sc = new searchcondition();
+                sc.UserID = userid;
+                sc.PageBrief = pagetag;
+                if (!string.IsNullOrEmpty(bianhao))
+                {
+                    if (bianhaoequal.Equals("="))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                    }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
+                }
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                searchconditionService.GetInstance().AddEntity(sc);
+            }
+            else
+            {
+                sc.ConditionInfo = "";
+                if (!string.IsNullOrEmpty(bianhao))
+                {
+                    if (bianhaoequal.Equals("="))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                    }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
+                }
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                searchconditionService.GetInstance().UpdateEntity(sc);
+            }
+            ViewBag.SearchCondition = sc.ConditionInfo;
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
+
+            var tempData = ob_ord_dingdanservice.LoadSortEntities(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_dingdan = tempData;
+            return View(tempData);
         }
     }
 }

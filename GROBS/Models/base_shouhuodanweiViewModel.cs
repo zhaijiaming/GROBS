@@ -82,6 +82,8 @@ namespace GROBS.Models
         public string Lianxiren { get; set; }
         [Display(Name = "联系电话")]
         public string LianxiDH { get; set; }
+        [Display(Name = "客户代码")]
+        public string KehuDM { get; set; }
     }
 }
 

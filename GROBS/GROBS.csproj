@@ -790,6 +790,8 @@
     <Content Include="Views\base_chanpinxiansq\Add.cshtml" />
     <Content Include="Views\base_chanpinxiansq\Edit.cshtml" />
     <Content Include="Views\base_chanpinxiansq\Index.cshtml" />
+    <Content Include="Views\Shared\_LayoutCustomer.cshtml" />
+    <Content Include="Views\ord_dingdan\CustomerOrderList.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

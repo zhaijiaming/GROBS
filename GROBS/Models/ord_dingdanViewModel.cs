@@ -56,6 +56,8 @@ namespace GROBS.Models
         public int? MakeMan { get; set; }
         [Display(Name = "已删除")]
         public bool IsDelete { get; set; }
+        [Display(Name = "客户代码")]
+        public string KehuDM { get; set; }
     }
 }
 

@@ -36,6 +36,10 @@ namespace GROBS.Models
         public int? MakeMan { get; set; }
         [Display(Name = "已删除")]
         public bool IsDelete { get; set; }
+        [Display(Name = "快递公司")]
+        public string KuaidiGS { get; set; }
+        [Display(Name = "运送方式")]
+        public string FayunFS { get; set; }
     }
 }
 
