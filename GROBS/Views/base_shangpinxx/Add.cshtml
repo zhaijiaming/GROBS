@@ -535,16 +535,10 @@
                                     <input type="hidden" name="zhucezhengbh" id="zhucezhengbh" />
                                     <input type="hidden" name="zhucezhengid" id="zhucezhengid" />
                                     <input type="hidden" id="Shouying" name="Shouying" value="1" />
+                                    <input type="hidden" name="huozhuid" value="1" />
                                     <input type="hidden" id="hz_allow" />
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <fieldset>
-                                        @*货主*@
-                                        <div class="form-group">
-                                            <label for="huozhuid" class="control-label col-sm-3"><i class="red glyphicon glyphicon-asterisk"></i> <b>货主</b></label>
-                                            <div class="col-sm-8">
-                                                @Html.SelectList_Auto("huozhuid", "货主", "名称")
-                                            </div>
-                                        </div>
                                         @*代码*@
                                         <div class="form-group">
                                             <label for="Daima" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>代码</b></label>

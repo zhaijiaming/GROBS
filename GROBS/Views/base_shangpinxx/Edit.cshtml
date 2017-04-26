@@ -473,17 +473,11 @@
                                     <input type="hidden" id="ocpx" value="@Model.Chanpinxian" />
                                     <input type="hidden" id="ogg" value="@Model.Guige" />
                                     <input type="hidden" name="Shouying" id="syid" value="@ViewData.Model.Shouying" />
+                                    <input type="hidden" name="huozhuid" value="@ViewData.Model.HuozhuID" />
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
                                     <input type="hidden" name="huozhuid" value="@Model.HuozhuID" />
                                     <fieldset>
-                                        @*货主*@
-                                        <div class="form-group">
-                                            <label for="huozhuid" class="control-label col-sm-3"><i class="red glyphicon glyphicon-asterisk"></i><b>货主</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" readonly class="form-control" value="@Html.GetDataValue_ID("货主", "简称", (int)Model.HuozhuID)" />
-                                            </div>
-                                        </div>
                                         @*代码*@
                                         <div class="form-group">
                                             <label for="Daima" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i><b>代码</b></label>

@@ -8,6 +8,12 @@
         $("#register").bind("click", function () {
             $("#form").submit();
         });
+        //enter键注册
+        $(document).keyup(function (event) {
+            if (event.keyCode == 13) {
+                $("#register").trigger("click");
+            }
+        });
     });
 </script>
 <div class="page-content" style="background:inherit;">

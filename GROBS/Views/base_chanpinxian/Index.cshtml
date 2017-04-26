@@ -125,7 +125,7 @@
                     <table class="table table-bordered table-condensed" id="mydatatable">
                         <tr>
                             <th></th>
-                            <th>货主</th>
+                            @*<th>货主</th>*@
                             <th>名称</th>
                             <th>说明</th>
                             <th>录入日期</th>
@@ -138,7 +138,7 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td>@Html.GetDataValue_ID("货主", "简称", (int)item.Huozhuxuhao)</td>
+                                    @*<td>@Html.GetDataValue_ID("货主", "简称", (int)item.Huozhuxuhao)</td>*@
                                     <td>@item.Mingcheng</td>
                                     <td>@item.Miaoshu</td>
                                     <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>

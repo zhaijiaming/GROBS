@@ -394,7 +394,6 @@
                         <tr>
                             <th></th>
                             <th>首营状态</th>
-                            <th>货主</th>
                             <th>商品代码</th>
                             <th>注册证</th>
                             <th>商品名称</th>
@@ -419,8 +418,6 @@
                                         <label><input class="checkbox" type="checkbox" value="@item.id"></label>
                                     </td>
                                     <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
-                                    @*<td>@Html.GetDataValue_ID("货主", "简称", (int)item.HuozhuID)</td>*@
-                                    <td>@item.Jiancheng</td>
                                     <td>@item.daima</td>
                                     @*<td>@Html.GetDataValue_ID("注册证", "编号", (int)item.ZhucezhengID)</td>*@
                                     <td>@item.ZhucezhengBH </td>

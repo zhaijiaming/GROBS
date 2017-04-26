@@ -3,7 +3,7 @@
 @using X.PagedList;
 @using X.PagedList.Mvc;
 @{
-    ViewBag.Title = "收货单位清单";
+    ViewBag.Title = "经销商客户";
     string _searchcondition = ViewBag.SearchCondition;
 }
 <script type="text/javascript">
@@ -172,7 +172,7 @@
             <i class="icon-home home-icon"></i>
             <a href="/Home">首页</a>
         </li>
-        <li class="active">收货单位</li>
+        <li class="active">经销商客户</li>
     </ul>
 </div>
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
@@ -199,7 +199,7 @@
                         <tr>
                             <th></th>
                             <th>首营状态</th>
-                            <th>货主</th>
+                            @*<th>货主</th>*@
                             <th>单位名称</th>
                             <th>送货地址</th>
                             <th>营业执照编号</th>
@@ -218,7 +218,7 @@
                                         <label><input class="checkbox" type="checkbox" value="@item.ID"></label>
                                     </td>
                                     <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
-                                    <td>@Html.GetDataValue_ID("货主", "简称", (int)item.HuozhuID)</td>
+                                    @*<td>@Html.GetDataValue_ID("货主", "简称", (int)item.HuozhuID)</td>*@
                                     <td>@item.Mingcheng</td>
                                     <td>@item.SonghuoDZ</td>
                                     <td>@item.YingyezhizhaoBH</td>

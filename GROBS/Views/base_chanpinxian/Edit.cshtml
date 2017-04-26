@@ -55,10 +55,11 @@
                                     <input type="hidden" name="ob_base_chanpinxian_makedate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
                                     <fieldset>
                                         @*货主*@
-                                        <div class="form-group">
+                                        <div class="form-group" style="display:none;">
                                             <label for="ob_base_chanpinxian_huozhuxuhao" class="col-sm-2 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>货主</b></label>
                                             <div class="col-sm-9">
-                                                @Html.SelectList_Auto("ob_base_chanpinxian_huozhuxuhao", "货主", "名称", (int)item.Huozhuxuhao)
+                                                <input type="text" class="form-control" placeholder="必填项,请填写名称" name="ob_base_chanpinxian_huozhuxuhao" value="@item.Huozhuxuhao">
+                                                @*@Html.SelectList_Auto("ob_base_chanpinxian_huozhuxuhao", "货主", "名称", (int)item.Huozhuxuhao)*@
                                             </div>
                                         </div>
                                         @*名称*@

@@ -54,10 +54,11 @@
                                     <input type="hidden" id="MakeMan" name="ob_base_chanpinxian_makeman" value=@Session["user_id"] />
                                     <fieldset>
                                         @*货主*@
-                                        <div class="form-group">
+                                        <div class="form-group" style="display:none;">
                                             <label for="ob_base_chanpinxian_huozhuxuhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>货主</b></label>
                                             <div class="col-sm-9">
-                                                @Html.SelectList_Auto("ob_base_chanpinxian_huozhuxuhao", "货主", "名称")
+                                                <input type="text" class="form-control" placeholder="必填项,请填写名称" name="ob_base_chanpinxian_huozhuxuhao" value="1">
+                                                @*@Html.SelectList_Auto("ob_base_chanpinxian_huozhuxuhao", "货主", "名称")*@
                                             </div>
                                         </div>
                                         @*名称*@

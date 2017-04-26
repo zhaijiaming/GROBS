@@ -3,7 +3,7 @@
 
 @model base_shouhuodanwei
 @{
-    ViewBag.Title = "收货单位修改";
+    ViewBag.Title = "经销商客户修改";
     base_shouhuodanwei item = ViewBag.base_shouhuodanwei;
 }
 @Html.GetFileUpload("yingyezhizhaotp", "yyzz", "z", "cus", 3, 0, new Dictionary<string, string>() { { "yyzz", "yingyezhizhaotp" }, { "xktp", "jingyingxuketp" }, { "batp", "beiantp" } })
@@ -577,7 +577,7 @@
             <a href="/Home">首页</a>
         </li>
         <li>
-            <a href="/base_shouhuodanwei">收货单位</a>
+            <a href="/base_shouhuodanwei">经销商客户</a>
         </li>
         <li class="active"> 编辑</li>
     </ul>
@@ -587,7 +587,7 @@
     <div id="pl_fun" class="page-header">
         <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
         <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
-        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i><b>刷新</b></button>
     </div>
     <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
         <div class="container-fluid">
@@ -595,7 +595,7 @@
                     <div class="col-sm-6 col-sm-offset-1">
                         <div class="widget-box radius-4">
                             <div class="widget-header">
-                                <h4><b>收货单位信息</b></h4>
+                                <h4><b>经销商客户信息</b></h4>
                             </div>
                             <div class="widget-body">
                                 <div class="widget-main no-padding">
@@ -606,21 +606,20 @@
                                         <input type="hidden" id="btnSelect" value="" />
                                         <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                         <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
-                                        <input type="hidden" name="huozhuid" id="huozhuid" value="@item.HuozhuID" />
                                         <input type="hidden" id="shouyid" value="@item.Shouying" />
                                         <fieldset>
                                             @*货主*@
-                                            <div class="form-group">
+                                            <div class="form-group" style="display:none;">
                                                 <label for="huozhuid" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>货主</b></label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" readonly class="form-control" value="@Html.GetDataValue_ID( "货主", "名称",(int)item.HuozhuID)" />
+                                                    <input type="text" id="huozhuid" name="huozhuid" class="form-control" placeholder="请输入经销商客户" value="@item.HuozhuID" />
                                                 </div>
                                             </div>
-                                            @*单位名称*@
+                                            @*经销商客户*@
                                             <div class="form-group">
-                                                <label for="Mingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>单位名称</b></label>
+                                                <label for="Mingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>经销商客户</b></label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请输入单位名称" value="@item.Mingcheng" />
+                                                    <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请输入经销商客户" value="@item.Mingcheng" />
                                                 </div>
                                             </div>
                                             @*营业执照编号*@
@@ -908,7 +907,7 @@
                         <div style="position:fixed;max-width:530px;min-width:500px;">
                             <div class="widget-box radius-4">
                                 <div class="widget-header">
-                                    <h4><b>收货地址信息</b></h4>
+                                    <h4><b>经销商客户地址</b></h4>
                                 </div>
                                 <div class="widget-body">
                                     <div class="widget-main">

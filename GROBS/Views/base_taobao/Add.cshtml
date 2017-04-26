@@ -3,10 +3,29 @@
 @model base_taobaoViewModel
 @{ViewBag.Title = "套包添加";}
 
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+
+        });
+        //'是否停用'绑定值
+        $("#TingyongSF").val("true");//默认赋值
+        $("#TingyongSF").change(function () {
+            if ($("#TingyongSF").is(":checked")) {
+                $("#TingyongSF").val("true");//选中=true
+            } else {
+                $("#TingyongSF").val("false");//不选中=false
+            }
+        });
+    });
+</script>
 <div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
@@ -20,89 +39,144 @@
 </div>
 
 <div class="page-content">
-    @using (Html.BeginForm("Save", "base_taobao", FormMethod.Post, new { @role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="id" />
-        <div class="page-header">
-            <p>
-                <button type="submit" class="btn btn-default"><i class="icon-save"></i>保存</button>
-                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1); "><i class="icon-hand-left"></i>返回</button>
-            </p>
-        </div>
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4">
+            <i class="icon-save"></i><b>保存</b>
+            <span class="badge badge-transparent">
+                <i class="light-red icon-asterisk"></i>
+            </span>
+        </button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
         <div class="container">
-            <div class="form-group">
-                @Html.LabelFor(m => m.GYSID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.GYSID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.CPXID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.CPXID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Daima, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Daima, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Mingcheng, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Mingcheng, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Miaoshu, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Miaoshu, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.JiaXS, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.JiaXS, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.JiaCG, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.JiaCG, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.XSDW, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.XSDW, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.TingyongSF, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.TingyongSF, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MakeDate, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    <input id="MakeDate" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="MakeDate">
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MakeMan, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.SelectList_Auto("MakeMan", "userinfo", "fullname")
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>套包信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Save", "base_taobao", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <fieldset>
+                                        @*代码*@
+                                        <div class="form-group">
+                                            <label for="Daima" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>代码</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Daima" name="Daima" class="form-control" placeholder="请输入代码" />
+                                            </div>
+                                        </div>
+                                        @*名称*@
+                                        <div class="form-group">
+                                            <label for="Mingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>名称</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请输入名称" />
+                                            </div>
+                                        </div>
+                                        @*描述*@
+                                        <div class="form-group">
+                                            <label for="Miaoshu" class="col-sm-3 control-label"><b>描述</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Miaoshu" name="Miaoshu" class="form-control" placeholder="请输入描述" />
+                                            </div>
+                                        </div>
+                                        @*供应商*@
+                                        <div class="form-group" style="display:none;">
+                                            <label for="GYSID" class="col-sm-3 control-label"><b>供应商</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="GYSID" name="GYSID" class="form-control" placeholder="请输入供应商" value="1" />
+                                            </div>
+                                        </div>
+                                        @*产品线*@
+                                        <div class="form-group">
+                                            <label for="CPXID" class="col-sm-3 control-label"><b>产品线</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("CPXID", "产品线","")
+                                            </div>
+                                        </div>
+                                        @*销售价*@
+                                        <div class="form-group">
+                                            <label for="JiaXS" class="col-sm-3 control-label"><b>销售价</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="JiaXS" name="JiaXS" class="form-control" placeholder="请输入销售价" />
+                                            </div>
+                                        </div>
+                                        @*采购价*@
+                                        <div class="form-group">
+                                            <label for="JiaCG" class="col-sm-3 control-label"><b>采购价</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="JiaCG" name="JiaCG" class="form-control" placeholder="请输入采购价" />
+                                            </div>
+                                        </div>
+                                        @*销售单位*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="XSDW"><b>销售单位</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="XSDW" name="XSDW" placeholder="请填写销售单位" class="form-control col-sm-10" type="text">
+                                                    <span class="input-group-addon input-group-sm">个</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*是否停用*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="TingyongSF"><b>是否停用</b></label>
+                                            <div class="col-sm-4">
+                                                <label class="control-group">
+                                                    <input name="TingyongSF" id="TingyongSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*Col1*@
+                                        <div class="form-group" style="display:none;">
+                                            <label for="Col1" class="col-sm-3 control-label"><b>Col1</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="请输入Col1" />
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input name="MakeDate" id="MakeDate" disabled="disabled" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewBag.userid)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>保存</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    }
+    </div>
 </div>
