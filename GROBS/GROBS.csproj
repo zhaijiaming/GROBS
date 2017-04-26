@@ -291,6 +291,7 @@
     <Compile Include="Controllers\auth_gongsiController.cs" />
     <Compile Include="Controllers\auth_kehuController.cs" />
     <Compile Include="Controllers\base_bumenController.cs" />
+    <Compile Include="Controllers\base_chanpinxiansqController.cs" />
     <Compile Include="Controllers\base_feiyongxmController.cs" />
     <Compile Include="Controllers\base_huobiController.cs" />
     <Compile Include="Controllers\base_quyuController.cs" />
@@ -309,6 +310,7 @@
     <Compile Include="Models\auth_gongsiViewModel.cs" />
     <Compile Include="Models\auth_kehuViewModel.cs" />
     <Compile Include="Models\base_bumenViewModel.cs" />
+    <Compile Include="Models\base_chanpinxiansqViewModel.cs" />
     <Compile Include="Models\base_feiyongxmViewModel.cs" />
     <Compile Include="Models\base_huobiViewModel.cs" />
     <Compile Include="Models\base_kaipiaoxxViewModel.cs" />
@@ -523,10 +525,6 @@
     <Content Include="cssview\ace.css" />
     <Content Include="cssview\fontawesome.css" />
     <Content Include="cssview\StyleSheet1.css" />
-    <Content Include="Dlls\EntityFramework.dll" />
-    <Content Include="Dlls\EntityFramework.SqlServer.dll" />
-    <Content Include="Dlls\EntityFramework.SqlServer.xml" />
-    <Content Include="Dlls\EntityFramework.xml" />
     <Content Include="Dlls\GROBS.BSL.dll" />
     <Content Include="Dlls\GROBS.BSL.pdb" />
     <Content Include="Dlls\GROBS.Common.dll" />
@@ -789,6 +787,9 @@
     <Content Include="Views\ord_xiaoshou\Add.cshtml" />
     <Content Include="Views\ord_xiaoshou\Edit.cshtml" />
     <Content Include="Views\ord_xiaoshou\Index.cshtml" />
+    <Content Include="Views\base_chanpinxiansq\Add.cshtml" />
+    <Content Include="Views\base_chanpinxiansq\Edit.cshtml" />
+    <Content Include="Views\base_chanpinxiansq\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
