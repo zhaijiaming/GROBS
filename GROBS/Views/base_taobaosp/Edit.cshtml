@@ -4,11 +4,19 @@
 @{
     ViewBag.Title = "套包商品修改";
 }
-
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+        });
+    });
+</script>
 <div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
@@ -22,83 +30,135 @@
 </div>
 
 <div class="page-content">
-    @using (Html.BeginForm("Update", "base_taobaosp", FormMethod.Post, new { @role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="id" value="@ViewData.Model.ID" />
-        <div class="page-header">
-            <p>
-                <button type="submit" class="btn btn-default"><i class="icon-save"></i>更新</button>
-                <button type="button" class="btn btn-default" onclick="javascript: history.back(-1); "><i class="icon-hand-left"></i>返回</button>
-            </p>
-        </div>
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
         <div class="container">
-            <div class="form-group">
-                @Html.LabelFor(m => m.TBID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.TBID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.SPID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.SPID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Shuliang, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Shuliang, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.HSL, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.HSL, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.JBDW, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.JBDW, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.XSDW, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.XSDW, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.JiaXS, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.JiaXS, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.JiaCG, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.JiaCG, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MakeDate, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    <input id="MakeDate" type="date" class="form-control" name="MakeDate" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)">
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MakeMan, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.SelectList_Auto("MakeMan", "userinfo", "fullname", (long)ViewData.Model.MakeMan)
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>套包商品信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Update", "base_taobaosp", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@ViewData.Model.ID" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <fieldset>
+                                        @*套包ID*@
+                                        <div class="form-group" style="display:none;">
+                                            <label for="tbid" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>套包ID</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="tbid" name="tbid" class="form-control" placeholder="请输入套包ID" value="@ViewData.Model.TBID" />
+                                            </div>
+                                        </div>
+                                        @*商品*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="spid"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="spid" name="spid" placeholder="请选择商品" class="form-control" type="text" value="@ViewData.Model.SPID">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_select" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*数量*@
+                                        <div class="form-group">
+                                            <label for="shuliang" class="col-sm-3 control-label"><b>数量</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="shuliang" name="shuliang" class="form-control" placeholder="请输入数量" value="@ViewData.Model.Shuliang" />
+                                            </div>
+                                        </div>
+                                        @*换算率*@
+                                        <div class="form-group">
+                                            <label for="hsl" class="col-sm-3 control-label"><b>换算率</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="hsl" name="hsl" readonly class="form-control" placeholder="请选择商品,由商品带出换算率" value="@ViewData.Model.HSL" />
+                                            </div>
+                                        </div>
+                                        @*基本单位*@
+                                        <div class="form-group">
+                                            <label for="jbdw" class="col-sm-3 control-label"><b>基本单位</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="jbdw" name="jbdw" readonly class="form-control" placeholder="" value="@ViewData.Model.JBDW" />
+                                            </div>
+                                        </div>
+                                        @*销售单位*@
+                                        <div class="form-group">
+                                            <label for="xsdw" class="col-sm-3 control-label"><b>销售单位</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="xsdw" name="xsdw" readonly class="form-control" placeholder="" value="@ViewData.Model.XSDW" />
+                                            </div>
+                                        </div>
+                                        @*销售价*@
+                                        <div class="form-group">
+                                            <label for="JiaXS" class="col-sm-3 control-label"><b>销售价</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="JiaXS" name="JiaXS" readonly class="form-control" placeholder="请选择商品,由商品带出销售价" value="@ViewData.Model.JiaXS" />
+                                            </div>
+                                        </div>
+                                        @*采购价*@
+                                        <div class="form-group">
+                                            <label for="JiaCG" class="col-sm-3 control-label"><b>采购价</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="JiaCG" name="JiaCG" readonly class="form-control" placeholder="请选择商品,由商品带出采购价" value="@ViewData.Model.JiaCG" />
+                                            </div>
+                                        </div>
+                                        @*Col1*@
+                                        <div class="form-group" style="display:none;">
+                                            <label for="Col1" class="col-sm-3 control-label"><b>Col1</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="请输入Col1" value="@ViewData.Model.Col1" />
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="MakeDate" disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewData.Model.MakeMan)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>更新</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    }
+    </div>
 </div>

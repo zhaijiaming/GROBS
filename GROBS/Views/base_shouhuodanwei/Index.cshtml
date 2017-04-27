@@ -199,6 +199,7 @@
                         <tr>
                             <th></th>
                             <th>首营状态</th>
+                            <th>经销商代码</th>
                             @*<th>货主</th>*@
                             <th>单位名称</th>
                             <th>送货地址</th>
@@ -219,6 +220,7 @@
                                     </td>
                                     <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
                                     @*<td>@Html.GetDataValue_ID("货主", "简称", (int)item.HuozhuID)</td>*@
+                                    <td>@item.KehuDM</td>
                                     <td>@item.Mingcheng</td>
                                     <td>@item.SonghuoDZ</td>
                                     <td>@item.YingyezhizhaoBH</td>

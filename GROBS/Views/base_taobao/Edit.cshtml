@@ -32,7 +32,121 @@
             $("#TingyongSF").attr("checked", false);
             $("#TingyongSF").val("false");
         }
+
+        var tbId = $("#tbId").val();
+        /*
+            套包商品        
+        */
+        if (tbId.length > 0) {
+            getTaoBaoData(tbId);//获取套包商品明细
+        };
+        $("#btn_tbAdd").click(function () {
+            if (tbId != null) {
+                window.open("/base_taobaosp/Add?tbId=" + tbId, "_self");
+            } else {
+                alert("系统错误，请于管理员联系!");
+            }
+        });
+
+        /*
+            销售单位
+        */
+        $("#container").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        //click
+        GetJldw();   //获取单位数据
+        $("#btn_select").bind("click", function () {
+            $("#container").show();
+            //$("#pl_Cunchu .checkbox").prop("checked", false);
+        });
+        //弹框关闭
+        $("#container_close").click(function () {
+            $("#container").hide();
+        });
+        //确定添加
+        $("#btn_confirm").click(function () {
+            var _data = "";
+            $("#table_data tr").each(function () {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    _data = $(this).find(".mc").html();
+                }
+                $("#xsdw").val(_data);
+            });
+            $("#container").hide();
+        });
+        //单击tr打钩
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find(":checkbox").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
+        });
+        //双击取值
+        $("#table_data tbody").on("dblclick", "tr", function () {
+            $("#xsdw").val($(this).find(".mc").html());
+            $("#container").hide();
+        });
     });
+    function GetJldw() {
+        var filltable = "";
+        $.post(
+            "/base_jiliangdw/GetJldw",
+            {
+            },
+                function (data) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr><td width="50px;"><label><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></td><td width="30%;"><span class="bh">';
+                        filltable = filltable + data[i].Bianhao;
+                        filltable = filltable + '</span></td><td width="30%;"><span class="mc">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td width="30%;">';
+                        filltable = filltable + data[i].Miaoshu;
+                        filltable = filltable + '</td></tr>';
+                    }
+                    $("#table_data tbody").html(filltable);
+                });
+    }
+    //套包商品明细
+    function getTaoBaoData(tbId) {
+        var data = "";
+        $.post(
+            "/base_taobaosp/getdetail",
+                {
+                    tbId: tbId
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       for (var i in data) {
+                           data = data + '<tr><td><div class="checkbox"><label><input type="checkbox" value="';
+                           data = data + data[i].ID;
+                           data = data + '"></label></div></td>';
+                           data = data + '<td><span class="spid">';
+                           data = data + data[i].SPID;
+                           data = data + '</span></td><td>';
+                           data = data + data[i].Shuliang;
+                           data = data + '</td><td>';
+                           data = data + data[i].HSL;
+                           data = data + '</td><td>';
+                           data = data + data[i].JBDW;
+                           data = data + '</td><td>';
+                           data = data + data[i].XSDW;
+                           data = data + '</td><td>';
+                           data = data + data[i].JiaXS;
+                           data = data + '</td><td>';
+                           data = data + data[i].JiaCG;
+                           data = data + '</td></tr>';
+                       }
+                       $("#container_tbsp tbody").html(data);
+                   } else {
+                       $("#container_tbsp tbody").empty();
+                   }
+               }
+            );
+    }
 </script>
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
@@ -53,9 +167,9 @@
         <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
     </div>
     <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-8 col-sm-offset-2">
+                <div class="col-sm-6 col-sm-offset-1">
                     <div class="widget-box radius-4">
                         <div class="widget-header">
                             <h4><b>套包信息</b></h4>
@@ -65,7 +179,7 @@
                                 @using (Html.BeginForm("Update", "base_taobao", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
                                 {
                                     @Html.AntiForgeryToken()
-                                    <input type="hidden" name="id" value="@ViewData.Model.ID" />
+                                    <input type="hidden" id="tbId" name="id" value="@ViewData.Model.ID">
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
                                     <fieldset>
@@ -115,16 +229,21 @@
                                         <div class="form-group">
                                             <label for="JiaCG" class="col-sm-3 control-label"><b>采购价</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="JiaCG" name="JiaCG" class="form-control" placeholder="请输入采购价" value="@ViewData.Model.JiaCG"/>
+                                                <input type="text" id="JiaCG" readonly name="JiaCG" class="form-control" placeholder="不可输入" value="@ViewData.Model.JiaCG"/>
                                             </div>
                                         </div>
                                         @*销售单位*@
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="XSDW"><b>销售单位</b></label>
+                                            <label class="col-sm-3 control-label" for="xsdw"><b>销售单位</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
-                                                    <input id="XSDW" name="XSDW" placeholder="请填写销售单位" class="form-control col-sm-10" type="text" value="@ViewData.Model.XSDW">
-                                                    <span class="input-group-addon input-group-sm">个</span>
+                                                    <input id="xsdw" name="xsdw" placeholder="请选择销售单位" class="form-control" type="text" value="@ViewData.Model.XSDW">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_select" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -181,7 +300,73 @@
                         </div>
                     </div>
                 </div>
+                @*套包商品*@
+                <div class="col-sm-4" style="position:relative;">
+                    <div style="position:fixed;max-width:530px;min-width:500px;">
+                        <div class="widget-box radius-4">
+                            <div class="widget-header">
+                                <h4><b>套包商品</b></h4>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="row" id="pl_fun_dizhi">
+                                        <div class="col-sm-12">
+                                            <button type="button" id="btn_tbAdd" class="btn btn-white"><i class="icon-adn  bigger-120 blue"></i>添加</button>
+                                            <button type="button" id="btn_tbEdit" class="btn btn-white"><i class="icon-edit  bigger-120"></i>编辑</button>
+                                            <button type="button" id="btn_tbDel" class="btn btn-white"><i class="icon-remove red bigger-120"></i>删除</button>
+                                        </div>
+                                    </div>
+                                    <div class="space-18"></div>
+                                    @*套包商品列表*@
+                                    <div id="container_tbsp" class="container">
+                                        <table class="table table-hover" id="mydatatable">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>商品</th>
+                                                    <th>数量</th>
+                                                    <th>换算率</th>
+                                                    <th>基本单位</th>
+                                                    <th>销售单位</th>
+                                                    <th>销售价</th>
+                                                    <th>采购价</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
+        </div>
+    </div>
+</div>
+@*销售单位弹框*@
+<div id="container" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:400px;height:500px;z-index:99999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title"><b>销售单位</b><button id="container_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <button type="button" class="btn btn-primary " id="btn_confirm">
+            <i class="icon-pencil bigger-120"></i>
+            <b>添加</b>
+        </button>
+        <div class="center">
+            <table class="table table-hover" id="table_data" style="margin-top:10px;">
+                <caption></caption>
+                <thead style="display:block">
+                    <tr>
+                        <td width="50px;"></td>
+                        <td width="30%;">编号</td>
+                        <td width="30%;">名称</td>
+                        <td width="30%;">说明</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block; max-height:380px;overflow:auto;"></tbody>
+            </table>
         </div>
     </div>
 </div>

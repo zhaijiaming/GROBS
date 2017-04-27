@@ -12,7 +12,6 @@
         });
         $("#save_bottom").bind("click", function () {
             $("#form").submit();
-
         });
         //'是否停用'绑定值
         $("#TingyongSF").val("true");//默认赋值
@@ -23,7 +22,68 @@
                 $("#TingyongSF").val("false");//不选中=false
             }
         });
+        /*
+            销售单位
+        */
+        $("#container").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        //click
+        GetJldw();   //获取单位数据
+        $("#btn_select").bind("click", function () {
+            $("#container").show();
+            //$("#pl_Cunchu .checkbox").prop("checked", false);
+        });
+        //弹框关闭
+        $("#container_close").click(function () {
+            $("#container").hide();
+        });
+        //确定添加
+        $("#btn_confirm").click(function () {
+            var _data = "";
+            $("#table_data tr").each(function () {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    _data = $(this).find(".mc").html();
+                }
+                $("#xsdw").val(_data);
+            });
+            $("#container").hide();
+        });
+        //单击tr打钩
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find(":checkbox").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
+        });
+        //双击取值
+        $("#table_data tbody").on("dblclick", "tr", function () {
+            $("#xsdw").val($(this).find(".mc").html());
+            $("#container").hide();
+        });
     });
+    function GetJldw() {
+        var filltable = "";
+        $.post(
+            "/base_jiliangdw/GetJldw",
+            {
+            },
+                function (data) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr><td width="50px;"><label><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></td><td width="30%;"><span class="bh">';
+                        filltable = filltable + data[i].Bianhao;
+                        filltable = filltable + '</span></td><td width="30%;"><span class="mc">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td width="30%;">';
+                        filltable = filltable + data[i].Miaoshu;
+                        filltable = filltable + '</td></tr>';
+                    }
+                    $("#table_data tbody").html(filltable);
+                });
+    }
 </script>
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
@@ -96,7 +156,7 @@
                                         <div class="form-group">
                                             <label for="CPXID" class="col-sm-3 control-label"><b>产品线</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Auto("CPXID", "产品线","")
+                                                @Html.SelectList_Auto("CPXID", "产品线", "")
                                             </div>
                                         </div>
                                         @*销售价*@
@@ -110,16 +170,21 @@
                                         <div class="form-group">
                                             <label for="JiaCG" class="col-sm-3 control-label"><b>采购价</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="JiaCG" name="JiaCG" class="form-control" placeholder="请输入采购价" />
+                                                <input type="text" id="JiaCG" readonly name="JiaCG" class="form-control" placeholder="不可输入" />
                                             </div>
                                         </div>
                                         @*销售单位*@
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="XSDW"><b>销售单位</b></label>
+                                            <label class="col-sm-3 control-label" for="xsdw"><b>销售单位</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
-                                                    <input id="XSDW" name="XSDW" placeholder="请填写销售单位" class="form-control col-sm-10" type="text">
-                                                    <span class="input-group-addon input-group-sm">个</span>
+                                                    <input id="xsdw" name="xsdw" placeholder="请选择销售单位" class="form-control" type="text">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_select" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
@@ -177,6 +242,32 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+@*销售单位弹框*@
+<div id="container" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:400px;height:500px;z-index:99999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title"><b>销售单位</b><button id="container_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <button type="button" class="btn btn-primary " id="btn_confirm">
+            <i class="icon-pencil bigger-120"></i>
+            <b>添加</b>
+        </button>
+        <div class="center">
+            <table class="table table-hover" id="table_data" style="margin-top:10px;">
+                <caption></caption>
+                <thead style="display:block">
+                    <tr>
+                        <td width="50px;"></td>
+                        <td width="30%;">编号</td>
+                        <td width="30%;">名称</td>
+                        <td width="30%;">说明</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block; max-height:380px;overflow:auto;"></tbody>
+            </table>
         </div>
     </div>
 </div>

@@ -166,6 +166,9 @@ namespace GROBS.Controllers
 
         public ActionResult Add()
         {
+            //string tbId = Request["tbId"] ?? "";
+            //ViewBag.tbId = int.Parse(tbId);
+
             ViewBag.userid = (int)Session["user_id"];
             return View();
         }
@@ -186,6 +189,7 @@ namespace GROBS.Controllers
             string col1 = Request["col1"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
+            //int _id = int.Parse(tbid);
             try
             {
                 base_taobaosp ob_base_taobaosp = new base_taobaosp();
@@ -293,6 +297,21 @@ namespace GROBS.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        public JsonResult GetDetail()
+        {
+            string tbId = Request["tbId"] ?? "";
+            if (string.IsNullOrEmpty(tbId))
+            {
+                return Json("");
+            }
+            else
+            {
+                var tempData = ServiceFactory.base_taobaospservice.LoadSortEntities(p => p.TBID == int.Parse(tbId) && p.IsDelete == false, false, p => p.SPID);
+
+                return Json(tempData);
+            }
         }
     }
 }
