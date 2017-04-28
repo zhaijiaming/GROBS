@@ -243,3 +243,4 @@ ModelManifest.xml
 
 # FAKE - F# Make
 .fake/
+/GROBS/Properties/PublishProfiles/davis-gr.pubxml
