@@ -1052,8 +1052,10 @@ namespace GROBS.App_Code
                             else
                                 returnvalue = "";
                         }
-                        if (itemName == "商品名称")
+                        if (itemName == "商品描述")
                             returnvalue = _shp.ShangpinMS;
+                        if (itemName == "商品名称")
+                            returnvalue = _shp.Mingcheng;
                     }
                     break;
                 case "功能":
@@ -1186,6 +1188,42 @@ namespace GROBS.App_Code
                             returnvalue = _ysgs.Mingcheng;
                         if (itemName == "描述")
                             returnvalue = _ysgs.Miaoshu;
+                    }
+                    break;
+                case "订单":
+                    ord_dingdan _dd = ServiceFactory.ord_dingdanservice.GetEntityById(p => p.ID == dataValue);
+                    if (_dd == null)
+                        returnvalue = "";
+                    else
+                    {
+                        if (itemName == "编号")
+                            returnvalue = _dd.Bianhao;
+                        if (itemName == "客户单号")
+                            returnvalue = _dd.KehuDH;
+                    }
+                    break;
+                case "发货单":
+                    ord_xiaoshou _xsd = ServiceFactory.ord_xiaoshouservice.GetEntityById(p => p.ID == dataValue);
+                    if (_xsd == null)
+                        returnvalue = "";
+                    else
+                    {
+                        if (itemName == "编号")
+                            returnvalue = _xsd.XSDH;
+                        if (itemName == "快递单号")
+                            returnvalue = _xsd.KDDH;
+                    }
+                    break;
+                case "套包":
+                    base_taobao _tb = ServiceFactory.base_taobaoservice.GetEntityById(p => p.ID == dataValue);
+                    if (_tb == null)
+                        returnvalue = "";
+                    else
+                    {
+                        if (itemName == "编号")
+                            returnvalue = _tb.Daima;
+                        if (itemName == "名称")
+                            returnvalue = _tb.Mingcheng;
                     }
                     break;
                 default:
