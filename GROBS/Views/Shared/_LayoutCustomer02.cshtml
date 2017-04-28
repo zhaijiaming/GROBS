@@ -1,0 +1,140 @@
+﻿@using GROBS.App_Code
+@using GROBS.Common
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="renderer" content="webkit" />
+    <title>@ViewBag.Title - 嘉事国润订单系统</title>
+    <!-- basic styles -->
+
+    <link href="~/assets/css/bootstrap.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
+
+    <!--[if IE7]>
+      <link rel="stylesheet" href="~/assets/css/font-awesome-ie7.min.css" />
+    <![endif]-->
+    <!-- page specific plugin styles -->
+
+    <link rel="stylesheet" href="~/assets/css/select2.css" />
+    <link rel="stylesheet" href="~/Content/FrameworkList.css" />
+    <!-- fonts -->
+    @*<link rel='stylesheet' href='http://fonts.gmirror.org/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>*@
+    @*<link rel='stylesheet' href='http://fonts.useso.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>*@
+    <!-- ace styles -->
+
+    <link rel="stylesheet" href="~/assets/css/ace.min.css">
+    <link rel="stylesheet" href="~/assets/css/ace-rtl.min.css">
+    <link rel="stylesheet" href="~/assets/css/ace-skins.min.css">
+
+    <!--[if lt IE8]>
+      <link rel="stylesheet" href="~/assets/css/ace-ie.min.css" />
+    <![endif]-->
+    <!-- inline styles related to this page -->
+    <script src="~/assets/js/jquery-2.0.3.min.js"></script>
+    @*<script src="~/assets/js/jquery.validate.min.js"></script>*@
+    <!--script src="~/assets/js/jquery-1.10.2.min.js"></script-->
+    <script src="~/assets/js/bootstrap.min.js"></script>
+    <!-- ace settings handler -->
+
+    <script src="~/assets/js/ace-extra.min.js"></script>
+
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/davisfunction.js"></script>
+    <script src="~/Scripts/jquery.ui.datepicker-zh.js"></script>
+    <script src="~/Content/js/Common.js"></script>
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE9]>
+    <script src="~/assets/js/html5shiv.js"></script>
+    <script src="~/assets/js/respond.min.js"></script>
+    <![endif]-->
+    @*<style type="text/css">
+            .davis-container {
+                max-width: 1500px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+        </style>*@
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top u-navbar">
+        <div class="container">
+            <div class="row">
+                <div class="navbar-header">
+                    <a href="http://www.cachet.com.cn/" class="navbar-brand">
+                        <img style="width:66px; height:33px; top:0px; left:0px;" src="~/Imgs/cachet0.png" alt="Catche's icon" />
+                        <small>
+                            嘉事国润（上海）医疗科技有限公司
+                        </small>
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse navbar-right" style="height: auto;">
+                    <!-- Main navigation -->
+                    <ul class="nav navbar-nav">
+                        <li><a href="/home/about">国润平台</a></li>
+                        <li><a href="/ord_dingdan/customerorderlist">采购单</a></li>
+                        <li><a href="/ord_jixiao/customertarget">指标</a></li>
+                        <li><a href="/ord_fanli/customerprofit">返利</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <div class="page-content" style="background:inherit;">
+        <div class="container">
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year 嘉事国润</p>
+                </footer>
+                @PageMenu.Clear()
+        </div>
+    </div>
+
+
+    <!-- basic scripts -->
+    <!--[if !IE]> -->
+    <!--script-- type="text/javascript">
+        window.jQuery || document.write("<script src='~/assets/js/jquery-2.0.3.min.js'>" + "<" + "/script>");
+    </!--script-->
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script type="text/javascript">
+     window.jQuery || document.write("<script src='~/assets/js/jquery-1.10.2.min.js'>"+"<"+"/script>");
+        </script>
+    <![endif]-->
+    <!--script type="text/javascript">
+        if ("ontouchend" in document) document.write("<script src='~/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    </!--script-->
+    <script src="~/assets/js/typeahead-bs2.min.js"></script>
+
+    <!-- page specific plugin scripts -->
+    <!--[if lte IE 8]>
+          <script src="assets/js/excanvas.min.js"></script>
+        <![endif]-->
+    <script src="~/assets/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <script src="~/assets/js/jquery-ui-1.10.3.full.min.js"></script>
+    <script src="~/assets/js/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/assets/js/jquery.slimscroll.min.js"></script>
+    <script src="~/assets/js/fuelux/data/fuelux.tree-sampledata.js"></script>
+    <script src="~/assets/js/fuelux/fuelux.tree.min.js"></script>
+
+    <!-- ace scripts -->
+
+    <script src="~/assets/js/ace-elements.min.js"></script>
+    <script src="~/assets/js/ace.min.js"></script>
+
+    <!-- inline scripts related to this page -->
+
+
+
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>
+

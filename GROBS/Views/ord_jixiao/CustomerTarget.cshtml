@@ -3,28 +3,27 @@
 @using X.PagedList
 @using X.PagedList.Mvc
 @{
-    ViewBag.Title = "采购清单";
-    string _searchcondition = ViewBag.SearchCondition;
+    ViewBag.Title = "绩效";
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+    string _searchcondition = ViewBag.SearchCondition;
 }
-
 <script type="text/javascript">
     $(document).ready(function () {
         $("tr").bind("dblclick", function () {
             var u_id = $(this).find('td').eq(0).find('input').val();
             if (u_id != null) {
-                var url_go = "/ord_dingdan/Edit/" + u_id;
+                var url_go = "/ord_jixiao/Edit/" + u_id;
                 location.href = url_go;
             }
         });
     });
     function AddInfo() {
-        location.href = "/ord_dingdan/Add";
+        location.href = "/ord_jixiao/Add";
     }
     function EditInfo() {
         $("#mydatatable tr input[type=checkbox]").each(function () {
             if (this.checked)
-                location.href = "/ord_dingdan/Edit/" + $(this).val();
+                location.href = "/ord_jixiao/Edit/" + $(this).val();
         });
     }
     function DelInfo() {
@@ -35,7 +34,7 @@
         });
         if (sDel.length < 2)
             return;
-        var url_go = "/ord_dingdan/Delete/?del=" + sDel;
+        var url_go = "/ord_jixiao/Delete/?del=" + sDel;
         location.href = url_go;
     }
 </script>
@@ -44,9 +43,9 @@
     if (_searchcondition == null || _searchcondition == "")
     {
         SearchConditionModel scm = new SearchConditionModel();
-        scm.ItemCode = "Bianhao";
-        scm.ItemTitle = "编号";
-        scm.ItemType = "System.String";
+        scm.ItemCode = "KHID";
+        scm.ItemTitle = "客户";
+        scm.ItemType = "System.Int32";
         scms.Add(scm);
     }
     else
@@ -55,9 +54,9 @@
         if (scs.Length > 0)
         {
             SearchConditionModel scm = new SearchConditionModel();
-            scm.ItemCode = "Bianhao";
-            scm.ItemTitle = "编号";
-            scm.ItemType = "System.String";
+            scm.ItemCode = "KHID";
+            scm.ItemTitle = "客户";
+            scm.ItemType = "System.Int32";
             if (scs.Length > 1)
             {
                 scm.ItemValue = scs[0].Split(',')[1];
@@ -69,20 +68,8 @@
     }
 }
 
-<div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home home-icon"></i>
-            <a href="/Home">首页</a>
-        </li>
-        <li class="active">订单</li>
-    </ul>
-</div>
 <div class="page-content">
-    @Html.Search_Condition((int)Session["user_id"], "采购_条件组合查询", "/ord_dingdan/customerorderlist", "ord_dingdan_customerorderlist", scms)
+    @Html.Search_Condition((int)Session["user_id"], "绩效_条件组合查询", "/ord_jixiao/customertarget", "ord_jixiao_customertarget", scms)
     <div class="page-header">
         @*<p>
             <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
@@ -98,51 +85,35 @@
             <thead>
                 <tr>
                     <td></td>
-                    <td>编号</td>
                     <td>客户</td>
-                    <td>产品线</td>
-                    <td>采购类型</td>
-                    <td>客户单号</td>
-                    <td>下单日期</td>
-                    <td>联系人</td>
-                    <td>联系电话</td>
-                    <td>送货地址</td>
-                    <td>客服人员</td>
-                    <td>审核人员</td>
-                    <td>审核通过</td>
-                    <td>采购总数</td>
-                    <td>总金额</td>
-                    <td>是否结束</td>
-                    <td>状态</td>
-                    <td>备注</td>
+                    <td>年度</td>
+                    <td>月份</td>
+                    <td>指标</td>
+                    <td>业绩</td>
+                    <td>达成率</td>
+                    <td>返利申请金额</td>
+                    <td>返利发放金额</td>
+                    <td>返利是否发放</td>
                     <td>制单日期</td>
                     <td>制单人</td>
                 </tr>
             </thead>
             <tbody>
-                @foreach (var item in ViewBag.ord_dingdan)
+                @foreach (var item in ViewBag.ord_jixiao)
                 {
                     <tr>
                         <td>
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
-                        <td>@item.Bianhao</td>
                         <td>@item.KHID</td>
-                        <td>@item.CPXID</td>
-                        <td>@item.CGLX</td>
-                        <td>@item.KehuDH</td>
-                        <td>@item.XiadanRQ</td>
-                        <td>@item.Lianxiren</td>
-                        <td>@item.LianxiDH</td>
-                        <td>@item.SonghuoDZ</td>
-                        <td>@item.OPID</td>
-                        <td>@item.ACCID</td>
-                        <td>@item.ShenheTG</td>
-                        <td>@item.ZongshuCG</td>
-                        <td>@item.Zongjine</td>
-                        <td>@item.JieshuSF</td>
-                        <td>@item.Zhuangtai</td>
-                        <td>@item.Beizhu</td>
+                        <td>@item.Niandu</td>
+                        <td>@item.Yuefen</td>
+                        <td>@item.Zhibiao</td>
+                        <td>@item.Yeji</td>
+                        <td>@item.Dachenglv</td>
+                        <td>@item.FLSQJE</td>
+                        <td>@item.FLFFJE</td>
+                        <td>@item.FafangSF</td>
                         <td>@item.MakeDate</td>
                         <td>@item.MakeMan</td>
                     </tr>
@@ -151,6 +122,6 @@
         </table>
     </div>
     <div class="pager">
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("CustomerOrderList", new { page }))
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("customertarget", new { page }))
     </div>
 </div>

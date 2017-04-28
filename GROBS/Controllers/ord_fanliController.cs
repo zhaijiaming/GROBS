@@ -269,6 +269,152 @@ namespace GROBS.Controllers
             }
             return RedirectToAction("Index");
         }
+        [OutputCache(Duration =30)]
+        public ActionResult CustomerProfit(string page)
+        {
+            if (string.IsNullOrEmpty(page))
+                page = "1";
+            int userid = (int)Session["user_id"];
+            string pagetag = "ord_fanli_customerprofit";
+            Expression<Func<ord_fanli, bool>> where = PredicateExtensionses.True<ord_fanli>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc != null && sc.ConditionInfo != null)
+            {
+                string[] sclist = sc.ConditionInfo.Split(';');
+                foreach (string scl in sclist)
+                {
+                    string[] scld = scl.Split(',');
+                    switch (scld[0])
+                    {
+                        case "khid":
+                            string khid = scld[1];
+                            string khidequal = scld[2];
+                            string khidand = scld[3];
+                            if (!string.IsNullOrEmpty(khid))
+                            {
+                                if (khidequal.Equals("="))
+                                {
+                                    if (khidand.Equals("and"))
+                                        where = where.And(ord_fanli => ord_fanli.KHID == int.Parse(khid));
+                                    else
+                                        where = where.Or(ord_fanli => ord_fanli.KHID == int.Parse(khid));
+                                }
+                                if (khidequal.Equals(">"))
+                                {
+                                    if (khidand.Equals("and"))
+                                        where = where.And(ord_fanli => ord_fanli.KHID > int.Parse(khid));
+                                    else
+                                        where = where.Or(ord_fanli => ord_fanli.KHID > int.Parse(khid));
+                                }
+                                if (khidequal.Equals("<"))
+                                {
+                                    if (khidand.Equals("and"))
+                                        where = where.And(ord_fanli => ord_fanli.KHID < int.Parse(khid));
+                                    else
+                                        where = where.Or(ord_fanli => ord_fanli.KHID < int.Parse(khid));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                ViewBag.SearchCondition = sc.ConditionInfo;
+            }
+
+            where = where.And(ord_fanli => ord_fanli.IsDelete == false);
+
+            var tempData = ob_ord_fanliservice.LoadSortEntities(where.Compile(), false, ord_fanli => ord_fanli.ID).ToPagedList<ord_fanli>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_fanli = tempData;
+            return View(tempData);
+        }
+        [HttpPost]
+        [OutputCache(Duration =30)]
+        public ActionResult CustomerProfit()
+        {
+            int userid = (int)Session["user_id"];
+            string pagetag = "ord_fanli_customerprofit";
+            string page = "1";
+            string khid = Request["khid"] ?? "";
+            string khidequal = Request["khidequal"] ?? "";
+            string khidand = Request["khidand"] ?? "";
+            Expression<Func<ord_fanli, bool>> where = PredicateExtensionses.True<ord_fanli>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc == null)
+            {
+                sc = new searchcondition();
+                sc.UserID = userid;
+                sc.PageBrief = pagetag;
+                if (!string.IsNullOrEmpty(khid))
+                {
+                    if (khidequal.Equals("="))
+                    {
+                        if (khidand.Equals("and"))
+                            where = where.And(ord_fanli => ord_fanli.KHID == int.Parse(khid));
+                        else
+                            where = where.Or(ord_fanli => ord_fanli.KHID == int.Parse(khid));
+                    }
+                    if (khidequal.Equals(">"))
+                    {
+                        if (khidand.Equals("and"))
+                            where = where.And(ord_fanli => ord_fanli.KHID > int.Parse(khid));
+                        else
+                            where = where.Or(ord_fanli => ord_fanli.KHID > int.Parse(khid));
+                    }
+                    if (khidequal.Equals("<"))
+                    {
+                        if (khidand.Equals("and"))
+                            where = where.And(ord_fanli => ord_fanli.KHID < int.Parse(khid));
+                        else
+                            where = where.Or(ord_fanli => ord_fanli.KHID < int.Parse(khid));
+                    }
+                }
+                if (!string.IsNullOrEmpty(khid))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", khid, khidequal, khidand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", "", khidequal, khidand);
+                searchconditionService.GetInstance().AddEntity(sc);
+            }
+            else
+            {
+                sc.ConditionInfo = "";
+                if (!string.IsNullOrEmpty(khid))
+                {
+                    if (khidequal.Equals("="))
+                    {
+                        if (khidand.Equals("and"))
+                            where = where.And(ord_fanli => ord_fanli.KHID == int.Parse(khid));
+                        else
+                            where = where.Or(ord_fanli => ord_fanli.KHID == int.Parse(khid));
+                    }
+                    if (khidequal.Equals(">"))
+                    {
+                        if (khidand.Equals("and"))
+                            where = where.And(ord_fanli => ord_fanli.KHID > int.Parse(khid));
+                        else
+                            where = where.Or(ord_fanli => ord_fanli.KHID > int.Parse(khid));
+                    }
+                    if (khidequal.Equals("<"))
+                    {
+                        if (khidand.Equals("and"))
+                            where = where.And(ord_fanli => ord_fanli.KHID < int.Parse(khid));
+                        else
+                            where = where.Or(ord_fanli => ord_fanli.KHID < int.Parse(khid));
+                    }
+                }
+                if (!string.IsNullOrEmpty(khid))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", khid, khidequal, khidand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", "", khidequal, khidand);
+                searchconditionService.GetInstance().UpdateEntity(sc);
+            }
+            ViewBag.SearchCondition = sc.ConditionInfo;
+            where = where.And(ord_fanli => ord_fanli.IsDelete == false);
+
+            var tempData = ob_ord_fanliservice.LoadSortEntities(where.Compile(), false, ord_fanli => ord_fanli.ID).ToPagedList<ord_fanli>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_fanli = tempData;
+            return View(tempData);
+        }
     }
 }
 

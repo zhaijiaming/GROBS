@@ -1,0 +1,1256 @@
+﻿@*<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <div>
+        @RenderBody()
+    </div>
+</body>
+</html>*@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no" />
+    <title>关于我们-四川途欢医疗健康科技有限公司</title>
+    <meta name="description" content="途欢—致力于维护大众健康的创新型医疗服务机构" />
+    <meta name="keywords" content="四川途欢医疗健康科技有限公司,途欢健康,途欢,途欢医疗健康,途欢科技,精准健康管理,慢病管理,健康管理" />
+
+    <link href="~/assets/css/bootstrap.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/assets/scss/style.min.css" type="text/css" rel="stylesheet" />
+    <link href="~/assets/css/startcom.css" type="text/css" rel="stylesheet" />
+    <link href="~/assets/scss/index.min.css" type="text/css" rel="stylesheet" />
+    <!--手机背景 图片切换 js -->
+    <script type="text/javascript" src="~/assets/javascript/jquery-1.11.3.min.js"></script>
+    <script type="text/javascript" src="~/assets/javascript/jquery.touchSlider.js"></script>
+    <script src="~/assets/javascript/script-about.js" type="text/javascript"></script><!--pc端图片切换js-->
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $dragBln = false;
+
+            $(".team_main_image").touchSlider({
+                flexible: true,
+                speed: 200,
+                btn_prev: $("#btn_prev"),
+                btn_next: $("#btn_next"),
+                paging: $(".flicking_con .item-text"),
+                counter: function (e) {
+                    $(".flicking_con .item-text").removeClass("on").eq(e.current - 1).addClass("on");
+                }
+            });
+
+            $(".team_main_image").bind("mousedown", function () {
+                $dragBln = false;
+            });
+
+            $(".team_main_image").bind("dragstart", function () {
+                $dragBln = true;
+            });
+
+            $(".team_main_image a").click(function () {
+                if ($dragBln) {
+                    return false;
+                }
+            });
+
+            timer = setInterval(function () {
+                $("#btn_next").click();
+            }, 5000);
+
+            $(".main_visual").hover(function () {
+                clearInterval(timer);
+            }, function () {
+                timer = setInterval(function () {
+                    $("#btn_next").click();
+                }, 5000);
+            });
+
+            $(".team_main_image").bind("touchstart", function () {
+                clearInterval(timer);
+            }).bind("touchend", function () {
+                timer = setInterval(function () {
+                    $("#btn_next").click();
+                }, 5000);
+            });
+
+        });
+    </script>
+    <!-- 有手机背景的js end -->
+    <style type="text/css">
+        .team_main_image {
+            overflow: hidden;
+            min-height: 187px;
+        }
+
+
+        @@media (max-width: 435px) {
+            .team_main_image {
+                min-height: 226px;
+            }
+        }
+
+
+        @@media only screen and (min-width:440px) and (max-width: 768px) {
+            .team_main_image {
+                min-height: 398px;
+            }
+        }
+
+        @@media only screen and (min-width:320px) and (max-width: 411px) {
+            .team_main_image {
+                min-height: 185px;
+            }
+        }
+
+        @@media (device-width: 320px) {
+            .team_main_image {
+                min-height: 166px;
+            }
+        }
+
+        @@media (device-width: 411px) {
+            .team_main_image {
+                min-height: 213px;
+            }
+        }
+
+        @@media (device-width: 412px) {
+            .team_main_image {
+                min-height: 213px;
+            }
+        }
+
+        @@media (device-width: 600px) {
+            .team_main_image {
+                min-height: 311px;
+            }
+        }
+
+        @@media (device-height:480px) and (-webkit-min-device-pixel-ratio:2) { /* 兼容iphone4/4s */
+            .team_main_image {
+                min-height: 166px;
+            }
+        }
+
+        @@media (device-height:568px) and (-webkit-min-device-pixel-ratio:2) { /* 兼容iphone5 */
+            .team_main_image {
+                min-height: 166px;
+            }
+        }
+
+        @@media (device-height:667px) and (-webkit-min-device-pixel-ratio:2) { /* 兼容iphone6 */
+            .team_main_image {
+                min-height: 195px;
+            }
+        }
+
+        @@media (device-height:736px) and (-webkit-min-device-pixel-ratio:2) { /* 兼容iphone6 Plus */
+            .team_main_image {
+                min-height: 215px;
+            }
+        }
+
+        .team_main_image ul li {
+            width: 100%;
+            overflow: auto;
+        }
+
+        .team_main_visual {
+            overflow: hidden;
+            position: relative;
+            width: 100%;
+        }
+
+        .team_textbox {
+            background-color: rgba(59, 190, 122,.85);
+            padding: 10px;
+        }
+
+        .mb-inav-about li div {
+            width: 40px;
+            height: 2px;
+            background-color: rgba(170,170,170,.5);
+            margin: 2px 10px 0 0;
+        }
+
+            .mb-inav-about li div.cur {
+                background-image: url("~/assets/img/switch.svg");
+                background-repeat: no-repeat;
+                width: 40px;
+                height: 8px;
+                background-size: 40px 8px;
+                background-color: transparent;
+                margin-top: -3px;
+            }
+
+        .item-li {
+            transition: none;
+        }
+
+            .item-li:hover {
+                cursor: pointer;
+            }
+
+        .mb-describe {
+            background-color: rgba(59,190,122,.85);
+            padding: 0;
+            color: #fff;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .kePublic-rightdiv {
+            padding: 0 5%;
+            text-align: center;
+            margin-top: 27%\9;
+        }
+
+        @@media only screen and (max-width: 992px) and (min-width: 768px) {
+            .kePublic-rightdiv {
+                padding: 0;
+            }
+        }
+
+        .tuandui-title {
+            font-size: 18px;
+            margin: 9% 0 5%;
+        }
+
+        .kePublic-cont-info {
+            font-size: 14px;
+            color: rgba(255,255,255,.8);
+        }
+
+        .jiankangguwen-ico {
+            background-repeat: no-repeat;
+            background-image: url("~/assets/img/jiankangguwen-ico.png");
+            background-size: 64px 64px;
+            height: 64px;
+            width: 64px;
+            margin: auto;
+        }
+
+        .xietiaozhuanyuan-ico {
+            background-repeat: no-repeat;
+            background-image: url("~/assets/img/xietiaozhuanyuan-ico.png");
+            background-size: 64px 64px;
+            height: 64px;
+            width: 64px;
+            margin: auto;
+        }
+
+        .jiatingyisheng-ico {
+            background-repeat: no-repeat;
+            background-image: url("~/assets/img/jiatingyisheng-ico.png");
+            background-size: 64px 64px;
+            height: 64px;
+            width: 64px;
+            margin: auto;
+        }
+
+        .tuhuandaifu-ico {
+            background-repeat: no-repeat;
+            background-image: url("~/assets/img/tuhuandaifu-ico.png");
+            background-size: 64px 64px;
+            height: 64px;
+            width: 64px;
+            margin: auto;
+        }
+
+        .mb-news {
+            padding: 0 15px;
+            line-height: 1.8;
+            position: absolute;
+            left: 417px;
+            top: 150px;
+        }
+
+            .mb-news h4 {
+                word-break: break-all;
+                word-wrap: break-word;
+            }
+
+                .mb-news h4 a {
+                    font-size: 18px;
+                    color: #8c3608;
+                    line-height: 1.6;
+                    word-break: break-all;
+                    word-wrap: break-word;
+                }
+
+            .mb-news p {
+                font-size: 14px;
+                color: #444;
+                margin-top: 15px;
+                overflow: hidden;
+            }
+
+            .mb-news h4 a:hover {
+                text-decoration: underline;
+            }
+
+        .mb-img {
+            width: 100%;
+            position: relative;
+        }
+
+        .mb-ibox {
+            width: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+            .mb-ibox a {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: 5;
+                left: 0;
+                top: 0;
+                display: block;
+            }
+
+                .mb-ibox a:first-child {
+                    z-index: 6;
+                }
+
+                .mb-ibox a.move {
+                    z-index: 7;
+                }
+
+                .mb-ibox a.cur {
+                    z-index: 8;
+                    position: relative;
+                }
+
+        .mb-inav-about {
+            z-index: 10 !important;
+            width: 210px;
+            overflow: hidden;
+            margin: 0 auto;
+            margin-top: 4.5%;
+            padding-top: 4px;
+        }
+
+            .mb-inav-about li {
+                float: left;
+            }
+
+        div.flicking_con {
+            text-align: center;
+            margin: 0 0 0 0;
+            left: 0;
+            width: 100%;
+            height: 149px;
+        }
+
+
+            div.flicking_con .item-text {
+                padding: 0;
+                display: none;
+                color: #fff;
+            }
+
+                div.flicking_con .item-text h4 {
+                    color: #fff;
+                    width: 100%;
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                    margin-bottom: 10px;
+                }
+
+        .team_main_visual .flicking_con div.on {
+            display: block;
+        }
+
+        .kePublic-cont-text {
+            font-size: 12px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: -webkit-box;
+            -webkit-line-clamp: 5;
+            -webkit-box-orient: vertical;
+            word-wrap: break-word;
+        }
+
+        .delay_1 {
+            -webkit-animation-delay: 200ms;
+            -o-animation-delay: 200ms;
+            animation-delay: 200ms;
+        }
+
+        .delay_2 {
+            -webkit-animation-delay: 400ms;
+            -o-animation-delay: 400ms;
+            animation-delay: 400ms;
+        }
+
+        .delay_3 {
+            -webkit-animation-delay: 600ms;
+            -o-animation-delay: 600ms;
+            animation-delay: 600ms;
+        }
+
+        .animateUpDown {
+            -webkit-animation-name: animateUpDown;
+            -o-animation-name: animateUpDown;
+            animation-name: animateUpDown;
+            -webkit-animation-duration: 900ms;
+            -o-animation-duration: 900ms;
+            animation-duration: 900ms;
+        }
+
+        @@-webkit-keyframes animateUpDown {
+            0% {
+                opacity: 0;
+                -webkit-transform: translateY(100%);
+                transform: translateY(100%);
+            }
+
+            40% {
+                -webkit-transform: translateY(-20%);
+                transform: translateY(-20%);
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: translateY(0%);
+                transform: translateY(0%);
+            }
+        }
+
+        @@-o-keyframes animateUpDown {
+            0% {
+                opacity: 0;
+                -webkit-transform: translateY(100%);
+                -o-transform: translateY(100%);
+                transform: translateY(100%);
+            }
+
+            40% {
+                -webkit-transform: translateY(-20%);
+                -o-transform: translateY(-20%);
+                transform: translateY(-20%);
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: translateY(0%);
+                -o-transform: translateY(0%);
+                transform: translateY(0%);
+            }
+        }
+
+        @@keyframes animateUpDown {
+            0% {
+                opacity: 0;
+                -webkit-transform: translateY(100%);
+                -o-transform: translateY(100%);
+                transform: translateY(100%);
+            }
+
+            40% {
+                -webkit-transform: translateY(-20%);
+                -o-transform: translateY(-20%);
+                transform: translateY(-20%);
+            }
+
+            100% {
+                opacity: 1;
+                -webkit-transform: translateY(0%);
+                -o-transform: translateY(0%);
+                transform: translateY(0%);
+            }
+        }
+
+        .animateUp {
+            -webkit-animation-name: animateUp;
+            -o-animation-name: animateUp;
+            animation-name: animateUp;
+            -webkit-animation-duration: 500ms;
+            -o-animation-duration: 500ms;
+            animation-duration: 500ms;
+            -webkit-animation-timing-function: cubic-bezier(.39, .575, .565, 1);
+            -o-animation-timing-function: cubic-bezier(.39, .575, .565, 1);
+            animation-timing-function: cubic-bezier(.39, .575, .565, 1);
+        }
+
+        @@-webkit-keyframes animateUp {
+            from {
+                opacity: 0;
+                -webkit-transform: translateY(50px);
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: translateY(0%);
+                transform: translateY(0%);
+            }
+        }
+
+        @@-o-keyframes animateUp {
+            from {
+                opacity: 0;
+                -webkit-transform: translateY(50px);
+                -o-transform: translateY(50px);
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: translateY(0%);
+                -o-transform: translateY(0%);
+                transform: translateY(0%);
+            }
+        }
+
+        @@keyframes animateUp {
+            from {
+                opacity: 0;
+                -webkit-transform: translateY(50px);
+                -o-transform: translateY(50px);
+                transform: translateY(50px);
+            }
+
+            to {
+                opacity: 1;
+                -webkit-transform: translateY(0%);
+                -o-transform: translateY(0%);
+                transform: translateY(0%);
+            }
+        }
+
+
+        .cur .ShowBgUp {
+            -webkit-animation-name: ShowBgUp;
+            -o-animation-name: ShowBgUp;
+            animation-name: ShowBgUp;
+            -webkit-animation-duration: 1400ms;
+            -o-animation-duration: 1400ms;
+            animation-duration: 1400ms;
+            -webkit-animation-timing-function: cubic-bezier(.39, .575, .565, 1);
+            -o-animation-timing-function: cubic-bezier(.39, .575, .565, 1);
+            animation-timing-function: cubic-bezier(.39, .575, .565, 1);
+        }
+
+        @@-webkit-keyframes ShowBgUp {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @@-o-keyframes ShowBgUp {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @@keyframes ShowBgUp {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .move .ShowBgUp {
+            opacity: 1;
+            z-index: 9;
+        }
+
+        .cur .ShowBgUp {
+            z-index: 10;
+        }
+    </style>
+    <style type="text/css">
+        /*banner css start*/
+        #banner .banner-item .banner-text > div:first-child {
+            font-size: 48px;
+        }
+
+        #banner .banner-item em {
+            font-size: 66px;
+        }
+
+        #banner .banner-item .banner-text > div:last-child {
+            font-size: 20px;
+        }
+
+        #banner .banner-item:nth-child(1) .banner-img {
+            background-image: url(~/assets/banner/img/about-us-banner.jpg);
+        }
+
+        #banner .banner-item:nth-child(2) .banner-img {
+            background-image: url(~/assets/banner/img/about-us-banner-2.jpg);
+        }
+
+        @@media (-webkit-min-device-pixel-ratio:2) {
+            #banner .banner-item:nth-child(1) .banner-img {
+                background-image: url(~/assets/banner/img/about-us-banner-2x.jpg) !important;
+            }
+
+            #banner .banner-item:nth-child(2) .banner-img {
+                background-image: url(~/assets/banner/img/about-us-banner-2x-2.jpg) !important;
+            }
+        }
+
+        @@media (max-width: 767px) {
+            #banner .banner-item .banner-text > div > div[data-role='entext'] {
+                padding: 0 !important;
+            }
+
+            #banner .banner-item .banner-text > div:first-child {
+                font-size: 24px;
+            }
+
+            #banner .banner-item em {
+                font-size: 20px;
+            }
+
+            #banner .banner-item .banner-text > div:last-child {
+                font-size: 10px;
+            }
+
+            #banner .banner-item:nth-child(1) .banner-img {
+                background-image: url(~/assets/banner/img/about-us-banner-app.jpg) !important;
+            }
+
+            #banner .banner-item:nth-child(2) .banner-img {
+                background-image: url(~/assets/banner/img/about-us-banner-app-2.jpg) !important;
+            }
+        }
+        /*banner css end*/
+        .team-person {
+            position: relative;
+            margin: 0 20px;
+        }
+
+        .slideup_info p {
+            color: #333;
+            margin-bottom: 0;
+        }
+
+        .slideup_info {
+            color: #666;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 3;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            background-color: #fff;
+            transition: all 0.4s ease-in-out;
+        }
+
+        .team-person.hover .slideup_info {
+            opacity: 0.9;
+        }
+
+        .team-person > div img {
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .team-person.hover > div img {
+            transform: scale(1.02);
+            -webkit-filter: blur(4px);
+            -moz-filter: blur(4px);
+            -ms-filter: blur(4px);
+            -webkit-filter: blur(4px);
+            filter: blur(4px);
+        }
+
+        .leader-line {
+            border-top: 1px solid #3bbe7a;
+            width: 70px;
+            margin: 25px auto;
+        }
+
+        .slideup_info_bg {
+            border: 4px solid rgba(59, 190, 122,.7);
+            height: 100%;
+            display: -webkit-flex;
+            display: flex;
+            flex-flow: column;
+            -webkit-align-items: center;
+            align-items: center;
+            -webkit-justify-content: center;
+            justify-content: center;
+        }
+
+        .i-item-con-div {
+            transition: all 0.4s ease-in-out;
+            padding: 3% 0;
+            background-color: rgba(255,255,255,.98);
+        }
+
+        .team-person.hover .i-item-con-div {
+            opacity: 0;
+        }
+
+        .slideup_info ul {
+            margin: 0;
+        }
+
+            .slideup_info ul li {
+                line-height: 26px;
+            }
+
+        @@media only screen and (max-width: 767px) {
+            .col-small-12 {
+                width: 100%;
+            }
+
+            .team-person {
+                position: relative;
+                margin: 10px 0;
+            }
+
+            .itme-con {
+                padding: 15px 0;
+            }
+
+            .leader-line {
+                margin: 13px auto 10px;
+            }
+        }
+       .banner .banner-item .banner-text > div{
+            margin-top:18%\9;/*兼容IE6 IE7 IE8*/
+        }
+       .slideup_info_bg > div{
+           margin-top:32%\9;/*兼容IE6 IE7 IE8*/
+       }
+    </style>
+
+</head>
+<body>
+    <link rel="shortcut icon" href="favicon1.ico" type="image/x-icon" />
+    <nav class="navbar navbar-default navbar-fixed-top u-navbar">
+        <div class="container">
+            <div class="row">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        <figure class="ac-logo-icon pc-none"></figure>
+                        <div class="logo-pc-div app-none">
+                            <figure class="ac-familybrowser-icon"></figure>
+                        </div>
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse navbar-right" style="height: auto;">
+                    <!-- Main navigation -->
+                    <ul class="nav navbar-nav">
+
+                        <li class='click'><a href='/aboutus/'>国润平台</a><p class='line-top'></p></li>
+
+                        <li><a href="/health/">采购单</a></li>
+
+
+                        <li><a href="/corevalue/">指标&返利</a></li>
+
+
+                        <li><a href="/contactus/">联系我们</a></li>
+
+                    </ul>
+
+                    <script type="text/javascript">
+					window.onload=function(){
+						var ua = navigator.userAgent;
+						if(ua.indexOf("com.tuhuan.health")!=-1 || ua.indexOf("com.tuhuanjk.thmember")!=-1){
+							$("#downappform").addClass("hide");
+						}
+					}
+                    </script>
+                </div>
+            </div>
+        </div>
+    </nav>
+    <!--banner start-->
+    <link rel="stylesheet" type="text/css" href="~/assets/banner/css/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/banner/css/banner.min.css">
+    <link rel="stylesheet" type="text/css" href="~/assets/banner/css/style.css">
+
+    <div id="banner" class="banner">
+        <div class="banner-item animated" data-classin="fadeIn" data-classout="fadeOut delay10" data-time="400" data-thumb="~/assets/banner/img/aboutus-banner1-2x-small.jpg">
+            <div class="banner-img"></div>
+            <div class="banner-text vbox box-h-center box-v-center">
+                <div style="margin-left: 33%;">
+                    <div class="animated" data-classin="fadeInDown delay5 duration5" data-classout="fadeOutUp delay duration5">
+                        人生旅<em>途 欢 </em>悦同行
+                    </div>
+                    <div data-role="entext" class="animated" data-classin="fadeInUp delay7 duration5" data-classout="fadeOutDown delay duration5" style="margin-top:5%">
+                        To Health To Happiness
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="banner-item animated" data-classin="fadeIn" data-classout="fadeOut delay10" data-time="400" data-thumb="~/assets/banner/img/aboutus-banner2-2x-small.jpg">
+            <div class="banner-img"></div>
+            <div class="banner-text vbox box-h-center box-v-center">
+                <div style="margin-left: 7%;">
+                    <div class="animated" data-classin="fadeInDown delay5 duration5" data-classout="fadeOutUp delay duration5">
+                        连接您与复杂医学世界的桥梁
+                    </div>
+                    <div class="animated" data-role="entext" data-classin="fadeInUp delay7 duration5" data-classout="fadeOutDown delay duration5" style="margin-top:2%">
+                        Getting Access To Better Quality Health Care
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="banner-tool">
+        </div>
+        <div class="banner-prev">
+        </div>
+        <div class="banner-next">
+        </div>
+    </div>
+
+    <script type="text/javascript" src="~/assets/banner/js/banner.js"></script>
+    <script type="text/javascript">
+        $("#banner").THBanner();
+    </script>
+    <!--banner end-->
+    <div class="container">
+        @RenderBody()
+    </div>
+    <div class="container linian-con">
+        <div class="title-comm">
+            <h3 class="welinain">源自医疗、助力医疗、根植医疗</h3>
+            <p class="line"></p>
+            <p class="linh25">途欢，以创新科技驱动，以绝对的医学专业为前提和基石，将移动互联网、数据技术应用于健康领域</p>
+            <p class="linh25">用科技，改善医疗服务的效率和连续性；用科技，让优质医疗资源惠及更多的家庭；用科技，让更多的人受惠于医疗保健的预防价值，而不只是“因病治疗”</p>
+            <p class="linh25">途欢，帮助您获得更便捷的医疗健康服务与更优质的健康维护方案</p>
+        </div>
+        <div class="row linian-div">
+
+            <div class="col-lg-4  large-3 small-12">
+                <div class="col-div">
+                    <figure class="pu-logo-icon ac-figure-icon"></figure>
+                    <h4>普惠</h4>
+                    <div class="f12">为大众提供更高品质的医疗健康服务</div>
+                    <div class="f12" style="margin-top: 2px;">帮助大众在健康维护中获益</div>
+                </div>
+            </div><!-- /.col-lg-4 -->
+
+            <div class="col-lg-4  large-3 small-12">
+                <div class="col-div">
+                    <figure class="chuanxin-logo-icon ac-figure-icon"></figure>
+                    <h4>创新</h4>
+                    <div class="f12">协同现有医疗体系，以主动管理式医疗服务</div>
+                    <div class="f12" style="margin-top: 2px;">更好的维护大众健康、实现价值医疗</div>
+                </div>
+            </div><!-- /.col-lg-4 -->
+
+            <div class="col-lg-4  large-3 small-12">
+                <div class="col-div">
+                    <figure class="chonggou-logo-icon ac-figure-icon"></figure>
+                    <h4>重构</h4>
+                    <div class="f12">以前瞻视野重构医疗健康服务模式</div>
+                    <div class="f12" style="margin-top: 2px;">实现大众健康价值与医生医疗价值回归</div>
+                </div>
+            </div><!-- /.col-lg-4 -->
+        </div>
+
+    </div>
+    <div class="container">
+        <div class="title-comm">
+            <h3 class="welinain">途欢创始团队</h3>
+            <p class="line"></p>
+            <p>公司核心团队成员均来自临床医学、医疗健康服务以及数字科技领域</p>
+        </div>
+    </div>
+    <div class="i-item-con itme-con">
+        <div class="container">
+            <div class="row">
+                <div class="col-small-12 col-xs-6">
+                    <div class="team-person">
+                        <div>
+                            <img src="~/assets/img/yanglin.jpg" class="img-responsive" />
+                            <div class="i-item-con-div">
+                                <h4>阳琳</h4>
+                                <p class="f12 i-item-con-text">董事长 & CEO</p>
+                            </div>
+                        </div>
+                        <div class="slideup_info">
+                            <div class="slideup_info_bg">
+                                <div>
+                                    <div class="tcenter"><p><b>阳琳</b></p><p style="font-size: 12px; color:#aaa;margin-top:5%;"> 董事长 & CEO</p></div>
+                                    <div class="leader-line"></div>
+                                    <ul>
+                                        <li>毕业于重庆医科大学临床医学系</li>
+                                        <li>西南财经大学硕士</li>
+                                        <li>曾供职于四川省人民医院</li>
+                                        <li>同时拥有近10年企业经营管理经验</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.col-lg-4 -->
+                <div class="col-small-12 col-xs-6">
+                    <div class="team-person" id="team-person">
+                        <div>
+                            <img src="~/assets/img/yubo.jpg" class="img-responsive" />
+                            <div class="i-item-con-div">
+                                <h4>于波</h4>
+                                <p class="f12 i-item-con-text">首席医疗官</p>
+                            </div>
+                        </div>
+                        <div class="slideup_info">
+                            <div class="slideup_info_bg">
+                                <div>
+                                    <div class="tcenter"><p><b>于波</b></p><p style="font-size: 12px; color:#aaa;margin-top:5%;">首席医疗官</p></div>
+                                    <div class="leader-line"></div>
+                                    <ul>
+                                        <li>毕业于华西医科大学临床医学系</li>
+                                        <li>拥有17年临床医疗经验</li>
+                                        <li>曾供职于四川省人民医院</li>
+                                        <li>美国克林顿基金会HIV/AIDS(中国)</li>
+                                        <li>美国疾病控制中心(GAP)</li>
+                                        <li>世界卫生组织(WHO)认证培训师</li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div><!-- /.col-lg-4 -->
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="title-comm">
+            <h3 class="welinain">途欢优质的医疗服务团队</h3>
+            <p class="line"></p>
+        </div>
+        <div class="row">
+            <div class=" app-none" style="position:relative;">
+                <div class="mb-describe hbox box-v-center">
+                    <div class="col-md-8" style="padding:0">
+                        <div id="mb-ibox" class="mb-ibox ">
+                            <a class="cur">
+                                <div class=" animated ShowBgUp"><img src=~/assets/img/zhuanshuguwen.jpg class="img-responsive"></div>
+                            </a>
+                            <a>
+                                <div class=" animated ShowBgUp"><img src=~/assets/img/xietiaozhuanyuan.jpg class="img-responsive"></div>
+                            </a>
+                            <a>
+                                <div class=" animated ShowBgUp"><img src=~/assets/img/jiatingyisheng.jpg class="img-responsive"></div>
+                            </a>
+                            <a>
+                                <div class=" animated ShowBgUp"><img src=~/assets/img/tuhuandaifu.jpg class="img-responsive"></div>
+                            </a>
+                        </div>
+                    </div>
+                    <div id="mb-itxt" class="col-md-4">
+                        <div style="display: block;" class="slide-itxt">
+                            <div class="kePublic-rightdiv">
+                                <div class="jiankangguwen-ico animated animateUp delay_1"></div>
+                                <div class="tuandui-title">
+                                    <div class="animated animateUp delay_2">个人专属健康顾问</div>
+                                </div>
+                                <div class="kePublic-cont-info animated animateUp delay_3">您与医生间的纽带工作者，拥有多年临床及健康管理工作经验，令您与医生的沟通更有质量，帮助您获得更精准的医疗服务</div>
+                            </div>
+                        </div>
+                        <div style="display: none;" class="slide-itxt">
+                            <div class="kePublic-rightdiv">
+                                <div class="xietiaozhuanyuan-ico  animated animateUp delay_1"></div>
+                                <div class="tuandui-title">
+                                    <div class="animated animateUp delay_2">医疗协调专员</div>
+                                </div>
+                                <div class="kePublic-cont-info animated animateUp delay_3">您与家人的医疗服务协调顾问，拥有多年临床工作背景和分诊经验，给予您和家人必要的就医指导，帮助您选择适需的科室就医、获得专科医生线上预诊服务，或为您连接您所需的医疗服务</div>
+                            </div>
+                        </div>
+                        <div style="display: none;" class="slide-itxt">
+                            <div class="kePublic-rightdiv">
+                                <div class="jiatingyisheng-ico  animated animateUp delay_1"></div>
+                                <div class="tuandui-title">
+                                    <div class="animated animateUp delay_2">途欢家庭医生</div>
+                                </div>
+                                <div class="kePublic-cont-info animated animateUp delay_3">您与家人的健康守门人。解决您与家庭日常大多数的医疗需求及慢性疾病稳定期的治疗、随访与管理。在途欢健康管理平台与健康顾问支持下，协助您完成更精准，更有价值的诊疗</div>
+                            </div>
+                        </div>
+                        <div style="display: none;" class="slide-itxt">
+                            <div class="kePublic-rightdiv">
+                                <div class="tuhuandaifu-ico  animated animateUp delay_1"></div>
+                                <div class="tuandui-title">
+                                    <div class="animated animateUp delay_2">途欢大夫</div>
+                                </div>
+                                <div class="kePublic-cont-info animated animateUp delay_3">如您与家人患有慢性疾病，定期为您连接三甲医院专科医生，并评估指导您的诊疗方案。当家庭发生临床医疗需求，将为您推荐并连接最适宜的医生与专家，确保获得更优的医疗解决方案</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <ul id="mb-inav" class="mb-inav-about ">
+                    <li>
+                        <div class="item-li cur">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-li">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-li">
+                        </div>
+                    </li>
+                    <li>
+                        <div class="item-li">
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!--手机端途欢专业的责任医疗团队切换效果开始-->
+            <div class="team_main_visual pc-none">
+                <div class="team_main_image">
+                    <ul style="width:100% !important;">
+                        <li><img src=~/assets/img/zhuanshuguwen.jpg class="img-responsive"></li>
+                        <li><img src=~/assets/img/xietiaozhuanyuan.jpg class="img-responsive"></li>
+                        <li><img src=~/assets/img/jiatingyisheng.jpg class="img-responsive"></li>
+                        <li><img src=~/assets/img/tuhuandaifu.jpg class="img-responsive"></li>
+                    </ul>
+                    <a href="javascript:;" id="btn_prev"></a>
+                    <a href="javascript:;" id="btn_next"></a>
+                </div>
+                <div class="flicking_con team_textbox vbox box-v-center">
+                    <div class="item-text on">
+                        <h4>个人专属健康顾问</h4>
+                        <div class="kePublic-cont-text">您与医生间的纽带工作者，拥有多年临床及健康管理工作经验，令您与医生的沟通更有质量，帮助您获得更精准的医疗服务</div>
+                    </div>
+                    <div class="item-text">
+                        <h4>医疗协调专员</h4>
+                        <div class="kePublic-cont-text">您与家人的医疗服务协调顾问，拥有多年临床工作背景和分诊经验，给予您和家人必要的就医指导，帮助您选择适需的科室就医、获得专科医生线上预诊服务，或为您连接您所需的医疗服务</div>
+                    </div>
+                    <div class="item-text">
+                        <h4>途欢家庭医生</h4>
+                        <div class="kePublic-cont-text">您与家人的健康守门人。解决您与家庭日常大多数的医疗需求及慢性疾病稳定期的治疗、随访与管理。在途欢健康管理平台与健康顾问支持下，协助您完成更精准，更有价值的诊疗</div>
+                    </div>
+                    <div class="item-text">
+                        <h4>途欢大夫</h4>
+                        <div class="kePublic-cont-text">如您与家人患有慢性疾病，定期为您连接三甲医院专科医生，并评估指导您的诊疗方案。当家庭发生临床医疗需求，将为您推荐并连接最适宜的医生与专家，确保获得更优的医疗解决方案</div>
+                    </div>
+                </div>
+            </div>
+            <!--手机端途欢专业的责任医疗团队切换效果结束-->
+        </div>
+    </div>
+    <div class="container">
+        <div class="title-comm">
+            <h3 class="welinain">途欢的愿景</h3>
+            <p class="line"></p>
+            <p class="mtop40">永怀专业信念，以前瞻视野，定义医疗健康新未来</p>
+        </div>
+    </div>
+
+
+    <div class=" app-none">
+        <div style="background: url(~/assets/img/about-yuanjing.jpg) 50% 0%; height: 420px;">
+            <div class="container">
+                <div class="row">
+                    <div class="tuhuanyuanjing" style="text-align: center; color: rgba(255, 255, 255, 0.8)">
+                        <figure class="thyj-logo-icon"></figure>
+                        <p class="text-white" style="margin-top: 3.2%;">途欢健康，协同于现有的医疗服务体系，致力于构建更精准的医疗保健模式</p>
+                        <p class="text-white">途欢健康，以信息技术为基础，移动互联网平台为工具、以三甲医院医生、社区医院医生、医生助理组成的"责任医疗团队"</p>
+                        <p>为大众提供基于个体与疾病的主动管理式医疗服务</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="pc-none">
+        <div class="hbox box-v-center" style="background-image: url(~/assets/img/about-yuanjing.jpg);  background-size: cover !important;z-index: 0; background-position: 50% 50% !important;    height: 260px !important;">
+            <div class="container">
+                <div class="row">
+                    <div class="tuhuanyuanjing-app">
+                        <figure class="thyj-logo-icon"></figure>
+                        <p class="text-white" style="margin-top: 3.2%; line-height: 24px;">途欢健康，协同于现有的医疗服务体系，致力于构建更精准的医疗保健模式。途欢健康，以信息技术为基础，移动互联网平台为工具、以三甲医院医生、社区医院医生、医生助理组成的"责任医疗团队"，为大众提供基于个体与疾病的主动管理式医疗服务。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="lightboxOverlay" class="lightboxOverlay" style="display: none;"></div>
+
+    <!-- footer begin -->
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="ac-gf-footer-legal">
+                    <div class="footer-legal-links">
+                        <a href="/news/">公司动态</a>
+                        <div class="bor-line"></div>
+                        <a href="/joinus/">加入我们</a>
+                        <div class="bor-line"></div>
+                        <a href="/customres/">企业用户</a>
+                        <div class="bor-line"></div>
+                        <a href="/useragreement/" class="nob">用户使用协议</a>
+                    </div>
+                    <div class="footer-beizhu">Copyright &copy; 2016 途欢医疗健康科技有限公司 蜀ICP备15025302号-1</div>
+                </div>
+                <div class="footer-weixin">
+                    <div class="bt-example-popover">
+                        <div class="popover top">
+                            <div class="arrow"></div>
+                            <div style="padding: 7px">
+                                <figure class="erweima-logo-icon"></figure>
+                            </div>
+                        </div>
+                    </div>
+                    <figure class="weixin-logo-icon"></figure>
+                </div>
+                <div class="footer-weixin">
+                    <div class="bt-example-popover">
+                        <div class="popover top">
+                            <div class="arrow"></div>
+                            <div style="padding: 7px">
+                                <figure class="erweimaapp-logo-icon"></figure>
+                            </div>
+                        </div>
+                    </div>
+                    <figure class="shouji-logo-icon"></figure>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <div class="footer_app" style="display: none;"> Copyright &copy; 2016 途欢医疗健康科技有限公司 </div>
+    <!-- footer end -->
+    <!-- 弹出微信框  -->
+    <div class="modal fade bs-example-modal-sm" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content" style="height: 580px;">
+                <div style="width:580px; display: inline-block;">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <figure class="pop-erweima">
+                            <img src="~/assets/img/erweima-app.svg" width="300" height="300" style="padding: 20px; border: 1px solid rgba(170, 170, 170, 0.3);">
+                        </figure>
+                        <div class="pop-erweima-text">
+                            <p>请使用微信扫一扫</p>
+                            <p>下载“途欢健康”App注册登录</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 弹出微信框  /-->
+
+    <style type="text/css">
+        .bg-div {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,.5);
+            z-index: 50;
+        }
+
+        .body-static {
+            overflow: hidden !important;
+        }
+
+        .bg-div.hide {
+            display: none;
+        }
+    </style>
+    <div class="bg-div hide">
+
+    </div>
+    <!--底部蒙层end-->
+    <script type="text/javascript">
+    $(function() {
+        $(".navbar-toggle").click(function () {
+			$(this).toggleClass("click");
+			$(".bg-div").toggleClass("hide");
+			$("body").toggleClass("body-static");
+			$(".navbar-form a").toggleClass("active");
+			$(".navbar-collapse").slideToggle();
+		});
+		$(".bg-div").click(function () {
+			$(".navbar-toggle").trigger("click");
+		});
+
+		var top = ($(window).height() - $(".modal-content").height()) / 2;
+		$(".model-down").click(function () {
+			$(".modal-content").css({ position: 'absolute', 'top': top});
+		});
+         $(".model-down-1").click(function () {
+			$(".modal-content").css({ position: 'absolute', 'top': top});
+		});
+
+         $(".weixin-logo-icon").mouseleave(function () {
+             $(this).prev().find(".popover").removeClass("hover");
+         }).mouseenter(function () {
+             $(this).prev().find(".popover").addClass("hover");
+         });
+         $(".shouji-logo-icon").mouseleave(function () {
+             $(this).prev().find(".popover").removeClass("hover");
+         }).mouseenter(function () {
+             $(this).prev().find(".popover").addClass("hover");
+         });
+
+		var navAgent = navigator.userAgent.toLowerCase();
+		if(navAgent.indexOf("thjk-app-ios") > -1 || navAgent.indexOf("thdoctor-app-ios") > -1 || navAgent.indexOf("thjk-app-android") > -1 || navAgent.indexOf("thdoctor-app-android") > -1){
+			$(".navbar-form.navbar-right").hide();
+			$(".nav > li:last-child a").css({"border-bottom":"0"});
+		}
+
+		$(".navbar-nav > li.click a").removeAttr("href");
+    });
+    </script>
+    <link href="~/assets/skrollr/theme-cobalt.css" rel="stylesheet" type="text/css" media="all">
+    <script src="~/assets/skrollr/jquery.plugin.min.js"></script>
+    <script src="~/assets/skrollr/jquery.flexslider-min.js"></script>
+    <script src="~/assets/skrollr/smooth-scroll.min.js"></script>
+    <script src="~/assets/skrollr/skrollr.min.js"></script>
+    <script src="~/assets/skrollr/spectragram.min.js"></script>
+    <script src="~/assets/skrollr/scrollReveal.min.js"></script>
+    <script src="~/assets/skrollr/isotope.min.js"></script>
+    <script src="~/assets/skrollr/lightbox.min.js"></script>
+    <script src="~/assets/skrollr/scripts.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            var itemdiv = $(".i-item-con .col-lg-4");
+            itemdiv.hover(function () {
+                $(this).addClass("item-active").siblings().removeClass("item-active");
+            }).hover(function () {
+            }, function () {
+                $(this).removeClass("item-active");
+            });
+            var itemdiv = $(".team-person");
+            itemdiv.hover(function () {
+                $(this).addClass("hover").siblings().removeClass("hover");
+            }).hover(function () {
+            }, function () {
+                $(this).removeClass("hover");
+            });
+        });
+    </script>
+    <script type="text/javascript" src="~/assets/javascript/bootstrap.min.js"></script>
+</body>
+</html>

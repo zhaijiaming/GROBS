@@ -572,6 +572,7 @@
     <None Include="Properties\PublishProfiles\davis-ck.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck1.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck2.pubxml" />
+    <None Include="Properties\PublishProfiles\davis-gr.pubxml" />
     <None Include="Properties\PublishProfiles\davis1.pubxml" />
     <Content Include="reports\ReportDataSet.xsc">
       <DependentUpon>ReportDataSet.xsd</DependentUpon>
@@ -792,6 +793,10 @@
     <Content Include="Views\base_chanpinxiansq\Index.cshtml" />
     <Content Include="Views\Shared\_LayoutCustomer.cshtml" />
     <Content Include="Views\ord_dingdan\CustomerOrderList.cshtml" />
+    <Content Include="Views\Shared\_LayoutCustomer01.cshtml" />
+    <Content Include="Views\Shared\_LayoutCustomer02.cshtml" />
+    <Content Include="Views\ord_fanli\CustomerProfit.cshtml" />
+    <Content Include="Views\ord_jixiao\CustomerTarget.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
