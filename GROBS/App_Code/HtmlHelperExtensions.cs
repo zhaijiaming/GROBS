@@ -294,6 +294,16 @@ namespace GROBS.App_Code
                             sb.AppendFormat("<option value=\"{0}\">{1}</option>", i.ID, i.Xingming);
                     }
                     break;
+                case "套包":
+                    var tmptaobao = ServiceFactory.base_taobaoservice.LoadSortEntities(p => p.IsDelete == false && p.TingyongSF == false, true, s=>s.Daima);
+                    foreach(var i in tmptaobao)
+                    {
+                        if (i.ID == selectedvalue && selectedvalue != 0)
+                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", i.ID, i.Mingcheng);
+                        else
+                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", i.ID, i.Mingcheng);
+                    }
+                    break;
                 case "userinfo"://用户
                     IuserinfoService uis = ServiceFactory.userinfoservice;
                     var tmpus = uis.LoadSortEntities(userinfo => userinfo.IsDelete == false, true, userinfo => userinfo.Account);
