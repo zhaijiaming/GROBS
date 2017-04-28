@@ -244,3 +244,7 @@ ModelManifest.xml
 # FAKE - F# Make
 .fake/
 /GROBS/Properties/PublishProfiles/davis-gr.pubxml
+/GROBS/Dlls/EntityFramework.xml
+/GROBS/Dlls/EntityFramework.SqlServer.xml
+/GROBS/Dlls/EntityFramework.SqlServer.dll
+/GROBS/Dlls/EntityFramework.dll
