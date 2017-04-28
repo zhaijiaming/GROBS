@@ -221,6 +221,7 @@ namespace GROBS.Controllers
         {
             string id = Request["id"] ?? "";
             string huozhuid = Request["huozhuid"] ?? "";
+            string kehudm = Request["kehudm"] ?? "";
             string mingcheng = Request["mingcheng"] ?? "";
             string yingyezhizhaobh = Request["yingyezhizhaobh"] ?? "";
             string yingyezhizhaoyxq = Request["yingyezhizhaoyxq"] ?? "";
@@ -253,6 +254,7 @@ namespace GROBS.Controllers
             {
                 base_shouhuodanwei ob_base_shouhuodanwei = new base_shouhuodanwei();
                 ob_base_shouhuodanwei.HuozhuID = huozhuid == "" ? 0 : int.Parse(huozhuid);
+                ob_base_shouhuodanwei.KehuDM = kehudm.Trim();
                 ob_base_shouhuodanwei.Mingcheng = mingcheng.Trim();
                 ob_base_shouhuodanwei.YingyezhizhaoBH = yingyezhizhaobh.Trim();
                 ob_base_shouhuodanwei.YingyezhizhaoYXQ = yingyezhizhaoyxq == "" ? DateTime.Now : DateTime.Parse(yingyezhizhaoyxq);
@@ -312,6 +314,7 @@ namespace GROBS.Controllers
         {
             string id = Request["id"] ?? "";
             string huozhuid = Request["huozhuid"] ?? "";
+            string kehudm = Request["kehudm"] ?? "";
             string mingcheng = Request["mingcheng"] ?? "";
             string yingyezhizhaobh = Request["yingyezhizhaobh"] ?? "";
             string yingyezhizhaoyxq = Request["yingyezhizhaoyxq"] ?? "";
@@ -349,6 +352,7 @@ namespace GROBS.Controllers
                 base_shouhuodanwei p = ob_base_shouhuodanweiservice.GetEntityById(base_shouhuodanwei => base_shouhuodanwei.ID == uid);
                 p.HuozhuID = huozhuid == "" ? 0 : int.Parse(huozhuid);
                 p.Mingcheng = mingcheng.Trim();
+                p.KehuDM = kehudm.Trim();
                 p.YingyezhizhaoBH = yingyezhizhaobh.Trim();
                 p.YingyezhizhaoYXQ = yingyezhizhaoyxq == "" ? DateTime.Now : DateTime.Parse(yingyezhizhaoyxq);
                 p.YingyezhizhaoTP = yingyezhizhaotp.Trim();

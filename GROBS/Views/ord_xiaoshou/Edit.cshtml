@@ -4,11 +4,54 @@
 @{
     ViewBag.Title = "发货单修改";
 }
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+        });
+        //'是否合作'绑定值
+        $("#HezuoSF").change(function () {
+            if ($("#HezuoSF").is(":checked")) {
+                $("#HezuoSF").val("true");//选中=true
+            } else {
+                $("#HezuoSF").val("false");//不选中=false
+            }
+        });
+        //'是否整单'赋值
+        var ZhengdanSF = "@ViewData.Model.ZhengdanSF";
+        if (ZhengdanSF == "True") {
+            $("#ZhengdanSF").attr("checked", true);
+            $("#ZhengdanSF").val("true");
+        } else {
+            $("#ZhengdanSF").attr("checked", false);
+            $("#ZhengdanSF").val("false");
+        }
+        //'是否关闭'绑定值
+        $("#GuanbiSF").change(function () {
+            if ($("#GuanbiSF").is(":checked")) {
+                $("#GuanbiSF").val("true");//选中=true
+            } else {
+                $("#GuanbiSF").val("false");//不选中=false
+            }
+        });
+        //'是否关闭'赋值
+        var ShenchaSF = "@ViewData.Model.GuanbiSF";
+        if (ShenchaSF == "True") {
+            $("#GuanbiSF").attr("checked", true);
+            $("#GuanbiSF").val("true");
+        } else {
+            $("#GuanbiSF").attr("checked", false);
+            $("#GuanbiSF").val("false");
+        }
+    });
+</script>
 
 <div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
@@ -22,6 +65,149 @@
 </div>
 
 <div class="page-content">
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>包装箱信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Update", "ord_xiaoshou", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@ViewData.Model.ID" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <fieldset>
+                                        @*订单序号*@
+                                        <div class="form-group">
+                                            <label for="DDID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>订单序号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="DDID" name="DDID" class="form-control" placeholder="请输入订单序号" value="@ViewData.Model.DDID"/>
+                                            </div>
+                                        </div>
+                                        @*订单编号*@
+                                        <div class="form-group">
+                                            <label for="DDBH" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>订单编号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="DDBH" name="DDBH" class="form-control" placeholder="请输入订单编号" value="@ViewData.Model.DDBH"/>
+                                            </div>
+                                        </div>
+                                        @*销售单号*@
+                                        <div class="form-group">
+                                            <label for="XSDH" class="col-sm-3 control-label"><b>销售单号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="XSDH" name="XSDH" class="form-control" placeholder="请输入销售单号" value="@ViewData.Model.XSDH"/>
+                                            </div>
+                                        </div>
+                                        @*客户单号*@
+                                        <div class="form-group">
+                                            <label for="KDDH" class="col-sm-3 control-label"><b>客户单号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="KDDH" name="KDDH" class="form-control" placeholder="请输入客户单号" value="@ViewData.Model.KDDH"/>
+                                            </div>
+                                        </div>
+                                        @*发货日期*@
+                                        <div class="form-group">
+                                            <label for="FahuoRQ" class="col-sm-3 control-label"><b>发货日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="FahuoRQ" name="FahuoRQ" placeholder="请选择发货日期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.FahuoRQ)" type="date">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*客服*@
+                                        <div class="form-group">
+                                            <label for="Kefu" class="col-sm-3 control-label"><b>客服</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Kefu" name="Kefu" class="form-control" placeholder="请输入客服" value="@ViewData.Model.Kefu"/>
+                                            </div>
+                                        </div>
+                                        @*客服单号*@
+                                        <div class="form-group">
+                                            <label for="KefuDH" class="col-sm-3 control-label"><b>客服单号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="KefuDH" name="KefuDH" class="form-control" placeholder="请输入客服单号" value="@ViewData.Model.KefuDH" />
+                                            </div>
+                                        </div>
+                                        @*是否整单*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="ZhengdanSF"><b>是否整单</b></label>
+                                            <div class="col-sm-8">
+                                                <label class="control-group">
+                                                    <input name="ZhengdanSF" id="ZhengdanSF" class="ace ace-switch ace-switch-7" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*是否关闭*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="GuanbiSF"><b>是否关闭</b></label>
+                                            <div class="col-sm-8">
+                                                <label class="control-group">
+                                                    <input name="GuanbiSF" id="GuanbiSF" class="ace ace-switch ace-switch-7" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*Col1*@
+                                        <div class="form-group" style="display:none;">
+                                            <label for="Col1" class="col-sm-3 control-label"><b>Col1</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="Col1" value="@ViewData.Model.Col1"/>
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="MakeDate" disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewData.Model.MakeMan)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>更新</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     @using (Html.BeginForm("Update", "ord_xiaoshou", FormMethod.Post, new { @role = "form" }))
     {
         @Html.AntiForgeryToken()
