@@ -14,7 +14,67 @@
         $("#save_bottom").bind("click", function () {
             $("#form").submit();
         });
+        /*
+            商品
+        */
+        $("#container").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        //click
+        getSpxx();   //获取商品数据
+        $("#btn_select").bind("click", function () {
+            $("#container").show();
+        });
+        //弹框关闭
+        $("#container_close").click(function () {
+            $("#container").hide();
+        });
+        //确定添加
+        $("#btn_confirm").click(function () {
+            var _data = "";
+            $("#table_data tr").each(function () {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    _data = $(this).find(".mc").html();
+                }
+                $("#xsdw").val(_data);
+            });
+            $("#container").hide();
+        });
+        //单击tr打钩
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find(":checkbox").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
+        });
+        //双击取值
+        $("#table_data tbody").on("dblclick", "tr", function () {
+            $("#xsdw").val($(this).find(".mc").html());
+            $("#container").hide();
+        });
     });
+    function getSpxx() {
+        var filltable = "";
+        $.post(
+            "/base_shangpinxx/getDetail",
+            {
+            },
+                function (data) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr><td width="50px;"><label><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></td><td width="30%;"><span class="bh">';
+                        filltable = filltable + data[i].Bianhao;
+                        filltable = filltable + '</span></td><td width="30%;"><span class="mc">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td width="30%;">';
+                        filltable = filltable + data[i].Miaoshu;
+                        filltable = filltable + '</td></tr>';
+                    }
+                    $("#table_data tbody").html(filltable);
+                });
+    }
 </script>
 
 <div class="breadcrumbs" id="breadcrumbs">
@@ -52,11 +112,19 @@
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
                                     <fieldset>
-                                        @*商品序号*@
+                                        @*商品*@
                                         <div class="form-group">
-                                            <label for="SPID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品序号</b></label>
+                                            <label class="col-sm-3 control-label" for="spid"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="SPID" name="SPID" class="form-control" placeholder="请输入商品序号" value="@ViewData.Model.SPID"/>
+                                                <div class="input-group">
+                                                    <input id="spid" name="spid" placeholder="请选择商品" class="form-control" type="text" value="@ViewData.Model.SPID">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_select" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         @*销售价*@
@@ -124,6 +192,32 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+@*商品弹框*@
+<div id="container" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:400px;height:500px;z-index:99999;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title"><b>商品信息</b><button id="container_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <button type="button" class="btn btn-primary " id="btn_confirm">
+            <i class="icon-pencil bigger-120"></i>
+            <b>添加</b>
+        </button>
+        <div class="center">
+            <table class="table table-hover" id="table_data" style="margin-top:10px;">
+                <caption></caption>
+                <thead style="display:block">
+                    <tr>
+                        <td width="50px;"></td>
+                        <td width="30%;">编号</td>
+                        <td width="30%;">名称</td>
+                        <td width="30%;">说明</td>
+                    </tr>
+                </thead>
+                <tbody style="display:block; max-height:380px;overflow:auto;"></tbody>
+            </table>
         </div>
     </div>
 </div>
