@@ -61,13 +61,17 @@
                                 {
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="id" />
+                                    <input type="hidden" name="kehuid" id="kehuid"/>
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <fieldset>
                                         @*客户序号*@
                                         <div class="form-group">
                                             <label for="KehuID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="KehuID" name="KehuID" class="form-control" placeholder="请输入客户" />
+                                            <div class="col-sm-5">
+                                                <input type="text" id="khname" class="form-control" readonly placeholder="请选择客户" />
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <input type="button" class="btn btn-app" id="btn_selkh" value="选择"/>
                                             </div>
                                         </div>
                                         @*账号*@
@@ -102,12 +106,12 @@
                                             </div>
                                         </div>
                                         @*Col1*@
-                                        <div class="form-group" style="display:none;">
+                                        @*<div class="form-group" style="display:none;">
                                             <label for="Col1" class="col-sm-3 control-label"><b>Col1</b></label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="Col1" name="Col1" class="form-control" placeholder="请输入Col1" />
                                             </div>
-                                        </div>
+                                        </div>*@
                                         @*录入日期*@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
@@ -145,6 +149,29 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+</div>
+<div id="pl_jxs" class="panel panel-primary" hidden style="position:fixed;top:100px;left:240px;width:240px;height:auto;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">经销商<button id="pl_jxs_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <button type="button" class="btn btn-default " id="bt_jxs_add"><i class="icon-add"></i>确定</button>
+            <table class="table" id="dt_jxs">
+                <caption></caption>
+                <thead>
+                    <tr>
+                        <td></td>
+                        <td>编号</td>
+                        <td>名称</td>
+                        <td>联系人</td>
+                        <td>地址</td>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
     </div>
 </div>
