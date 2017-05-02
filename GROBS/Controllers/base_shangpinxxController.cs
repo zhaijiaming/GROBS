@@ -1187,6 +1187,14 @@ namespace GROBS.Controllers
             }
             return Json(flag);
         }
+        public JsonResult getSpxx()
+        {
+            var tempdata = ServiceFactory.base_shangpinxxservice.LoadEntities(p => p.IsDelete == false);
+            if (tempdata == null)
+                return Json("");
+            else
+                return Json(tempdata);
+        }
     }
 }
 

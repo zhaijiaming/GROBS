@@ -218,6 +218,7 @@ namespace GROBS.Controllers
         public ActionResult Save()
         {
             string id = Request["ob_base_chanpinxian_id"] ?? "";
+            string gysid = Request["gysid"] ?? "";
             string huozhuxuhao = Request["ob_base_chanpinxian_huozhuxuhao"] ?? "";
             string mingcheng = Request["ob_base_chanpinxian_mingcheng"] ?? "";
             string miaoshu = Request["ob_base_chanpinxian_miaoshu"] ?? "";
@@ -230,6 +231,7 @@ namespace GROBS.Controllers
             {
                 base_chanpinxian ob_base_chanpinxian = new base_chanpinxian();
                 ob_base_chanpinxian.Huozhuxuhao = huozhuxuhao == "" ? 0 : int.Parse(huozhuxuhao);
+                ob_base_chanpinxian.GYSID = gysid == "" ? 0 : int.Parse(gysid);
                 ob_base_chanpinxian.Mingcheng = mingcheng.Trim();
                 ob_base_chanpinxian.Miaoshu = miaoshu.Trim();
                 ob_base_chanpinxian.Col1 = col1.Trim();
@@ -283,6 +285,7 @@ namespace GROBS.Controllers
         {
             string id = Request["ob_base_chanpinxian_id"] ?? "";
             string huozhuxuhao = Request["ob_base_chanpinxian_huozhuxuhao"] ?? "";
+            string gysid = Request["gysid"] ?? "";
             string mingcheng = Request["ob_base_chanpinxian_mingcheng"] ?? "";
             string miaoshu = Request["ob_base_chanpinxian_miaoshu"] ?? "";
             string col1 = Request["ob_base_chanpinxian_col1"] ?? "";
@@ -294,6 +297,7 @@ namespace GROBS.Controllers
             try
             {
                 base_chanpinxian p = ob_base_chanpinxianservice.GetEntityById(base_chanpinxian => base_chanpinxian.ID == uid);
+                p.GYSID = gysid == "" ? 0 : int.Parse(gysid);
                 p.Huozhuxuhao = huozhuxuhao == "" ? 0 : int.Parse(huozhuxuhao);
                 p.Mingcheng = mingcheng.Trim();
                 p.Miaoshu = miaoshu.Trim();
@@ -328,6 +332,29 @@ namespace GROBS.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+        public JsonResult GetCpxFromGysid()
+        {
+            string _cpxid = Request["cpxid"] ?? "";
+            IList<ChanPinXian> _cpxs;
+            if (_cpxid == "")
+                return Json("");
+            else
+            {
+                _cpxs = new List<ChanPinXian>();
+                var tempdata = ob_base_chanpinxianservice.LoadSortEntities(p => p.IsDelete == false && p.GYSID == int.Parse(_cpxid), false, p => p.Mingcheng);
+                foreach (base_chanpinxian _cpx in tempdata)
+                {
+                    if (_cpx.ID > 0)
+                    {
+                        ChanPinXian _cpxxx = new ChanPinXian();
+                        _cpxxx.ID = _cpx.ID;
+                        _cpxxx.Mingcheng = _cpx.Mingcheng;
+                        _cpxs.Add(_cpxxx);
+                    }
+                }
+            }
+            return Json(_cpxs);
         }
     }
 }

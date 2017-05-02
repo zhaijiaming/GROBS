@@ -184,6 +184,7 @@ namespace GROBS.Controllers
             string jiacg = Request["jiacg"] ?? "";
             string xsdw = Request["xsdw"] ?? "";
             string tingyongsf = Request["tingyongsf"] ?? "";
+            string kongzhisf = Request["kongzhisf"] ?? "";
             string col1 = Request["col1"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
@@ -199,17 +200,19 @@ namespace GROBS.Controllers
                 ob_base_taobao.JiaCG = jiacg == "" ? 0 : float.Parse(jiacg);
                 ob_base_taobao.XSDW = xsdw.Trim();
                 ob_base_taobao.TingyongSF = tingyongsf == "" ? false : Boolean.Parse(tingyongsf);
+                ob_base_taobao.KongzhiSF = kongzhisf == "" ? false : Boolean.Parse(kongzhisf);
                 ob_base_taobao.Col1 = col1.Trim();
                 ob_base_taobao.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_base_taobao.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_base_taobao = ob_base_taobaoservice.AddEntity(ob_base_taobao);
+                id = ob_base_taobao.ID.ToString();
                 ViewBag.base_taobao = ob_base_taobao;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { id = int.Parse(id) });
         }
 
         [OutputCache(Duration = 10)]
@@ -232,6 +235,7 @@ namespace GROBS.Controllers
                 base_taobaoviewmodel.JiaCG = tempData.JiaCG;
                 base_taobaoviewmodel.XSDW = tempData.XSDW;
                 base_taobaoviewmodel.TingyongSF = tempData.TingyongSF;
+                base_taobaoviewmodel.KongzhiSF = tempData.KongzhiSF;
                 base_taobaoviewmodel.Col1 = tempData.Col1;
                 base_taobaoviewmodel.MakeDate = tempData.MakeDate;
                 base_taobaoviewmodel.MakeMan = tempData.MakeMan;
@@ -253,6 +257,7 @@ namespace GROBS.Controllers
             string jiacg = Request["jiacg"] ?? "";
             string xsdw = Request["xsdw"] ?? "";
             string tingyongsf = Request["tingyongsf"] ?? "";
+            string kongzhisf = Request["kongzhisf"] ?? "";
             string col1 = Request["col1"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
@@ -269,6 +274,7 @@ namespace GROBS.Controllers
                 p.JiaCG = jiacg == "" ? 0 : float.Parse(jiacg);
                 p.XSDW = xsdw.Trim();
                 p.TingyongSF = tingyongsf == "" ? false : Boolean.Parse(tingyongsf);
+                p.KongzhiSF = kongzhisf == "" ? false : Boolean.Parse(kongzhisf);
                 p.Col1 = col1.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
@@ -280,7 +286,7 @@ namespace GROBS.Controllers
                 Console.WriteLine(ex.Message);
                 ViewBag.saveok = ViewAddTag.ModifyNo;
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { id = uid });
         }
         public ActionResult Delete()
         {

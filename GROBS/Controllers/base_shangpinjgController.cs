@@ -274,6 +274,26 @@ namespace GROBS.Controllers
             }
             return RedirectToAction("Index");
         }
+        public JsonResult GetPriceWithSpid()
+        {
+            string _spid = Request["spid"] ?? "";
+            if (string.IsNullOrEmpty(_spid))
+            {
+                return Json("");
+            }
+            else
+            {
+                var tempdata = ServiceFactory.base_shangpinjgservice.GetEntityById(p => p.SPID == int.Parse(_spid) && p.IsDelete == false);
+                if(tempdata == null)
+                {
+                    return Json("");
+                }
+                else
+                {
+                    return Json(tempdata);
+                }
+            }
+        }
     }
 }
 

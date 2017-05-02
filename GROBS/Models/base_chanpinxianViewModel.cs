@@ -10,6 +10,8 @@ namespace GROBS.Models
         public int ID { get; set; }
         [Display(Name = "货主序号")]
         public int Huozhuxuhao { get; set; }
+        [Display(Name = "供应商ID")]
+        public int GYSID { get; set; }
         [Display(Name = "名称")]
         public string Mingcheng { get; set; }
         [Display(Name = "说明")]

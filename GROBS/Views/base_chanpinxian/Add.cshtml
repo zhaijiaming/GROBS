@@ -56,29 +56,36 @@
                                         @*货主*@
                                         <div class="form-group" style="display:none;">
                                             <label for="ob_base_chanpinxian_huozhuxuhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>货主</b></label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-8">
                                                 <input type="text" class="form-control" placeholder="必填项,请填写名称" name="ob_base_chanpinxian_huozhuxuhao" value="1">
                                                 @*@Html.SelectList_Auto("ob_base_chanpinxian_huozhuxuhao", "货主", "名称")*@
+                                            </div>
+                                        </div>
+                                        @*供应商*@
+                                        <div class="form-group">
+                                            <label for="GYSID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>供应商</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("GYSID", "供应商", "")
                                             </div>
                                         </div>
                                         @*名称*@
                                         <div class="form-group">
                                             <label for="ob_base_chanpinxian_mingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>名称</b></label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-8">
                                                 <input type="text" class="form-control" placeholder="必填项,请填写名称" name="ob_base_chanpinxian_mingcheng">
                                             </div>
                                         </div>
                                         @*说明*@
                                         <div class="form-group">
                                             <label for="ob_base_chanpinxian_miaoshu" class="col-sm-3 control-label"><b>说明</b></label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-8">
                                                 <input type="text" class="form-control" placeholder="请填写说明" name="ob_base_chanpinxian_miaoshu">
                                             </div>
                                         </div>
                                         @*录入日期*@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label" for="makedate"><b>录入日期</b></label>
-                                            <div class="col-sm-9">
+                                            <div class="col-sm-8">
                                                 <div class="input-group">
                                                     <input name="ob_base_chanpinxian_makedate" disabled="disabled" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="text">
                                                     <span class="input-group-addon">

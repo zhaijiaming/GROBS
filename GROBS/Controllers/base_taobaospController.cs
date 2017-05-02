@@ -166,8 +166,8 @@ namespace GROBS.Controllers
 
         public ActionResult Add()
         {
-            //string tbId = Request["tbId"] ?? "";
-            //ViewBag.tbId = int.Parse(tbId);
+            string tbId = Request["tbId"] ?? "";
+            ViewBag.tbId = int.Parse(tbId);
 
             ViewBag.userid = (int)Session["user_id"];
             return View();
@@ -189,7 +189,7 @@ namespace GROBS.Controllers
             string col1 = Request["col1"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
-            //int _id = int.Parse(tbid);
+            int _id = int.Parse(tbid);
             try
             {
                 base_taobaosp ob_base_taobaosp = new base_taobaosp();
@@ -211,7 +211,7 @@ namespace GROBS.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", "base_taobao", new { id = _id });
         }
 
         [OutputCache(Duration = 10)]
@@ -257,6 +257,7 @@ namespace GROBS.Controllers
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
             int uid = int.Parse(id);
+            int _tbid = int.Parse(tbid);
             try
             {
                 base_taobaosp p = ob_base_taobaospservice.GetEntityById(base_taobaosp => base_taobaosp.ID == uid);
@@ -279,7 +280,7 @@ namespace GROBS.Controllers
                 Console.WriteLine(ex.Message);
                 ViewBag.saveok = ViewAddTag.ModifyNo;
             }
-            return RedirectToAction("Edit", new { id = uid });
+            return RedirectToAction("Edit","base_taobao", new { id = _tbid });
         }
         public ActionResult Delete()
         {
@@ -309,9 +310,28 @@ namespace GROBS.Controllers
             else
             {
                 var tempData = ServiceFactory.base_taobaospservice.LoadSortEntities(p => p.TBID == int.Parse(tbId) && p.IsDelete == false, false, p => p.SPID);
-
-                return Json(tempData);
+                if (tempData == null)
+                    return Json("");
+                else
+                    return Json(tempData);
             }
+        }
+        public int DeleteInBase_taobao()
+        {
+            string sdel = Request["del"] ?? "";
+            int id;
+            base_taobaosp ob_base_taobaosp;
+            foreach (string sD in sdel.Split(','))
+            {
+                if (sD.Length > 0)
+                {
+                    id = int.Parse(sD);
+                    ob_base_taobaosp = ob_base_taobaospservice.GetEntityById(base_taobaosp => base_taobaosp.ID == id && base_taobaosp.IsDelete == false);
+                    ob_base_taobaosp.IsDelete = true;
+                    ob_base_taobaospservice.UpdateEntity(ob_base_taobaosp);
+                }
+            }
+            return 1;
         }
     }
 }

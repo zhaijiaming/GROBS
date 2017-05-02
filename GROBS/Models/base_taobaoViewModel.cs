@@ -26,6 +26,8 @@ namespace GROBS.Models
         public string XSDW { get; set; }
         [Display(Name = "是否停用")]
         public bool TingyongSF { get; set; }
+        [Display(Name = "是否受控")]
+        public bool KongzhiSF { get; set; }
         [Display(Name = "机动1")]
         public string Col1 { get; set; }
         [Display(Name = "制单日期")]

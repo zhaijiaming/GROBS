@@ -15,28 +15,39 @@
             $("#form").submit();
         });
         /*
-            商品
+            选择商品
         */
-        $("#container").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
-        //click
-        getSpxx();   //获取商品数据
+        $("#containerSpxx").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        //获取商品数据
+        getSpxx();
+        //var spid = $("#spid").val();
+        //$("#table_data tbody tr").each(function () {
+        //    console.log($(this).find(".checkbox").val());
+        //    if ($("#spid").val() == $(this).find(".checkbox").val()) {
+        //        $("#spmc").val($(this).find(".Mingcheng").val());
+        //    }
+        //});
+        //弹框开启
         $("#btn_select").bind("click", function () {
-            $("#container").show();
+            $("#containerSpxx").show();
         });
         //弹框关闭
         $("#container_close").click(function () {
-            $("#container").hide();
+            $("#containerSpxx").hide();
         });
         //确定添加
         $("#btn_confirm").click(function () {
             var _data = "";
+            var _spid = "";
             $("#table_data tr").each(function () {
                 if ($(this).find("input[type=checkbox]").is(':checked')) {
-                    _data = $(this).find(".mc").html();
+                    _data = $(this).find(".Mingcheng").html();
+                    _spid = $(this).find(".checkbox").val();
                 }
-                $("#xsdw").val(_data);
+                $("#spid").val(_spid);
+                $("#spmc").val(_data);
             });
-            $("#container").hide();
+            $("#containerSpxx").hide();
         });
         //单击tr打钩
         $("#table_data").on("click", "tr", function (e) {
@@ -50,29 +61,38 @@
         });
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {
-            $("#xsdw").val($(this).find(".mc").html());
-            $("#container").hide();
+            $("#spmc").val($(this).find(".Mingcheng").html());
+            $("#spid").val($(this).find(".checkbox").val());
+            $("#containerSpxx").hide();
         });
     });
     function getSpxx() {
         var filltable = "";
         $.post(
-            "/base_shangpinxx/getDetail",
+            "/base_shangpinxx/getSpxx",
             {
             },
                 function (data) {
+                    var spid = $("#spid").val();
                     for (var i in data) {
-                        filltable = filltable + '<tr><td width="50px;"><label><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox" value="';
                         filltable = filltable + data[i].ID;
-                        filltable = filltable + '"></label></td><td width="30%;"><span class="bh">';
-                        filltable = filltable + data[i].Bianhao;
-                        filltable = filltable + '</span></td><td width="30%;"><span class="mc">';
+                        filltable = filltable + '"></label></td><td><span class="Daima">';
+                        filltable = filltable + data[i].Daima;
+                        filltable = filltable + '</span></td><td><span class="Mingcheng">';
                         filltable = filltable + data[i].Mingcheng;
-                        filltable = filltable + '</span></td><td width="30%;">';
-                        filltable = filltable + data[i].Miaoshu;
+                        if (data[i].ID == spid) {
+                            $("#spmc").val(data[i].Mingcheng)
+                        }
+                        filltable = filltable + '</span></td><td>';
+                        filltable = filltable + data[i].Huansuanlv;
+                        filltable = filltable + '</td><td>';
+                        filltable = filltable + data[i].Danwei;
+                        filltable = filltable + '</td><td>';
+                        filltable = filltable + data[i].BaozhuangDW;
                         filltable = filltable + '</td></tr>';
                     }
-                    $("#table_data tbody").html(filltable);
+                    $("#containerSpxx tbody").html(filltable);
                 });
     }
 </script>
@@ -111,13 +131,14 @@
                                     <input type="hidden" name="id" value="@ViewData.Model.ID" />
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <input type="hidden" id="spid" name="spid" value="@ViewData.Model.SPID" />
                                     <fieldset>
                                         @*商品*@
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="spid"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品</b></label>
+                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
-                                                    <input id="spid" name="spid" placeholder="请选择商品" class="form-control" type="text" value="@ViewData.Model.SPID">
+                                                    <input id="spmc" placeholder="请选择商品" class="form-control" type="text">
                                                     <span class="input-group-btn">
                                                         <button type="button" id="btn_select" class="btn btn-primary btn-sm">
                                                             选择
@@ -196,7 +217,7 @@
     </div>
 </div>
 @*商品弹框*@
-<div id="container" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:400px;height:500px;z-index:99999;">
+<div id="containerSpxx" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99999;">
     <div class="panel-heading tuodong">
         <h3 class="panel-title"><b>商品信息</b><button id="container_close" class="pull-right">X</button></h3>
     </div>
@@ -205,18 +226,20 @@
             <i class="icon-pencil bigger-120"></i>
             <b>添加</b>
         </button>
-        <div class="center">
-            <table class="table table-hover" id="table_data" style="margin-top:10px;">
+        <div style="margin-top:10px;max-height:330px;overflow:auto;">
+            <table class="table table-hover" id="table_data">
                 <caption></caption>
-                <thead style="display:block">
+                <thead>
                     <tr>
-                        <td width="50px;"></td>
-                        <td width="30%;">编号</td>
-                        <td width="30%;">名称</td>
-                        <td width="30%;">说明</td>
+                        <th></th>
+                        <th>代码</th>
+                        <th>商品名称</th>
+                        <th>换算率</th>
+                        <th>基本单位</th>
+                        <th>销售单位</th>
                     </tr>
                 </thead>
-                <tbody style="display:block; max-height:380px;overflow:auto;"></tbody>
+                <tbody></tbody>
             </table>
         </div>
     </div>

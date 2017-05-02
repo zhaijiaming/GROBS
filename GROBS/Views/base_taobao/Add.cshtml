@@ -22,6 +22,15 @@
                 $("#TingyongSF").val("false");//不选中=false
             }
         });
+        //'是否受控'绑定值
+        $("#KongzhiSF").val("true");//默认赋值
+        $("#KongzhiSF").change(function () {
+            if ($("#KongzhiSF").is(":checked")) {
+                $("#KongzhiSF").val("true");//选中=true
+            } else {
+                $("#KongzhiSF").val("false");//不选中=false
+            }
+        });
         /*
             销售单位
         */
@@ -62,7 +71,36 @@
             $("#xsdw").val($(this).find(".mc").html());
             $("#container").hide();
         });
+
+        //供应商ID→产品线名称
+        $("#GYSID").change(function () {
+            var _gysid = $("#GYSID").val();
+            if (_gysid == "") {
+                $("#select_cpx").text("");
+            } else {
+                getCpx(_gysid);
+            }
+        });
     });
+    function getCpx(gysid) {
+        var _gysid = gysid;
+        var filltable = '<option value="0"></option>';
+        $.post(
+            "/base_chanpinxian/GetCpxFromGysid",
+            {
+                cpxid: _gysid
+            },
+            function (data) {
+                for (var i in data) {
+                    filltable = filltable + '<option value="';
+                    filltable = filltable + data[i].ID;
+                    filltable = filltable + '">';
+                    filltable = filltable + data[i].Mingcheng;
+                    filltable = filltable + '</option>';
+                }
+                $("#select_cpx").html(filltable);
+            });
+    }
     function GetJldw() {
         var filltable = "";
         $.post(
@@ -124,11 +162,11 @@
                                     <input type="hidden" name="id" />
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <fieldset>
-                                        @*代码*@
+                                        @*套包号*@
                                         <div class="form-group">
-                                            <label for="Daima" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>代码</b></label>
+                                            <label for="Daima" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>套包号</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Daima" name="Daima" class="form-control" placeholder="请输入代码" />
+                                                <input type="text" id="Daima" name="Daima" class="form-control" placeholder="请输入套包号" />
                                             </div>
                                         </div>
                                         @*名称*@
@@ -146,24 +184,31 @@
                                             </div>
                                         </div>
                                         @*供应商*@
-                                        <div class="form-group" style="display:none;">
+                                        <div class="form-group">
                                             <label for="GYSID" class="col-sm-3 control-label"><b>供应商</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="GYSID" name="GYSID" class="form-control" placeholder="请输入供应商" value="1" />
+                                                @Html.SelectList_Auto("GYSID", "供应商","")
                                             </div>
                                         </div>
                                         @*产品线*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="CPXID"><b>产品线</b></label>
+                                            <div class="col-sm-8">
+                                                <select name="CPXID" id="select_cpx" style="width:100%;"></select>
+                                            </div>
+                                        </div>
+                                        @*产品线
                                         <div class="form-group">
                                             <label for="CPXID" class="col-sm-3 control-label"><b>产品线</b></label>
                                             <div class="col-sm-8">
                                                 @Html.SelectList_Auto("CPXID", "产品线", "")
                                             </div>
-                                        </div>
+                                        </div>*@
                                         @*销售价*@
                                         <div class="form-group">
                                             <label for="JiaXS" class="col-sm-3 control-label"><b>销售价</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="JiaXS" name="JiaXS" class="form-control" placeholder="请输入销售价" />
+                                                <input type="text" id="JiaXS" readonly name="JiaXS" class="form-control" placeholder="不可输入" />
                                             </div>
                                         </div>
                                         @*采购价*@
@@ -194,6 +239,16 @@
                                             <div class="col-sm-4">
                                                 <label class="control-group">
                                                     <input name="TingyongSF" id="TingyongSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*是否受控*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="KongzhiSF"><b>是否受控</b></label>
+                                            <div class="col-sm-4">
+                                                <label class="control-group">
+                                                    <input name="KongzhiSF" id="KongzhiSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
                                                     <span class="lbl"></span>
                                                 </label>
                                             </div>

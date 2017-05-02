@@ -15,6 +15,8 @@
         $("#save_bottom").bind("click", function () {
             $("#form").submit();
         });
+        //页面每次加载后计算'销售价'、'采购价'
+
         //'是否停用'绑定值
         $("#TingyongSF").change(function () {
             if ($("#TingyongSF").is(":checked")) {
@@ -32,14 +34,32 @@
             $("#TingyongSF").attr("checked", false);
             $("#TingyongSF").val("false");
         }
+        //'是否受控'绑定值
+        $("#KongzhiSF").change(function () {
+            if ($("#KongzhiSF").is(":checked")) {
+                $("#KongzhiSF").val("true");//选中=true
+            } else {
+                $("#KongzhiSF").val("false");//不选中=false
+            }
+        });
+        //'是否受控'赋值
+        var KongzhiSF = "@ViewData.Model.KongzhiSF";
+        if (KongzhiSF == "True") {
+            $("#KongzhiSF").attr("checked", true);
+            $("#KongzhiSF").val("true");
+        } else {
+            $("#KongzhiSF").attr("checked", false);
+            $("#KongzhiSF").val("false");
+        }
 
         var tbId = $("#tbId").val();
         /*
-            套包商品        
+            套包商品
         */
         if (tbId.length > 0) {
             getTaoBaoData(tbId);//获取套包商品明细
         };
+        //套包商品添加
         $("#btn_tbAdd").click(function () {
             if (tbId != null) {
                 window.open("/base_taobaosp/Add?tbId=" + tbId, "_self");
@@ -47,7 +67,50 @@
                 alert("系统错误，请于管理员联系!");
             }
         });
-
+        //套包商品编辑
+        $("#btn_tbEdit").bind("click", function () {
+            var itemLength = $("#container_tbsp input[type = checkbox]:checked").length;
+            if (itemLength > 1) {
+                alert("您只能选取一个套包商品进行编辑。");
+            } else if (itemLength == 0) {
+                alert("您还未选择商品");
+            } else {
+                $("#container_tbsp tr input[type=checkbox]").each(function () {
+                    if (this.checked) {
+                        if ($(this).val() != null && $(this).val() != "") {
+                            window.open("/base_taobaosp/Edit/" + $(this).val(), "_self");
+                        }
+                    }
+                });
+            }
+        });
+        //套包商品删除
+        $("#btn_tbDel").bind("click", function () {
+            var tbItem = "";
+            $("#container_tbsp tr input[type = checkbox]").each(function () {
+                if (this.checked) {
+                    tbItem = tbItem + $(this).val() + ",";
+                }
+            });
+            if (tbItem.length > 0) {
+                var isOk = confirm("确定要删除这些信息吗？");
+                if (isOk) {
+                    $.post(
+                    "/base_taobaosp/DeleteInBase_taobao",
+                    {
+                        del: tbItem
+                    },
+                    function (data) {
+                        if (data == 1) {
+                            $("#form").submit();
+                        }
+                    }
+                    )
+                }
+            } else if (tbItem.length == 0) {
+                alert("您还未选择商品");
+            }
+        });
         /*
             销售单位
         */
@@ -88,6 +151,17 @@
             $("#xsdw").val($(this).find(".mc").html());
             $("#container").hide();
         });
+
+        //供应商ID→产品线名称
+        getCpx(@Model.GYSID);//初始化产品线信息
+        $("#GYSID").change(function () {
+            var _gysid = $("#GYSID").val();
+            if (_gysid == "") {
+                $("#select_cpx").text("");
+            } else {
+                getCpx(_gysid);
+            }
+        });
     });
     function GetJldw() {
         var filltable = "";
@@ -110,9 +184,32 @@
                     $("#table_data tbody").html(filltable);
                 });
     }
+    function getCpx(gysid) {
+        var _gysid = gysid;
+        var filltable = '<option value="0"></option>';
+        $.post(
+            "/base_chanpinxian/GetCpxFromGysid",
+            {
+                cpxid: _gysid
+            },
+            function (data) {
+                var selval = $("#ocpx").val();
+                for (var i in data) {
+                    filltable = filltable + '<option value="';
+                    filltable = filltable + data[i].ID;
+                    if (data[i].ID == selval)
+                        filltable = filltable + '" selected="selected">';
+                    else
+                        filltable = filltable + '">';
+                    filltable = filltable + data[i].Mingcheng;
+                    filltable = filltable + '</option>';
+                }
+                $("#select_cpx").html(filltable);
+            });
+    }
     //套包商品明细
     function getTaoBaoData(tbId) {
-        var data = "";
+        var filltable = "";
         $.post(
             "/base_taobaosp/getdetail",
                 {
@@ -121,26 +218,26 @@
                function (data) {
                    if (data.length > 0) {
                        for (var i in data) {
-                           data = data + '<tr><td><div class="checkbox"><label><input type="checkbox" value="';
-                           data = data + data[i].ID;
-                           data = data + '"></label></div></td>';
-                           data = data + '<td><span class="spid">';
-                           data = data + data[i].SPID;
-                           data = data + '</span></td><td>';
-                           data = data + data[i].Shuliang;
-                           data = data + '</td><td>';
-                           data = data + data[i].HSL;
-                           data = data + '</td><td>';
-                           data = data + data[i].JBDW;
-                           data = data + '</td><td>';
-                           data = data + data[i].XSDW;
-                           data = data + '</td><td>';
-                           data = data + data[i].JiaXS;
-                           data = data + '</td><td>';
-                           data = data + data[i].JiaCG;
-                           data = data + '</td></tr>';
+                           filltable = filltable + '<tr><td><label><input type="checkbox" value="';
+                           filltable = filltable + data[i].ID;
+                           filltable = filltable + '"></label></td>';
+                           filltable = filltable + '<td><span class="spid">';
+                           filltable = filltable + data[i].SPID;
+                           filltable = filltable + '</span></td><td>';
+                           filltable = filltable + data[i].Shuliang;
+                           filltable = filltable + '</td><td>';
+                           filltable = filltable + data[i].HSL;
+                           filltable = filltable + '</td><td>';
+                           filltable = filltable + data[i].JBDW;
+                           filltable = filltable + '</td><td>';
+                           filltable = filltable + data[i].XSDW;
+                           filltable = filltable + '</td><td>';
+                           filltable = filltable + data[i].JiaXS;
+                           filltable = filltable + '</td><td>';
+                           filltable = filltable + data[i].JiaCG;
+                           filltable = filltable + '</td></tr>';
                        }
-                       $("#container_tbsp tbody").html(data);
+                       $("#container_tbsp tbody").html(filltable);
                    } else {
                        $("#container_tbsp tbody").empty();
                    }
@@ -182,54 +279,62 @@
                                     <input type="hidden" id="tbId" name="id" value="@ViewData.Model.ID">
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <input type="hidden" id="ocpx" value="@Model.CPXID" />
                                     <fieldset>
-                                        @*代码*@
+                                        @*套包号*@
                                         <div class="form-group">
-                                            <label for="Daima" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>代码</b></label>
+                                            <label for="Daima" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>套包号</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Daima" name="Daima" class="form-control" placeholder="请输入代码" value="@ViewData.Model.Daima"/>
+                                                <input type="text" id="Daima" name="Daima" class="form-control" placeholder="请输入套包号" value="@ViewData.Model.Daima" />
                                             </div>
                                         </div>
                                         @*名称*@
                                         <div class="form-group">
                                             <label for="Mingcheng" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>名称</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请输入名称" value="@ViewData.Model.Mingcheng"/>
+                                                <input type="text" id="Mingcheng" name="Mingcheng" class="form-control" placeholder="请输入名称" value="@ViewData.Model.Mingcheng" />
                                             </div>
                                         </div>
                                         @*描述*@
                                         <div class="form-group">
                                             <label for="Miaoshu" class="col-sm-3 control-label"><b>描述</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Miaoshu" name="Miaoshu" class="form-control" placeholder="请输入描述" value="@ViewData.Model.Miaoshu"/>
+                                                <input type="text" id="Miaoshu" name="Miaoshu" class="form-control" placeholder="请输入描述" value="@ViewData.Model.Miaoshu" />
                                             </div>
                                         </div>
                                         @*供应商*@
                                         <div class="form-group">
                                             <label for="GYSID" class="col-sm-3 control-label"><b>供应商</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="GYSID" name="GYSID" class="form-control" placeholder="请输入供应商" value="@ViewData.Model.GYSID" />
+                                                @Html.SelectList_Auto("GYSID", "供应商", "", (int)ViewData.Model.GYSID)
                                             </div>
                                         </div>
                                         @*产品线*@
                                         <div class="form-group">
-                                            <label for="CPXID" class="col-sm-3 control-label"><b>产品线</b></label>
+                                            <label class="col-sm-3 control-label" for="chanpinxian"><b>产品线</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Auto("CPXID", "产品线", "",(long)ViewData.Model.CPXID)
+                                                <select name="CPXID" id="select_cpx" style="width:100%;"></select>
                                             </div>
                                         </div>
+                                        @*产品线
+                                            <div class="form-group">
+                                                <label for="CPXID" class="col-sm-3 control-label"><b>产品线</b></label>
+                                                <div class="col-sm-8">
+                                                    @Html.SelectList_Auto("CPXID", "产品线", "",(long)ViewData.Model.CPXID)
+                                                </div>
+                                            </div>*@
                                         @*销售价*@
                                         <div class="form-group">
                                             <label for="JiaXS" class="col-sm-3 control-label"><b>销售价</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="JiaXS" name="JiaXS" class="form-control" placeholder="请输入销售价" value="@ViewData.Model.JiaXS"/>
+                                                <input type="text" id="JiaXS" name="JiaXS" readonly class="form-control" placeholder="请输入销售价" value="@ViewData.Model.JiaXS" />
                                             </div>
                                         </div>
                                         @*采购价*@
                                         <div class="form-group">
                                             <label for="JiaCG" class="col-sm-3 control-label"><b>采购价</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="JiaCG" readonly name="JiaCG" class="form-control" placeholder="不可输入" value="@ViewData.Model.JiaCG"/>
+                                                <input type="text" id="JiaCG" readonly name="JiaCG" class="form-control" placeholder="不可输入" value="@ViewData.Model.JiaCG" />
                                             </div>
                                         </div>
                                         @*销售单位*@
@@ -253,6 +358,16 @@
                                             <div class="col-sm-4">
                                                 <label class="control-group">
                                                     <input name="TingyongSF" id="TingyongSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*是否受控*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="KongzhiSF"><b>是否受控</b></label>
+                                            <div class="col-sm-4">
+                                                <label class="control-group">
+                                                    <input name="KongzhiSF" id="KongzhiSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
                                                     <span class="lbl"></span>
                                                 </label>
                                             </div>
