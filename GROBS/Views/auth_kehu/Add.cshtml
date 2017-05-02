@@ -7,10 +7,10 @@
     try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
     $(document).ready(function () {
         //submit
-        $("#save_top").bind("click", function () {
+        $("#save_top").click(function () {
             $("#form").submit();
         });
-        $("#save_bottom").bind("click", function () {
+        $("#save_bottom").click(function() {
             $("#form").submit();
         });
         //'是否停用'绑定值
@@ -21,6 +21,64 @@
             } else {
                 $("#TingyongSF").val("false");//不选中=false
             }
+        });
+        $("#pl_jxs").draggable({ handle: ".panel-heading" });
+        $("#pl_jxs_close").click(function () {
+            $("#pl_jxs").hide();
+        });
+        $("#bt_jxs_add").click(function () {
+            var selrow = false;
+            $("#dt_jxs tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    selrow = true;
+                    $("#kehuid").val($(this).val());
+                    $("#khname").val($(this).parent().parent().find("td").eq(2).html());
+                }
+            });
+            if (selrow == false)
+                alert("请选择客户后再确定！");
+            else
+                $("#pl_jxs").hide();
+        });
+        $("#btn_selkh").click(function () {
+            $("#pl_jxs").show();
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/base_shouhuodanwei/getcust",
+                data: {
+                     hz:1
+                },
+                success: function (data) {
+                    var filltable = "";
+                    if (data != -1) {
+                        for (var i in data) {
+                            filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
+                            filltable = filltable + data[i].ID;
+                            filltable = filltable + '"/></td><td>';
+                            filltable = filltable + data[i].KehuDM;
+                            filltable = filltable + '</td><td>';
+                            filltable = filltable + data[i].Mingcheng;
+                            filltable = filltable + '</td><td>';
+                            filltable = filltable + data[i].Lianxiren;
+                            filltable = filltable + '</td><td>';
+                            filltable = filltable + data[i].SonghuoDZ;
+                            filltable = filltable + '</td><tr>';
+                        }
+                    }
+                    else {
+                        alert("获取客户信息出错，请联系管理员！");
+                    }
+                    $("#dt_jxs tbody").html(filltable);
+                }
+            });
+
         });
     });
 </script>
@@ -36,7 +94,7 @@
         <li class="active"> 新增</li>
     </ul>
 </div>
-
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
     <div class="page-header">
         <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
@@ -67,11 +125,14 @@
                                         @*客户序号*@
                                         <div class="form-group">
                                             <label for="KehuID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
-                                            <div class="col-sm-5">
+                                            <div class="col-sm-6">
                                                 <input type="text" id="khname" class="form-control" readonly placeholder="请选择客户" />
                                             </div>
-                                            <div class="col-sm-3">
-                                                <input type="button" class="btn btn-app" id="btn_selkh" value="选择"/>
+                                            <div class="col-sm-2">
+                                                <button type="button" id="btn_selkh" class="btn btn-default">
+                                                    <b>选择</b>
+                                                    <i class="icon-hand-down"></i>
+                                                </button>
                                             </div>
                                         </div>
                                         @*账号*@
@@ -152,14 +213,14 @@
         </div>
     </div>
 </div>
-<div id="pl_jxs" class="panel panel-primary" hidden style="position:fixed;top:100px;left:240px;width:240px;height:auto;z-index:999;">
+<div id="pl_jxs" class="panel panel-primary" hidden style="position:fixed;top:100px;left:240px;width:700px;height:auto;overflow:hidden;z-index:999;">
     <div class="panel-heading">
         <h3 class="panel-title">经销商<button id="pl_jxs_close" class="pull-right">X</button></h3>
     </div>
     <div class="panel-body">
-        <div class="center">
+        <div class="center" style="width:680px;height:500px;overflow:scroll;">
             <button type="button" class="btn btn-default " id="bt_jxs_add"><i class="icon-add"></i>确定</button>
-            <table class="table" id="dt_jxs">
+            <table class="table table-bordered table-condensed" id="dt_jxs">
                 <caption></caption>
                 <thead>
                     <tr>

@@ -10,6 +10,10 @@ using GROBS.BSL;
 using GROBS.Common;
 using GROBS.Models;
 using GROBS.Filters;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.Owin;
+using System.Runtime.Remoting.Contexts;
+using System.Web;
 
 namespace GROBS.Controllers
 {
@@ -195,6 +199,12 @@ namespace GROBS.Controllers
                 ob_auth_kehu.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_auth_kehu.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_auth_kehu = ob_auth_kehuservice.AddEntity(ob_auth_kehu);
+                if (ob_auth_kehu != null)
+                {
+                    RegisterViewModel model = new RegisterViewModel { Email=ob_auth_kehu.Zhanghao,Password=ob_auth_kehu.Mima,ConfirmPassword=ob_auth_kehu.Mima};
+                    AccountController _ac = new AccountController(HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>(),HttpContext.GetOwinContext().Get<ApplicationSignInManager>());
+                    var _bt= _ac.RegistNow(model);
+                }
                 ViewBag.auth_kehu = ob_auth_kehu;
             }
             catch (Exception ex)

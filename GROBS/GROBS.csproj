@@ -569,6 +569,8 @@
     <Content Include="CommonValue.json" />
     <Content Include="Metadata\deploymentTemplates\apiappconfig.azureresource.json" />
     <Content Include="apiapp.json" />
+    <Content Include="assets\font\glyphicons-halflings-regular.ttf" />
+    <Content Include="assets\font\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\davis-ck.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck1.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck2.pubxml" />
