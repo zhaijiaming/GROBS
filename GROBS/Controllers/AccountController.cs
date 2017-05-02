@@ -208,7 +208,27 @@ namespace GROBS.Controllers
             // 如果我们进行到这一步时某个地方出错，则重新显示表单
             return View(model);
         }
-
+        public bool RegistNow(RegisterViewModel model)
+        {
+            var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+            var result = UserManager.Create(user, model.Password);
+            if (result.Succeeded)
+            {
+                //add user info
+                IuserinfoService uiservice = ServiceFactory.userinfoservice;
+                userinfo ui = new userinfo();
+                ui.Account = model.Email;
+                ui.FullName = model.Email.Substring(0, model.Email.IndexOf('@'));
+                ui.AccountType = 101;
+                ui.Status = 1;
+                ui.InputDate = DateTime.Now;
+                ui.ModifyDate = DateTime.Now;
+                ui = uiservice.AddEntity(ui);
+                return true;
+            }
+            else
+                return false;
+        }
         //
         // GET: /Account/ConfirmEmail
         [AllowAnonymous]

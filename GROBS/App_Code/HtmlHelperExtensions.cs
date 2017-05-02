@@ -306,7 +306,7 @@ namespace GROBS.App_Code
                     break;
                 case "userinfo"://用户
                     IuserinfoService uis = ServiceFactory.userinfoservice;
-                    var tmpus = uis.LoadSortEntities(userinfo => userinfo.IsDelete == false, true, userinfo => userinfo.Account);
+                    var tmpus = uis.LoadSortEntities(userinfo => userinfo.IsDelete == false && userinfo.AccountType<100, true, userinfo => userinfo.Account);
                     switch (itemname)
                     {
                         case "account":
