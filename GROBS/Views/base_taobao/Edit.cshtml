@@ -15,8 +15,6 @@
         $("#save_bottom").bind("click", function () {
             $("#form").submit();
         });
-        //页面每次加载后计算'销售价'、'采购价'
-
         //'是否停用'绑定值
         $("#TingyongSF").change(function () {
             if ($("#TingyongSF").is(":checked")) {
@@ -137,21 +135,15 @@
             $("#container").hide();
         });
         //单击tr打钩
-        $("#table_data").on("click", "tr", function (e) {
-            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
-                if ($(this).find(":checkbox").is(':checked')) {
-                    $(this).find(":checkbox").prop("checked", false);
-                } else {
-                    $(this).find(":checkbox").prop("checked", true);
-                }
-            }
+        $("#table_data").on("click", "tr", function () {
+            $("input[type=checkbox]").prop("checked", false);
+            $(this).find(":checkbox").prop("checked", true);
         });
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {
             $("#xsdw").val($(this).find(".mc").html());
             $("#container").hide();
         });
-
         //供应商ID→产品线名称
         getCpx(@Model.GYSID);//初始化产品线信息
         $("#GYSID").change(function () {
@@ -163,6 +155,31 @@
             }
         });
     });
+    //记录选过的信息
+    function markSelect() {
+        $("#container tbody tr").each(function () {
+            if ($("#xsdw").val() == $(this).find(".mc").html()) {
+                $(this).find("input[type=checkbox]").prop("checked", true);
+            }
+        });
+    }
+    //页面每次加载都要重新初始化一次'销售价'$'采购价'
+    function priceInit() {
+        var sum_Jiaxs = 0;
+        var sum_Jiacg = 0;
+        var _length = $("#container_tbsp tbody tr").length;
+        if (_length == 0) {
+            $("#JiaXS").val(0);
+            $("#JiaCG").val(0);
+        } else {
+            $("#container_tbsp tbody tr").each(function () {
+                sum_Jiaxs += parseFloat($(this).find(".tbsp_jiaxs").html());
+                sum_Jiacg += parseFloat($(this).find(".tbsp_jiacg").html());
+            });
+            $("#JiaXS").val(sum_Jiaxs);
+            $("#JiaCG").val(sum_Jiacg);
+        }
+    }
     function GetJldw() {
         var filltable = "";
         $.post(
@@ -182,6 +199,7 @@
                         filltable = filltable + '</td></tr>';
                     }
                     $("#table_data tbody").html(filltable);
+                    markSelect();
                 });
     }
     function getCpx(gysid) {
@@ -231,14 +249,17 @@
                            filltable = filltable + data[i].JBDW;
                            filltable = filltable + '</td><td>';
                            filltable = filltable + data[i].XSDW;
-                           filltable = filltable + '</td><td>';
+                           filltable = filltable + '</td><td><span class="tbsp_jiaxs">';
                            filltable = filltable + data[i].JiaXS;
-                           filltable = filltable + '</td><td>';
+                           filltable = filltable + '</span></td><td><span class="tbsp_jiacg">';
                            filltable = filltable + data[i].JiaCG;
-                           filltable = filltable + '</td></tr>';
+                           filltable = filltable + '</span></td></tr>';
                        }
                        $("#container_tbsp tbody").html(filltable);
+                       priceInit();//页面每次加载都要重新初始化一次'销售价'$'采购价'
                    } else {
+                       $("#JiaXS").val(0);
+                       $("#JiaCG").val(0);
                        $("#container_tbsp tbody").empty();
                    }
                }

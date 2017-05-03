@@ -20,16 +20,10 @@
         $("#containerSpxx").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
         //获取商品数据
         getSpxx();
-        //var spid = $("#spid").val();
-        //$("#table_data tbody tr").each(function () {
-        //    console.log($(this).find(".checkbox").val());
-        //    if ($("#spid").val() == $(this).find(".checkbox").val()) {
-        //        $("#spmc").val($(this).find(".Mingcheng").val());
-        //    }
-        //});
         //弹框开启
         $("#btn_select").bind("click", function () {
             $("#containerSpxx").show();
+            
         });
         //弹框关闭
         $("#container_close").click(function () {
@@ -50,14 +44,9 @@
             $("#containerSpxx").hide();
         });
         //单击tr打钩
-        $("#table_data").on("click", "tr", function (e) {
-            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
-                if ($(this).find(":checkbox").is(':checked')) {
-                    $(this).find(":checkbox").prop("checked", false);
-                } else {
-                    $(this).find(":checkbox").prop("checked", true);
-                }
-            }
+        $("#table_data").on("click", "tr", function () {
+            $("input[type=checkbox]").prop("checked", false);
+            $(this).find(":checkbox").prop("checked", true);
         });
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {
@@ -66,6 +55,14 @@
             $("#containerSpxx").hide();
         });
     });
+    //记录选过的信息
+    function markSelect() {
+        $("#table_data tbody tr").each(function () {
+            if ($("#spid").val() == $(this).find(".checkbox").val()) {
+                $(this).find("input[type=checkbox]").prop("checked", true);
+            }
+        });
+    }
     function getSpxx() {
         var filltable = "";
         $.post(
@@ -93,6 +90,7 @@
                         filltable = filltable + '</td></tr>';
                     }
                     $("#containerSpxx tbody").html(filltable);
+                    markSelect();
                 });
     }
 </script>
