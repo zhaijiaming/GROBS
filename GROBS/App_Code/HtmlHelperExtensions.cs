@@ -472,6 +472,9 @@ namespace GROBS.App_Code
                 case "移动类型":
                     sb.Append(GetCommonSelect(selectedValue, MvcApplication.MoveType));
                     break;
+                case "订单类型":
+                    sb.Append(GetCommonSelect(selectedValue, MvcApplication.OrderType));
+                    break;
                 default:
                     break;
             }
@@ -1412,6 +1415,10 @@ namespace GROBS.App_Code
                 case "移动类型":
                     if (MvcApplication.MoveType.ContainsKey(dataValue))
                         returnvalue = MvcApplication.MoveType[dataValue];
+                    break;
+                case "订单类型":
+                    if (MvcApplication.OrderType.ContainsKey(dataValue))
+                        returnvalue = MvcApplication.OrderType[dataValue];
                     break;
                 default:
                     break;

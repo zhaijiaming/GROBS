@@ -131,6 +131,10 @@ namespace GROBS
         /// 移位类型
         /// </summary>
         public static Dictionary<int, string> MoveType;
+        /// <summary>
+        /// 订单类型
+        /// </summary>
+        public static Dictionary<int, string> OrderType;
 
         protected void Application_Start()
         {
@@ -429,6 +433,11 @@ namespace GROBS
             MoveType.Add(3, "不良移位");
             MoveType.Add(4, "回复移动");
             MoveType.Add(5, "库位移动");
+
+            OrderType = new Dictionary<int, string>();
+            OrderType.Add(0, "");
+            OrderType.Add(1, "普通");
+            OrderType.Add(2, "套包");
         }
     }
 }
