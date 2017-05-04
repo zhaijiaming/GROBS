@@ -15,6 +15,10 @@
                 location.href = url_go;
             }
         });
+        //table样式
+        table_config(mydatatable);
+        trResize();//初始化表头
+
     });
     function AddInfo() {
         location.href = "/base_chanpinxiansq/Add";
@@ -82,49 +86,53 @@
 <div class="page-content">
     @Html.Search_Condition((int)Session["user_id"], "产品线授权_条件组合查询", "/base_chanpinxiansq/index", "base_chanpinxiansq_index", scms)
     <div class="page-header">
-        <p>
-            <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
-            <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
-            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
-            <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
-            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-        </p>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
     </div>
     <div class="row">
-        <table class="table" id="mydatatable">
-            <caption></caption>
-            <thead>
-                <tr>
-                    <td></td>
-                    <td>经销商序号</td>
-                    <td>产品线序号</td>
-                    <td>经销商代码</td>
-                    <td>产品线代码</td>
-                    <td>是否停用</td>
-                    <td>制单日期</td>
-                    <td>制单人</td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in ViewBag.base_chanpinxiansq)
-                {
-                    <tr>
-                        <td>
-                            <label><input type="checkbox" value="@item.ID"></label>
-                        </td>
-                        <td>@item.JXSID</td>
-                        <td>@item.CPXID</td>
-                        <td>@item.JXSDM</td>
-                        <td>@item.CPXDM</td>
-                        <td>@item.TingyongSF</td>
-                        <td>@item.MakeDate</td>
-                        <td>@item.MakeMan</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="pager">
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="mydatatable">
+                        <tr>
+                            <th></th>
+                            <th>经销商代码</th>
+                            <th>经销商</th>
+                            <th>产品线代码</th>
+                            <th>产品线</th>
+                            <th>是否停用</th>
+                            <th>制单日期</th>
+                            <th>制单人</th>
+                        </tr>
+                        <tbody>
+                            @foreach (var item in ViewBag.base_chanpinxiansq)
+                            {
+                                <tr>
+                                    <td>
+                                        <label><input type="checkbox" value="@item.ID"></label>
+                                    </td>
+                                    <td>@item.JXSDM</td>
+                                    <td>@Html.GetDataValue_ID("收货单位","",(int)item.JXSID)</td>
+                                    <td>@item.CPXDM</td>
+                                    <td>@Html.GetDataValue_ID("产品线", "", (int)item.CPXID)</td>
+                                    <td>@string.Format("{0:0}", item.TingyongSF == bool.Parse("False") ? "否" : "是")</td>
+                                    <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span class="pager">
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+            </span>
+        </div>
     </div>
 </div>

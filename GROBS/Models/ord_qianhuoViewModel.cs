@@ -16,7 +16,7 @@ namespace GROBS.Models
         [DataType(DataType.Date)]
         public DateTime? DJRQ { get; set; }
         [Display(Name = "是否采购")]
-        public bool CaigouSF { get; set; }
+        public bool? CaigouSF { get; set; }
         [Display(Name = "采购编号")]
         public string CaigouBH { get; set; }
         [Display(Name = "机动1")]

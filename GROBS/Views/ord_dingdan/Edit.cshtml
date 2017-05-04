@@ -4,11 +4,148 @@
 @{
     ViewBag.Title = "订单修改";
 }
-
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        //submit
+        $("#save_top").bind("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").bind("click", function () {
+            $("#form").submit();
+        });
+        //时间
+        $("#XiadanRQ").datepicker();
+        //'审核通过'绑定值
+        $("#ShenheTG").val("true");//默认赋值
+        $("#ShenheTG").change(function () {
+            if ($("#ShenheTG").is(":checked")) {
+                $("#ShenheTG").val("true");//选中=true
+            } else {
+                $("#ShenheTG").val("false");//不选中=false
+            }
+        });
+        //'审核通过'赋值
+        var ShenheTG = "@Model.ShenheTG";
+        if (ShenheTG == "True") {
+            $("#ShenheTG").attr("checked", true);
+            $("#ShenheTG").val("true");
+        } else {
+            $("#ShenheTG").attr("checked", false);
+            $("#ShenheTG").val("false");
+        }
+        //'是否结束'绑定值
+        $("#JieshuSF").val("true");//默认赋值
+        $("#JieshuSF").change(function () {
+            if ($("#JieshuSF").is(":checked")) {
+                $("#JieshuSF").val("true");//选中=true
+            } else {
+                $("#JieshuSF").val("false");//不选中=false
+            }
+        });
+        //'是否结束'赋值
+        var JieshuSF = "@Model.JieshuSF";
+        if (JieshuSF == "True") {
+            $("#JieshuSF").attr("checked", true);
+            $("#JieshuSF").val("true");
+        } else {
+            $("#JieshuSF").attr("checked", false);
+            $("#JieshuSF").val("false");
+        }
+        /*
+            经销商客户选择
+        */
+        getCust();//初始化经销商
+        $("#containerJxs").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        //关闭
+        $("#container_close").click(function () {
+            $("#containerJxs").hide();
+        });
+        //添加
+        $("#btn_confirm").click(function () {
+            var selrow = false;
+            $("#table_data tr").each(function () {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    selrow = true;
+                    $("#jxsid").val($(this).find(".checkbox").val());
+                    $("#khname").val($(this).find(".Mingcheng").html());
+                }
+            });
+            if (selrow == false)
+                alert("请选择客户后再确定！");
+            else
+                $("#containerJxs").hide();
+        });
+        //单击tr打钩
+        $("#table_data").on("click", "tr", function () {
+            $("input[type=checkbox]").prop("checked", false);
+            $(this).find(":checkbox").prop("checked", true);
+        });
+        //双击取值
+        $("#table_data tbody").on("dblclick", "tr", function () {
+            $("#khname").val($(this).find(".Mingcheng").html());
+            $("#jxsid").val($(this).find(".checkbox").val());
+            $("#containerJxs").hide();
+        });
+        //弹框
+        $("#btn_select").click(function () {
+            $("#containerJxs").show();
+        });
+    });
+    //记录选过的信息
+    function markSelect() {
+        $("#containerJxs tbody tr").each(function () {
+            if ($("#jxsid").val() == $(this).find(".checkbox").val()) {
+                $(this).find("input[type=checkbox]").prop("checked", true);
+            }
+        });
+    }
+    //获取经销商信息
+    function getCust() {
+        var filltable = "";
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
+            },
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: "/base_shouhuodanwei/getcust",
+            data: {
+                hz: 1
+            },
+            success: function (data) {
+                var filltable = "";
+                if (data != -1) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"/></td><td>';
+                        filltable = filltable + data[i].KehuDM;
+                        filltable = filltable + '</td><td><span class="Mingcheng">';
+                        filltable = filltable + data[i].Mingcheng;
+                        if (data[i].ID == $("#jxsid").val()) {
+                            $("#khname").val(data[i].Mingcheng)
+                        }
+                        filltable = filltable + '</span></td><td>';
+                        filltable = filltable + data[i].Lianxiren;
+                        filltable = filltable + '</td><td>';
+                        filltable = filltable + data[i].SonghuoDZ;
+                        filltable = filltable + '</td><tr>';
+                    }
+                }
+                else {
+                    alert("获取客户信息出错，请联系管理员！");
+                }
+                $("#table_data tbody").html(filltable);
+                markSelect();//记录选过的信息
+            }
+        });
+    }
+</script>
 <div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
@@ -22,149 +159,247 @@
 </div>
 
 <div class="page-content">
-    @using (Html.BeginForm("Update", "ord_dingdan", FormMethod.Post, new { @role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="id" value="@ViewData.Model.ID" />
-        <div class="page-header">
-            <p>
-                <button type="submit" class="btn btn-default"><i class="icon-save"></i>更新</button>
-                <button type="button" class="btn btn-default" onclick="javascript: history.back(-1); "><i class="icon-hand-left"></i>返回</button>
-            </p>
-        </div>
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
         <div class="container">
-            <div class="form-group">
-                @Html.LabelFor(m => m.Bianhao, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Bianhao, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.KHID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.KHID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.CPXID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.CPXID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.CGLX, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.CGLX, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.KehuDH, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.KehuDH, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.XiadanRQ, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    <input id="XiadanRQ" type="date" class="form-control" name="XiadanRQ" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.XiadanRQ)">
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Lianxiren, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Lianxiren, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.LianxiDH, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.LianxiDH, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.SonghuoDZ, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.SonghuoDZ, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.OPID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.OPID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.ACCID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.ACCID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.ShenheTG, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.ShenheTG, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.ZongshuCG, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.ZongshuCG, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Zongjine, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Zongjine, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.JieshuSF, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.JieshuSF, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Zhuangtai, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Zhuangtai, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Beizhu, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Beizhu, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Col2, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Col2, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Col3, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Col3, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MakeDate, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    <input id="MakeDate" type="date" class="form-control" name="MakeDate" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)">
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MakeMan, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.SelectList_Auto("MakeMan", "userinfo", "fullname", (long)ViewData.Model.MakeMan)
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>订单信息</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Update", "ord_dingdan", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" value="@ViewData.Model.ID" />
+                                    <input type="hidden" id="jxsid" name="KHID" value="@ViewData.Model.KHID"/>
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <fieldset>
+                                        @*编号*@
+                                        <div class="form-group">
+                                            <label for="Bianhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>编号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Bianhao" name="Bianhao" readonly class="form-control" placeholder="自动生成编号" value="@ViewData.Model.Bianhao"/>
+                                            </div>
+                                        </div>
+                                        @*客户*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="khname" placeholder="请选择客户" class="form-control" type="text">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_select" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*产品线*@
+                                        <div class="form-group">
+                                            <label for="CPXID" class="col-sm-3 control-label"><b>产品线</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("CPXID", "产品线", "", (long)ViewData.Model.CPXID)
+                                            </div>
+                                        </div>
+                                        @*采购类型*@
+                                        <div class="form-group">
+                                            <label for="CGLX" class="col-sm-3 control-label"><b>采购类型</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="CGLX" name="CGLX" class="form-control" placeholder="请输入采购类型" value="@ViewData.Model.CGLX" />
+                                            </div>
+                                        </div>
+                                        @*客户单号*@
+                                        <div class="form-group">
+                                            <label for="KehuDH" class="col-sm-3 control-label"><b>客户单号</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="KehuDH" name="KehuDH" class="form-control" placeholder="请输入客户单号" value="@ViewData.Model.KehuDH" />
+                                            </div>
+                                        </div>
+                                        @*下单日期*@
+                                        <div class="form-group">
+                                            <label for="XiadanRQ" class="col-sm-3 control-label"><b>下单日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="XiadanRQ" name="XiadanRQ" placeholder="请填写下单日期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.XiadanRQ)" type="date">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*联系人*@
+                                        <div class="form-group">
+                                            <label for="Lianxiren" class="col-sm-3 control-label"><b>联系人</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Lianxiren" name="Lianxiren" class="form-control" placeholder="请输入联系人" value="@ViewData.Model.Lianxiren" />
+                                            </div>
+                                        </div>
+                                        @*联系电话*@
+                                        <div class="form-group">
+                                            <label for="LianxiDH" class="col-sm-3 control-label"><b>联系电话</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="LianxiDH" name="LianxiDH" class="form-control" placeholder="请输入联系电话" value="@ViewData.Model.LianxiDH" />
+                                            </div>
+                                        </div>
+                                        @*送货地址*@
+                                        <div class="form-group">
+                                            <label for="SonghuoDZ" class="col-sm-3 control-label"><b>送货地址</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="SonghuoDZ" name="SonghuoDZ" class="form-control" placeholder="请输入送货地址" value="@ViewData.Model.SonghuoDZ" />
+                                            </div>
+                                        </div>
+                                        @*客服人员*@
+                                        <div class="form-group">
+                                            <label for="CPXID" class="col-sm-3 control-label"><b>客服人员</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("OPID", "userinfo", "",(long)ViewData.Model.OPID)
+                                            </div>
+                                        </div>
+                                        @*审核人员*@
+                                        <div class="form-group">
+                                            <label for="CPXID" class="col-sm-3 control-label"><b>审核人员</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("ACCID", "userinfo", "",(long)ViewData.Model.ACCID)
+                                            </div>
+                                        </div>
+                                        @*审核通过*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="ShenheTG"><b>审核通过</b></label>
+                                            <div class="col-sm-4">
+                                                <label class="control-group">
+                                                    <input name="ShenheTG" id="ShenheTG" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*采购总数*@
+                                        <div class="form-group">
+                                            <label for="ZongshuCG" class="col-sm-3 control-label"><b>采购总数</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="ZongshuCG" name="ZongshuCG" class="form-control" placeholder="请输入采购总数" value="@ViewData.Model.ZongshuCG" />
+                                            </div>
+                                        </div>
+                                        @*总金额*@
+                                        <div class="form-group">
+                                            <label for="Zongjine" class="col-sm-3 control-label"><b>总金额</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Zongjine" name="Zongjine" class="form-control" placeholder="请输入总金额" value="@ViewData.Model.Zongjine" />
+                                            </div>
+                                        </div>
+                                        @*是否结束*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="JieshuSF"><b>是否结束</b></label>
+                                            <div class="col-sm-4">
+                                                <label class="control-group">
+                                                    <input name="JieshuSF" id="JieshuSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                    <span class="lbl"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        @*状态*@
+                                        <div class="form-group">
+                                            <label for="Zhuangtai" class="col-sm-3 control-label"><b>状态</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Zhuangtai" name="Zhuangtai" class="form-control" placeholder="请输入状态"  value="@ViewData.Model.Zhuangtai" />
+                                            </div>
+                                        </div>
+                                        @*备注*@
+                                        <div class="form-group">
+                                            <label for="Beizhu" class="col-sm-3 control-label"><b>备注</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Beizhu" name="Beizhu" class="form-control" placeholder="请输入备注" value="@ViewData.Model.Beizhu" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none;">
+                                            @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
+                                            <div class="col-sm-10">
+                                                @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none;">
+                                            @Html.LabelFor(m => m.Col2, new { @class = "control-label col-sm-2" })
+                                            <div class="col-sm-10">
+                                                @Html.TextBoxFor(m => m.Col2, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        <div class="form-group" style="display:none;">
+                                            @Html.LabelFor(m => m.Col3, new { @class = "control-label col-sm-2" })
+                                            <div class="col-sm-10">
+                                                @Html.TextBoxFor(m => m.Col3, new { @class = "form-control" })
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="MakeDate" disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewData.Model.MakeMan)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>更新</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    }
+    </div>
+</div>
+<div id="containerJxs" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99999;">
+    <div class="panel-heading">
+        <h3 class="panel-title"><b>经销商</b><button id="container_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <button type="button" class="btn btn-primary " id="btn_confirm">
+            <i class="icon-pencil bigger-120"></i>
+            <b>添加</b>
+        </button>
+        <div style="margin-top:10px;max-height:330px;overflow:auto;">
+            <table class="table table-hover" id="table_data">
+                <caption></caption>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>编号</th>
+                        <th>名称</th>
+                        <th>联系人</th>
+                        <th>地址</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
 </div>

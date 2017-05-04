@@ -314,7 +314,7 @@ namespace GROBS.Controllers
                 Console.WriteLine(ex.Message);
                 ViewBag.saveok = ViewAddTag.ModifyNo;
             }
-            return RedirectToAction("Edit", new { id = uid });
+            return RedirectToAction("Index");
         }
         public ActionResult Delete()
         {

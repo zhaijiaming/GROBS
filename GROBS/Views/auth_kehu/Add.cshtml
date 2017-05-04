@@ -122,17 +122,19 @@
                                     <input type="hidden" name="kehuid" id="kehuid"/>
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <fieldset>
-                                        @*客户序号*@
+                                        @*客户*@
                                         <div class="form-group">
-                                            <label for="KehuID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
-                                            <div class="col-sm-6">
-                                                <input type="text" id="khname" class="form-control" readonly placeholder="请选择客户" />
-                                            </div>
-                                            <div class="col-sm-2">
-                                                <button type="button" id="btn_selkh" class="btn btn-default">
-                                                    <b>选择</b>
-                                                    <i class="icon-hand-down"></i>
-                                                </button>
+                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="khname" placeholder="请选择商品" class="form-control" type="text">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_selkh" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         @*账号*@
