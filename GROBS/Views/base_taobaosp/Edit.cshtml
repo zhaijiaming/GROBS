@@ -19,10 +19,10 @@
         */
         $("#containerSpxx").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
         //click
-        getSpxx();   //获取商品数据
         getShangPinjg()//获取商品价格
         $("#btn_select").bind("click", function () {
             $("#containerSpxx").show();
+            getSpxx();   //获取商品数据
         });
         //弹框关闭
         $("#container_close").click(function () {
@@ -53,9 +53,15 @@
             $("#containerSpxx").hide();
         });
         //单击tr打钩
-        $("#table_data").on("click", "tr", function () {
-            $("input[type=checkbox]").prop("checked", false);
-            $(this).find(":checkbox").prop("checked", true);
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $("input[type=checkbox]").prop("checked", false);
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
         });
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {

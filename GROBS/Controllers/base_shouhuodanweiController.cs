@@ -499,6 +499,25 @@ namespace GROBS.Controllers
             string viewHtml = ExportNow.RenderPartialViewToString(this, "RecipientEntityExport");
             return File(System.Text.Encoding.UTF8.GetBytes(viewHtml), "application/ms-excel", string.Format("RecipientEntity_{0}.xls", DateTime.Now.ToShortDateString()));
         }
+        public JsonResult getJxsWithQuery()
+        {
+            var _jxs = Request["req_jxs"] ?? "";
+            var _lianxiren = Request["req_lianxiren"] ?? "";
+            var _shdz = Request["req_shdz"] ?? "";
+
+            Expression<Func<base_shouhuodanwei, bool>> where = PredicateExtensionses.True<base_shouhuodanwei>();
+            if (!string.IsNullOrEmpty(_jxs))
+                where = where.And(p => p.Mingcheng.Contains(_jxs));
+            if (!string.IsNullOrEmpty(_lianxiren))
+                where = where.And(p => p.KehuDM.Contains(_lianxiren));
+            if (!string.IsNullOrEmpty(_shdz))
+                where = where.And(p => p.LianxiDH.Contains(_shdz));
+            where = where.And(p => p.IsDelete == false);
+            var tempData = ServiceFactory.base_shouhuodanweiservice.LoadSortEntities(where.Compile(), true, p => p.KehuDM);
+            if (tempData == null)
+                return Json(-1);
+            return Json(tempData);
+        }
     }
 }
 

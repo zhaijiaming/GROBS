@@ -36,8 +36,12 @@
         /*
             经销商客户选择
         */
-        getCust();//初始化经销商
         $("#containerJxs").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        //弹框
+        $("#btn_select").click(function () {
+            $("#containerJxs").show();
+            getCust();//初始化经销商
+        });
         //关闭
         $("#container_close").click(function () {
             $("#containerJxs").hide();
@@ -57,20 +61,27 @@
             else
                 $("#containerJxs").hide();
         });
+        //经销商查询
+        $("#jxs_search").on("click", function () {
+            $("#table_data tbody").html("");
+            getCust();
+        });
         //单击tr打钩
-        $("#table_data").on("click", "tr", function () {
-            $("input[type=checkbox]").prop("checked", false);
-            $(this).find(":checkbox").prop("checked", true);
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $("input[type=checkbox]").prop("checked", false);
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
         });
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {
             $("#khname").val($(this).find(".Mingcheng").html());
             $("#jxsid").val($(this).find(".checkbox").val());
             $("#containerJxs").hide();
-        });
-        //弹框
-        $("#btn_select").click(function () {
-            $("#containerJxs").show();
         });
     });
     //记录选过的信息
@@ -93,9 +104,11 @@
                 HiddenWait();
             },
             type: "POST",
-            url: "/base_shouhuodanwei/getcust",
+            url: "/base_shouhuodanwei/getJxsWithQuery",
             data: {
-                hz: 1
+                req_jxs: $("#req_jxs").val(),
+                req_lianxiren: $("#req_lianxiren").val(),
+                req_shdz: $("#req_shdz").val()
             },
             success: function (data) {
                 var filltable = "";
@@ -135,7 +148,7 @@
         <li class="active"> 新增</li>
     </ul>
 </div>
-
+<div id="loading" style="z-index:999;"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
 <div class="page-header">
     <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
@@ -146,6 +159,7 @@
         </span>
     </button>
 </div>
+
 <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
     <div class="container">
         <div class="row">
@@ -359,29 +373,74 @@
         </div>
     </div>
 </div>
-<div id="containerJxs" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99999;">
+<div id="containerJxs" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;min-height:330px;z-index:99;">
     <div class="panel-heading">
         <h3 class="panel-title"><b>经销商</b><button id="container_close" class="pull-right">X</button></h3>
     </div>
     <div class="panel-body">
-        <button type="button" class="btn btn-primary " id="btn_confirm">
-            <i class="icon-pencil bigger-120"></i>
-            <b>添加</b>
-        </button>
-        <div style="margin-top:10px;max-height:330px;overflow:auto;">
-            <table class="table table-hover" id="table_data">
-                <caption></caption>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>编号</th>
-                        <th>名称</th>
-                        <th>联系人</th>
-                        <th>地址</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    @*查询条件*@
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="border:1px solid #DDD;padding-top:10px;border-radius:4px;">
+                                <div class="row">
+                                    @*经销商*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_jxs" class="col-sm-3 control-label"><b>经销商</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_jxs" class="form-control" placeholder="请输入经销商名称" />
+                                        </div>
+                                    </div>
+                                    @*联系人*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_lianxiren" class="col-sm-3 control-label"><b>联系人</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_lianxiren" class="form-control" placeholder="请输入联系人" />
+                                        </div>
+                                    </div>
+                                    @*送货地址*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_shdz" class="col-sm-3 control-label"><b>地址</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_shdz" class="form-control" placeholder="请输入送货地址" />
+                                        </div>
+                                    </div>
+                                </div>
+                                @*按钮*@
+                                <div class="row">
+                                    <div class="form-group col-sm-4 col-sm-offset-4">
+                                        <button type="button" id="jxs_search" class="btn btn-block " style="background-color:#56b18e!important;border:none;border-radius:6px;">
+                                            <span style="font-size:16px!important;">查询</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:500px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <caption></caption>
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>编号</th>
+                                                    <th>名称</th>
+                                                    <th>联系人</th>
+                                                    <th>地址</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

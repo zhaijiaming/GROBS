@@ -23,7 +23,7 @@
         //弹框开启
         $("#btn_select").bind("click", function () {
             $("#containerSpxx").show();
-            
+
         });
         //弹框关闭
         $("#container_close").click(function () {
@@ -44,9 +44,15 @@
             $("#containerSpxx").hide();
         });
         //单击tr打钩
-        $("#table_data").on("click", "tr", function () {
-            $("input[type=checkbox]").prop("checked", false);
-            $(this).find(":checkbox").prop("checked", true);
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $("input[type=checkbox]").prop("checked", false);
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
         });
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {
@@ -65,33 +71,41 @@
     }
     function getSpxx() {
         var filltable = "";
-        $.post(
-            "/base_shangpinxx/getSpxx",
-            {
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
             },
-                function (data) {
-                    var spid = $("#spid").val();
-                    for (var i in data) {
-                        filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox" value="';
-                        filltable = filltable + data[i].ID;
-                        filltable = filltable + '"></label></td><td><span class="Daima">';
-                        filltable = filltable + data[i].Daima;
-                        filltable = filltable + '</span></td><td><span class="Mingcheng">';
-                        filltable = filltable + data[i].Mingcheng;
-                        if (data[i].ID == spid) {
-                            $("#spmc").val(data[i].Mingcheng)
-                        }
-                        filltable = filltable + '</span></td><td>';
-                        filltable = filltable + data[i].Huansuanlv;
-                        filltable = filltable + '</td><td>';
-                        filltable = filltable + data[i].Danwei;
-                        filltable = filltable + '</td><td>';
-                        filltable = filltable + data[i].BaozhuangDW;
-                        filltable = filltable + '</td></tr>';
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: "/base_shangpinxx/getSpxx",
+            data: {},
+            success: function (data) {
+                var spid = $("#spid").val();
+                for (var i in data) {
+                    filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox" value="';
+                    filltable = filltable + data[i].ID;
+                    filltable = filltable + '"></label></td><td><span class="Daima">';
+                    filltable = filltable + data[i].Daima;
+                    filltable = filltable + '</span></td><td><span class="Mingcheng">';
+                    filltable = filltable + data[i].Mingcheng;
+                    if (data[i].ID == spid) {
+                        $("#spmc").val(data[i].Mingcheng)
                     }
-                    $("#containerSpxx tbody").html(filltable);
-                    markSelect();
-                });
+                    filltable = filltable + '</span></td><td>';
+                    filltable = filltable + data[i].Huansuanlv;
+                    filltable = filltable + '</td><td>';
+                    filltable = filltable + data[i].Danwei;
+                    filltable = filltable + '</td><td>';
+                    filltable = filltable + data[i].BaozhuangDW;
+                    filltable = filltable + '</td></tr>';
+                }
+                $("#containerSpxx tbody").html(filltable);
+                markSelect();
+            }
+        });
     }
 </script>
 
@@ -107,7 +121,7 @@
         <li class="active"> 编辑</li>
     </ul>
 </div>
-
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
     <div class="page-header">
         <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
@@ -150,28 +164,28 @@
                                         <div class="form-group">
                                             <label for="JiaXS" class="col-sm-3 control-label"><b>销售价</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="JiaXS" name="JiaXS" class="form-control" placeholder="请输入销售价" value="@ViewData.Model.JiaXS"/>
+                                                <input type="text" id="JiaXS" name="JiaXS" class="form-control" placeholder="请输入销售价" value="@ViewData.Model.JiaXS" />
                                             </div>
                                         </div>
                                         @*采购价*@
                                         <div class="form-group">
                                             <label for="JiaCG" class="col-sm-3 control-label"><b>采购价</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="JiaCG" name="JiaCG" class="form-control" placeholder="请输入采购价" value="@ViewData.Model.JiaCG"/>
+                                                <input type="text" id="JiaCG" name="JiaCG" class="form-control" placeholder="请输入采购价" value="@ViewData.Model.JiaCG" />
                                             </div>
                                         </div>
                                         @*内部价*@
                                         <div class="form-group">
                                             <label for="JiaNB" class="col-sm-3 control-label"><b>内部价</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="JiaNB" name="JiaNB" class="form-control" placeholder="请输入内部价" value="@ViewData.Model.JiaNB"/>
+                                                <input type="text" id="JiaNB" name="JiaNB" class="form-control" placeholder="请输入内部价" value="@ViewData.Model.JiaNB" />
                                             </div>
                                         </div>
                                         @*Col1*@
                                         <div class="form-group" style="display:none;">
                                             <label for="Col1" class="col-sm-3 control-label"><b>Col1</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="请输入Col1" value="@ViewData.Model.Col1"/>
+                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="请输入Col1" value="@ViewData.Model.Col1" />
                                             </div>
                                         </div>
                                         @*录入日期*@
@@ -215,7 +229,7 @@
     </div>
 </div>
 @*商品弹框*@
-<div id="containerSpxx" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99999;">
+<div id="containerSpxx" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99;">
     <div class="panel-heading tuodong">
         <h3 class="panel-title"><b>商品信息</b><button id="container_close" class="pull-right">X</button></h3>
     </div>

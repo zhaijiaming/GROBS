@@ -18,9 +18,9 @@
         */
         $("#containerSpxx").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
         //click
-        getSpxx();   //获取商品数据
         $("#btn_select").bind("click", function () {
             $("#containerSpxx").show();
+            getSpxx();   //获取商品数据
         });
         //弹框关闭
         $("#container_close").click(function () {
@@ -41,9 +41,15 @@
             $("#containerSpxx").hide();
         });
         //单击tr打钩
-        $("#table_data").on("click", "tr", function () {
-            $("input[type=checkbox]").prop("checked", false);
-            $(this).find(":checkbox").prop("checked", true);
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" ||e.target.tagName == "SPAN") {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $("input[type=checkbox]").prop("checked", false);
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
         });
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {
@@ -53,29 +59,38 @@
         });
     });
     function getSpxx() {
-        var filltable = "";
-        $.post(
-            "/base_shangpinxx/getSpxx",
-            {
-            },
-                function (data) {
-                    for (var i in data) {
-                        filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox" value="';
-                        filltable = filltable + data[i].ID;
-                        filltable = filltable + '"></label></td><td><span class="Daima">';
-                        filltable = filltable + data[i].Daima;
-                        filltable = filltable + '</span></td><td><span class="Mingcheng">';
-                        filltable = filltable + data[i].Mingcheng;
-                        filltable = filltable + '</span></td><td>';
-                        filltable = filltable + data[i].Huansuanlv;
-                        filltable = filltable + '</td><td>';
-                        filltable = filltable + data[i].Danwei;
-                        filltable = filltable + '</td><td>';
-                        filltable = filltable + data[i].BaozhuangDW;
-                        filltable = filltable + '</td></tr>';
-                    }
-                    $("#containerSpxx tbody").html(filltable);
-                });
+        $.ajax({
+            async: true,
+            //beforeSend: function () {
+            //    ShowWait();
+            //},
+            //complete: function () {
+            //    HiddenWait();
+            //},
+            type: "POST",
+            url: "/base_shangpinxx/getSpxx",
+            success: function (data) {
+                var filltable = "";
+                var spid = $("#spid").val();
+                for (var i in data) {
+                    filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox" value="';
+                    filltable = filltable + data[i].ID;
+                    filltable = filltable + '"></label></td><td><span class="Daima">';
+                    filltable = filltable + data[i].Daima;
+                    filltable = filltable + '</span></td><td><span class="Mingcheng">';
+                    filltable = filltable + data[i].Mingcheng;
+                    filltable = filltable + '</span></td><td>';
+                    filltable = filltable + data[i].Huansuanlv;
+                    filltable = filltable + '</td><td>';
+                    filltable = filltable + data[i].Danwei;
+                    filltable = filltable + '</td><td>';
+                    filltable = filltable + data[i].BaozhuangDW;
+                    filltable = filltable + '</td></tr>';
+                }
+                $("#containerSpxx tbody").html(filltable);
+                markSelect();
+            }
+        });
     }
 </script>
 <div class="breadcrumbs" id="breadcrumbs">
@@ -90,6 +105,7 @@
         <li class="active"> 新增</li>
     </ul>
 </div>
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
     <div class="page-header">
         <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
@@ -200,7 +216,7 @@
     </div>
 </div>
 @*商品弹框*@
-<div id="containerSpxx" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99999;">
+<div id="containerSpxx" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99;">
     <div class="panel-heading tuodong">
         <h3 class="panel-title"><b>商品信息</b><button id="container_close" class="pull-right">X</button></h3>
     </div>
