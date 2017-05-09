@@ -84,13 +84,13 @@
 <div class="page-content">
     @Html.Search_Condition((int)Session["user_id"], "采购_条件组合查询", "/ord_dingdan/customerorderlist", "ord_dingdan_customerorderlist", scms)
     <div class="page-header">
-        @*<p>
+        <p>
             <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
             <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
             <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
             <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
             <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-        </p>*@
+        </p>
     </div>
     <div class="row">
         <table class="table" id="mydatatable">
@@ -99,6 +99,7 @@
                 <tr>
                     <td></td>
                     <td>编号</td>
+                    <td>状态</td>
                     <td>客户</td>
                     <td>产品线</td>
                     <td>采购类型</td>
@@ -107,13 +108,8 @@
                     <td>联系人</td>
                     <td>联系电话</td>
                     <td>送货地址</td>
-                    <td>客服人员</td>
-                    <td>审核人员</td>
-                    <td>审核通过</td>
                     <td>采购总数</td>
                     <td>总金额</td>
-                    <td>是否结束</td>
-                    <td>状态</td>
                     <td>备注</td>
                     <td>制单日期</td>
                     <td>制单人</td>
@@ -127,7 +123,8 @@
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
                         <td>@item.Bianhao</td>
-                        <td>@item.KHID</td>
+                        <td>@item.Zhuangtai</td>
+                        <td>@Html.GetDataValue_ID("收货单位","名称",(int)item.KHID)</td>
                         <td>@item.CPXID</td>
                         <td>@item.CGLX</td>
                         <td>@item.KehuDH</td>
@@ -135,13 +132,8 @@
                         <td>@item.Lianxiren</td>
                         <td>@item.LianxiDH</td>
                         <td>@item.SonghuoDZ</td>
-                        <td>@item.OPID</td>
-                        <td>@item.ACCID</td>
-                        <td>@item.ShenheTG</td>
                         <td>@item.ZongshuCG</td>
                         <td>@item.Zongjine</td>
-                        <td>@item.JieshuSF</td>
-                        <td>@item.Zhuangtai</td>
                         <td>@item.Beizhu</td>
                         <td>@item.MakeDate</td>
                         <td>@item.MakeMan</td>

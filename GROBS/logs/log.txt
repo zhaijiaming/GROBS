@@ -100,3 +100,15 @@ INFO  2017-05-03 09:16:42,699 28428ms 2                      MoveNext           
 INFO  2017-05-03 09:16:42,699 28428ms 2                      MoveNext           - 姚文华 login at 2017/5/3 9:16:42!
 INFO  2017-05-03 17:01:05,976 53531ms 2                      MoveNext           - 姚文华 login at 2017/5/3 17:01:05!
 INFO  2017-05-03 17:01:05,976 53531ms 2                      MoveNext           - 姚文华 login at 2017/5/3 17:01:05!
+INFO  2017-05-09 08:59:09,401 200726ms 2                      MoveNext           - 姚文华 login at 2017/5/9 8:59:09!
+INFO  2017-05-09 09:18:58,866 17556ms 2                      MoveNext           - 姚文华 login at 2017/5/9 9:18:58!
+INFO  2017-05-09 09:28:25,561 52182ms 2                      MoveNext           - 姚文华 login at 2017/5/9 9:28:25!
+INFO  2017-05-09 10:13:41,851 50550ms 2                      MoveNext           - 姚文华 login at 2017/5/9 10:13:41!
+INFO  2017-05-09 15:13:44,460 31055ms 2                      MoveNext           - 姚文华 login at 2017/5/9 15:13:44!
+INFO  2017-05-09 15:13:44,460 31055ms 2                      MoveNext           - 姚文华 login at 2017/5/9 15:13:44!
+INFO  2017-05-09 16:06:43,314 82262ms 2                      MoveNext           - 姚文华 login at 2017/5/9 16:06:43!
+INFO  2017-05-09 16:06:43,314 82262ms 2                      MoveNext           - 姚文华 login at 2017/5/9 16:06:43!
+INFO  2017-05-09 16:08:49,741 208690ms 2                      LogOut             - 姚文华 log out at 2017/5/9 16:08:49
+INFO  2017-05-09 16:09:01,232 220181ms 15                     MoveNext           - btfx login at 2017/5/9 16:09:01!
+INFO  2017-05-09 16:11:48,220 14624ms 15                     MoveNext           - btfx login at 2017/5/9 16:11:48!
+INFO  2017-05-09 16:11:48,220 14624ms 15                     MoveNext           - btfx login at 2017/5/9 16:11:48!

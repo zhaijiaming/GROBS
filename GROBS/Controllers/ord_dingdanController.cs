@@ -340,6 +340,7 @@ namespace GROBS.Controllers
             if (string.IsNullOrEmpty(page))
                 page = "1";
             int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
             string pagetag = "ord_dingdan_customerorderlist";
             Expression<Func<ord_dingdan, bool>> where = PredicateExtensionses.True<ord_dingdan>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
@@ -380,7 +381,7 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
+            where = where.And(ord_dingdan =>ord_dingdan.KHID==custid && ord_dingdan.IsDelete == false);
 
             var tempData = ob_ord_dingdanservice.LoadSortEntities(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
@@ -391,6 +392,7 @@ namespace GROBS.Controllers
         public ActionResult CustomerOrderList()
         {
             int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
             string pagetag = "ord_dingdan_customerorderlist";
             string page = "1";
             string bianhao = Request["bianhao"] ?? "";
@@ -453,11 +455,27 @@ namespace GROBS.Controllers
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
+            where = where.And(ord_dingdan =>ord_dingdan.KHID==custid && ord_dingdan.IsDelete == false);
 
             var tempData = ob_ord_dingdanservice.LoadSortEntities(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
+        }
+        [OutputCache(Duration =30)]
+        public ActionResult CustomerCurrentOrder()
+        {
+            int _userid = (int)Session["user_id"];
+            var _acct = (string)Session["account"];
+            int _custid = (int)Session["customer_id"];
+            var _shdw = ServiceFactory.base_shouhuodanweiservice.GetEntityById(p => p.ID == _custid);
+            if (_shdw != null)
+                ViewBag.customername = _shdw.Mingcheng;
+            else
+                ViewBag.customername = "0";
+
+            var tempData = ob_ord_dingdanservice.LoadSortEntities(p => p.KHID == _custid && p.Zhuangtai < 12 && p.IsDelete == false, true, s => s.Bianhao);
+            ViewBag.ord_dingdan = tempData;
+            return View();
         }
     }
 }

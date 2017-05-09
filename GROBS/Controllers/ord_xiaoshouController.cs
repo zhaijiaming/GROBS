@@ -309,6 +309,151 @@ namespace GROBS.Controllers
             }
             return RedirectToAction("Index");
         }
+        [OutputCache(Duration =30)]
+        public ActionResult GetSendList(string page)
+        {
+            if (string.IsNullOrEmpty(page))
+                page = "1";
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+            string pagetag = "ord_xiaoshou_sendlist";
+            Expression<Func<ord_sendlist_v, bool>> where = PredicateExtensionses.True<ord_sendlist_v>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc != null && sc.ConditionInfo != null)
+            {
+                string[] sclist = sc.ConditionInfo.Split(';');
+                foreach (string scl in sclist)
+                {
+                    string[] scld = scl.Split(',');
+                    switch (scld[0])
+                    {
+                        case "ddid":
+                            string ddid = scld[1];
+                            string ddidequal = scld[2];
+                            string ddidand = scld[3];
+                            if (!string.IsNullOrEmpty(ddid))
+                            {
+                                if (ddidequal.Equals("="))
+                                {
+                                    if (ddidand.Equals("and"))
+                                        where = where.And(ord_xiaoshou => ord_xiaoshou.DDID == int.Parse(ddid));
+                                    else
+                                        where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID == int.Parse(ddid));
+                                }
+                                if (ddidequal.Equals(">"))
+                                {
+                                    if (ddidand.Equals("and"))
+                                        where = where.And(ord_xiaoshou => ord_xiaoshou.DDID > int.Parse(ddid));
+                                    else
+                                        where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID > int.Parse(ddid));
+                                }
+                                if (ddidequal.Equals("<"))
+                                {
+                                    if (ddidand.Equals("and"))
+                                        where = where.And(ord_xiaoshou => ord_xiaoshou.DDID < int.Parse(ddid));
+                                    else
+                                        where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID < int.Parse(ddid));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                ViewBag.SearchCondition = sc.ConditionInfo;
+            }
+
+            var tempData = ob_ord_xiaoshouservice.LoadSendList(custid,where.Compile()).ToPagedList<ord_sendlist_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_xiaoshou = tempData;
+            return View(tempData);
+        }
+        [HttpPost]
+        [OutputCache(Duration =30)]
+        public ActionResult GetSendList()
+        {
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+            string pagetag = "ord_xiaoshou_sendlist";
+            string page = "1";
+            string ddid = Request["ddid"] ?? "";
+            string ddidequal = Request["ddidequal"] ?? "";
+            string ddidand = Request["ddidand"] ?? "";
+            Expression<Func<ord_sendlist_v, bool>> where = PredicateExtensionses.True<ord_sendlist_v>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc == null)
+            {
+                sc = new searchcondition();
+                sc.UserID = userid;
+                sc.PageBrief = pagetag;
+                if (!string.IsNullOrEmpty(ddid))
+                {
+                    if (ddidequal.Equals("="))
+                    {
+                        if (ddidand.Equals("and"))
+                            where = where.And(ord_xiaoshou => ord_xiaoshou.DDID == int.Parse(ddid));
+                        else
+                            where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID == int.Parse(ddid));
+                    }
+                    if (ddidequal.Equals(">"))
+                    {
+                        if (ddidand.Equals("and"))
+                            where = where.And(ord_xiaoshou => ord_xiaoshou.DDID > int.Parse(ddid));
+                        else
+                            where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID > int.Parse(ddid));
+                    }
+                    if (ddidequal.Equals("<"))
+                    {
+                        if (ddidand.Equals("and"))
+                            where = where.And(ord_xiaoshou => ord_xiaoshou.DDID < int.Parse(ddid));
+                        else
+                            where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID < int.Parse(ddid));
+                    }
+                }
+                if (!string.IsNullOrEmpty(ddid))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddid", ddid, ddidequal, ddidand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddid", "", ddidequal, ddidand);
+                searchconditionService.GetInstance().AddEntity(sc);
+            }
+            else
+            {
+                sc.ConditionInfo = "";
+                if (!string.IsNullOrEmpty(ddid))
+                {
+                    if (ddidequal.Equals("="))
+                    {
+                        if (ddidand.Equals("and"))
+                            where = where.And(ord_xiaoshou => ord_xiaoshou.DDID == int.Parse(ddid));
+                        else
+                            where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID == int.Parse(ddid));
+                    }
+                    if (ddidequal.Equals(">"))
+                    {
+                        if (ddidand.Equals("and"))
+                            where = where.And(ord_xiaoshou => ord_xiaoshou.DDID > int.Parse(ddid));
+                        else
+                            where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID > int.Parse(ddid));
+                    }
+                    if (ddidequal.Equals("<"))
+                    {
+                        if (ddidand.Equals("and"))
+                            where = where.And(ord_xiaoshou => ord_xiaoshou.DDID < int.Parse(ddid));
+                        else
+                            where = where.Or(ord_xiaoshou => ord_xiaoshou.DDID < int.Parse(ddid));
+                    }
+                }
+                if (!string.IsNullOrEmpty(ddid))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddid", ddid, ddidequal, ddidand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddid", "", ddidequal, ddidand);
+                searchconditionService.GetInstance().UpdateEntity(sc);
+            }
+            ViewBag.SearchCondition = sc.ConditionInfo;
+
+            var tempData = ob_ord_xiaoshouservice.LoadSendList(custid,where.Compile()).ToPagedList<ord_sendlist_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_xiaoshou = tempData;
+            return View(tempData);
+        }
     }
 }
 

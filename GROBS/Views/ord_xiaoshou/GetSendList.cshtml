@@ -1,0 +1,112 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+
+@{
+    ViewBag.Title = "发货单";
+    Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+    string _searchcondition = ViewBag.SearchCondition;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            //if (u_id != null) {
+            //    var url_go = "/ord_xiaoshou/Edit/" + u_id;
+            //    location.href = url_go;
+            //}
+        });
+        //table样式
+        table_config(mydatatable);
+        trResize();//初始化表头
+    });
+</script>
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "DDID";
+        scm.ItemTitle = "订单序号";
+        scm.ItemType = "System.Int32";
+        scms.Add(scm);
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "DDID";
+            scm.ItemTitle = "订单序号";
+            scm.ItemType = "System.Int32";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+        }
+    }
+}
+<div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "发货单_条件组合查询", "/ord_xiaoshou/getsendlist", "ord_xiaoshou_sendlist", scms)
+    <div class="page-header">
+        <p>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+        </p>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="mydatatable">
+                        <tr>
+                            <th></th>
+                            <th>订单编号</th>
+                            <th>销售单号</th>
+                            <th>快递单号</th>
+                            <th>发货日期</th>
+                            <th>客服人员</th>
+                            <th>客服电话</th>
+                            <th>是否整单</th>
+                            <th>是否关闭</th>
+                            <th>制单日期</th>
+                            <th>制单人</th>
+                        </tr>
+                        <tbody>
+                            @foreach (var item in ViewBag.ord_xiaoshou)
+                            {
+                                <tr>
+                                    <td>
+                                        <label><input type="checkbox" value="@item.ID"></label>
+                                    </td>
+                                    <td>@item.DDBH</td>
+                                    <td>@item.XSDH</td>
+                                    <td>@item.KDDH</td>
+                                    <td>@item.FahuoRQ</td>
+                                    <td>@item.Kefu</td>
+                                    <td>@item.KefuDH</td>
+                                    <td>@string.Format("{0:0}", item.ZhengdanSF == bool.Parse("False") ? "否" : "是")</td>
+                                    <td>@string.Format("{0:0}", item.GuanbiSF == bool.Parse("False") ? "否" : "是")</td>
+                                    <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <span class="pager">
+                @Html.PagedListPager((IPagedList)Model, page => Url.Action("getsendlist", new { page }))
+            </span>
+        </div>
+    </div>
+</div>
+

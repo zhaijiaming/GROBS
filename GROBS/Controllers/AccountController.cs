@@ -95,11 +95,24 @@ namespace GROBS.Controllers
                         Session["user_account"] = model.Email;
                         Session["user_id"] = ui.ID;
                         Session["user_name"] = ui.FullName;
+                        if (ui.AccountType == 101)
+                        {
+                            var _kh = ServiceFactory.auth_kehuservice.GetEntityById(p => p.Zhanghao == model.Email && p.IsDelete == false);
+                            if (_kh != null)
+                                Session["customer_id"] = _kh.KehuID;
+                        }
+                        else
+                            Session["customer_id"] = 0;
                         log4net.LogManager.GetLogger(ui.ID.ToString()).Info(string.Format("{0} login at {1}!", ui.FullName, DateTime.Now.ToString()));
                         if (smallscreen == "1")
                             return RedirectToLocal("/wms_scanhome");
                         else
-                            return RedirectToLocal(returnUrl);
+                        {
+                            if (ui.AccountType == 101)
+                                return RedirectToLocal("/home/about");
+                            else
+                                return RedirectToLocal(returnUrl);
+                        }
                     }
                 case SignInStatus.LockedOut:
                     return View("Lockout");

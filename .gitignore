@@ -248,3 +248,12 @@ ModelManifest.xml
 /GROBS/Dlls/EntityFramework.SqlServer.xml
 /GROBS/Dlls/EntityFramework.SqlServer.dll
 /GROBS/Dlls/EntityFramework.dll
+/GROBS/Dlls/ServiceStack.xml
+/GROBS/Dlls/ServiceStack.Text.xml
+/GROBS/Dlls/ServiceStack.Text.dll
+/GROBS/Dlls/ServiceStack.Interfaces.dll
+/GROBS/Dlls/ServiceStack.dll
+/GROBS/Dlls/ServiceStack.Common.xml
+/GROBS/Dlls/ServiceStack.Common.dll
+/GROBS/Dlls/ServiceStack.Client.xml
+/GROBS/Dlls/ServiceStack.Client.dll
