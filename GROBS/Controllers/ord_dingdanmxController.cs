@@ -377,6 +377,19 @@ namespace GROBS.Controllers
                 return Json(-1);
             }
         }
+        public JsonResult GetCommodityPrice()
+        {
+            var _cpx = Request["cpx"] ?? "";
+            var _sp = Request["sp"] ?? "";
+
+            if (string.IsNullOrEmpty(_cpx) || string.IsNullOrEmpty(_sp))
+                return Json(-1);
+
+            var _spjg = ServiceFactory.base_shangpinxxservice.GetEntityById(p => p.Daima == _sp && p.Chanpinxian==int.Parse(_cpx) && p.IsDelete == false);
+            if (_spjg == null)
+                return Json(-2);
+            return Json(_spjg);
+        }
     }
 }
 

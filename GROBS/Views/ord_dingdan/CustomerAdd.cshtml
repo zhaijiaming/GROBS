@@ -15,6 +15,17 @@
             //    location.href = url_go;
             //}
         });
+
+        $("#bt_add").click(function () {
+            $("#pl_sp").show();
+        });
+        $("#pl_sp").draggable({ handle: ".panel-heading" });
+        $("#pl_sp_close").click(function () {
+            $("#pl_sp").hide();
+        });
+        $("#pl_sp_cancel").click(function () {
+            $("#pl_sp").hide();
+        });
     });
 </script>
 <div class="page-content">
@@ -39,6 +50,13 @@
         </div>
     </div>
     <div class="row">
+        <p>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_save"><i class="icon-adn"></i>保存订单</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_add"><i class="icon-adn"></i>添加商品</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_import"><i class="icon-adn"></i>导入商品</button>
+        </p>
+    </div>
+    <div class="row">
         <div class="col-sm-12">
             <div class="table-wapper-all">
                 <div class="fixed-table-wapper">
@@ -46,7 +64,7 @@
                 </div>
                 <div class="table-wapper">
                     <table class="table table-bordered table-condensed" id="mydatatable">
-                        <caption><i class="icon-edit"></i>录入订单商品</caption>
+                        <caption><i class="icon-edit"></i>采购商品列表</caption>
                         <thead>
                             <tr>
                                 <td></td>
@@ -60,21 +78,42 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td><i class="icon-minus-sign"></i></td>
-                                <td><input type="text" value="" /></td>
-                                <td></td>
-                                <td></td>
-                                <td><input type="text" value="0" /></td>
-                                <td></td>
-                                <td></td>
-                                <td><input type="text" value="" /></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-
+    </div>
+</div>
+<div id="pl_sp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">商品登记<button id="pl_sp_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <div class="col-sm-6"><p class="btn default" id="pl_sp_ok"><i class="icon-ok"></i>添加</p></div>
+            <div class="col-sm-6"><p class="btn default" id="pl_sp_cancel"><i class="icon-search"></i>取消</p></div>
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3">商品代码</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_spdm" name="KDdanhao" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">采购数量</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_cgsl" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">备注</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_bz" readonly class="form-control" />
+                </div>
+            </div>
+        </div>
     </div>
 </div>
