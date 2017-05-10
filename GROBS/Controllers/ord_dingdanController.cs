@@ -477,6 +477,33 @@ namespace GROBS.Controllers
             ViewBag.ord_dingdan = tempData;
             return View();
         }
+        public ActionResult CustomerAdd()
+        {
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+
+            var _cpxsq = ServiceFactory.base_chanpinxiansqservice.LoadSortEntities(p => p.JXSID==custid && p.IsDelete == false, true, s => s.CPXDM).ToList();
+            List<base_chanpinxiansqViewModel> cpxsq = new List<base_chanpinxiansqViewModel>();
+            foreach (var sq in _cpxsq)
+            {
+                base_chanpinxiansqViewModel csq = new base_chanpinxiansqViewModel();
+                csq.ID = sq.ID;
+                var _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == sq.CPXID);
+                csq.CPXDM = _cpx.Mingcheng;
+                csq.CPXID = sq.CPXID;
+                csq.IsDelete = sq.IsDelete;
+                csq.JXSDM = sq.JXSDM;
+                csq.JXSID = sq.JXSID;
+                csq.MakeDate = sq.MakeDate;
+                csq.MakeMan = sq.MakeMan;
+                csq.TingyongSF = sq.TingyongSF;
+                cpxsq.Add(csq);
+            }
+            ViewBag.cpxsq = cpxsq;
+            ViewBag.customer = custid;
+            ViewBag.user = userid;
+            return View();
+        }
     }
 }
 

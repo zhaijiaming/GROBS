@@ -257,3 +257,8 @@ ModelManifest.xml
 /GROBS/Dlls/ServiceStack.Common.dll
 /GROBS/Dlls/ServiceStack.Client.xml
 /GROBS/Dlls/ServiceStack.Client.dll
+/GROBSTest/GROBSTest.csproj
+/GROBSTest/UnitTest3.cs
+/GROBSTest/UnitTest2.cs
+/GROBSTest/Properties/AssemblyInfo.cs
+/GROBSTest/base_chanpinxianControllerTest.cs

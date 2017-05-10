@@ -1,0 +1,80 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "新增采购单";
+    Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            //if (u_id != null) {
+            //    var url_go = "/ord_dingdan/Edit/" + u_id;
+            //    location.href = url_go;
+            //}
+        });
+    });
+</script>
+<div class="page-content">
+    <div class="row">
+        <div class="col-sm-2">
+            <label>产品线:</label>
+        </div>
+        <div class="col-sm-4">
+            <select id="cpx">
+                <option value="0"></option>
+                @foreach (base_chanpinxiansqViewModel cpx in ViewBag.cpxsq)
+                {
+                    <option value="@cpx.CPXID">@cpx.CPXID</option>
+                }
+            </select>
+        </div>
+        <div class="col-sm-2">
+            <label>订单类型</label>
+        </div>
+        <div class="col-sm-4">
+            @Html.SelectList_Common("ordertype", "订单类型")
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="mydatatable">
+                        <caption><i class="icon-edit"></i>录入订单商品</caption>
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>代码</td>
+                                <td>规格</td>
+                                <td>描述</td>
+                                <td>数量</td>
+                                <td>单价</td>
+                                <td>金额</td>
+                                <td>备注</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><i class="icon-minus-sign"></i></td>
+                                <td><input type="text" value="" /></td>
+                                <td></td>
+                                <td></td>
+                                <td><input type="text" value="0" /></td>
+                                <td></td>
+                                <td></td>
+                                <td><input type="text" value="" /></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

@@ -806,6 +806,7 @@
     <Content Include="Views\ord_qianhuo\Index.cshtml" />
     <Content Include="Views\ord_dingdan\CustomerCurrentOrder.cshtml" />
     <Content Include="Views\ord_xiaoshou\GetSendList.cshtml" />
+    <Content Include="Views\ord_dingdan\CustomerAdd.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
