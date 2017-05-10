@@ -38,7 +38,7 @@ namespace GROBS.Models
         public string HSBM { get; set; }
         [Display(Name = "基本单位")]
         public string JBDW { get; set; }
-        [Display(Name = "销售单位ie")]
+        [Display(Name = "销售单位")]
         public string XSDW { get; set; }
         [Display(Name = "机动1")]
         public string Col1 { get; set; }

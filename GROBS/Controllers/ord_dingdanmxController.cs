@@ -166,6 +166,9 @@ namespace GROBS.Controllers
 
         public ActionResult Add()
         {
+            string ddid = Request["ddid"] ?? "";
+            ViewBag.ddid = ddid;
+
             ViewBag.userid = (int)Session["user_id"];
             return View();
         }
@@ -194,6 +197,7 @@ namespace GROBS.Controllers
             string col1 = Request["col1"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
+            int _id = int.Parse(ddid);
             try
             {
                 ord_dingdanmx ob_ord_dingdanmx = new ord_dingdanmx();
@@ -223,7 +227,7 @@ namespace GROBS.Controllers
             {
                 Console.WriteLine(ex.Message);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit","ord_dingdan",new { id = _id});
         }
 
         [OutputCache(Duration = 10)]
@@ -285,6 +289,7 @@ namespace GROBS.Controllers
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
             int uid = int.Parse(id);
+            int _id = int.Parse(ddid);
             try
             {
                 ord_dingdanmx p = ob_ord_dingdanmxservice.GetEntityById(ord_dingdanmx => ord_dingdanmx.ID == uid);
@@ -315,7 +320,7 @@ namespace GROBS.Controllers
                 Console.WriteLine(ex.Message);
                 ViewBag.saveok = ViewAddTag.ModifyNo;
             }
-            return RedirectToAction("Edit", new { id = uid });
+            return RedirectToAction("Edit","ord_dingdan", new { id = _id });
         }
         public ActionResult Delete()
         {
@@ -333,6 +338,44 @@ namespace GROBS.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        public JsonResult DeleteFromDingdan()
+        {
+            string sdel = Request["del"] ?? "";
+            int id;
+            ord_dingdanmx ob_ord_dingdanmx;
+            foreach (string sD in sdel.Split(','))
+            {
+                if (sD.Length > 0)
+                {
+                    id = int.Parse(sD);
+                    ob_ord_dingdanmx = ob_ord_dingdanmxservice.GetEntityById(ord_dingdanmx => ord_dingdanmx.ID == id && ord_dingdanmx.IsDelete == false);
+                    ob_ord_dingdanmx.IsDelete = true;
+                    ob_ord_dingdanmxservice.UpdateEntity(ob_ord_dingdanmx);
+                }
+            }
+            return Json(1);
+        }
+        public JsonResult getDingdanMingXiWithDDID()
+        {
+            string _ddid = Request["ddid"] ?? "";
+            if (!string.IsNullOrEmpty(_ddid))
+            {
+                var tempdata = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == int.Parse(_ddid) && p.IsDelete == false, true, p => p.DDID).ToList<ord_dingdanmx>();
+                if(tempdata != null)
+                {
+                    return Json(tempdata);
+                }
+                else
+                {
+                    return Json(-1);
+                }
+            }
+            else
+            {
+                return Json(-1);
+            }
         }
     }
 }
