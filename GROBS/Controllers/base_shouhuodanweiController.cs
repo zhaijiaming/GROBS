@@ -509,9 +509,9 @@ namespace GROBS.Controllers
             if (!string.IsNullOrEmpty(_jxs))
                 where = where.And(p => p.Mingcheng.Contains(_jxs));
             if (!string.IsNullOrEmpty(_lianxiren))
-                where = where.And(p => p.KehuDM.Contains(_lianxiren));
+                where = where.And(p => p.Lianxiren.Contains(_lianxiren));
             if (!string.IsNullOrEmpty(_shdz))
-                where = where.And(p => p.LianxiDH.Contains(_shdz));
+                where = where.And(p => p.SonghuoDZ.Contains(_shdz));
             where = where.And(p => p.IsDelete == false);
             var tempData = ServiceFactory.base_shouhuodanweiservice.LoadSortEntities(where.Compile(), true, p => p.KehuDM);
             if (tempData == null)

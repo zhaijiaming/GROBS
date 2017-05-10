@@ -53,6 +53,71 @@
             $("#JieshuSF").val("false");
         }
         /*
+            订单商品
+        */
+        getDingdanMingXi();//初始化订单明细
+        //订单商品添加
+        var ddid = $("#ddid").val();
+        $("#btn_Add").click(function () {
+            if (ddid != null) {
+                window.open("/ord_dingdanmx/Add?ddid=" + ddid, "_self");
+            } else {
+                alert("系统错误，请于管理员联系!");
+            }
+        });
+        //订单商品编辑
+        $("#btn_Edit").on("click", function () {
+            var itemLength = $("#container_ddmx input[type = checkbox]:checked").length;
+            if (itemLength > 1) {
+                alert("您只能选取一个进行编辑。");
+            } else if (itemLength == 0) {
+                alert("您还未选择商品");
+            } else {
+                $("#container_ddmx tr input[type=checkbox]").each(function () {
+                    if (this.checked) {
+                        if ($(this).val() != null && $(this).val() != "") {
+                            window.open("/ord_dingdanmx/Edit/" + $(this).val(), "_self");
+                        }
+                    }
+                });
+            }
+        });
+        //订单商品删除
+        $("#btn_Del").on("click", function () {
+            var ddspItem = "";
+            $("#container_ddmx tr input[type = checkbox]").each(function () {
+                if (this.checked) {
+                    ddspItem = ddspItem + $(this).val() + ",";
+                }
+            });
+            if (ddspItem.length > 0) {
+                var isOk = confirm("确定要删除这些信息吗？");
+                if (isOk) {
+                    $.ajax({
+                        async: true,
+                        beforeSend: function () {
+                            ShowWait();
+                        },
+                        complete: function () {
+                            HiddenWait();
+                        },
+                        type: "POST",
+                        url: "/ord_dingdanmx/DeleteFromDingdan",
+                        data: {
+                            del: ddspItem
+                        },
+                        success: function (data) {
+                            if (data == 1) {
+                                location.reload();
+                            }
+                        }
+                    });
+                }
+            } else if (ddspItem.length == 0) {
+                alert("您还未选择商品");
+            }
+        });
+        /*
             经销商客户选择
         */
         $("#containerJxs").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
@@ -103,6 +168,75 @@
             $("#containerJxs").hide();
         });
     });
+    //计算采购总数和总金额
+    function calPriceAndTotal() {
+        var sum_caigou = 0;
+        var sum_jine = 0;
+        $("#container_ddmx tbody tr").each(function () {
+            var jine = $(this).find(".jine").html();
+            var caigousl = $(this).find(".cgsl").html();
+            if (jine != "" && jine != null) {
+                sum_jine += parseFloat(jine);
+            }
+            if (caigousl != "" && caigousl != null) {
+                sum_caigou += parseFloat(caigousl);
+            }
+        });
+        $("#ZongshuCG").val(sum_caigou);
+        $("#Zongjine").val(sum_jine);
+    }
+    function getDingdanMingXi() {
+        var _ddid = $("#ddid").val();
+        if (_ddid > 0) {
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/ord_dingdanmx/getDingdanMingXiWithDDID",
+                data: {
+                    ddid: _ddid
+                },
+                success: function (data) {
+                    var filltable = "";
+                    if (data.length > 0) {
+                        for (var i in data) {
+                            filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
+                            filltable = filltable + data[i].ID;
+                            filltable = filltable + '"></td><td><span class="spmc">';
+                            filltable = filltable + data[i].SPMC;
+                            filltable = filltable + '</span></td><td><span class="guige">';
+                            filltable = filltable + data[i].Guige;
+                            filltable = filltable + '</span></td><td><span class="cgsl">';
+                            filltable = filltable + data[i].CGSL;
+                            filltable = filltable + '</span></td><td><span class="fhsl">';
+                            filltable = filltable + data[i].FHSL;
+                            filltable = filltable + '</span></td><td><span class="xsbj">';
+                            filltable = filltable + data[i].XSBJ;
+                            filltable = filltable + '</span></td><td><span class="xsdj">';
+                            filltable = filltable + data[i].XSDJ;
+                            filltable = filltable + '</span></td><td><span class="jine">';
+                            filltable = filltable + data[i].Jine;
+                            filltable = filltable + '</span></td><td><span class="zhekou">';
+                            filltable = filltable + data[i].Zhekou;
+                            filltable = filltable + '</span></td><td><span class="zhekoulv">';
+                            filltable = filltable + data[i].Zhekoulv;
+                            filltable = filltable + '</span></td></tr>';
+                        }
+                        $("#container_ddmx tbody").html(filltable);
+                        calPriceAndTotal();//初始化总金额和总采购数
+                    } else {
+                        $("#container_ddmx tbody").empty();
+                    }
+                }
+
+            });
+        }
+    }
     //记录选过的信息
     function markSelect() {
         $("#containerJxs tbody tr").each(function () {
@@ -170,16 +304,16 @@
         <li class="active"> 编辑</li>
     </ul>
 </div>
-<div id="loading" style="z-index:999;"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
     <div class="page-header">
         <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
         <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
     </div>
     <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-sm-8 col-sm-offset-2">
+                <div class="col-sm-5 col-sm-offset-1">
                     <div class="widget-box radius-4">
                         <div class="widget-header">
                             <h4><b>订单信息</b></h4>
@@ -189,8 +323,8 @@
                                 @using (Html.BeginForm("Update", "ord_dingdan", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
                                 {
                                     @Html.AntiForgeryToken()
-                                    <input type="hidden" name="id" value="@ViewData.Model.ID" />
-                                    <input type="hidden" id="jxsid" name="KHID" value="@ViewData.Model.KHID"/>
+                                    <input type="hidden" id="ddid" name="id" value="@ViewData.Model.ID" />
+                                    <input type="hidden" id="jxsid" name="KHID" value="@ViewData.Model.KHID" />
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
                                     <fieldset>
@@ -198,7 +332,7 @@
                                         <div class="form-group">
                                             <label for="Bianhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>编号</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Bianhao" name="Bianhao" readonly class="form-control" placeholder="自动生成编号" value="@ViewData.Model.Bianhao"/>
+                                                <input type="text" id="Bianhao" name="Bianhao" readonly class="form-control" placeholder="自动生成编号" value="@ViewData.Model.Bianhao" />
                                             </div>
                                         </div>
                                         @*客户*@
@@ -206,7 +340,7 @@
                                             <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
-                                                    <input id="khname" placeholder="请选择客户" class="form-control" type="text">
+                                                    <input id="khname" placeholder="请选择客户" class="form-control" type="text" value="@Html.GetDataValue_ID("收货单位", "", (int)ViewData.Model.KHID)">
                                                     <span class="input-group-btn">
                                                         <button type="button" id="btn_select" class="btn btn-primary btn-sm">
                                                             选择
@@ -274,14 +408,14 @@
                                         <div class="form-group">
                                             <label for="CPXID" class="col-sm-3 control-label"><b>客服人员</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Auto("OPID", "userinfo", "",(long)ViewData.Model.OPID)
+                                                @Html.SelectList_Auto("OPID", "userinfo", "", (long)ViewData.Model.OPID)
                                             </div>
                                         </div>
                                         @*审核人员*@
                                         <div class="form-group">
                                             <label for="CPXID" class="col-sm-3 control-label"><b>审核人员</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Auto("ACCID", "userinfo", "",(long)ViewData.Model.ACCID)
+                                                @Html.SelectList_Auto("ACCID", "userinfo", "", (long)ViewData.Model.ACCID)
                                             </div>
                                         </div>
                                         @*审核通过*@
@@ -322,7 +456,7 @@
                                         <div class="form-group">
                                             <label for="Zhuangtai" class="col-sm-3 control-label"><b>状态</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Zhuangtai" name="Zhuangtai" class="form-control" placeholder="请输入状态"  value="@ViewData.Model.Zhuangtai" />
+                                                <input type="text" id="Zhuangtai" name="Zhuangtai" class="form-control" placeholder="请输入状态" value="@ViewData.Model.Zhuangtai" />
                                             </div>
                                         </div>
                                         @*备注*@
@@ -386,10 +520,54 @@
                         </div>
                     </div>
                 </div>
+                @*订单明细*@
+                <div class="col-sm-5" style="position:relative;">
+                    <div style="position:fixed;max-width:682px;min-width:500px;">
+                        <div class="widget-box radius-4">
+                            <div class="widget-header">
+                                <h4><b>订单明细</b></h4>
+                            </div>
+                            <div class="widget-body">
+                                <div class="widget-main">
+                                    <div class="row" id="pl_fun_dizhi">
+                                        <div class="col-sm-12">
+                                            <button type="button" id="btn_Add" class="btn btn-white"><i class="icon-adn  bigger-120 blue"></i>添加</button>
+                                            <button type="button" id="btn_Edit" class="btn btn-white"><i class="icon-edit  bigger-120"></i>编辑</button>
+                                            <button type="button" id="btn_Del" class="btn btn-white"><i class="icon-remove red bigger-120"></i>删除</button>
+                                        </div>
+                                    </div>
+                                    <div class="space-18"></div>
+                                    @*订单明细列表*@
+                                    <div id="container_ddmx" class="container">
+                                        <table class="table table-hover" id="mydatatable">
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>商品</th>
+                                                    <th>规格</th>
+                                                    <th>采购数量</th>
+                                                    <th>发货数量</th>
+                                                    <th>销售报价</th>
+                                                    <th>销售单价</th>
+                                                    <th>金额</th>
+                                                    <th>折扣额</th>
+                                                    <th>折扣率</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <div id="containerJxs" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;min-height:330px;z-index:99;">
     <div class="panel-heading">
         <h3 class="panel-title"><b>经销商</b><button id="container_close" class="pull-right">X</button></h3>
@@ -437,7 +615,7 @@
                             @*列表*@
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div style="margin-top:10px;max-height:500px;overflow:auto;">
+                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
                                         <table class="table table-hover" id="table_data">
                                             <caption></caption>
                                             <thead>

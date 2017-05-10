@@ -2,11 +2,190 @@
 @using GROBS.Models
 @model ord_dingdanmxViewModel
 @{ViewBag.Title = "订单明细添加";}
+<script type="text/javascript">
+    try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+    $(document).ready(function () {
+        //submit
+        $("#save_top").on("click", function () {
+            $("#form").submit();
+        });
+        $("#save_bottom").on("click", function () {
+            $("#form").submit();
+        });
 
+        //金额计算
+        $("#CGSL,#XSBJ,#Jine").blur(function () {
+            if ($("#CGSL").val() != "" && $("#XSBJ").val() != "" && $("#CGSL").val() != null && $("#XSBJ").val() != null) {
+                var Jine = $("#CGSL").val() * $("#XSBJ").val();
+                $("#Jine").val(toDecimal(Jine));
+            } else {
+                $("#Jine").val("0");
+            }
+        });
+        //折扣率计算
+        $("#Zhekou").blur(function () {
+            if ($("#Jine").val() == "" || $("#Jine").val() == null || $("#Jine").val() == "0") {
+                alert("金额不能为空和0");
+                $("#CGSL").focus();
+            }else if ($("#Zhekou").val() != "" && $("#Zhekou").val() != null) {
+                var zhekou = $("#Zhekou").val();
+                var Jine = $("#Jine").val();
+                var rel = 1 - zhekou / Jine;
+
+                $("#Zhekoulv").val(toDecimal(rel));
+
+                var rel_persent = rel * 100;
+                $("#zhekoulv_percent").val(toDecimal(rel_persent));
+            }
+        });
+        //销售单价计算
+        $("#zhekoulv_percent,#XSBJ,#XSDJ").blur(function () {
+            if ($("#XSBJ").val() != "" && $("#XSBJ").val() != null && $("#XSBJ").val() != "0" && $("#Zhekoulv").val() != "" && $("#Zhekoulv").val() != null && $("#Zhekoulv").val() != "0") {
+                var xsbj = $("#XSBJ").val();
+                var zhekoulv = $("#Zhekoulv").val();
+                var rel = xsbj * zhekoulv;
+                $("#XSDJ").val(toDecimal(rel));
+            }
+        });
+        /*
+            选择商品
+        */
+        $("#containerSpxx").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+        //click
+        $("#btn_select").on("click", function () {
+            $("#containerSpxx").show();
+            getSpxx();   //获取商品数据
+        });
+        //弹框关闭
+        $("#container_close").click(function () {
+            $("#containerSpxx").hide();
+        });
+        //商品查询
+        $("#spxx_search").on("click", function () {
+            $("#table_data tbody").html("");
+            getSpxx();
+        });
+        //确定添加
+        //$("#btn_confirm").click(function () {
+        //    var _data = "";
+        //    var _spid = "";
+        //    var _Huansuanlv = "";
+        //    var _Danwei = "";
+        //    var _BaozhuangDW = "";
+        //    $("#table_data tr").each(function () {
+        //        if ($(this).find("input[type=checkbox]").is(':checked')) {
+        //            _data = $(this).find(".Mingcheng").html();
+        //            _Huansuanlv = $(this).find(".Huansuanlv").html();
+        //            _Danwei = $(this).find(".Danwei").html();
+        //            _BaozhuangDW = $(this).find(".BaozhuangDW").html();
+        //            _spid = $(this).find(".checkbox").val();
+        //        }
+        //        $("#spid").val(_spid);
+        //        $("#spmc").val(_data);
+        //        $("#hsl").val(_Huansuanlv);
+        //        $("#jbdw").val(_Danwei);
+        //        $("#xsdw").val(_BaozhuangDW);
+        //    });
+        //    getPrice($("#spid").val());//获取销售价和采购价
+        //    $("#containerSpxx").hide();
+        //});
+        //单击tr打钩
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $("input[type=checkbox]").prop("checked", false);
+                    $(this).find(":checkbox").prop("checked", true);
+                }
+            }
+        });
+        //双击取值
+        $("#table_data tbody").on("dblclick", "tr", function () {
+            $("#spid").val($(this).find(".checkbox").val());
+            $("#SPBM").val($(this).find(".Daima").html());
+            $("#spmc").val($(this).find(".Mingcheng").html());
+            $("#Guige").val($(this).find(".Guige").html());
+            $("#XSBJ").val($(this).find(".XSBJ").html());
+            $("#XSDJ").val($(this).find(".XSBJ").html());
+            $("#HSL").val($(this).find(".Huansuanlv").html());
+            $("#Col1").val($(this).find(".Col1").html());
+            $("#JBDW").val($(this).find(".Danwei").html());
+            $("#XSDW").val($(this).find(".BaozhuangDW").html());
+            $("#CGSL").focus();
+            $("#containerSpxx").hide();
+        });
+    });
+    //取小数点后两位
+    function toDecimal(x) {
+        var f = parseFloat(x);
+        if (isNaN(f)) {
+            return;
+        }
+        f = Math.round(x * 100) / 100;
+        return f;
+    }
+    //获取商品信息
+    function getSpxx() {
+        var filltable = "";
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
+            },
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: "/base_shangpinxx/getSpxxWithQuery",
+            data: {
+                req_spbm: $("#req_spbm").val(),
+                req_spmc: $("#req_spmc").val(),
+                req_guige: $("#req_guige").val()
+            },
+            success: function (data) {
+                var filltable = "";
+                if (data != -1) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></td><td><span class="Daima">';
+                        filltable = filltable + data[i].Daima;
+                        filltable = filltable + '</span></td><td><span class="Mingcheng">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td><span class="Guige">';
+                        filltable = filltable + data[i].Guige;
+                        filltable = filltable + '</span></td><td><span class="XSBJ">';
+                        filltable = filltable + data[i].JiaXS;
+                        filltable = filltable + '</span></td><td><span class="Danwei">';
+                        filltable = filltable + data[i].Danwei;
+                        filltable = filltable + '</span></td><td><span class="BaozhuangDW">';
+                        filltable = filltable + data[i].BaozhuangDW;
+                        filltable = filltable + '</span></td><td><span class="Huansuanlv">';
+                        filltable = filltable + data[i].Huansuanlv;
+                        filltable = filltable + '</span></td><td><span class="Col1">';
+                        filltable = filltable + data[i].Col1;
+                        filltable = filltable + '</span></td></tr>';
+                    }
+                }
+                else {
+                    alert("获取客户信息出错，请联系管理员！");
+                }
+                $("#table_data tbody").html(filltable);
+                markSelect();//记录选过的信息
+            }
+        });
+    }
+    //记录选过的信息
+    function markSelect() {
+        $("#containerSpxx tbody tr").each(function () {
+            if ($("#spid").val() == $(this).find(".checkbox").val()) {
+                $(this).find("input[type=checkbox]").prop("checked", true);
+            }
+        });
+    }
+</script>
 <div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
     <ul class="breadcrumb">
         <li>
             <i class="icon-home home-icon"></i>
@@ -18,133 +197,257 @@
         <li class="active"> 新增</li>
     </ul>
 </div>
-
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
-    @using (Html.BeginForm("Save", "ord_dingdanmx", FormMethod.Post, new { @role = "form" }))
-    {
-        @Html.AntiForgeryToken()
-        <input type="hidden" name="id" />
-        <div class="page-header">
-            <p>
-                <button type="submit" class="btn btn-default"><i class="icon-save"></i>保存</button>
-                <button type="button" class="btn btn-default" onclick="javascript:history.back(-1); "><i class="icon-hand-left"></i>返回</button>
-            </p>
-        </div>
+    <div class="page-header">
+        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4">
+            <i class="icon-save"></i><b>保存</b>
+            <span class="badge badge-transparent">
+                <i class="light-red icon-asterisk"></i>
+            </span>
+        </button>
+    </div>
+    <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
         <div class="container">
-            <div class="form-group">
-                @Html.LabelFor(m => m.DDID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.DDID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.SPID, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.SPID, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.SPBM, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.SPBM, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.SPMC, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.SPMC, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Guige, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Guige, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.CGSL, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.CGSL, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.FHSL, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.FHSL, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.XSBJ, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.XSBJ, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.XSDJ, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.XSDJ, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Jine, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Jine, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Zhekou, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Zhekou, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Zhekoulv, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Zhekoulv, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.HSL, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.HSL, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.HSBM, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.HSBM, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.JBDW, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.JBDW, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.XSDW, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.XSDW, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MakeDate, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    <input id="MakeDate" type="date" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" name="MakeDate">
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.MakeMan, new { @class = "control-label col-sm-2" })
-                <div class="col-sm-10">
-                    @Html.SelectList_Auto("MakeMan", "userinfo", "fullname")
+            <div class="row">
+                <div class="col-sm-8 col-sm-offset-2">
+                    <div class="widget-box radius-4">
+                        <div class="widget-header">
+                            <h4><b>订单明细</b></h4>
+                        </div>
+                        <div class="widget-body">
+                            <div class="widget-main no-padding">
+                                @using (Html.BeginForm("Save", "ord_dingdanmx", FormMethod.Post, new { @role = "form", @class = "form-horizontal", @id = "form" }))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" />
+                                    <input type="hidden" id="DDID" name="DDID" value="@ViewBag.ddid" />
+                                    <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
+                                    <input type="hidden" name="spid" id="spid" />
+                                    <input type="hidden" name="Zhekoulv" id="Zhekoulv" />
+                                    <fieldset>
+                                        @*商品代码*@
+                                        <div class="form-group">
+                                            <label for="SPBM" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品代码</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="SPBM" name="SPBM" class="form-control" placeholder="请选择商品" />
+                                            </div>
+                                        </div>
+                                        @*商品名称*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="spmc" name="spmc" placeholder="请选择商品" class="form-control" type="text">
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_select" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*规格*@
+                                        <div class="form-group">
+                                            <label for="Guige" class="col-sm-3 control-label"><b>规格</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Guige" name="Guige" class="form-control" placeholder="请选择商品" />
+                                            </div>
+                                        </div>
+                                        @*采购数量*@
+                                        <div class="form-group">
+                                            <label for="CGSL" class="col-sm-3 control-label"><b>采购数量</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="CGSL" name="CGSL" class="form-control" placeholder="请输入采购数量" />
+                                            </div>
+                                        </div>
+                                        @*发货数量*@
+                                        <div class="form-group">
+                                            <label for="FHSL" class="col-sm-3 control-label"><b>发货数量</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="FHSL" readonly name="FHSL" class="form-control" placeholder="请输入发货数量" />
+                                            </div>
+                                        </div>
+                                        @*销售报价*@
+                                        <div class="form-group">
+                                            <label for="XSBJ" class="col-sm-3 control-label"><b>销售报价</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="XSBJ" name="XSBJ" class="form-control" placeholder="请选择商品" />
+                                            </div>
+                                        </div>
+                                        @*销售单价*@
+                                        <div class="form-group">
+                                            <label for="XSDJ" class="col-sm-3 control-label"><b>销售单价</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="XSDJ" readonly name="XSDJ" class="form-control" placeholder="请输入销售单价" />
+                                            </div>
+                                        </div>
+                                        @*金额*@
+                                        <div class="form-group">
+                                            <label for="Jine" class="col-sm-3 control-label"><b>金额</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Jine" name="Jine" class="form-control" placeholder="请输入金额" />
+                                            </div>
+                                        </div>
+                                        @*折扣额*@
+                                        <div class="form-group">
+                                            <label for="Zhekou" class="col-sm-3 control-label"><b>折扣额</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Zhekou" name="Zhekou" class="form-control" placeholder="请输入折扣额" />
+                                            </div>
+                                        </div>
+                                        @*折扣率*@
+                                        <div class="form-group">
+                                            <label for="Zhekoulv" class="col-sm-3 control-label"><b>折扣率</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input type="text" id="zhekoulv_percent"  class="form-control" placeholder="请输入折扣率" />
+                                                    <span class="input-group-addon input-group-sm"><b>%</b></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*换算率*@
+                                        <div class="form-group">
+                                            <label for="HSL" class="col-sm-3 control-label"><b>换算率</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="HSL" name="HSL" class="form-control" placeholder="请选择商品" />
+                                            </div>
+                                        </div>
+                                        @*换算编码*@
+                                        <div class="form-group">
+                                            <label for="Col1" class="col-sm-3 control-label"><b>换算编码</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="请选择商品" />
+                                            </div>
+                                        </div>
+                                        @*基本单位*@
+                                        <div class="form-group">
+                                            <label for="JBDW" class="col-sm-3 control-label"><b>基本单位</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="JBDW" name="JBDW" class="form-control" placeholder="请选择商品" />
+                                            </div>
+                                        </div>
+                                        @*销售单位*@
+                                        <div class="form-group">
+                                            <label for="XSDW" class="col-sm-3 control-label"><b>销售单位</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="XSDW" name="XSDW" class="form-control" placeholder="请选择商品" />
+                                            </div>
+                                        </div>
+                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input name="MakeDate" id="MakeDate" disabled="disabled" class="form-control" value="@DateTime.Now.ToString("yyyy-MM-dd")" type="text">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-calendar bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        @*录入人*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewBag.userid)">
+                                                    <span class="input-group-addon">
+                                                        <i class="icon-user bigger-110"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </fieldset>
+                                    <div class="form-actions center">
+                                        <button id="save_bottom" class="btn btn-primary" type="button">
+                                            <b>保存</b>
+                                            <i class="icon-save bigger-110"></i>
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    }
+    </div>
+</div>
+<div id="containerSpxx" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;min-height:330px;z-index:99;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title"><b>商品信息</b><button id="container_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    @*查询条件*@
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="border:1px solid #DDD;padding-top:10px;border-radius:4px;">
+                                <div class="row">
+                                    @*商品代码*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_spmc" class="col-sm-4 control-label"><b>商品代码</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_spbm" class="form-control" placeholder="请输入商品代码" />
+                                        </div>
+                                    </div>
+                                    @*商品名称*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_spmc" class="col-sm-4 control-label"><b>商品名称</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_spmc" class="form-control" placeholder="请输入商品名称" />
+                                        </div>
+                                    </div>
+                                    @*规格*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_guige" class="col-sm-3 control-label"><b>规格</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_guige" class="form-control" placeholder="请输入规格" />
+                                        </div>
+                                    </div>
+                                </div>
+                                @*按钮*@
+                                <div class="row">
+                                    <div class="form-group col-sm-4 col-sm-offset-4">
+                                        <button type="button" id="spxx_search" class="btn btn-block " style="background-color:#56b18e!important;border:none;border-radius:6px;">
+                                            <span style="font-size:16px!important;">查询</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <caption></caption>
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>代码</th>
+                                                    <th>商品名称</th>
+                                                    <th>规格</th>
+                                                    <th>销售报价</th>
+                                                    <th>基本单位</th>
+                                                    <th>销售单位</th>
+                                                    <th>换算率</th>
+                                                    <th>换算编码</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>

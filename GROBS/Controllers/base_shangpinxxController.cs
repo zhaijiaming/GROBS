@@ -1195,6 +1195,25 @@ namespace GROBS.Controllers
             else
                 return Json(tempdata);
         }
+
+        public JsonResult getSpxxWithQuery()
+        {
+            var _spbm = Request["req_spbm"] ?? "";
+            var _spmc = Request["req_spmc"] ?? "";
+            var _guige = Request["req_guige"] ?? "";
+
+            Expression<Func<base_shangpinjg_v, bool>> where = PredicateExtensionses.True<base_shangpinjg_v>();
+            if (!string.IsNullOrEmpty(_spbm))
+                where = where.And(p => p.Daima.Contains(_spbm));
+            if (!string.IsNullOrEmpty(_spmc))
+                where = where.And(p => p.Mingcheng.Contains(_spmc));
+            if (!string.IsNullOrEmpty(_guige))
+                where = where.And(p => p.Guige.Contains(_guige));
+            var tempData = ServiceFactory.base_shangpinxxservice.LoadShangpinPriceAll(where.Compile()).ToList<base_shangpinjg_v>();
+            if (tempData == null)
+                return Json(-1);
+            return Json(tempData);
+        }
     }
 }
 

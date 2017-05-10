@@ -185,7 +185,7 @@
                                                 <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>经销商</b></label>
                                                 <div class="col-sm-8">
                                                     <div class="input-group">
-                                                        <input id="khname" placeholder="请选择经销商" class="form-control" type="text">
+                                                        <input id="khname" placeholder="请选择经销商" class="form-control" type="text" value="@Html.GetDataValue_ID("收货单位", "", (int)ViewData.Model.JXSID)" >
                                                         <span class="input-group-btn">
                                                             <button type="button" id="btn_select" class="btn btn-primary btn-sm">
                                                                 选择
@@ -313,7 +313,7 @@
                             @*列表*@
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div style="margin-top:10px;max-height:500px;overflow:auto;">
+                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
                                         <table class="table table-hover" id="table_data">
                                             <caption></caption>
                                             <thead>
