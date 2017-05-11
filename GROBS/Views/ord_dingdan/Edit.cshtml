@@ -34,7 +34,7 @@
             $("#ShenheTG").attr("checked", false);
             $("#ShenheTG").val("false");
         }
-        //'是否结束'绑定值
+        //'是否控制'绑定值
         $("#JieshuSF").val("true");//默认赋值
         $("#JieshuSF").change(function () {
             if ($("#JieshuSF").is(":checked")) {
@@ -43,7 +43,7 @@
                 $("#JieshuSF").val("false");//不选中=false
             }
         });
-        //'是否结束'赋值
+        //'是否控制'赋值
         var JieshuSF = "@Model.JieshuSF";
         if (JieshuSF == "True") {
             $("#JieshuSF").attr("checked", true);
@@ -165,6 +165,9 @@
         $("#table_data tbody").on("dblclick", "tr", function () {
             $("#khname").val($(this).find(".Mingcheng").html());
             $("#jxsid").val($(this).find(".checkbox").val());
+            $("#Lianxiren").val($(this).find(".lianxiren").html());
+            $("#LianxiDH").val($(this).find(".lianxidianhua").html());
+            $("#SonghuoDZ").val($(this).find(".songhuodizhi").html());
             $("#containerJxs").hide();
         });
     });
@@ -276,11 +279,22 @@
                         if (data[i].ID == $("#jxsid").val()) {
                             $("#khname").val(data[i].Mingcheng)
                         }
-                        filltable = filltable + '</span></td><td>';
+                        filltable = filltable + '</span></td><td><span class = "lianxiren">';
                         filltable = filltable + data[i].Lianxiren;
-                        filltable = filltable + '</td><td>';
+                        if (data[i].Lianxiren == $("#Lianxiren").val()) {
+                            $("#Lianxiren").val(data[i].Lianxiren)
+                        }
+                        filltable = filltable + '</span></td><td><span class = "lianxidianhua">';
+                        filltable = filltable + data[i].LianxiDH;
+                        if (data[i].LianxiDH == $("#LianxiDH").val()) {
+                            $("#LianxiDH").val(data[i].LianxiDH)
+                        }
+                        filltable = filltable + '</span></td><td><span class = "songhuodizhi">';
                         filltable = filltable + data[i].SonghuoDZ;
-                        filltable = filltable + '</td><tr>';
+                        if (data[i].SonghuoDZ == $("#SonghuoDZ").val()) {
+                            $("#SonghuoDZ").val(data[i].SonghuoDZ)
+                        }
+                        filltable = filltable + '</span></td><tr>';
                     }
                 }
                 else {
@@ -361,7 +375,7 @@
                                         <div class="form-group">
                                             <label for="CGLX" class="col-sm-3 control-label"><b>采购类型</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="CGLX" name="CGLX" class="form-control" placeholder="请输入采购类型" value="@ViewData.Model.CGLX" />
+                                                @Html.SelectList_Common("CGLX", "订单类型",(long)ViewData.Model.CGLX)
                                             </div>
                                         </div>
                                         @*客户单号*@
@@ -415,7 +429,7 @@
                                         <div class="form-group">
                                             <label for="CPXID" class="col-sm-3 control-label"><b>审核人员</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Auto("ACCID", "userinfo", "", (long)ViewData.Model.ACCID)
+                                                <input type="text" id="ACCID" name="ACCID" class="form-control" placeholder="请输入审核人员" value="@ViewData.Model.ACCID" />
                                             </div>
                                         </div>
                                         @*审核通过*@
@@ -423,7 +437,7 @@
                                             <label class="col-sm-3 control-label" for="ShenheTG"><b>审核通过</b></label>
                                             <div class="col-sm-4">
                                                 <label class="control-group">
-                                                    <input name="ShenheTG" id="ShenheTG" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                    <input name="ShenheTG" id="ShenheTG" disabled class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
                                                     <span class="lbl"></span>
                                                 </label>
                                             </div>
@@ -442,9 +456,9 @@
                                                 <input type="text" id="Zongjine" name="Zongjine" class="form-control" placeholder="请输入总金额" value="@ViewData.Model.Zongjine" />
                                             </div>
                                         </div>
-                                        @*是否结束*@
+                                        @*是否控制*@
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="JieshuSF"><b>是否结束</b></label>
+                                            <label class="col-sm-3 control-label" for="JieshuSF"><b>是否控制</b></label>
                                             <div class="col-sm-4">
                                                 <label class="control-group">
                                                     <input name="JieshuSF" id="JieshuSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
@@ -521,8 +535,8 @@
                     </div>
                 </div>
                 @*订单明细*@
-                <div class="col-sm-5" style="position:relative;">
-                    <div style="position:fixed;max-width:682px;min-width:500px;">
+                <div class="col-sm-5">
+                    <div style="max-height:1058px;">
                         <div class="widget-box radius-4">
                             <div class="widget-header">
                                 <h4><b>订单明细</b></h4>
@@ -538,7 +552,7 @@
                                     </div>
                                     <div class="space-18"></div>
                                     @*订单明细列表*@
-                                    <div id="container_ddmx" class="container">
+                                    <div id="container_ddmx" class="container" style="overflow:auto;max-height:922px;">
                                         <table class="table table-hover" id="mydatatable">
                                             <thead>
                                                 <tr>

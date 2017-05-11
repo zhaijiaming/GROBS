@@ -22,65 +22,105 @@
                 $("#TingyongSF").val("false");//不选中=false
             }
         });
-        $("#pl_jxs").draggable({ handle: ".panel-heading" });
-        $("#pl_jxs_close").click(function () {
-            $("#pl_jxs").hide();
+        /*
+            经销商客户选择
+        */
+        $("#containerJxs").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        //关闭
+        $("#container_close").click(function () {
+            $("#containerJxs").hide();
         });
-        $("#bt_jxs_add").click(function () {
-            var selrow = false;
-            $("#dt_jxs tr input[type=checkbox]").each(function () {
-                if (this.checked) {
-                    selrow = true;
-                    $("#kehuid").val($(this).val());
-                    $("#khname").val($(this).parent().parent().find("td").eq(2).html());
+        //添加
+        //$("#btn_confirm").click(function () {
+        //    var selrow = false;
+        //    $("#table_data tr").each(function () {
+        //        if ($(this).find("input[type=checkbox]").is(':checked')) {
+        //            selrow = true;
+        //            $("#jxsid").val($(this).find(".checkbox").val());
+        //            $("#khname").val($(this).find(".Mingcheng").html());
+        //            $("#JXSDM").val($(this).find(".daima").html());
+        //        }
+        //    });
+        //    if (selrow == false)
+        //        alert("请选择客户后再确定！");
+        //    else
+        //        $("#containerJxs").hide();
+        //});
+        //单击tr打钩
+        $("#table_data").on("click", "tr", function (e) {
+            if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+                if ($(this).find("input[type=checkbox]").is(':checked')) {
+                    $(this).find(":checkbox").prop("checked", false);
+                } else {
+                    $("input[type=checkbox]").prop("checked", false);
+                    $(this).find(":checkbox").prop("checked", true);
                 }
-            });
-            if (selrow == false)
-                alert("请选择客户后再确定！");
-            else
-                $("#pl_jxs").hide();
+            }
         });
-        $("#btn_selkh").click(function () {
-            $("#pl_jxs").show();
-            $.ajax({
-                async: true,
-                beforeSend: function () {
-                    ShowWait();
-                },
-                complete: function () {
-                    HiddenWait();
-                },
-                type: "POST",
-                url: "/base_shouhuodanwei/getcust",
-                data: {
-                     hz:1
-                },
-                success: function (data) {
-                    var filltable = "";
-                    if (data != -1) {
-                        for (var i in data) {
-                            filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
-                            filltable = filltable + data[i].ID;
-                            filltable = filltable + '"/></td><td>';
-                            filltable = filltable + data[i].KehuDM;
-                            filltable = filltable + '</td><td>';
-                            filltable = filltable + data[i].Mingcheng;
-                            filltable = filltable + '</td><td>';
-                            filltable = filltable + data[i].Lianxiren;
-                            filltable = filltable + '</td><td>';
-                            filltable = filltable + data[i].SonghuoDZ;
-                            filltable = filltable + '</td><tr>';
-                        }
-                    }
-                    else {
-                        alert("获取客户信息出错，请联系管理员！");
-                    }
-                    $("#dt_jxs tbody").html(filltable);
-                }
-            });
-
+        //双击取值
+        $("#table_data tbody").on("dblclick", "tr", function () {
+            $("#khname").val($(this).find(".Mingcheng").html());
+            $("#jxsid").val($(this).find(".checkbox").val());
+            $("#containerJxs").hide();
+        });
+        //经销商弹框
+        $("#btn_select").click(function () {
+            $("#containerJxs").show();
+            getJxsWithQuery();
+        });
+        //经销商查询
+        $("#jxs_search").on("click", function () {
+            $("#table_data tbody").html("");
+            getJxsWithQuery();
         });
     });
+    //查询条件搜索经销商
+    function getJxsWithQuery() {
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
+            },
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: "/base_shouhuodanwei/getJxsWithQuery",
+            data: {
+                req_jxs: $("#req_jxs").val(),
+                req_lianxiren: $("#req_lianxiren").val(),
+                req_shdz: $("#req_shdz").val()
+            },
+            success: function (data) {
+                var filltable = "";
+                if (data != -1) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"/></td><td><span class="daima">';
+                        filltable = filltable + data[i].KehuDM;
+                        filltable = filltable + '</span></td><td><span class="Mingcheng">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td>';
+                        filltable = filltable + data[i].Lianxiren;
+                        filltable = filltable + '</td><td>';
+                        filltable = filltable + data[i].SonghuoDZ;
+                        filltable = filltable + '</td><tr>';
+                    }
+                }
+                $("#table_data tbody").html(filltable);
+                markSelect();
+            }
+        });
+    }
+    //记录选过的信息
+    function markSelect() {
+        $("#containerJxs tbody tr").each(function () {
+            if ($("#jxsid").val() == $(this).find(".checkbox").val()) {
+                $(this).find("input[type=checkbox]").prop("checked", true);
+            }
+        });
+    }
 </script>
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
@@ -119,17 +159,17 @@
                                 {
                                     @Html.AntiForgeryToken()
                                     <input type="hidden" name="id" />
-                                    <input type="hidden" name="kehuid" id="kehuid"/>
+                                    <input type="hidden" name="kehuid" id="jxsid"/>
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <fieldset>
-                                        @*客户*@
+                                        @*经销商*@
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
+                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>经销商</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
-                                                    <input id="khname" placeholder="请选择商品" class="form-control" type="text">
+                                                    <input id="khname" placeholder="请选择经销商" class="form-control" type="text">
                                                     <span class="input-group-btn">
-                                                        <button type="button" id="btn_selkh" class="btn btn-primary btn-sm">
+                                                        <button type="button" id="btn_select" class="btn btn-primary btn-sm">
                                                             选择
                                                             <i class="icon-hand-up icon-on-right bigger-110"></i>
                                                         </button>
@@ -215,26 +255,74 @@
         </div>
     </div>
 </div>
-<div id="pl_jxs" class="panel panel-primary" hidden style="position:fixed;top:100px;left:240px;width:700px;height:auto;overflow:hidden;z-index:999;">
+<div id="containerJxs" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;min-height:330px;z-index:99;">
     <div class="panel-heading">
-        <h3 class="panel-title">经销商<button id="pl_jxs_close" class="pull-right">X</button></h3>
+        <h3 class="panel-title"><b>经销商</b><button id="container_close" class="pull-right">X</button></h3>
     </div>
     <div class="panel-body">
-        <div class="center" style="width:680px;height:500px;overflow:scroll;">
-            <button type="button" class="btn btn-default " id="bt_jxs_add"><i class="icon-add"></i>确定</button>
-            <table class="table table-bordered table-condensed" id="dt_jxs">
-                <caption></caption>
-                <thead>
-                    <tr>
-                        <td></td>
-                        <td>编号</td>
-                        <td>名称</td>
-                        <td>联系人</td>
-                        <td>地址</td>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    @*查询条件*@
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="border:1px solid #DDD;padding-top:10px;border-radius:4px;">
+                                <div class="row">
+                                    @*经销商*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_jxs" class="col-sm-3 control-label"><b>经销商</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_jxs" class="form-control" placeholder="请输入经销商名称" />
+                                        </div>
+                                    </div>
+                                    @*联系人*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_lianxiren" class="col-sm-3 control-label"><b>联系人</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_lianxiren" class="form-control" placeholder="请输入联系人" />
+                                        </div>
+                                    </div>
+                                    @*送货地址*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_shdz" class="col-sm-3 control-label"><b>地址</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_shdz" class="form-control" placeholder="请输入送货地址" />
+                                        </div>
+                                    </div>
+                                </div>
+                                @*按钮*@
+                                <div class="row">
+                                    <div class="form-group col-sm-4 col-sm-offset-4">
+                                        <button type="button" id="jxs_search" class="btn btn-block " style="background-color:#56b18e!important;border:none;border-radius:6px;">
+                                            <span style="font-size:16px!important;">查询</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <caption></caption>
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>编号</th>
+                                                    <th>名称</th>
+                                                    <th>联系人</th>
+                                                    <th>地址</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

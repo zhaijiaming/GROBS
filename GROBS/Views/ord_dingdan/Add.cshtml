@@ -24,7 +24,7 @@
                 $("#ShenheTG").val("false");//不选中=false
             }
         });
-        //'是否结束'绑定值
+        //'是否控制'绑定值
         $("#JieshuSF").val("true");//默认赋值
         $("#JieshuSF").change(function () {
             if ($("#JieshuSF").is(":checked")) {
@@ -81,6 +81,9 @@
         $("#table_data tbody").on("dblclick", "tr", function () {
             $("#khname").val($(this).find(".Mingcheng").html());
             $("#jxsid").val($(this).find(".checkbox").val());
+            $("#Lianxiren").val($(this).find(".lianxiren").html());
+            $("#LianxiDH").val($(this).find(".lianxidianhua").html());
+            $("#SonghuoDZ").val($(this).find(".songhuodizhi").html());
             $("#containerJxs").hide();
         });
     });
@@ -120,11 +123,13 @@
                         filltable = filltable + data[i].KehuDM;
                         filltable = filltable + '</td><td><span class="Mingcheng">';
                         filltable = filltable + data[i].Mingcheng;
-                        filltable = filltable + '</span></td><td>';
+                        filltable = filltable + '</span></td><td><span class = "lianxiren">';
                         filltable = filltable + data[i].Lianxiren;
-                        filltable = filltable + '</td><td>';
+                        filltable = filltable + '</span></td><td><span class = "lianxidianhua">';
+                        filltable = filltable + data[i].LianxiDH;
+                        filltable = filltable + '</span></td><td><span class = "songhuodizhi">';
                         filltable = filltable + data[i].SonghuoDZ;
-                        filltable = filltable + '</td><tr>';
+                        filltable = filltable + '</span></td><tr>';
                     }
                 }
                 else {
@@ -210,7 +215,7 @@
                                         <div class="form-group">
                                             <label for="CGLX" class="col-sm-3 control-label"><b>采购类型</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="CGLX" name="CGLX" class="form-control" placeholder="请输入采购类型" />
+                                                @Html.SelectList_Common("CGLX", "订单类型")
                                             </div>
                                         </div>
                                         @*客户单号*@
@@ -255,16 +260,16 @@
                                         </div>
                                         @*客服人员*@
                                         <div class="form-group">
-                                            <label for="CPXID" class="col-sm-3 control-label"><b>客服人员</b></label>
+                                            <label for="OPID" class="col-sm-3 control-label"><b>客服人员</b></label>
                                             <div class="col-sm-8">
                                                 @Html.SelectList_Auto("OPID", "userinfo", "")
                                             </div>
                                         </div>
                                         @*审核人员*@
                                         <div class="form-group">
-                                            <label for="CPXID" class="col-sm-3 control-label"><b>审核人员</b></label>
+                                            <label for="ACCID" class="col-sm-3 control-label"><b>审核人员</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Auto("ACCID", "userinfo", "")
+                                                <input type="text" id="ACCID" name="ACCID" class="form-control" placeholder="请输入审核人员" />
                                             </div>
                                         </div>
                                         @*审核通过*@
@@ -272,7 +277,7 @@
                                             <label class="col-sm-3 control-label" for="ShenheTG"><b>审核通过</b></label>
                                             <div class="col-sm-4">
                                                 <label class="control-group">
-                                                    <input name="ShenheTG" id="ShenheTG" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                    <input name="ShenheTG" id="ShenheTG" disabled class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
                                                     <span class="lbl"></span>
                                                 </label>
                                             </div>
@@ -291,12 +296,12 @@
                                                 <input type="text" id="Zongjine" name="Zongjine" class="form-control" placeholder="请输入总金额" />
                                             </div>
                                         </div>
-                                        @*是否结束*@
+                                        @*是否控制*@
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="JieshuSF"><b>是否结束</b></label>
+                                            <label class="col-sm-3 control-label" for="JieshuSF"><b>是否控制</b></label>
                                             <div class="col-sm-4">
                                                 <label class="control-group">
-                                                    <input name="JieshuSF" id="JieshuSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                    <input name="JieshuSF" id="JieshuSF" class="ace ace-switch  ace-switch-7" checked="checked" type="checkbox">
                                                     <span class="lbl"></span>
                                                 </label>
                                             </div>
@@ -429,6 +434,7 @@
                                                     <th>编号</th>
                                                     <th>名称</th>
                                                     <th>联系人</th>
+                                                    <th>联系电话</th>
                                                     <th>地址</th>
                                                 </tr>
                                             </thead>
