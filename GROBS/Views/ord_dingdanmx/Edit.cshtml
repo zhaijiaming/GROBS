@@ -14,6 +14,106 @@
         $("#save_bottom").on("click", function () {
             $("#form").submit();
         });
+        /*
+            判断采购类型:判断是选择套包还是普通商品
+            0：无
+            1：普通
+            2：套包
+            3：促销
+        */
+        var cglx = $("#cglx").val();
+        switch (cglx) {
+            case "1":
+                /*
+                    选择商品
+                */
+                $("#containerSpxx").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+                //click
+                $("#btn_select").on("click", function () {
+                    $("#containerSpxx").show();
+                    getSpxx();   //获取商品数据
+                });
+                //弹框关闭
+                $("#container_close").click(function () {
+                    $("#containerSpxx").hide();
+                });
+                //商品查询
+                $("#spxx_search").on("click", function () {
+                    $("#table_data tbody").html("");
+                    getSpxx();
+                });
+                //双击取值
+                $("#table_data tbody").on("dblclick", "tr", function () {
+                    $("#spid").val($(this).find(".checkbox").val());
+                    $("#SPBM").val($(this).find(".Daima").html());
+                    $("#spmc").val($(this).find(".Mingcheng").html());
+                    $("#Guige").val($(this).find(".Guige").html());
+                    $("#XSBJ").val($(this).find(".XSBJ").html());
+                    $("#XSDJ").val($(this).find(".XSBJ").html());
+                    $("#HSL").val($(this).find(".Huansuanlv").html());
+                    $("#Col1").val($(this).find(".Col1").html());
+                    $("#JBDW").val($(this).find(".Danwei").html());
+                    $("#XSDW").val($(this).find(".BaozhuangDW").html());
+                    $("#CGSL").val("");
+                    $("#Jine").val("");
+                    $("#Zhekou").val("");
+                    $("#zhekoulv_percent").val("");
+                    $("#Zhekoulv").val("");
+                    $("#CGSL").focus();
+                    $("#containerSpxx").hide();
+                });
+                break;
+            case "2":
+                /*
+                    选择套包
+                */
+                //修改样式
+                $("#container_tb").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
+                $(".label_spbm").html("套包代码");
+                $(".label_spmc").html("套包");
+                $("#display_Guige").hide();
+                $("#display_HSL").hide();
+                $("#display_Col1").hide();
+                $("#display_JBDW").hide();
+                //弹框显示
+                $("#btn_select").on("click", function () {
+                    $("#container_tb").show();
+                    getTaobao();   //获取套包信息
+                });
+                //弹框关闭
+                $("#container_close_tb").click(function () {
+                    $("#container_tb").hide();
+                });
+                //商品查询
+                $("#btn_search_tb").on("click", function () {
+                    $("#table_data_tb tbody").html("");
+                    getTaobao();   //获取套包信息
+                });
+                //双击取值
+                $("#table_data_tb tbody").on("dblclick", "tr", function () {
+                    $("#spid").val($(this).find(".tb_checkbox").val());
+                    $("#SPBM").val($(this).find(".tb_Daima").html());
+                    $("#spmc").val($(this).find(".tb_Mingcheng").html());
+                    //$("#Guige").val($(this).find(".Guige").html());
+                    $("#XSBJ").val($(this).find(".tb_JiaXS").html());
+                    $("#XSDJ").val($(this).find(".tb_JiaXS").html());
+                    //$("#HSL").val($(this).find(".Huansuanlv").html());
+                    //$("#Col1").val($(this).find(".Col1").html());
+                    //$("#JBDW").val($(this).find(".Danwei").html());
+                    $("#XSDW").val($(this).find(".tb_XSDW").html());
+                    $("#CGSL").val("");
+                    $("#Jine").val("");
+                    $("#Zhekou").val("");
+                    $("#zhekoulv_percent").val("");
+                    $("#Zhekoulv").val("");
+                    $("#CGSL").focus();
+                    $("#container_tb").hide();
+                });
+                break;
+            default:
+                break;
+
+        }
         //金额计算
         $("#CGSL,#XSBJ,#Jine").blur(function () {
             if ($("#CGSL").val() != "" && $("#XSBJ").val() != "" && $("#CGSL").val() != null && $("#XSBJ").val() != null) {
@@ -35,72 +135,26 @@
         //折扣率计算
         $("#Zhekou").blur(function () {
             if ($("#Jine").val() == "" || $("#Jine").val() == null || $("#Jine").val() == "0") {
-                alert("金额不能为空和0");
+                alert("金额不能为空或0");
                 $("#CGSL").focus();
             } else if ($("#Zhekou").val() != "" && $("#Zhekou").val() != null) {
                 var zhekou = $("#Zhekou").val();
                 var Jine = $("#Jine").val();
                 var rel = 1 - zhekou / Jine;
 
-                $("#Zhekoulv").val(toDecimal(rel));
+                $("#Zhekoulv").val(toDecimal4(rel));
 
                 var rel_persent = rel * 100;
                 $("#zhekoulv_percent").val(toDecimal(rel_persent));
+                cal_xiaoShouDanJia();//销售单价计算
             }
         });
         //销售单价计算
-        $("#zhekoulv_percent,#XSBJ,#XSDJ").blur(function () {
-            if ($("#XSBJ").val() != "" && $("#XSBJ").val() != null && $("#XSBJ").val() != "0" && $("#Zhekoulv").val() != "" && $("#Zhekoulv").val() != null && $("#Zhekoulv").val() != "0") {
-                var xsbj = $("#XSBJ").val();
-                var zhekoulv = $("#Zhekoulv").val();
-                var rel = xsbj * zhekoulv;
-                $("#XSDJ").val(toDecimal(rel));
-            }
+        $("#zhekoulv_percent,#XSBJ").blur(function () {
+            cal_xiaoShouDanJia();
         });
-        /*
-            选择商品
-        */
-        $("#containerSpxx").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
-        //click
-        $("#btn_select").bind("click", function () {
-            $("#containerSpxx").show();
-            getSpxx();   //获取商品数据
-        });
-        //弹框关闭
-        $("#container_close").click(function () {
-            $("#containerSpxx").hide();
-        });
-        //商品查询
-        $("#spxx_search").on("click", function () {
-            $("#table_data tbody").html("");
-            getSpxx();
-        });
-        //确定添加
-        //$("#btn_confirm").click(function () {
-        //    var _data = "";
-        //    var _spid = "";
-        //    var _Huansuanlv = "";
-        //    var _Danwei = "";
-        //    var _BaozhuangDW = "";
-        //    $("#table_data tr").each(function () {
-        //        if ($(this).find("input[type=checkbox]").is(':checked')) {
-        //            _data = $(this).find(".Mingcheng").html();
-        //            _Huansuanlv = $(this).find(".Huansuanlv").html();
-        //            _Danwei = $(this).find(".Danwei").html();
-        //            _BaozhuangDW = $(this).find(".BaozhuangDW").html();
-        //            _spid = $(this).find(".checkbox").val();
-        //        }
-        //        $("#spid").val(_spid);
-        //        $("#spmc").val(_data);
-        //        $("#hsl").val(_Huansuanlv);
-        //        $("#jbdw").val(_Danwei);
-        //        $("#xsdw").val(_BaozhuangDW);
-        //    });
-        //    getPrice($("#spid").val());//获取销售价和采购价
-        //    $("#containerSpxx").hide();
-        //});
         //单击tr打钩
-        $("#table_data").on("click", "tr", function (e) {
+        $("#table_data,#table_data_tb").on("click", "tr", function (e) {
             if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
                 if ($(this).find("input[type=checkbox]").is(':checked')) {
                     $(this).find(":checkbox").prop("checked", false);
@@ -110,21 +164,16 @@
                 }
             }
         });
-        //双击取值
-        $("#table_data tbody").on("dblclick", "tr", function () {
-            $("#spid").val($(this).find(".checkbox").val());
-            $("#SPBM").val($(this).find(".Daima").html());
-            $("#spmc").val($(this).find(".Mingcheng").html());
-            $("#Guige").val($(this).find(".Guige").html());
-            $("#XSBJ").val($(this).find(".XSBJ").html());
-            $("#XSDJ").val($(this).find(".XSBJ").html());
-            $("#HSL").val($(this).find(".Huansuanlv").html());
-            $("#Col1").val($(this).find(".Col1").html());
-            $("#JBDW").val($(this).find(".Danwei").html());
-            $("#XSDW").val($(this).find(".BaozhuangDW").html());
-            $("#containerSpxx").hide();
-        });
     });
+    //销售单价计算
+    function cal_xiaoShouDanJia() {
+        if ($("#XSBJ").val() != "" && $("#XSBJ").val() != null && $("#XSBJ").val() != "0" && $("#Zhekoulv").val() != "" && $("#Zhekoulv").val() != null && $("#Zhekoulv").val() != "0") {
+            var xsbj = $("#XSBJ").val();
+            var zhekoulv = $("#Zhekoulv").val();
+            var rel = xsbj * zhekoulv;
+            $("#XSDJ").val(toDecimal(rel));
+        }
+    }
     //取小数点后两位
     function toDecimal(x) {
         var f = parseFloat(x);
@@ -133,6 +182,63 @@
         }
         f = Math.round(x * 100) / 100;
         return f;
+    }
+    //取小数点后4位
+    function toDecimal4(x) {
+        var f = parseFloat(x);
+        if (isNaN(f)) {
+            return;
+        }
+        f = Math.round(x * 10000) / 10000;
+        return f;
+    }
+    //获取套包商品
+    function getTaobao() {
+        var filltable = "";
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
+            },
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: "/base_taobao/getTaobaoWithQuery",
+            data: {
+                req_tbdm: $("#req_tbdm").val(),
+                req_tbmc: $("#req_tbmc").val(),
+                req_gys: $("#req_gys").val(),
+                cpxid: $("#cpx").val()
+            },
+            success: function (data) {
+                var filltable = "";
+                if (data != -1) {
+                    for (var i in data) {
+                        filltable = filltable + '<tr><td><label><input type="checkbox" class ="tb_checkbox mark_id" value="';
+                        filltable = filltable + data[i].ID;
+                        filltable = filltable + '"></label></td><td><span class="tb_Daima">';
+                        filltable = filltable + data[i].Daima;
+                        filltable = filltable + '</span></td><td><span class="tb_Mingcheng">';
+                        filltable = filltable + data[i].Mingcheng;
+                        filltable = filltable + '</span></td><td><span class="tb_Miaoshu">';
+                        filltable = filltable + data[i].Miaoshu;
+                        filltable = filltable + '</span></td><td><span class="tb_JiaXS">';
+                        filltable = filltable + data[i].JiaXS;
+                        filltable = filltable + '</span></td><td><span class="tb_JiaCG">';
+                        filltable = filltable + data[i].JiaCG;
+                        filltable = filltable + '</span></td><td><span class="tb_XSDW">';
+                        filltable = filltable + data[i].XSDW;
+                        filltable = filltable + '</span></td></tr>';
+                    }
+                }
+                else {
+                    alert("获取信息出错，请联系管理员！");
+                }
+                $("#table_data_tb tbody").html(filltable);
+                markSelect($("#table_data_tb tbody tr"));//记录选过的信息
+            }
+        });
     }
     //获取商品信息
     function getSpxx() {
@@ -150,13 +256,14 @@
             data: {
                 req_spbm: $("#req_spbm").val(),
                 req_spmc: $("#req_spmc").val(),
-                req_guige: $("#req_guige").val()
+                req_guige: $("#req_guige").val(),
+                cpxid: $("#cpx").val()
             },
             success: function (data) {
                 var filltable = "";
                 if (data != -1) {
                     for (var i in data) {
-                        filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox" value="';
+                        filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox mark_id" value="';
                         filltable = filltable + data[i].ID;
                         filltable = filltable + '"></label></td><td><span class="Daima">';
                         filltable = filltable + data[i].Daima;
@@ -181,14 +288,15 @@
                     alert("获取客户信息出错，请联系管理员！");
                 }
                 $("#table_data tbody").html(filltable);
-                markSelect();//记录选过的信息
+                markSelect($("#containerSpxx tbody tr"));//记录选过的信息
             }
         });
     }
     //记录选过的信息
-    function markSelect() {
-        $("#containerSpxx tbody tr").each(function () {
-            if ($("#spid").val() == $(this).find(".checkbox").val()) {
+    function markSelect(selector) {
+        var selector = selector;
+        selector.each(function () {
+            if ($("#spid").val() == $(this).find(".mark_id").val()) {
                 $(this).find("input[type=checkbox]").prop("checked", true);
             }
         });
@@ -201,7 +309,7 @@
             <a href="/Home">首页</a>
         </li>
         <li>
-            <a href="/ord_dingdanmx">订单明细</a>
+            <a href="/ord_dingdan/Edit/@ViewData.Model.DDID">订单明细</a>
         </li>
         <li class="active"> 编辑</li>
     </ul>
@@ -231,17 +339,12 @@
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
                                     <input type="hidden" name="Zhekoulv" id="Zhekoulv" value="@ViewData.Model.Zhekoulv"/>
+                                    <input type="hidden" id="cpx" value="@ViewBag.cpx" />
+                                    <input type="hidden" id="cglx" value="@ViewBag.cglx" />
                                     <fieldset>
-                                        @*商品代码*@
-                                        <div class="form-group">
-                                            <label for="SPBM" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品代码</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="SPBM" name="SPBM" class="form-control" placeholder="请选择商品" value="@ViewData.Model.SPBM"/>
-                                            </div>
-                                        </div>
                                         @*商品名称*@
                                         <div class="form-group">
-                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>商品</b></label>
+                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b class="label_spmc">商品</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
                                                     <input id="spmc" name="spmc" placeholder="请选择商品" class="form-control" type="text" value="@ViewData.Model.SPMC">
@@ -254,25 +357,18 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @*规格*@
+                                        @*商品代码*@
                                         <div class="form-group">
+                                            <label for="SPBM" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b class="label_spbm">商品代码</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="SPBM" name="SPBM" class="form-control" placeholder="请选择商品" value="@ViewData.Model.SPBM"/>
+                                            </div>
+                                        </div>
+                                        @*规格*@
+                                        <div id="display_Guige" class="form-group">
                                             <label for="Guige" class="col-sm-3 control-label"><b>规格</b></label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="Guige" name="Guige" class="form-control" placeholder="请选择商品" value="@ViewData.Model.Guige"/>
-                                            </div>
-                                        </div>
-                                        @*采购数量*@
-                                        <div class="form-group">
-                                            <label for="CGSL" class="col-sm-3 control-label"><b>采购数量</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="CGSL" name="CGSL" class="form-control" placeholder="请输入采购数量" value="@ViewData.Model.CGSL" />
-                                            </div>
-                                        </div>
-                                        @*发货数量*@
-                                        <div class="form-group">
-                                            <label for="FHSL" class="col-sm-3 control-label"><b>发货数量</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="FHSL" readonly name="FHSL" class="form-control" placeholder="请输入发货数量" value="@ViewData.Model.FHSL" />
                                             </div>
                                         </div>
                                         @*销售报价*@
@@ -287,6 +383,49 @@
                                             <label for="XSDJ" class="col-sm-3 control-label"><b>销售单价</b></label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="XSDJ" readonly name="XSDJ" class="form-control" placeholder="请输入销售单价" value="@ViewData.Model.XSDJ" />
+                                            </div>
+                                        </div>
+                                        @*换算率*@
+                                        <div id="display_HSL" class="form-group">
+                                            <label for="HSL" class="col-sm-3 control-label"><b>换算率</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="HSL" name="HSL" class="form-control" placeholder="请选择商品" value="@ViewData.Model.HSL" />
+                                            </div>
+                                        </div>
+                                        @*换算编码*@
+                                        <div id="display_Col1" class="form-group">
+                                            <label for="Col1" class="col-sm-3 control-label"><b>换算编码</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="请选择商品" value="@ViewData.Model.Col1" />
+                                            </div>
+                                        </div>
+                                        @*基本单位*@
+                                        <div id="display_JBDW" class="form-group">
+                                            <label for="JBDW" class="col-sm-3 control-label"><b>基本单位</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="JBDW" name="JBDW" class="form-control" placeholder="请选择商品" value="@ViewData.Model.JBDW" />
+                                            </div>
+                                        </div>
+                                        @*销售单位*@
+                                        <div class="form-group">
+                                            <label for="XSDW" class="col-sm-3 control-label"><b>销售单位</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="XSDW" name="XSDW" class="form-control" placeholder="请选择商品" value="@ViewData.Model.XSDW" />
+                                            </div>
+                                        </div>
+                                        <hr />
+                                        @*采购数量*@
+                                        <div class="form-group">
+                                            <label for="CGSL" class="col-sm-3 control-label"><b>采购数量</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="CGSL" name="CGSL" class="form-control" placeholder="请输入采购数量" value="@ViewData.Model.CGSL" />
+                                            </div>
+                                        </div>
+                                        @*发货数量*@
+                                        <div class="form-group">
+                                            <label for="FHSL" class="col-sm-3 control-label"><b>发货数量</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="FHSL" readonly name="FHSL" class="form-control" placeholder="请输入发货数量" value="@ViewData.Model.FHSL" />
                                             </div>
                                         </div>
                                         @*金额*@
@@ -313,34 +452,8 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        @*换算率*@
-                                        <div class="form-group">
-                                            <label for="HSL" class="col-sm-3 control-label"><b>换算率</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="HSL" name="HSL" class="form-control" placeholder="请选择商品" value="@ViewData.Model.HSL" />
-                                            </div>
-                                        </div>
-                                        @*换算编码*@
-                                        <div class="form-group">
-                                            <label for="Col1" class="col-sm-3 control-label"><b>换算编码</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="请选择商品" value="@ViewData.Model.Col1" />
-                                            </div>
-                                        </div>
-                                        @*基本单位*@
-                                        <div class="form-group">
-                                            <label for="JBDW" class="col-sm-3 control-label"><b>基本单位</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="JBDW" name="JBDW" class="form-control" placeholder="请选择商品" value="@ViewData.Model.JBDW" />
-                                            </div>
-                                        </div>
-                                        @*销售单位*@
-                                        <div class="form-group">
-                                            <label for="XSDW" class="col-sm-3 control-label"><b>销售单位</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="XSDW" name="XSDW" class="form-control" placeholder="请选择商品" value="@ViewData.Model.XSDW" />
-                                            </div>
-                                        </div>
+                                        
+                                        <hr />
                                         @*录入日期*@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
@@ -442,6 +555,80 @@
                                                     <th>销售单位</th>
                                                     <th>换算率</th>
                                                     <th>换算编码</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="container_tb" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;min-height:330px;z-index:99;">
+    <div class="panel-heading tuodong">
+        <h3 class="panel-title"><b>套包信息</b><button id="container_close_tb" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    @*查询条件*@
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="border:1px solid #DDD;padding-top:10px;border-radius:4px;">
+                                <div class="row">
+                                    @*套包代码*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_tbdm" class="col-sm-4 control-label"><b>套包代码</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_tbdm" class="form-control" placeholder="请输入套包代码" />
+                                        </div>
+                                    </div>
+                                    @*套包名称*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_tbmc" class="col-sm-4 control-label"><b>套包名称</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_tbmc" class="form-control" placeholder="请输入套包名称" />
+                                        </div>
+                                    </div>
+                                    @*供应商*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_gys" class="col-sm-3 control-label"><b>供应商</b></label>
+                                        <div class="col-sm-8">
+                                            @*<input type="text" id="req_gys" class="form-control" placeholder="请输入供应商" />*@
+                                            @Html.SelectList_Auto("req_gys", "供应商", "")
+                                        </div>
+                                    </div>
+                                </div>
+                                @*按钮*@
+                                <div class="row">
+                                    <div class="form-group col-sm-4 col-sm-offset-4">
+                                        <button type="button" id="btn_search_tb" class="btn btn-block " style="background-color:#56b18e!important;border:none;border-radius:6px;">
+                                            <span style="font-size:16px!important;">查询</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data_tb">
+                                            <caption></caption>
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>套包号</th>
+                                                    <th>名称</th>
+                                                    <th>描述</th>
+                                                    <th>销售价</th>
+                                                    <th>采购价</th>
+                                                    <th>销售单位</th>
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>

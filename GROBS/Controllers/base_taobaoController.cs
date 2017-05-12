@@ -305,6 +305,27 @@ namespace GROBS.Controllers
             }
             return RedirectToAction("Index");
         }
+        public JsonResult getTaobaoWithQuery()
+        {
+            var tbdm = Request["req_tbdm"] ?? "";
+            var tbmc = Request["req_tbmc"] ?? "";
+            var gys = Request["req_gys"] ?? "";
+            var cpxid = Request["cpxid"] ?? "";
+
+            Expression<Func<base_taobao, bool>> where = PredicateExtensionses.True<base_taobao>();
+            if (!string.IsNullOrEmpty(tbdm))
+                where = where.And(p => p.Daima.Contains(tbdm));
+            if (!string.IsNullOrEmpty(tbmc))
+                where = where.And(p => p.Mingcheng.Contains(tbmc));
+            if (!string.IsNullOrEmpty(gys))
+                where = where.And(p => p.GYSID == int.Parse(gys));
+            where.And(p => p.CPXID == int.Parse(cpxid) && p.IsDelete == false);
+
+            var tempData = ServiceFactory.base_taobaoservice.LoadSortEntities(where.Compile(), true, p => p.ID).ToList<base_taobao>();
+            if (tempData == null)
+                return Json(-1);
+            return Json(tempData);
+        }
     }
 }
 

@@ -204,13 +204,14 @@ namespace GROBS.Controllers
                 ob_ord_dingdan.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdan.KehuDM = kehudm.Trim();
                 ob_ord_dingdan = ob_ord_dingdanservice.AddEntity(ob_ord_dingdan);
+                id = ob_ord_dingdan.ID.ToString();
                 ViewBag.ord_dingdan = ob_ord_dingdan;
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
             }
-            return RedirectToAction("Index");
+            return RedirectToAction("Edit", new { id = int.Parse(id) });
         }
 
         [OutputCache(Duration = 10)]

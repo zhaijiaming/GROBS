@@ -1201,6 +1201,7 @@ namespace GROBS.Controllers
             var _spbm = Request["req_spbm"] ?? "";
             var _spmc = Request["req_spmc"] ?? "";
             var _guige = Request["req_guige"] ?? "";
+            var cpxid = Request["cpxid"] ?? "";
 
             Expression<Func<base_shangpinjg_v, bool>> where = PredicateExtensionses.True<base_shangpinjg_v>();
             if (!string.IsNullOrEmpty(_spbm))
