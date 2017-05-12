@@ -303,6 +303,8 @@
     <Compile Include="Controllers\ord_dingdanController.cs" />
     <Compile Include="Controllers\ord_dingdanmxController.cs" />
     <Compile Include="Controllers\ord_fanliController.cs" />
+    <Compile Include="Controllers\ord_fanliczController.cs" />
+    <Compile Include="Controllers\ord_fanlixfController.cs" />
     <Compile Include="Controllers\ord_jixiaoController.cs" />
     <Compile Include="Controllers\ord_qianhuoController.cs" />
     <Compile Include="Controllers\ord_xiaoshouController.cs" />
@@ -323,7 +325,9 @@
     <Compile Include="Models\base_zhucezhengjlViewModel.cs" />
     <Compile Include="Models\ord_dingdanmxViewModel.cs" />
     <Compile Include="Models\ord_dingdanViewModel.cs" />
+    <Compile Include="Models\ord_fanliczViewModel.cs" />
     <Compile Include="Models\ord_fanliViewModel.cs" />
+    <Compile Include="Models\ord_fanlixfViewModel.cs" />
     <Compile Include="Models\ord_jixiaoViewModel.cs" />
     <Compile Include="Models\ord_qianhuoViewModel.cs" />
     <Compile Include="Models\ord_xiaoshoumxViewModel.cs" />
@@ -807,6 +811,12 @@
     <Content Include="Views\ord_dingdan\CustomerCurrentOrder.cshtml" />
     <Content Include="Views\ord_xiaoshou\GetSendList.cshtml" />
     <Content Include="Views\ord_dingdan\CustomerAdd.cshtml" />
+    <Content Include="Views\ord_fanlicz\Add.cshtml" />
+    <Content Include="Views\ord_fanlicz\Edit.cshtml" />
+    <Content Include="Views\ord_fanlicz\Index.cshtml" />
+    <Content Include="Views\ord_fanlixf\Add.cshtml" />
+    <Content Include="Views\ord_fanlixf\Edit.cshtml" />
+    <Content Include="Views\ord_fanlixf\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
