@@ -1214,6 +1214,30 @@ namespace GROBS.Controllers
                 return Json(-1);
             return Json(tempData);
         }
+        public JsonResult GetProductbyCust()
+        {
+            int _userid = (int)Session["user_id"];
+            var _cpx = Request["cpx"] ?? "";
+            var _dm = Request["dm"] ?? "";
+            var _sl = Request["sl"] ?? "";
+            var _sm = Request["sm"] ?? "";
+            if (string.IsNullOrEmpty(_cpx) || string.IsNullOrEmpty(_dm) || string.IsNullOrEmpty(_sl))
+                return Json(-1);
+            try
+            {
+                int _cpxid = int.Parse(_cpx);
+                float _shul = float.Parse(_sl);
+                var _sp = ob_base_shangpinxxservice.GetEntityById(p => p.Daima == _dm && p.Chanpinxian == int.Parse(_cpx) && p.IsDelete == false);
+                if (_sp == null)
+                    return Json(-2);
+                else
+                    return Json(_sp);
+            }
+            catch
+            {
+                return Json(-2);
+            }
+        }
     }
 }
 
