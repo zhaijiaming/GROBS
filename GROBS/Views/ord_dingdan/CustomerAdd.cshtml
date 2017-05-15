@@ -23,10 +23,18 @@
                 alert("请选择产品线和订单类型后才能添加商品信息！");
                 return;
             }
-            if (_type == 1)
+            if (_type == 1) {
+                $("#pl_spdm").val("");
+                $("#pl_cgsl").val("");
+                $("#pl_bz").val("");
                 $("#pl_sp").show();
-            if (_type == 2)
+            }
+            if (_type == 2) {
+                $("#pl_tb_tbdm").val("");
+                $("#pl_tb_cgsl").val("");
+                $("#pl_tb_bz").val("");
                 $("#pl_tb").show();
+            }
             if (_type == 3)
                 $("pl_cx").show();
         });
@@ -40,6 +48,7 @@
         $("#pl_sp_ok").click(function () {
             var _dm = $("#pl_spdm").val();
             var _sl = $("#pl_cgsl").val();
+            var _sm = $("#pl_bz").val();
             if (_dm.length == 0) {
                 alert("请录入商品代码后添加！");
                 return;
@@ -62,24 +71,52 @@
                     cpx: $("#sel_line").val(),
                     dm: _dm,
                     sl: _sl,
-                    sm: $("#pl_bz").val()
+                    sm: _sm
                 },
                 success: function (data) {
                     if (data == -1) {
-                        alert("添加商品出错！");
+                        alert("添加套包商品出错！");
+                    }
+                    else if (data == -2) {
+                        alert("输入格式不正确！");
+                    }
+                    else if (data == -3) {
+                        alert("该商品不存在！");
                     }
                     else {
-                        var _filltr = "";
-                        _filltr = _filltr + "<tr>";
-                        _filltr = _filltr + "<td></td>";
+                        var _filltr = '';
+                        _filltr = _filltr + '<tr>';
+                        _filltr = _filltr + '<td><i class="icon-minus-sign bigger-150 red"></i><input type="hidden" value="';
+                        _filltr = _filltr + data.ID;
+                        _filltr = _filltr + '"/></td>';
+                        _filltr = _filltr + '<td>';
+                        _filltr = _filltr + data.Daima;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + data.Guige;
+                        _filltr = _filltr + '</td><td>';
                         _filltr = _filltr + data.Mingcheng;
-                        _filltr = _filltr + "</tr>";
-                        $("#dt_sp tbody tr").append(_filltr);
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + _sl;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + data.JiaXS;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + _sm;
+                        _filltr = _filltr + '</td>';
+                        _filltr = _filltr + '</tr>';
+                        alert(_filltr);
+                        $("#dt_sp tbody").append(_filltr);
                         $("#pl_sp").hide();
+                        alert(DatarowCount());
                     }
                 }
             });
-
+        });
+        $("#dt_sp").on("click", ".icon-minus-sign", function () {
+            alert("delete now");
+            var _dtr = $(this).parent().parent();
+            _dtr.remove();
         });
         $("#cpx").change(function () {
             $("#sel_line").val($("#cpx").val());
@@ -95,8 +132,110 @@
             $("#pl_tb").hide();
         });
         $("#pl_tb_ok").click(function () {
+            var _dm = $("#pl_tb_tbdm").val();
+            var _sl = $("#pl_tb_cgsl").val();
+            if (_dm.length == 0) {
+                alert("请录入套包代码后添加！");
+                return;
+            }
+            if (_sl.length == 0) {
+                alert("请输入采购数量！");
+                return;
+            }
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/base_taobao/getpackagebycust",
+                data: {
+                    cpx: $("#sel_line").val(),
+                    dm: _dm,
+                    sl: _sl,
+                    sm: $("#pl_bz").val()
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        alert("添加套包商品出错！");
+                    }
+                    else if (data == -2) {
+                        alert("输入格式不正确！");
+                    }
+                    else if (data == -3) {
+                        alert("该套包不存在！");
+                    }
+                    else if (data == -4) {
+                        alert("该套包不支持网络下单，需要通知客服手工下单！");
+                    }
+                    else {
+                        var _filltr = "";
+                        _filltr = _filltr + "<tr>";
+                        _filltr = _filltr + "<td><input type='hidden' value='";
+                        _filltr = _filltr + data.ID;
+                        _filltr = _filltr + "'/></td>";
+                        _filltr = _filltr + "<td>";
+                        _filltr = _filltr + data.Daima;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + data.Miaoshu;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + data.Mingcheng;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + _sl;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + data.JiaXS;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + _sm;
+                        _filltr = _filltr + "</td>";
+                        _filltr = _filltr + "</tr>";
+                        $("#dt_sp tbody tr").append(_filltr);
+                        //$("#pl_sp").hide();
+                    }
+                }
+            });
+        });
+        $("#bt_save").click(function () {
+            var _dt = "";
+            $("#dt_sp tbody tr").each(function () {
+                var _rtd = $(this).find("td");
+                var _sp = _rtd.eq(0).find("input").val();
+                //var _gg = _rtd.eq(2).text();
+                var _sl = _rtd.eq(4).text();
+                var _dj = _rtd.eq(5).text();
+                var _je = _rtd.eq(6).text();
+                var _bz = _rtd.eq(7).text();
+                _bz = _bz.replace(",", "&#");
+                _bz = _bz.replace(";", "&*");
+                alert(_sp + "," + _sl + "," + _dj + "," + _je + "," + _bz);
+                _dt = _dt + _sp + "," + _sl + "," + _dj + "," + _je + "," + _bz + ";";
+            });
+            alert(_dt);
+            if (_dt.length > 10) {
+
+            }
         });
     });
+    function DatarowCount() {
+        var _rc = 0;
+        $("#dt_sp tbody tr").each(function () {
+            _rc++;
+        });
+        if (_rc == 0)
+        {
+            $("#cpx").removeAttr("disabled");
+            $("#ordertype").removeAttr("disabled");
+        }
+        if (_rc == 1) {
+            $("#cpx").attr("disabled", true);
+            $("#ordertype").attr("disabled", true);
+        }
+            return _rc;
+    }
 </script>
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
@@ -105,6 +244,7 @@
     <div class="row">
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_add"><i class="icon-adn"></i>添加商品</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_edit"><i class="icon-edit"></i>编辑商品</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_import"><i class="icon-exchange"></i>导入商品</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_save"><i class="icon-save"></i>保存订单</button>
         </p>
@@ -156,18 +296,7 @@
                                 <td>备注</td>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td></td>
-                                <td>代码</td>
-                                <td>规格</td>
-                                <td>描述</td>
-                                <td>数量</td>
-                                <td>单价</td>
-                                <td>金额</td>
-                                <td>备注</td>
-                            </tr>
-                        </tbody>
+                        <tbody></tbody>
                     </table>
                 </div>
             </div>

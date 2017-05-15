@@ -1228,11 +1228,11 @@ namespace GROBS.Controllers
             {
                 int _cpxid = int.Parse(_cpx);
                 float _shul = float.Parse(_sl);
-                var _sp = ob_base_shangpinxxservice.GetEntityById(p => p.Daima == _dm && p.Chanpinxian == int.Parse(_cpx) && p.IsDelete == false);
-                if (_sp == null)
-                    return Json(-2);
+                var _sp = ob_base_shangpinxxservice.LoadShangpinPriceAll(p => p.Daima == _dm && p.chanpinxian == int.Parse(_cpx)).ToList();
+                if (_sp.Count == 0)
+                    return Json(-3);
                 else
-                    return Json(_sp);
+                    return Json(_sp.First());
             }
             catch
             {

@@ -326,6 +326,34 @@ namespace GROBS.Controllers
                 return Json(-1);
             return Json(tempData);
         }
+        public JsonResult GetPackagebyCust()
+        {
+            var _cpx = Request["cpx"] ?? "";
+            var _dm = Request["dm"] ?? "";
+            var _sl = Request["sl"] ?? "";
+            var _sm = Request["sm"] ?? "";
+            if (string.IsNullOrEmpty(_cpx) || string.IsNullOrEmpty(_dm) || string.IsNullOrEmpty(_sl))
+                return Json(-1);
+            try
+            {
+                int _cpxid = int.Parse(_cpx);
+                float _shul = float.Parse(_sl);
+                var _tb = ob_base_taobaoservice.GetEntityById(p => p.Daima == _dm && p.CPXID == int.Parse(_cpx) && p.IsDelete == false && p.TingyongSF == false);
+                if (_tb == null)
+                    return Json(-3);
+                else
+                {
+                    if (_tb.KongzhiSF)
+                        return Json(-4);
+                    else
+                        return Json(_tb);
+                }
+            }
+            catch
+            {
+                return Json(-2);
+            }
+        }
     }
 }
 
