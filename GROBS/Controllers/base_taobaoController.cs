@@ -319,9 +319,9 @@ namespace GROBS.Controllers
                 where = where.And(p => p.Mingcheng.Contains(tbmc));
             if (!string.IsNullOrEmpty(gys))
                 where = where.And(p => p.GYSID == int.Parse(gys));
-            where.And(p => p.CPXID == int.Parse(cpxid) && p.IsDelete == false);
+            where = where.And(p => p.CPXID == int.Parse(cpxid) && p.IsDelete == false);
 
-            var tempData = ServiceFactory.base_taobaoservice.LoadSortEntities(where.Compile(), true, p => p.ID).ToList<base_taobao>();
+            var tempData = ServiceFactory.base_taobaoservice.LoadSortEntities(where.Compile(), true, p => p.Mingcheng).ToList<base_taobao>();
             if (tempData == null)
                 return Json(-1);
             return Json(tempData);

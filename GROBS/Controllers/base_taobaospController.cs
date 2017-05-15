@@ -309,7 +309,7 @@ namespace GROBS.Controllers
             }
             else
             {
-                var tempData = ServiceFactory.base_taobaospservice.LoadSortEntities(p => p.TBID == int.Parse(tbId) && p.IsDelete == false, false, p => p.SPID);
+                var tempData = ServiceFactory.base_taobaospservice.LoadPackageDetailByID(int.Parse(tbId)).ToList<base_taobaosp_v>();
                 if (tempData == null)
                     return Json("");
                 else
