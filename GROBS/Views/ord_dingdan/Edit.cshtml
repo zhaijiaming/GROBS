@@ -56,24 +56,34 @@
             订单商品
         */
         getDingdanMingXi();//初始化订单明细
-        var cpx = $("#CPXID").val();//产品线ID
-        var cglx = $("#CGLX").val();//采购类型
         //订单商品添加
         $("#btn_Add").click(function () {
             var ddid = $("#ddid").val();//订单ID
-            if (ddid != null) {
-                window.open("/ord_dingdanmx/Add?ddid=" + ddid + "&" + "cpx=" + cpx + "&" + "cglx=" + cglx, "_self"); 
-            } else {
+            var cpx = $("#CPXID").val();//产品线ID
+            var cglx = $("#CGLX").val();//采购类型
+            if (ddid == null || ddid == "") {
                 alert("系统错误，请于管理员联系!");
+            } else if (cglx == null || cglx == "" || cglx == "0") {
+                alert("采购类型不可为空");
+            } else if (cpx == null || cpx == "") {
+                alert("产品线不可为空");
+            } else {
+                window.open("/ord_dingdanmx/Add?ddid=" + ddid + "&" + "cpx=" + cpx + "&" + "cglx=" + cglx, "_self"); 
             }
         });
         //订单商品编辑
         $("#btn_Edit").on("click", function () {
+            var cpx = $("#CPXID").val();//产品线ID
+            var cglx = $("#CGLX").val();//采购类型
             var itemLength = $("#container_ddmx input[type = checkbox]:checked").length;
             if (itemLength > 1) {
                 alert("您只能选取一个进行编辑。");
             } else if (itemLength == 0) {
                 alert("您还未选择商品");
+            } else if (cglx == null || cglx == "" || cglx == "0") {
+                alert("采购类型不可为空");
+            } else if (cpx == null || cpx == "") {
+                alert("产品线不可为空");
             } else {
                 $("#container_ddmx tr input[type=checkbox]").each(function () {
                     if (this.checked) {
@@ -422,14 +432,14 @@
                                         </div>
                                         @*客服人员*@
                                         <div class="form-group">
-                                            <label for="CPXID" class="col-sm-3 control-label"><b>客服人员</b></label>
+                                            <label for="OPID" class="col-sm-3 control-label"><b>客服人员</b></label>
                                             <div class="col-sm-8">
                                                 @Html.SelectList_Auto("OPID", "userinfo", "", (long)ViewData.Model.OPID)
                                             </div>
                                         </div>
                                         @*审核人员*@
                                         <div class="form-group">
-                                            <label for="CPXID" class="col-sm-3 control-label"><b>审核人员</b></label>
+                                            <label for="ACCID" class="col-sm-3 control-label"><b>审核人员</b></label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="ACCID" name="ACCID" class="form-control" placeholder="请输入审核人员" value="@ViewData.Model.ACCID" />
                                             </div>
