@@ -18,39 +18,43 @@
         */
         $("#containerSpxx").draggable({ handle: '.tuodong' }, { containment: [-1000, 50, 1300, 600] });
         //click
-        getShangPinjg()//获取商品价格
-        $("#btn_select").bind("click", function () {
+        $("#btn_select").on("click", function () {
             $("#containerSpxx").show();
             getSpxx();   //获取商品数据
+        });
+        //商品查询
+        $("#spxx_search").on("click", function () {
+            $("#table_data tbody").html("");
+            getSpxx();
         });
         //弹框关闭
         $("#container_close").click(function () {
             $("#containerSpxx").hide();
         });
         //确定添加
-        $("#btn_confirm").click(function () {
-            var _data = "";
-            var _spid = "";
-            var _Huansuanlv = "";
-            var _Danwei = "";
-            var _BaozhuangDW = "";
-            $("#table_data tr").each(function () {
-                if ($(this).find("input[type=checkbox]").is(':checked')) {
-                    _data = $(this).find(".Mingcheng").html();
-                    _Huansuanlv = $(this).find(".Huansuanlv").html();
-                    _Danwei = $(this).find(".Danwei").html();
-                    _BaozhuangDW = $(this).find(".BaozhuangDW").html();
-                    _spid = $(this).find(".checkbox").val();
-                }
-                $("#spid").val(_spid);
-                $("#spmc").val(_data);
-                $("#hsl").val(_Huansuanlv);
-                $("#jbdw").val(_Danwei);
-                $("#xsdw").val(_BaozhuangDW);
-            });
-            getPrice($("#spid").val());//获取销售价和采购价
-            $("#containerSpxx").hide();
-        });
+        //$("#btn_confirm").click(function () {
+        //    var _data = "";
+        //    var _spid = "";
+        //    var _Huansuanlv = "";
+        //    var _Danwei = "";
+        //    var _BaozhuangDW = "";
+        //    $("#table_data tr").each(function () {
+        //        if ($(this).find("input[type=checkbox]").is(':checked')) {
+        //            _data = $(this).find(".Mingcheng").html();
+        //            _Huansuanlv = $(this).find(".Huansuanlv").html();
+        //            _Danwei = $(this).find(".Danwei").html();
+        //            _BaozhuangDW = $(this).find(".BaozhuangDW").html();
+        //            _spid = $(this).find(".checkbox").val();
+        //        }
+        //        $("#spid").val(_spid);
+        //        $("#spmc").val(_data);
+        //        $("#hsl").val(_Huansuanlv);
+        //        $("#jbdw").val(_Danwei);
+        //        $("#xsdw").val(_BaozhuangDW);
+        //    });
+        //    getPrice($("#spid").val());//获取销售价和采购价
+        //    $("#containerSpxx").hide();
+        //});
         //单击tr打钩
         $("#table_data").on("click", "tr", function (e) {
             if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
@@ -69,7 +73,8 @@
             $("#hsl").val($(this).find(".Huansuanlv").html());
             $("#jbdw").val($(this).find(".Danwei").html());
             $("#xsdw").val($(this).find(".BaozhuangDW").html());
-            getPrice($(this).find(".checkbox").val());//获取销售价和采购价
+            $("#JiaXS").val($(this).find(".XSBJ").html());
+            $("#JiaCG").val($(this).find(".JiaCG").html());
             $("#containerSpxx").hide();
         });
     });
@@ -81,47 +86,27 @@
             }
         });
     }
-    //通过商品ID取出商品'采购价'和'销售价'
-    function getPrice(ospid) {
-        var _spid = ospid;
-        $("#containerSpjg tbody tr").each(function () {
-            if ($(this).find(".spjg_spid").html() == _spid) {
-                $("#JiaXS").val($(this).find(".spjg_jiaxs").html());
-                $("#JiaCG").val($(this).find(".spjg_jiacg").html());
-            }
-        });
-    }
-    //获取商品价格
-    function getShangPinjg() {
-        var filltable = "";
-        $.post(
-            "/base_shangpinjg/GetPriceWithSpid",
-            {
-                //spid: _spid
-            },
-                function (data) {
-                    for (var i in data) {
-                        filltable = filltable + '<tr><td><label><input type="checkbox" value="';
-                        filltable = filltable + data[i].ID;
-                        filltable = filltable + '"></label></td><td><span class="spjg_spid">';
-                        filltable = filltable + data[i].SPID;
-                        filltable = filltable + '</span></td><td><span class="spjg_jiaxs">';
-                        filltable = filltable + data[i].JiaXS;
-                        filltable = filltable + '</span></td><td><span class="spjg_jiacg">';
-                        filltable = filltable + data[i].JiaCG;
-                        filltable = filltable + '</span></td></tr>';
-                    }
-                    $("#containerSpjg tbody").html(filltable);
-                });
-    }
     //获取商品信息
     function getSpxx() {
         var filltable = "";
-        $.post(
-            "/base_shangpinxx/getSpxx",
-            {
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
             },
-                function (data) {
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: "/base_shangpinxx/getSpxxWithQuery",
+            data: {
+                req_spbm: $("#req_spbm").val(),
+                req_spmc: $("#req_spmc").val(),
+                req_guige: $("#req_guige").val()
+            },
+            success: function (data) {
+                var filltable = "";
+                if (data != -1) {
                     for (var i in data) {
                         filltable = filltable + '<tr><td><label><input type="checkbox" class ="checkbox" value="';
                         filltable = filltable + data[i].ID;
@@ -129,17 +114,30 @@
                         filltable = filltable + data[i].Daima;
                         filltable = filltable + '</span></td><td><span class="Mingcheng">';
                         filltable = filltable + data[i].Mingcheng;
-                        filltable = filltable + '</span></td><td><span class="Huansuanlv">';
-                        filltable = filltable + data[i].Huansuanlv;
+                        filltable = filltable + '</span></td><td><span class="Guige">';
+                        filltable = filltable + data[i].Guige;
+                        filltable = filltable + '</span></td><td><span class="XSBJ">';
+                        filltable = filltable + data[i].JiaXS;
+                        filltable = filltable + '</span></td><td><span class="JiaCG">';
+                        filltable = filltable + data[i].JiaCG;
                         filltable = filltable + '</span></td><td><span class="Danwei">';
                         filltable = filltable + data[i].Danwei;
                         filltable = filltable + '</span></td><td><span class="BaozhuangDW">';
                         filltable = filltable + data[i].BaozhuangDW;
+                        filltable = filltable + '</span></td><td><span class="Huansuanlv">';
+                        filltable = filltable + data[i].Huansuanlv;
+                        filltable = filltable + '</span></td><td><span class="Col1">';
+                        filltable = filltable + data[i].Col1;
                         filltable = filltable + '</span></td></tr>';
                     }
-                    $("#containerSpxx tbody").html(filltable);
-                    markSelect();
-                });
+                }
+                else {
+                    alert("获取客户信息出错，请联系管理员！");
+                }
+                $("#table_data tbody").html(filltable);
+                markSelect();//记录选过的信息
+            }
+        });
     }
 </script>
 <div class="breadcrumbs" id="breadcrumbs">
@@ -154,7 +152,7 @@
         <li class="active"> 新增</li>
     </ul>
 </div>
-
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
     <div class="page-header">
         <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript:history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
@@ -287,57 +285,79 @@
         </div>
     </div>
 </div>
-@*商品弹框*@
-<div id="containerSpxx" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99999;">
+<div id="containerSpxx" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;min-height:330px;z-index:99;">
     <div class="panel-heading tuodong">
         <h3 class="panel-title"><b>商品信息</b><button id="container_close" class="pull-right">X</button></h3>
     </div>
     <div class="panel-body">
-        <button type="button" class="btn btn-primary " id="btn_confirm">
-            <i class="icon-pencil bigger-120"></i>
-            <b>添加</b>
-        </button>
-        <div style="margin-top:10px;max-height:330px;overflow:auto;">
-            <table class="table table-hover" id="table_data">
-                <caption></caption>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>代码</th>
-                        <th>商品名称</th>
-                        <th>换算率</th>
-                        <th>基本单位</th>
-                        <th>销售单位</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-    </div>
-</div>
-@*商品价格弹框*@
-<div id="containerSpjg" class="panel panel-primary " style="display:none;position:fixed;top:100px;left:250px;width:1000px;height:500px;z-index:99999;">
-    <div class="panel-heading tuodong">
-        <h3 class="panel-title"><b>商品价格</b><button id="container_close" class="pull-right">X</button></h3>
-    </div>
-    <div class="panel-body">
-        <button type="button" class="btn btn-primary " id="btn_confirm">
-            <i class="icon-pencil bigger-120"></i>
-            <b>添加</b>
-        </button>
-        <div style="margin-top:10px;max-height:330px;overflow:auto;">
-            <table class="table table-hover" id="table_data">
-                <caption></caption>
-                <thead>
-                    <tr>
-                        <th></th>
-                        <th>商品名称</th>
-                        <th>销售价</th>
-                        <th>采购价</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    @*查询条件*@
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div style="border:1px solid #DDD;padding-top:10px;border-radius:4px;">
+                                <div class="row">
+                                    @*商品代码*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_spmc" class="col-sm-4 control-label"><b>商品代码</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_spbm" class="form-control" placeholder="请输入商品代码" />
+                                        </div>
+                                    </div>
+                                    @*商品名称*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_spmc" class="col-sm-4 control-label"><b>商品名称</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_spmc" class="form-control" placeholder="请输入商品名称" />
+                                        </div>
+                                    </div>
+                                    @*规格*@
+                                    <div class="form-group col-sm-4">
+                                        <label for="req_guige" class="col-sm-3 control-label"><b>规格</b></label>
+                                        <div class="col-sm-8">
+                                            <input type="text" id="req_guige" class="form-control" placeholder="请输入规格" />
+                                        </div>
+                                    </div>
+                                </div>
+                                @*按钮*@
+                                <div class="row">
+                                    <div class="form-group col-sm-4 col-sm-offset-4">
+                                        <button type="button" id="spxx_search" class="btn btn-block " style="background-color:#56b18e!important;border:none;border-radius:6px;">
+                                            <span style="font-size:16px!important;">查询</span>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <caption></caption>
+                                            <thead>
+                                                <tr>
+                                                    <th></th>
+                                                    <th>代码</th>
+                                                    <th>商品名称</th>
+                                                    <th>规格</th>
+                                                    <th>销售价</th>
+                                                    <th>采购价</th>
+                                                    <th>基本单位</th>
+                                                    <th>销售单位</th>
+                                                    <th>换算率</th>
+                                                    <th>换算编码</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

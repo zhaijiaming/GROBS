@@ -168,6 +168,10 @@ namespace GROBS.Controllers
         {
             string ddid = Request["ddid"] ?? "";
             ViewBag.ddid = ddid;
+            string cpx = Request["cpx"] ?? "";
+            ViewBag.cpx = cpx;
+            string cglx = Request["cglx"] ?? "";
+            ViewBag.cglx = cglx;
 
             ViewBag.userid = (int)Session["user_id"];
             return View();
@@ -233,6 +237,11 @@ namespace GROBS.Controllers
         [OutputCache(Duration = 10)]
         public ActionResult Edit(int id)
         {
+            string cpx = Request["cpx"] ?? "";
+            ViewBag.cpx = cpx;
+            string cglx = Request["cglx"] ?? "";
+            ViewBag.cglx = cglx;
+
             ord_dingdanmx tempData = ob_ord_dingdanmxservice.GetEntityById(ord_dingdanmx => ord_dingdanmx.ID == id && ord_dingdanmx.IsDelete == false);
             ViewBag.ord_dingdanmx = tempData;
             if (tempData == null)
