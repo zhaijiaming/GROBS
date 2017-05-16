@@ -130,7 +130,7 @@
                                     <td>@item.Bianhao</td>
                                     <td>@Html.GetDataValue_ID("收货单位", "", (int)item.KHID)</td>
                                     <td>@Html.GetDataValue_ID("产品线", "", (int)item.CPXID)</td>
-                                    <td>@item.CGLX</td>
+                                    <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
                                     <td>@item.KehuDH</td>
                                     <td>@string.Format("{0:yyyy-MM-dd}", item.XiadanRQ)</td>
                                     <td>@item.Lianxiren</td>

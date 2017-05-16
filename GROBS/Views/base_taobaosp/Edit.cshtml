@@ -62,7 +62,7 @@
                 if ($(this).find("input[type=checkbox]").is(':checked')) {
                     $(this).find(":checkbox").prop("checked", false);
                 } else {
-                    $("input[type=checkbox]").prop("checked", false);
+                    $("table_data input[type=checkbox]").prop("checked", false);
                     $(this).find(":checkbox").prop("checked", true);
                 }
             }
@@ -103,7 +103,8 @@
             data: {
                 req_spbm: $("#req_spbm").val(),
                 req_spmc: $("#req_spmc").val(),
-                req_guige: $("#req_guige").val()
+                req_guige: $("#req_guige").val(),
+                cpxid: $("#cpxid").val()
             },
             success: function (data) {
                 var filltable = "";
@@ -177,6 +178,7 @@
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
                                     <input type="hidden" id="spid" name="spid" value="@ViewData.Model.SPID"/>
+                                    <input type="hidden" id="cpxid" value="@ViewBag.cpxid" />
                                     <fieldset>
                                         @*商品*@
                                         <div class="form-group">
