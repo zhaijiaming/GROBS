@@ -329,6 +329,7 @@
     <Compile Include="Models\ord_fanliViewModel.cs" />
     <Compile Include="Models\ord_fanlixfViewModel.cs" />
     <Compile Include="Models\ord_jixiaoViewModel.cs" />
+    <Compile Include="Models\ord_productsViewModel.cs" />
     <Compile Include="Models\ord_qianhuoViewModel.cs" />
     <Compile Include="Models\ord_xiaoshoumxViewModel.cs" />
     <Compile Include="Models\ord_xiaoshouViewModel.cs" />

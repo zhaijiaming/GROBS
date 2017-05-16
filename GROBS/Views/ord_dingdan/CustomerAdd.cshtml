@@ -105,18 +105,17 @@
                         _filltr = _filltr + _sm;
                         _filltr = _filltr + '</td>';
                         _filltr = _filltr + '</tr>';
-                        alert(_filltr);
                         $("#dt_sp tbody").append(_filltr);
+                        DatarowCount();
                         $("#pl_sp").hide();
-                        alert(DatarowCount());
                     }
                 }
             });
         });
         $("#dt_sp").on("click", ".icon-minus-sign", function () {
-            alert("delete now");
             var _dtr = $(this).parent().parent();
             _dtr.remove();
+            DatarowCount();
         });
         $("#cpx").change(function () {
             $("#sel_line").val($("#cpx").val());
@@ -199,6 +198,79 @@
                 }
             });
         });
+        $("#bt_import").click(function () {
+            $("#pl_im").show();
+        });
+        $("#pl_im").draggable({ handle: ".panel-heading" });
+        $("#pl_im_close").click(function () {
+            $("#pl_im").hide();
+        });
+        $("#pl_im_cancel").click(function () {
+            $("#pl_im").hide();
+        });
+        $("#pl_im_ok").click(function () {
+            var _imt = $("#pl_im_text").val();
+            if (_imt.length == 0) {
+                alert("请先录入需要导入的信息!");
+                return;
+            }
+            var _posturl = "";
+            var _tp = Number($("#sel_type").val());
+            if (_tp == 1)
+                _posturl = "/base_shangpinxx/getproductsbycode";
+            if (_tp == 2)
+                _posturl = "";
+            if (_tp == 3)
+                _posturl = "";
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: _posturl,
+                data: {
+                    cpx: $("#sel_line").val(),
+                    imt: _imt
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        alert("导入货品出错！");
+                    }
+                    else {
+                        var _filltr = '';
+                        for (var i in data) {
+                            _filltr = _filltr + '<tr>';
+                            _filltr = _filltr + '<td><i class="icon-minus-sign bigger-150 red"></i><input type="hidden" value="';
+                            _filltr = _filltr + data[i].ID;
+                            _filltr = _filltr + '"/></td>';
+                            _filltr = _filltr + '<td>';
+                            _filltr = _filltr + data[i].Daima;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].Guige;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].Mingcheng;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].Shuliang;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].JiaXS;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].Jine;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].Beizhu;
+                            _filltr = _filltr + '</td>';
+                            _filltr = _filltr + '</tr>';
+                        }
+                        $("#dt_sp tbody").append(_filltr);
+                        DatarowCount();
+                        $("#pl_sp").hide();
+                    }
+                }
+            });
+        });
         $("#bt_save").click(function () {
             var _dt = "";
             $("#dt_sp tbody tr").each(function () {
@@ -225,16 +297,15 @@
         $("#dt_sp tbody tr").each(function () {
             _rc++;
         });
-        if (_rc == 0)
-        {
-            $("#cpx").removeAttr("disabled");
-            $("#ordertype").removeAttr("disabled");
+        if (_rc == 0) {
+            $("#cpx").attr("disabled", false);
+            $("#ordertype").attr("disabled", false);
         }
         if (_rc == 1) {
             $("#cpx").attr("disabled", true);
             $("#ordertype").attr("disabled", true);
         }
-            return _rc;
+        return _rc;
     }
 </script>
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
@@ -244,8 +315,8 @@
     <div class="row">
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_add"><i class="icon-adn"></i>添加商品</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_edit"><i class="icon-edit"></i>编辑商品</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_import"><i class="icon-exchange"></i>导入商品</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_edit"><i class="icon-edit"></i>编辑商品</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_save"><i class="icon-save"></i>保存订单</button>
         </p>
     </div>
@@ -362,6 +433,27 @@
                 <label class="col-sm-3">备注</label>
                 <div class="col-sm-9">
                     <input type="text" id="pl_tb_bz" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_im" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">导入<button id="pl_im_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <p class="align-center">
+                <div class="col-sm-6"><button class="btn default" id="pl_im_ok"><i class="icon-ok"></i>添加</button></div>
+                <div class="col-sm-6"><button class="btn default" id="pl_im_cancel"><i class="icon-search"></i>取消</button></div>
+            </p>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="form-control">需要导入的货品</label>
+                <div class="form-control">
+                    <textarea id="pl_im_text" class="form-control" placeholder="此处粘贴代码和数量，以空格分隔（CY1210CT 1）"/>
                 </div>
             </div>
         </div>
