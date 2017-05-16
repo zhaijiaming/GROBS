@@ -46,7 +46,7 @@
                 if ($(this).find("input[type=checkbox]").is(':checked')) {
                     $(this).find(":checkbox").prop("checked", false);
                 } else {
-                    $("input[type=checkbox]").prop("checked", false);
+                    $("#table_data input[type=checkbox]").prop("checked", false);
                     $(this).find(":checkbox").prop("checked", true);
                 }
             }

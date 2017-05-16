@@ -1210,6 +1210,7 @@ namespace GROBS.Controllers
                 where = where.And(p => p.Mingcheng.Contains(_spmc));
             if (!string.IsNullOrEmpty(_guige))
                 where = where.And(p => p.Guige.Contains(_guige));
+            where = where.And(p => p.chanpinxian == int.Parse(cpxid));
             var tempData = ServiceFactory.base_shangpinxxservice.LoadShangpinPriceAll(where.Compile()).ToList<base_shangpinjg_v>();
             if (tempData == null)
                 return Json(-1);

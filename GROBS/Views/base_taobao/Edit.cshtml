@@ -50,33 +50,39 @@
             $("#KongzhiSF").val("false");
         }
 
-        var tbId = $("#tbId").val();
         /*
             套包商品
         */
-        if (tbId.length > 0) {
-            getTaoBaoData(tbId);//获取套包商品明细
-        };
+        getTaoBaoData();//获取套包商品明细
         //套包商品添加
         $("#btn_tbAdd").click(function () {
-            if (tbId != null) {
-                window.open("/base_taobaosp/Add?tbId=" + tbId, "_self");
-            } else {
+            var tbId = $("#tbId").val();
+            var cpxid = $("#select_cpx option:selected").val();
+            console.log(cpxid);
+            if (tbId == null || tbId == "") {
                 alert("系统错误，请于管理员联系!");
+                window.open("/base_taobaosp/Add?tbId=" + tbId, "_self");
+            } else if(cpxid == null || cpxid =="") {
+                alert("产品线不可为空");
+            } else {
+                window.open("/base_taobaosp/Add?tbId=" + tbId + "&cpxid=" + cpxid, "_self");
             }
         });
         //套包商品编辑
         $("#btn_tbEdit").bind("click", function () {
             var itemLength = $("#container_tbsp input[type = checkbox]:checked").length;
+            var cpxid = $("#select_cpx option:selected").val();
             if (itemLength > 1) {
                 alert("您只能选取一个套包商品进行编辑。");
             } else if (itemLength == 0) {
                 alert("您还未选择商品");
+            } else if (cpxid == null || cpxid == "") {
+                alert("产品线不可为空");
             } else {
                 $("#container_tbsp tr input[type=checkbox]").each(function () {
                     if (this.checked) {
                         if ($(this).val() != null && $(this).val() != "") {
-                            window.open("/base_taobaosp/Edit/" + $(this).val(), "_self");
+                            window.open("/base_taobaosp/Edit/" + $(this).val() + "?cpxid=" + cpxid, "_self");
                         }
                     }
                 });
@@ -140,7 +146,7 @@
                 if ($(this).find("input[type=checkbox]").is(':checked')) {
                     $(this).find(":checkbox").prop("checked", false);
                 } else {
-                    $("input[type=checkbox]").prop("checked", false);
+                    $("#table_data input[type=checkbox]").prop("checked", false);
                     $(this).find(":checkbox").prop("checked", true);
                 }
             }
@@ -234,6 +240,7 @@
     //套包商品明细
     function getTaoBaoData(tbId) {
         var filltable = "";
+        var tbId = $("#tbId").val();
         $.post(
             "/base_taobaosp/getdetail",
                 {

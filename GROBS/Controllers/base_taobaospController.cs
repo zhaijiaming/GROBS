@@ -168,6 +168,8 @@ namespace GROBS.Controllers
         {
             string tbId = Request["tbId"] ?? "";
             ViewBag.tbId = int.Parse(tbId);
+            string cpxid = Request["cpxid"] ?? "";
+            ViewBag.cpxid = int.Parse(cpxid);
 
             ViewBag.userid = (int)Session["user_id"];
             return View();
@@ -217,6 +219,9 @@ namespace GROBS.Controllers
         [OutputCache(Duration = 10)]
         public ActionResult Edit(int id)
         {
+            string cpxid = Request["cpxid"] ?? "";
+            ViewBag.cpxid = int.Parse(cpxid);
+
             base_taobaosp tempData = ob_base_taobaospservice.GetEntityById(base_taobaosp => base_taobaosp.ID == id && base_taobaosp.IsDelete == false);
             ViewBag.base_taobaosp = tempData;
             if (tempData == null)
