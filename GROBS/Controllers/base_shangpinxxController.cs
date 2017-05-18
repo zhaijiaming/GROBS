@@ -1254,6 +1254,8 @@ namespace GROBS.Controllers
                 for(int i=0; i < _item.Count(); i=i+2)
                 {
                     string _dm = _item[i];
+                    if (i + 1 >= _item.Count())
+                        break;
                     string _sh = _item[i + 1];
                     if (string.IsNullOrEmpty(_dm) || string.IsNullOrEmpty(_sh))
                         continue;

@@ -415,6 +415,16 @@ namespace GROBS.Controllers
             ViewBag.ord_fanli = tempData;
             return View(tempData);
         }
+        public JsonResult GetTotalNumber()
+        {
+            var _cust = Request["cust"] ?? "";
+            if (string.IsNullOrEmpty(_cust))
+                return Json(-1);
+            var _fl = ob_ord_fanliservice.GetEntityById(p => p.KHID == int.Parse(_cust) && p.IsDelete == false);
+            if (_fl == null)
+                return Json(-2);
+            return Json(_fl.Keyong);
+        }
     }
 }
 

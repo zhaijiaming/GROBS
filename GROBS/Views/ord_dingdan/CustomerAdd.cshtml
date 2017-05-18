@@ -26,13 +26,11 @@
             if (_type == 1) {
                 $("#pl_spdm").val("");
                 $("#pl_cgsl").val("");
-                $("#pl_bz").val("");
                 $("#pl_sp").show();
             }
             if (_type == 2) {
                 $("#pl_tb_tbdm").val("");
                 $("#pl_tb_cgsl").val("");
-                $("#pl_tb_bz").val("");
                 $("#pl_tb").show();
             }
             if (_type == 3)
@@ -48,7 +46,6 @@
         $("#pl_sp_ok").click(function () {
             var _dm = $("#pl_spdm").val();
             var _sl = $("#pl_cgsl").val();
-            var _sm = $("#pl_bz").val();
             if (_dm.length == 0) {
                 alert("请录入商品代码后添加！");
                 return;
@@ -70,8 +67,7 @@
                 data: {
                     cpx: $("#sel_line").val(),
                     dm: _dm,
-                    sl: _sl,
-                    sm: _sm
+                    sl: _sl
                 },
                 success: function (data) {
                     if (data == -1) {
@@ -101,8 +97,6 @@
                         _filltr = _filltr + data.JiaXS;
                         _filltr = _filltr + '</td><td>';
                         _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
-                        _filltr = _filltr + '</td><td>';
-                        _filltr = _filltr + _sm;
                         _filltr = _filltr + '</td>';
                         _filltr = _filltr + '</tr>';
                         $("#dt_sp tbody").append(_filltr);
@@ -132,7 +126,6 @@
         });
         $("#pl_tb_ok").click(function () {
             var _dm = $("#pl_tb_tbdm").val();
-            var _sl = $("#pl_tb_cgsl").val();
             if (_dm.length == 0) {
                 alert("请录入套包代码后添加！");
                 return;
@@ -188,8 +181,6 @@
                         _filltr = _filltr + data.JiaXS;
                         _filltr = _filltr + "</td><td>";
                         _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
-                        _filltr = _filltr + "</td><td>";
-                        _filltr = _filltr + _sm;
                         _filltr = _filltr + "</td>";
                         _filltr = _filltr + "</tr>";
                         $("#dt_sp tbody tr").append(_filltr);
@@ -199,6 +190,7 @@
             });
         });
         $("#bt_import").click(function () {
+            $("#pl_im_text").val("");
             $("#pl_im").show();
         });
         $("#pl_im").draggable({ handle: ".panel-heading" });
@@ -259,18 +251,67 @@
                             _filltr = _filltr + data[i].JiaXS;
                             _filltr = _filltr + '</td><td>';
                             _filltr = _filltr + data[i].Jine;
-                            _filltr = _filltr + '</td><td>';
-                            _filltr = _filltr + data[i].Beizhu;
                             _filltr = _filltr + '</td>';
                             _filltr = _filltr + '</tr>';
                         }
                         $("#dt_sp tbody").append(_filltr);
                         DatarowCount();
-                        $("#pl_sp").hide();
+                        $("#pl_im").hide();
                     }
                 }
             });
         });
+        $("#pl_fl").draggable({ handle: ".panel-heading" });
+        $("#bt_com").click(function () {
+            var _zje = $("#tx_zje").val();
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/ord_fanli/GetTotalNumber",
+                data: {
+                    cust: $("#cust").val()
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        alert("查询返利金额失败！");
+                        $("#pl_fl").hide();
+                    }
+                    else if (data == -2) {
+                        alert("获取返利金额失败！");
+                        $("#pl_fl").hide();
+                    }
+                    else {
+                        $("#pl_fl_ze").val(data);
+                    }
+                }
+        });
+            $("#pl_fl_zd").val(0.3*Number(_zje));
+            if (Number($("#pl_fl_zd").val()) > Number($("#pl_fl_ze").val()))
+                $("#pl_fl_mn").val(Number($("#pl_fl_ze").val()));
+            else
+                $("#pl_fl_mn").val(Number($("#pl_fl_zd").val()));
+            $("#pl_fl_sy").val($("#pl_fl_mn").val());
+            $("#pl_fl").show();
+        });
+        $("#pl_fl_ok").click(function () {
+            $("#sel_zk").val("1");
+            $("#tx_zk").val($("#pl_fl_sy").val());
+        });
+        $("#pl_fl_close").click(function () {
+            $("#sel_zk").val("0");
+            $("#pl_fl").hide();
+        });
+        $("#pl_fl_cancel").click(function () {
+            $("#sel_zk").val("0");
+            $("#pl_fl").hide();
+        });
+
         $("#bt_save").click(function () {
             var _dt = "";
             $("#dt_sp tbody tr").each(function () {
@@ -294,14 +335,22 @@
     });
     function DatarowCount() {
         var _rc = 0;
+        var _tje = 0;
+        var _tsl = 0;
         $("#dt_sp tbody tr").each(function () {
             _rc++;
+            var _je = $(this).find("td").eq(6).text();
+            var _sl = $(this).find("td").eq(4).text();
+            _tje = _tje + Number(_je);
+            _tsl = _tsl + Number(_sl);
         });
+        $("#tx_zje").val(_tje);
+        $("#tx_zsl").val(_tsl);
         if (_rc == 0) {
             $("#cpx").attr("disabled", false);
             $("#ordertype").attr("disabled", false);
         }
-        if (_rc == 1) {
+        if (_rc >= 1) {
             $("#cpx").attr("disabled", true);
             $("#ordertype").attr("disabled", true);
         }
@@ -312,26 +361,28 @@
 <div class="page-content">
     <input type="hidden" id="sel_line" value="0" />
     <input type="hidden" id="sel_type" value="0" />
+    <input type="hidden" id="sel_zk" value="0" />
+    <input type="hidden" id="cust" value="@ViewBag.customer" />
     <div class="row">
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_add"><i class="icon-adn"></i>添加商品</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_import"><i class="icon-exchange"></i>导入商品</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_edit"><i class="icon-edit"></i>编辑商品</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_com"><i class="icon-dollar"></i>使用返利</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_save"><i class="icon-save"></i>保存订单</button>
         </p>
     </div>
     <div class="row">
-        <div class="col-sm-2">
-            <label>订单编号：</label>
+        @*<div class="col-sm-1">
+                <label>订单编号：</label>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" readonly placeholder="系统自动生成" />
+            </div>*@
+        <div class="col-sm-1">
+            <label>产品线</label>
         </div>
         <div class="col-sm-2">
-            <input type="text" readonly placeholder="系统自动生成" />
-        </div>
-        <div class="col-sm-2">
-            <label>产品线:</label>
-        </div>
-        <div class="col-sm-2">
-            <select id="cpx">
+            <select id="cpx" class="form-control">
                 <option value="0"></option>
                 @foreach (base_chanpinxiansqViewModel cpx in ViewBag.cpxsq)
                 {
@@ -339,13 +390,39 @@
                 }
             </select>
         </div>
-        <div class="col-sm-2">
+        <div class="col-sm-1">
             <label>订单类型</label>
         </div>
         <div class="col-sm-2">
             @Html.SelectList_Common("ordertype", "订单类型")
         </div>
+        <div class="col-sm-1">
+            <label>订单数量</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_zsl" readonly value="0" />
+        </div>
+        <div class="col-sm-1">
+            <label>订单金额</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_zje" readonly value="0" />
+        </div>
     </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label>备注</label>
+        </div>
+        <div class="col-sm-8">
+            <input class="form-control" type="text" placeholder="订单说明录入" />
+        </div>
+        <div class="col-sm-1">
+            <label>折扣金额</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_zk" readonly value="0" />
+        </div>
+</div>
     <div class="row">
         <div class="col-sm-12">
             <div class="table-wapper-all">
@@ -364,7 +441,6 @@
                                 <td>数量</td>
                                 <td>单价</td>
                                 <td>金额</td>
-                                <td>备注</td>
                             </tr>
                         </thead>
                         <tbody></tbody>
@@ -397,12 +473,6 @@
                     <input type="text" id="pl_cgsl" class="form-control" />
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3">备注</label>
-                <div class="col-sm-9">
-                    <input type="text" id="pl_bz" class="form-control" />
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -429,12 +499,6 @@
                     <input type="text" id="pl_tb_cgsl" class="form-control" />
                 </div>
             </div>
-            <div class="form-group">
-                <label class="col-sm-3">备注</label>
-                <div class="col-sm-9">
-                    <input type="text" id="pl_tb_bz" class="form-control" />
-                </div>
-            </div>
         </div>
     </div>
 </div>
@@ -451,9 +515,46 @@
         </div>
         <div class="row">
             <div class="form-group">
-                <label class="form-control">需要导入的货品</label>
-                <div class="form-control">
-                    <textarea id="pl_im_text" class="form-control" placeholder="此处粘贴代码和数量，以空格分隔（CY1210CT 1）"/>
+                <p class="align-center">需要导入的货品</p>
+                <textarea id="pl_im_text" class="form-control" rows="10" placeholder="此处粘贴代码和数量，以空格分隔（CY1210CT 1）"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_fl" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">返利<button id="pl_fl_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <p class="align-center">
+                <div class="col-sm-6"><button class="btn default" id="pl_fl_ok"><i class="icon-ok"></i>确定</button></div>
+                <div class="col-sm-6"><button class="btn default" id="pl_fl_cancel"><i class="icon-search"></i>取消</button></div>
+            </p>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3">返利总额</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_ze" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">订单可用</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_zd" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">最大可用</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_mn" readonly class="form-control" />
+                </div>
+            </div>
+           <div class="form-group">
+                <label class="col-sm-3">使用金额</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_sy" class="form-control" />
                 </div>
             </div>
         </div>
