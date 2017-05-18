@@ -80,14 +80,25 @@
                     $("#container_tb").show();
                     getTaobao();   //获取套包信息
                 });
+                //查看套包详情...
+                $("#table_data_tb").on("click", "tr", function (e) {
+                    if (e.target.tagName == "BUTTON") {
+                        var tbid = $(this).find(".tb_checkbox").val();
+                        //console.log(tbid);
+                        getTaoBaoData(tbid);
+                        $("#container_tbsp").show();
+                    }
+                });
                 //弹框关闭
                 $("#container_close_tb").click(function () {
                     $("#container_tb").hide();
+                    $("#container_tbsp").hide();
                 });
                 //商品查询
                 $("#btn_search_tb").on("click", function () {
                     $("#table_data_tb tbody").html("");
                     getTaobao();   //获取套包信息
+                    $("#container_tbsp").hide();
                 });
                 //双击取值
                 $("#table_data_tb tbody").on("dblclick", "tr", function () {
@@ -108,6 +119,7 @@
                     $("#Zhekoulv").val("");
                     $("#CGSL").focus();
                     $("#container_tb").hide();
+                    $("#container_tbsp").hide();
                 });
                 break;
             default:
@@ -192,7 +204,7 @@
         f = Math.round(x * 10000) / 10000;
         return f;
     }
-    //获取套包商品
+    //获取套包
     function getTaobao() {
         var filltable = "";
         $.ajax({
@@ -229,16 +241,53 @@
                         filltable = filltable + data[i].JiaCG;
                         filltable = filltable + '</span></td><td><span class="tb_XSDW">';
                         filltable = filltable + data[i].XSDW;
-                        filltable = filltable + '</span></td></tr>';
+                        filltable = filltable + '</span></td><td><span><button id="btn_detail_taobaosp" class="btn btn-link" style="padding-left:0px!important;">查看详情...</button></span></td></tr>';
                     }
                 }
                 else {
                     alert("获取信息出错，请联系管理员！");
                 }
-                $("#table_data_tb tbody").html(filltable);
-                markSelect($("#table_data_tb tbody tr"));//记录选过的信息
+                $("#tbody_tb").html(filltable);
+                markSelect($("#tbody_tb tr"));//记录选过的信息
             }
         });
+    }
+    //套包商品明细
+    function getTaoBaoData(tbid) {
+        var filltable = "";
+        var tbId = tbid;
+        $.post(
+            "/base_taobaosp/getdetail",
+                {
+                    tbId: tbId
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       for (var i in data) {
+                           filltable = filltable + '<tr><td style="display:none;"><label><input type="checkbox" value="';
+                           filltable = filltable + data[i].ID;
+                           filltable = filltable + '"></label></td>';
+                           filltable = filltable + '<td><span class="daima_tbsp">';
+                           filltable = filltable + data[i].Daima;
+                           filltable = filltable + '</span></td>';
+                           filltable = filltable + '<td><span class="mingcheng_tbsp">';
+                           filltable = filltable + data[i].Mingcheng;
+                           filltable = filltable + '</span></td><td>';
+                           filltable = filltable + data[i].Guige;
+                           filltable = filltable + '</td><td>';
+                           filltable = filltable + data[i].Danwei;
+                           filltable = filltable + '</td><td><span class="tbsp_jiaxs">';
+                           filltable = filltable + data[i].JiaXS;
+                           filltable = filltable + '</span></td><td><span class="tbsp_jiacg">';
+                           filltable = filltable + data[i].JiaCG;
+                           filltable = filltable + '</span></td></tr>';
+                       }
+                       $("#tbody_tbsp").html(filltable);
+                   } else {
+                       $("#tbody_tbsp").empty();
+                   }
+               }
+            );
     }
     //获取商品信息
     function getSpxx() {
@@ -285,10 +334,10 @@
                     }
                 }
                 else {
-                    alert("获取客户信息出错，请联系管理员！");
+                    alert("获取商品信息出错，请联系管理员！");
                 }
-                $("#table_data tbody").html(filltable);
-                markSelect($("#containerSpxx tbody tr"));//记录选过的信息
+                $("#tbody_sp").html(filltable);
+                markSelect($("#tbody_sp tr"));//记录选过的信息
             }
         });
     }
@@ -557,7 +606,7 @@
                                                     <th>换算编码</th>
                                                 </tr>
                                             </thead>
-                                            <tbody></tbody>
+                                            <tbody id="tbody_sp"></tbody>
                                         </table>
                                     </div>
                                 </div>
@@ -569,6 +618,7 @@
         </div>
     </div>
 </div>
+@*套包*@
 <div id="container_tb" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;min-height:330px;z-index:99;">
     <div class="panel-heading tuodong">
         <h3 class="panel-title"><b>套包信息</b><button id="container_close_tb" class="pull-right">X</button></h3>
@@ -577,9 +627,9 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-sm-12">
-                    @*查询条件*@
                     <div class="row">
                         <div class="col-sm-12">
+                            @*查询条件*@
                             <div style="border:1px solid #DDD;padding-top:10px;border-radius:4px;">
                                 <div class="row">
                                     @*套包代码*@
@@ -615,24 +665,47 @@
                                 </div>
                             </div>
                             @*列表*@
-                            <div class="row">
-                                <div class="col-sm-12">
-                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
-                                        <table class="table table-hover" id="table_data_tb">
-                                            <caption></caption>
-                                            <thead>
+                            <div style="border:1px solid #DDD;border-radius:4px;margin-top:10px;">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div style="max-height:200px;overflow:auto;">
+                                            <table class="table table-hover" id="table_data_tb">
+                                                <caption></caption>
+                                                <thead>
+                                                    <tr>
+                                                        <th></th>
+                                                        <th>套包号</th>
+                                                        <th>名称</th>
+                                                        <th>描述</th>
+                                                        <th>销售价</th>
+                                                        <th>采购价</th>
+                                                        <th>销售单位</th>
+                                                        <th>详情</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id="tbody_tb"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @*套包商品详细信息*@
+                            <div id="container_tbsp" style="display:none;border:1px solid #DDD;border-radius:4px;margin-top:10px;">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div style="padding:0px 20px 20px 20px;max-height:200px;overflow:auto;">
+                                            <table class="table table-hover" id="table_data_tbsp">
                                                 <tr>
-                                                    <th></th>
-                                                    <th>套包号</th>
-                                                    <th>名称</th>
-                                                    <th>描述</th>
+                                                    <th>商品代码</th>
+                                                    <th>商品名称</th>
+                                                    <th>规格</th>
+                                                    <th>基本单位</th>
                                                     <th>销售价</th>
                                                     <th>采购价</th>
-                                                    <th>销售单位</th>
                                                 </tr>
-                                            </thead>
-                                            <tbody></tbody>
-                                        </table>
+                                                <tbody id="tbody_tbsp"></tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>

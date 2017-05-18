@@ -56,3 +56,16 @@ function trResize() {
         $(this).css("height", th_height + "px");
     });
 }
+function checkedByClick(name) {
+    var tableName = name;
+    tableName.on("click", "tr", function (e) {
+        if (e.target.tagName == "TD" || e.target.tagName == "SPAN") {
+            if ($(this).find("input[type=checkbox]").is(':checked')) {
+                $(this).find(":checkbox").prop("checked", false);
+            } else {
+                tableName.find("input[type=checkbox]").prop("checked", false);
+                $(this).find(":checkbox").prop("checked", true);
+            }
+        }
+    });
+}

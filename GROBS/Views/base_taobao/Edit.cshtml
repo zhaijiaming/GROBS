@@ -252,7 +252,10 @@
                            filltable = filltable + '<tr><td><label><input type="checkbox" value="';
                            filltable = filltable + data[i].ID;
                            filltable = filltable + '"></label></td>';
-                           filltable = filltable + '<td><span class="spid">';
+                           filltable = filltable + '<td><span class="daima_tbsp">';
+                           filltable = filltable + data[i].Daima;
+                           filltable = filltable + '</span></td>';
+                           filltable = filltable + '<td><span class="mingcheng_tbsp">';
                            filltable = filltable + data[i].Mingcheng;
                            filltable = filltable + '</span></td><td>';
                            filltable = filltable + data[i].Guige;
@@ -468,6 +471,7 @@
                                             <thead>
                                                 <tr>
                                                     <th></th>
+                                                    <th>商品代码</th>
                                                     <th>商品名称</th>
                                                     <th>规格</th>
                                                     <th>基本单位</th>
