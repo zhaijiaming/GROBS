@@ -223,6 +223,8 @@
                             filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
                             filltable = filltable + data[i].ID;
                             filltable = filltable + '"></td><td><span class="spmc">';
+                            filltable = filltable + data[i].SPBM;
+                            filltable = filltable + '</span></td><td><span class="spmc">';
                             filltable = filltable + data[i].SPMC;
                             filltable = filltable + '</span></td><td><span class="guige">';
                             filltable = filltable + data[i].Guige;
@@ -569,6 +571,7 @@
                                             <thead>
                                                 <tr>
                                                     <th></th>
+                                                    <th>商品代码</th>
                                                     <th>商品</th>
                                                     <th>规格</th>
                                                     <th>采购数量</th>
