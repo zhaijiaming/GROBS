@@ -61,7 +61,7 @@
         } navbar-fixed-top u-navbar
     </style>*@
 </head>
-<body>
+<body style="background-color:#fff;">
     <div class="navbar navbar-default">
         <div class="container">
             <div class="row">
@@ -86,16 +86,17 @@
             </div>
         </div>
     </div>
-    <div class="page-content">
+    @RenderBody()
+    @*<hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year 嘉事国润</p>
+    </footer>*@
+    @PageMenu.Clear()
+    @*<div class="page-content" style="background:inherit;">
         <div class="container">
-                @RenderBody()
-                <hr />
-                <footer>
-                    <p>&copy; @DateTime.Now.Year 嘉事国润</p>
-                </footer>
-                @PageMenu.Clear()
+                
         </div>
-    </div>
+    </div>*@
 
 
     <!-- basic scripts -->

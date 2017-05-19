@@ -555,6 +555,9 @@
     <Content Include="Imgs\20140321021230992.jpg" />
     <Content Include="Imgs\bg-cloud.png" />
     <Content Include="Imgs\cachet0.png" />
+    <Content Include="Imgs\carousel\carousel-1.jpg" />
+    <Content Include="Imgs\carousel\carousel-2.jpg" />
+    <Content Include="Imgs\carousel\carousel-3.jpg" />
     <Content Include="Imgs\ck1.jpg" />
     <Content Include="Imgs\ckflow.jpg" />
     <Content Include="Imgs\LOADING.gif" />
