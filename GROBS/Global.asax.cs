@@ -135,7 +135,11 @@ namespace GROBS
         /// 订单类型
         /// </summary>
         public static Dictionary<int, string> OrderType;
-
+        /// <summary>
+        /// 订单状态
+        /// </summary>
+        public static Dictionary<int, string> OrderState;
+        
         protected void Application_Start()
         {
             AreaRegistration.RegisterAllAreas();
@@ -439,6 +443,16 @@ namespace GROBS
             OrderType.Add(1, "普通");
             OrderType.Add(2, "套包");
             OrderType.Add(3, "促销");
+
+            OrderState = new Dictionary<int, string>();
+            OrderState.Add(0, "未通过");
+            OrderState.Add(10, "未付款");
+            OrderState.Add(20, "已结算");
+            OrderState.Add(30, "已审核");
+            OrderState.Add(40, "配货中");
+            OrderState.Add(50, "已出库");
+            OrderState.Add(60, "已收货");
+            OrderState.Add(70, "已关闭");
         }
     }
 }

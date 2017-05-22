@@ -17,7 +17,7 @@
             //}
         });
         $("#bt_addInfo").click(function () {
-            window.open("/ord_dingdan/customeradd", "_blank");
+            window.open("/ord_dingdan/customeradd", "_parent");
         });
         $("#bt_deleteInfo").click(function () {
             var sDel = "";
@@ -47,9 +47,11 @@
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo"><i class="icon-adn"></i>新增</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo"><i class="icon-remove"></i>删除</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_collect"><i class="icon-upload"></i>结算</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_recieve"><i class="icon-shopping-cart"></i>收货</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-5" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-5" id="bt_historyInfo"><i class="icon-edit"></i>历史</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-6" id="bt_sendInfo"><i class="icon-edit"></i>发货</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-5" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
+           <button type="button" class="btn btn-primary btn-xs btn-app radius-6" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
         </p>
     </div>
     <div class="row">
@@ -74,7 +76,9 @@
                                 <td>联系电话</td>
                                 <td>送货地址</td>
                                 <td>采购总数</td>
-                                <td>总金额</td>
+                                <td>采购金额</td>
+                                <td>折扣金额</td>
+                                <td>实付金额</td>
                                 <td>备注</td>
                             </tr>
                         </thead>
@@ -86,9 +90,9 @@
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
                                     <td>@item.Bianhao</td>
-                                    <td>@item.Zhuangtai</td>
-                                    <td>@item.CPXID</td>
-                                    <td>@item.CGLX</td>
+                                    <td>@Html.GetCommonValue_ID("订单状态",(int)item.Zhuangtai)</td>
+                                    <td>@item.Mingcheng</td>
+                                    <td>@Html.GetCommonValue_ID("订单类型",(int)item.CGLX)</td>
                                     <td>@item.KehuDH</td>
                                     <td>@item.XiadanRQ</td>
                                     <td>@item.Lianxiren</td>
@@ -96,6 +100,8 @@
                                     <td>@item.SonghuoDZ</td>
                                     <td>@item.ZongshuCG</td>
                                     <td>@item.Zongjine</td>
+                                    <td>@item.ZhekouJE</td>
+                                    <td>@string.Format("{0:C}",item.Zongjine-item.ZhekouJE)</td>
                                     <td>@item.Beizhu</td>
                                 </tr>
                             }

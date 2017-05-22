@@ -475,6 +475,9 @@ namespace GROBS.App_Code
                 case "订单类型":
                     sb.Append(GetCommonSelect(selectedValue, MvcApplication.OrderType));
                     break;
+                case "订单状态":
+                    sb.Append(GetCommonSelect(selectedValue, MvcApplication.OrderState));
+                    break;
                 default:
                     break;
             }
@@ -1419,6 +1422,10 @@ namespace GROBS.App_Code
                 case "订单类型":
                     if (MvcApplication.OrderType.ContainsKey(dataValue))
                         returnvalue = MvcApplication.OrderType[dataValue];
+                    break;
+                case "订单状态":
+                    if (MvcApplication.OrderState.ContainsKey(dataValue))
+                        returnvalue = MvcApplication.OrderState[dataValue];
                     break;
                 default:
                     break;

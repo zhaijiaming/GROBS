@@ -291,13 +291,21 @@
                     }
                 }
             });
-            $("#pl_fl_zd").val(Math.round(0.3 * Number(_zje) * 100) / 100);
-            if (Number($("#pl_fl_zd").val()) > Number($("#pl_fl_ze").val())) {
-                $("#pl_fl_mn").val($("#pl_fl_ze").val());
+            if (_zje == "") {
+                $("#pl_fl_zd").val("0");
+                $("#pl_fl_mn").val("0");
+                $("#pl_fl_sy").val("0");
             }
-            else
-                $("#pl_fl_mn").val($("#pl_fl_zd").val());
-            $("#pl_fl_sy").val($("#pl_fl_mn").val());
+            else {
+                $("#pl_fl_zd").val(Math.round(0.3 * Number(_zje) * 100) / 100);
+                if (Number($("#pl_fl_zd").val()) > Number($("#pl_fl_ze").val())) {
+                    $("#pl_fl_mn").val($("#pl_fl_ze").val());
+                }
+                else
+                    $("#pl_fl_mn").val($("#pl_fl_zd").val());
+                $("#pl_fl_sy").val($("#pl_fl_mn").val());
+
+            }
             $("#pl_fl").show();
         });
         $("#pl_fl_ok").click(function () {
@@ -367,6 +375,7 @@
                     url: "/ord_dingdan/addordernow",
                     data: {
                         cust: $("#cust").val(),
+                        cdm:$("#cdm").val(),
                         cpx: $("#sel_line").val(),
                         lx: $("#sel_type").val(),
                         zsl: $("#tx_zsl").val(),
@@ -382,7 +391,8 @@
                     },
                     success: function (data) {
                         if (data == 1) {
-                            window.open("/ord_dingdan/customerorderlist", _blank);
+                            //location.reload();
+                            window.open("/ord_dingdan/customercurrentorder", "_parent");
                         }
                         else {
                             alert("订单信息不正确，请重新录入！"); 
