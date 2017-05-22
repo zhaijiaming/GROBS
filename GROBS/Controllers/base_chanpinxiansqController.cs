@@ -279,7 +279,27 @@ namespace GROBS.Controllers
             }
             return RedirectToAction("Index");
         }
-        
+
+        public JsonResult getProductLineWithID()
+        {
+            var jxsid = Request["jxsid"] ?? "";
+            if (!string.IsNullOrEmpty(jxsid))
+            {
+                var data = ServiceFactory.base_chanpinxiansqservice.LoadSortEntities(p => p.JXSID == int.Parse(jxsid) && p.IsDelete == false, true, p => p.ID).ToList<base_chanpinxiansq>();
+                if(data != null)
+                {
+                    return Json(data);
+                }
+                else
+                {
+                    return Json("");
+                }
+            }
+            else
+            {
+                return Json(-1);
+            }
+        }
     }
 }
 
