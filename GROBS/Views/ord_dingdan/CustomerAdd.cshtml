@@ -265,7 +265,7 @@
         $("#bt_com").click(function () {
             var _zje = $("#tx_zje").val();
             $.ajax({
-                async: true,
+                async: false,
                 beforeSend: function () {
                     ShowWait();
                 },
@@ -290,18 +290,28 @@
                         $("#pl_fl_ze").val(data);
                     }
                 }
-        });
-            $("#pl_fl_zd").val(0.3*Number(_zje));
-            if (Number($("#pl_fl_zd").val()) > Number($("#pl_fl_ze").val()))
-                $("#pl_fl_mn").val(Number($("#pl_fl_ze").val()));
+            });
+            $("#pl_fl_zd").val(Math.round(0.3 * Number(_zje) * 100) / 100);
+            if (Number($("#pl_fl_zd").val()) > Number($("#pl_fl_ze").val())) {
+                $("#pl_fl_mn").val($("#pl_fl_ze").val());
+            }
             else
-                $("#pl_fl_mn").val(Number($("#pl_fl_zd").val()));
+                $("#pl_fl_mn").val($("#pl_fl_zd").val());
             $("#pl_fl_sy").val($("#pl_fl_mn").val());
             $("#pl_fl").show();
         });
         $("#pl_fl_ok").click(function () {
+            if (!$.isNumeric($("#pl_fl_sy").val())) {
+                alert("使用返利金额的录入不正确！");
+                return;
+            }
+            if (Number($("#pl_fl_sy").val()) > Number($("#pl_fl_mn").val())) {
+                alert("使用的返利金额不可以超过订单可用的返利金额！");
+                return;
+            }
             $("#sel_zk").val("1");
             $("#tx_zk").val($("#pl_fl_sy").val());
+            $("#pl_fl").hide();
         });
         $("#pl_fl_close").click(function () {
             $("#sel_zk").val("0");
@@ -313,24 +323,76 @@
         });
 
         $("#bt_save").click(function () {
+            var _zsl = $("#tx_zsl").val();
+            if (Number(_zsl) == 0)
+            {
+                alert("请选择商品后再保存！");
+                return;
+            }
+            var _khdh = $("#tx_khdh").val();
+            var _lxr = $("#tx_lxr").val();
+            if (_lxr == "") {
+                alert("收货联系人必须录入！");
+                return;
+            }
+            var _lxdh = $("#tx_lxdh").val();
+            if (_lxdh == "") {
+                alert("联系电话必须录入！");
+                return;
+            }
+            var _shdz = $("#tx_shdz").val();
+            if (_shdz == "") {
+                alert("收货地址必须录入！");
+                return;
+            }
             var _dt = "";
             $("#dt_sp tbody tr").each(function () {
                 var _rtd = $(this).find("td");
                 var _sp = _rtd.eq(0).find("input").val();
-                //var _gg = _rtd.eq(2).text();
                 var _sl = _rtd.eq(4).text();
                 var _dj = _rtd.eq(5).text();
                 var _je = _rtd.eq(6).text();
-                var _bz = _rtd.eq(7).text();
-                _bz = _bz.replace(",", "&#");
-                _bz = _bz.replace(";", "&*");
-                alert(_sp + "," + _sl + "," + _dj + "," + _je + "," + _bz);
-                _dt = _dt + _sp + "," + _sl + "," + _dj + "," + _je + "," + _bz + ";";
+                _dt = _dt + _sp + "," + _sl + "," + _dj + "," + _je + ";";
             });
-            alert(_dt);
             if (_dt.length > 10) {
+                $.ajax({
+                    async: true,
+                    beforeSend: function () {
+                        ShowWait();
+                    },
+                    complete: function () {
+                        HiddenWait();
+                    },
+                    type: "POST",
+                    url: "/ord_dingdan/addordernow",
+                    data: {
+                        cust: $("#cust").val(),
+                        cpx: $("#sel_line").val(),
+                        lx: $("#sel_type").val(),
+                        zsl: $("#tx_zsl").val(),
+                        zje: $("#tx_zje").val(),
+                        bz: $("#tx_bz").val(),
+                        zk: $("#sel_zk").val(),
+                        zkje: $("#tx_zk").val(),
+                        khdh: $("#tx_khdh").val(),
+                        lxr: $("#tx_lxr").val(),
+                        lxdh: $("#tx_lxdh").val(),
+                        shdz:$("#tx_shdz").val(),
+                        sps: _dt
+                    },
+                    success: function (data) {
+                        if (data == 1) {
+                            window.open("/ord_dingdan/customerorderlist", _blank);
+                        }
+                        else {
+                            alert("订单信息不正确，请重新录入！"); 
+                        }
+                    }
+                });
 
             }
+            else
+                alert("请录入需要购买的商品！");
         });
     });
     function DatarowCount() {
@@ -344,8 +406,9 @@
             _tje = _tje + Number(_je);
             _tsl = _tsl + Number(_sl);
         });
-        $("#tx_zje").val(_tje);
+        $("#tx_zje").val(Math.round(Number(_tje) * 100) / 100);
         $("#tx_zsl").val(_tsl);
+        $("#tx_zk").val("0");
         if (_rc == 0) {
             $("#cpx").attr("disabled", false);
             $("#ordertype").attr("disabled", false);
@@ -363,6 +426,7 @@
     <input type="hidden" id="sel_type" value="0" />
     <input type="hidden" id="sel_zk" value="0" />
     <input type="hidden" id="cust" value="@ViewBag.customer" />
+    <input type="hidden" id="cdm" value="@ViewBag.custcode" />
     <div class="row">
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_add"><i class="icon-adn"></i>添加商品</button>
@@ -397,7 +461,7 @@
             @Html.SelectList_Common("ordertype", "订单类型")
         </div>
         <div class="col-sm-1">
-            <label>订单数量</label>
+            <label>商品数量</label>
         </div>
         <div class="col-sm-2">
             <input class="form-control" type="text" id="tx_zsl" readonly value="0" />
@@ -411,10 +475,16 @@
     </div>
     <div class="row">
         <div class="col-sm-1">
+            <label>客户单号</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_khdh" value="" placeholder="客户自有编号" />
+        </div>
+        <div class="col-sm-1">
             <label>备注</label>
         </div>
-        <div class="col-sm-8">
-            <input class="form-control" type="text" placeholder="订单说明录入" />
+        <div class="col-sm-5">
+            <input class="form-control" type="text" id="tx_bz" placeholder="订单说明录入" />
         </div>
         <div class="col-sm-1">
             <label>折扣金额</label>
@@ -422,7 +492,27 @@
         <div class="col-sm-2">
             <input class="form-control" type="text" id="tx_zk" readonly value="0" />
         </div>
-</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>联系人</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_lxr" value="@ViewBag.lxr" placeholder="收货联系人"/>
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>联系电话</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_lxdh" value="@ViewBag.lxdh" placeholder="收货联系电话"/>
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>收货地址</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" id="tx_shdz" value="@ViewBag.shdz" placeholder="收货详细地址"/>
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-12">
             <div class="table-wapper-all">
@@ -527,9 +617,9 @@
     </div>
     <div class="panel-body">
         <div class="row">
-            <p class="align-center">
-                <div class="col-sm-6"><button class="btn default" id="pl_fl_ok"><i class="icon-ok"></i>确定</button></div>
-                <div class="col-sm-6"><button class="btn default" id="pl_fl_cancel"><i class="icon-search"></i>取消</button></div>
+            <p>
+                <div class="col-sm-6 align-center"><button class="btn default" id="pl_fl_ok"><i class="icon-ok"></i>确定</button></div>
+                <div class="col-sm-6 align-center"><button class="btn default" id="pl_fl_cancel"><i class="icon-search"></i>取消</button></div>
             </p>
         </div>
         <div class="row">
@@ -540,18 +630,18 @@
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3">订单可用</label>
+                <label class="col-sm-3">最大折扣</label>
                 <div class="col-sm-9">
                     <input type="text" id="pl_fl_zd" readonly class="form-control" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="col-sm-3">最大可用</label>
+                <label class="col-sm-3">订单可用</label>
                 <div class="col-sm-9">
                     <input type="text" id="pl_fl_mn" readonly class="form-control" />
                 </div>
             </div>
-           <div class="form-group">
+            <div class="form-group">
                 <label class="col-sm-3">使用金额</label>
                 <div class="col-sm-9">
                     <input type="text" id="pl_fl_sy" class="form-control" />

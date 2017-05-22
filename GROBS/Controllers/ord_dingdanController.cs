@@ -482,7 +482,22 @@ namespace GROBS.Controllers
         {
             int userid = (int)Session["user_id"];
             int custid = (int)Session["customer_id"];
-
+            
+            var _cust = ServiceFactory.base_shouhuodanweiservice.GetEntityById(p => p.ID == custid && p.IsDelete == false);
+            if(_cust==null)
+            {
+                ViewBag.lxr = "";
+                ViewBag.lxdh = "";
+                ViewBag.shdz = "";
+                ViewBag.custcode = "";
+            }
+            else
+            {
+                ViewBag.lxr = _cust.Lianxiren;
+                ViewBag.lxdh = _cust.LianxiDH;
+                ViewBag.shdz = _cust.SonghuoDZ;
+                ViewBag.custcode = _cust.KehuDM;
+            }
             var _cpxsq = ServiceFactory.base_chanpinxiansqservice.LoadSortEntities(p => p.JXSID==custid && p.IsDelete == false, true, s => s.CPXDM).ToList();
             List<base_chanpinxiansqViewModel> cpxsq = new List<base_chanpinxiansqViewModel>();
             foreach (var sq in _cpxsq)
@@ -504,6 +519,63 @@ namespace GROBS.Controllers
             ViewBag.customer = custid;
             ViewBag.user = userid;
             return View();
+        }
+        public JsonResult AddOrderNow()
+        {
+            int _userid = (int)Session["user_id"];
+            var _cust = Request["cust"] ?? "";
+            var _cpx = Request["cpx"] ?? "";
+            var _lx = Request["lx"] ?? "";
+            var _zsl = Request["zsl"] ?? "0";
+            var _zje = Request["zje"] ?? "0";
+            var _bz = Request["bz"] ?? "";
+            var _zk = Request["zk"] ?? "";
+            var _zkje = Request["zkje"] ?? "0";
+            var _sps = Request["sps"] ?? "";
+            var _lxr = Request["lxr"] ?? "";
+            var _lxdh = Request["lxdh"] ?? "";
+            var _shdz = Request["shdz"] ?? "";
+            var _khdh = Request["khdh"] ?? "";
+
+            if (string.IsNullOrEmpty(_cpx) || string.IsNullOrEmpty(_cust) || string.IsNullOrEmpty(_lx) 
+                || string.IsNullOrEmpty(_sps) || string.IsNullOrEmpty(_lxr) || string.IsNullOrEmpty(_lxdh)
+                || string.IsNullOrEmpty(_shdz))
+                return Json(-1);
+            string[] _splist = _sps.Split(';');
+
+            //add order
+            ord_dingdan _dd = new ord_dingdan();
+            _dd.Beizhu = _bz;
+            _dd.CGLX = int.Parse(_lx);
+            _dd.CPXID = int.Parse(_cpx);
+            _dd.JieshuSF = false;
+            _dd.KehuDH = _khdh;
+            _dd.KHID = int.Parse(_cust);
+            _dd.LianxiDH = _lxdh;
+            _dd.Lianxiren = _lxr;
+            _dd.SonghuoDZ = _shdz;
+            _dd.XiadanRQ = DateTime.Now;
+            _dd.ZhekouJE = float.Parse(_zkje);
+            _dd.Zhuangtai = 1;
+            _dd.Zongjine = float.Parse(_zje);
+            _dd.ZongshuCG = float.Parse(_zsl);
+            _dd.ShenheTG = false;
+            _dd.HH = _splist.Count();
+            _dd.MakeMan = _userid;
+            _dd = ob_ord_dingdanservice.AddEntity(_dd);
+            if (_dd == null)
+                return Json(-2);
+
+            //add commodity
+            foreach(var sp in _splist)
+            {
+                if (sp.Length > 5)
+                {
+                    string[] _sp = sp.Split(',');
+
+                }
+            }
+            return Json(1);
         }
     }
 }

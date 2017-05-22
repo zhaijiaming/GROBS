@@ -458,6 +458,7 @@
     <Content Include="assets\css\jquery.gritter.css" />
     <Content Include="assets\css\select2.css" />
     <Content Include="assets\css\ui.jqgrid.css" />
+    <Content Include="assets\font\glyphicons-halflings-regular.svg" />
     <Content Include="assets\images\gallery\image-1.jpg" />
     <Content Include="assets\images\gallery\image-2.jpg" />
     <Content Include="assets\images\gallery\image-3.jpg" />
@@ -581,6 +582,7 @@
     <Content Include="apiapp.json" />
     <Content Include="assets\font\glyphicons-halflings-regular.ttf" />
     <Content Include="assets\font\glyphicons-halflings-regular.woff" />
+    <Content Include="assets\font\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\davis-ck.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck1.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck2.pubxml" />
