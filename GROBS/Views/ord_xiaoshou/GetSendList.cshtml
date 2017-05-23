@@ -54,7 +54,7 @@
 <div class="page-content">
     @Html.Search_Condition((int)Session["user_id"], "发货单_条件组合查询", "/ord_xiaoshou/getsendlist", "ord_xiaoshou_sendlist", scms)
     <div class="page-header">
-        <p>
+        <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
         </p>
@@ -70,15 +70,13 @@
                         <tr>
                             <th></th>
                             <th>订单编号</th>
-                            <th>销售单号</th>
+                            <th>发货单号</th>
                             <th>快递单号</th>
                             <th>发货日期</th>
                             <th>客服人员</th>
                             <th>客服电话</th>
                             <th>是否整单</th>
                             <th>是否关闭</th>
-                            <th>制单日期</th>
-                            <th>制单人</th>
                         </tr>
                         <tbody>
                             @foreach (var item in ViewBag.ord_xiaoshou)
@@ -90,13 +88,11 @@
                                     <td>@item.DDBH</td>
                                     <td>@item.XSDH</td>
                                     <td>@item.KDDH</td>
-                                    <td>@item.FahuoRQ</td>
+                                    <td>@string.Format("{0:yyyy-mm-dd}",item.FahuoRQ)</td>
                                     <td>@item.Kefu</td>
                                     <td>@item.KefuDH</td>
                                     <td>@string.Format("{0:0}", item.ZhengdanSF == bool.Parse("False") ? "否" : "是")</td>
                                     <td>@string.Format("{0:0}", item.GuanbiSF == bool.Parse("False") ? "否" : "是")</td>
-                                    <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
                                 </tr>
                             }
                         </tbody>

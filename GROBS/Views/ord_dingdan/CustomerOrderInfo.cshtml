@@ -1,0 +1,132 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "采购单";
+    Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+    var _i = 1;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            //if (u_id != null) {
+            //    var url_go = "/ord_dingdan/Edit/" + u_id;
+            //    location.href = url_go;
+            //}
+        });
+    });
+</script>
+<div class="page-content">
+    <div class="row">
+        <p class="align-center"><i class="icon-file-text bigger-200 green"></i><span class="bigger-150 blue">订单详情</span></p>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>产品线</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.cpx"/>
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>订单类型</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@Html.GetCommonValue_ID("订单类型",(int)ViewBag.cglx)" />
+        </div>
+        <div class="col-sm-1">
+            <label>商品数量</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.sl" />
+        </div>
+        <div class="col-sm-1">
+            <label>订单金额</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.je" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label>客户单号</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.khdh"/>
+        </div>
+        <div class="col-sm-1">
+            <label>备注</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" readonly value="@ViewBag.bz"/>
+        </div>
+        <div class="col-sm-1">
+            <label>折扣金额</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.zk" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>联系人</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.lxr" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>联系电话</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.lxdh" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>收货地址</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" readonly value="@ViewBag.shdz" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="dt_sp">
+                        <caption><i class="icon-edit"></i>采购商品列表</caption>
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>代码</td>
+                                <td>规格</td>
+                                <td>描述</td>
+                                <td>数量</td>
+                                <td>单价</td>
+                                <td>金额</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.ord_dingdanmx)
+                            {
+                                <tr>
+                                    <td>
+                                        <label>@string.Format("{0:d}",_i++)</label>
+                                    </td>
+                                    <td>@item.SPBM</td>
+                                    <td>@item.Guige</td>
+                                    <td>@item.SPMC</td>
+                                    <td>@item.CGSL</td>
+                                    <td>@item.XSBJ</td>
+                                    <td>@item.Jine</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
