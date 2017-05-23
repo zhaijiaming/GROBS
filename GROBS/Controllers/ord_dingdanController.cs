@@ -631,16 +631,16 @@ namespace GROBS.Controllers
                 _xf.XFJE = _dd.ZhekouJE;
                 _xf.MakeMan = _userid;
                 _xf = ServiceFactory.ord_fanlixfservice.AddEntity(_xf);
-                if (_xf != null)
-                {
-                    var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == _xf.KHID && p.IsDelete == false);
-                    if (_fl != null)
-                    {
-                        _fl.Zonge = _fl.Zonge - _xf.XFJE;
-                        _fl.Keyong = _fl.Keyong - _xf.XFJE;
-                        ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
-                    }
-                }
+                //if (_xf != null)
+                //{
+                //    var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == _xf.KHID && p.IsDelete == false);
+                //    if (_fl != null)
+                //    {
+                //        _fl.Zonge = _fl.Zonge - _xf.XFJE;
+                //        _fl.Keyong = _fl.Keyong - _xf.XFJE;
+                //        ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                //    }
+                //}
             }
 
             return Json(1);

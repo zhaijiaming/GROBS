@@ -22,13 +22,43 @@
         $("#bt_deleteInfo").click(function () {
             var sDel = "";
             $("#mydatatable tr input[type=checkbox]").each(function () {
-                if (this.checked)
+                if (this.checked){
+                    var _st=$(this).data("state");
+                    if(Number(_st)>10)
+                    {
+                        alert("只有新建的未付款订单才能删除，如需删除其他状态订单，需联络平台客服！");
+                        return;
+                    }
                     sDel = sDel + ", " + $(this).val()
+                }
             });
-            if (sDel.length < 2)
+            if (sDel.length < 2){
+                alert("请选择需要删除的订单！");
                 return;
-            var url_go = "/ord_dingdan/Delete/?del=" + sDel;
-            location.href = url_go;
+            }
+            var url_go = "/ord_dingdan/deleteorder";
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: url_go,
+                data: {
+                    sdel:sDel
+                },
+                success: function (data) {
+                    if (data == 1) {
+                        location.reload();
+                    }
+                    else {
+                        alert("删除订单失败，请与客服联系！"); 
+                    }
+                }
+            });
         });
         $("#bt_historyInfo").click(function () {
             window.open("/ord_dingdan/customerorderlist", "_blank");
@@ -37,8 +67,12 @@
             window.open("/ord_xiaoshou/getsendlist", "_blank");
         });
     });
+    //function spdetail(oid){
+    //    var _durl="/ord_dingdanmx/edit/"+oid;
+    //    window.open(_durl,"_blank");
+    //}
 </script>
-
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
     <div class="row">
         <p><i class="icon-home bigger-200 red"></i><span class="bigger-150 blue">@ViewBag.customername</span></p>
@@ -66,6 +100,7 @@
                         <thead>
                             <tr>
                                 <td></td>
+                                <td></td>
                                 <td>编号</td>
                                 <td>状态</td>
                                 <td>产品线</td>
@@ -87,8 +122,9 @@
                             {
                                 <tr>
                                     <td>
-                                        <label><input type="checkbox" value="@item.ID"></label>
+                                        <label><input type="checkbox" value="@item.ID" data-state="@item.Zhuangtai"></label>
                                     </td>
+                                    <td><a href="/ord_dingdan/edit/@item.ID"><i class="icon-list-alt bigger-150" title="订单详情"></i></a></td>
                                     <td>@item.Bianhao</td>
                                     <td>@Html.GetCommonValue_ID("订单状态",(int)item.Zhuangtai)</td>
                                     <td>@item.Mingcheng</td>

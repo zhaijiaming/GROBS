@@ -126,6 +126,7 @@
         });
         $("#pl_tb_ok").click(function () {
             var _dm = $("#pl_tb_tbdm").val();
+            var _sl = $("#pl_tb_cgsl").val();
             if (_dm.length == 0) {
                 alert("请录入套包代码后添加！");
                 return;
@@ -147,8 +148,7 @@
                 data: {
                     cpx: $("#sel_line").val(),
                     dm: _dm,
-                    sl: _sl,
-                    sm: $("#pl_bz").val()
+                    sl: _sl
                 },
                 success: function (data) {
                     if (data == -1) {
@@ -166,7 +166,7 @@
                     else {
                         var _filltr = "";
                         _filltr = _filltr + "<tr>";
-                        _filltr = _filltr + "<td><input type='hidden' value='";
+                        _filltr = _filltr + "<td><i class='icon-minus-sign bigger-150 red'></i><input type='hidden' value='";
                         _filltr = _filltr + data.ID;
                         _filltr = _filltr + "'/></td>";
                         _filltr = _filltr + "<td>";
@@ -183,13 +183,22 @@
                         _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
                         _filltr = _filltr + "</td>";
                         _filltr = _filltr + "</tr>";
-                        $("#dt_sp tbody tr").append(_filltr);
-                        //$("#pl_sp").hide();
+                        $("#dt_sp tbody").append(_filltr);
+                        DatarowCount();
+                        $("#pl_tb").hide();
                     }
                 }
             });
         });
         $("#bt_import").click(function () {
+            if ($("#sel_line").val() == "0") {
+                alert("产品线必须选择！");
+                return;
+            }
+            if ($("#sel_type").val() == "0") {
+                alert("订单类型必须选择！")
+                return;
+            }
             $("#pl_im_text").val("");
             $("#pl_im").show();
         });
@@ -211,7 +220,7 @@
             if (_tp == 1)
                 _posturl = "/base_shangpinxx/getproductsbycode";
             if (_tp == 2)
-                _posturl = "";
+                _posturl = "/base_taobao/getproducts";
             if (_tp == 3)
                 _posturl = "";
             $.ajax({
@@ -231,6 +240,9 @@
                 success: function (data) {
                     if (data == -1) {
                         alert("导入货品出错！");
+                    }
+                    else if (data == -3) {
+                        alert("货品格式不正确，请重新导入！");
                     }
                     else {
                         var _filltr = '';
@@ -279,12 +291,12 @@
                 },
                 success: function (data) {
                     if (data == -1) {
-                        alert("查询返利金额失败！");
-                        $("#pl_fl").hide();
+                        //alert("查询返利金额失败！");
+                        $("#pl_fl_zd").val("0");
                     }
                     else if (data == -2) {
-                        alert("获取返利金额失败！");
-                        $("#pl_fl").hide();
+                        //alert("获取返利金额失败！");
+                        $("#pl_fl_zd").val("0");
                     }
                     else {
                         $("#pl_fl_ze").val(data);
@@ -331,7 +343,20 @@
         });
 
         $("#bt_save").click(function () {
+            if ($("#sel_line").val() == "0") {
+                alert("产品线必须选择！");
+                return;
+            }
+            if ($("#sel_type").val() == "0") {
+                alert("订单类型必须选择！")
+                return;
+            }
             var _zsl = $("#tx_zsl").val();
+            var _zje = $("#tx_zje").val();
+            if (_zsl == "NaN" || _zje == "NaN") {
+                alert("非法录入，请重新输入商品信息！");
+                return;
+            }
             if (Number(_zsl) == 0)
             {
                 alert("请选择商品后再保存！");
@@ -453,7 +478,7 @@
                 <input type="text" readonly placeholder="系统自动生成" />
             </div>*@
         <div class="col-sm-1">
-            <label>产品线</label>
+            <label><i class="icon-star red"></i>产品线</label>
         </div>
         <div class="col-sm-2">
             <select id="cpx" class="form-control">
@@ -465,7 +490,7 @@
             </select>
         </div>
         <div class="col-sm-1">
-            <label>订单类型</label>
+            <label><i class="icon-star red"></i>订单类型</label>
         </div>
         <div class="col-sm-2">
             @Html.SelectList_Common("ordertype", "订单类型")
