@@ -55,7 +55,7 @@
                         location.reload();
                     }
                     else {
-                        alert("删除订单失败，请与客服联系！"); 
+                        alert("删除订单失败，请与客服联系！");
                     }
                 }
             });
@@ -83,9 +83,9 @@
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo"><i class="icon-remove"></i>删除</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_collect"><i class="icon-upload"></i>结算</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_recieve"><i class="icon-shopping-cart"></i>收货</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-5" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-5" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
-           <button type="button" class="btn btn-primary btn-xs btn-app radius-6" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
         </p>
     </div>
     <div class="row">
@@ -124,11 +124,11 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID" data-state="@item.Zhuangtai"></label>
                                     </td>
-                                    <td><a href="/ord_dingdan/edit/@item.ID"><i class="icon-list-alt bigger-150" title="订单详情"></i></a></td>
+                                    <td><a href="/ord_dingdan/customerorderinfo/@item.ID"><i class="icon-list-alt bigger-150" title="订单详情"></i></a></td>
                                     <td>@item.Bianhao</td>
-                                    <td>@Html.GetCommonValue_ID("订单状态",(int)item.Zhuangtai)</td>
+                                    <td>@Html.GetCommonValue_ID("订单状态", (int)item.Zhuangtai)</td>
                                     <td>@item.Mingcheng</td>
-                                    <td>@Html.GetCommonValue_ID("订单类型",(int)item.CGLX)</td>
+                                    <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
                                     <td>@item.KehuDH</td>
                                     <td>@item.XiadanRQ</td>
                                     <td>@item.Lianxiren</td>
@@ -137,7 +137,7 @@
                                     <td>@item.ZongshuCG</td>
                                     <td>@item.Zongjine</td>
                                     <td>@item.ZhekouJE</td>
-                                    <td>@string.Format("{0:C}",item.Zongjine-item.ZhekouJE)</td>
+                                    <td>@string.Format("{0:C}", item.Zongjine - item.ZhekouJE)</td>
                                     <td>@item.Beizhu</td>
                                 </tr>
                             }
@@ -148,4 +148,3 @@
         </div>
     </div>
 </div>
-

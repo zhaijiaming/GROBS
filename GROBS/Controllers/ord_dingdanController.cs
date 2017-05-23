@@ -343,7 +343,7 @@ namespace GROBS.Controllers
             int userid = (int)Session["user_id"];
             int custid = (int)Session["customer_id"];
             string pagetag = "ord_dingdan_customerorderlist";
-            Expression<Func<ord_dingdan, bool>> where = PredicateExtensionses.True<ord_dingdan>();
+            Expression<Func<ord_ordermain_v, bool>> where = PredicateExtensionses.True<ord_ordermain_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
             {
@@ -382,9 +382,7 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(ord_dingdan => ord_dingdan.KHID == custid && ord_dingdan.IsDelete == false);
-
-            var tempData = ob_ord_dingdanservice.LoadSortEntities(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
         }
@@ -399,7 +397,7 @@ namespace GROBS.Controllers
             string bianhao = Request["bianhao"] ?? "";
             string bianhaoequal = Request["bianhaoequal"] ?? "";
             string bianhaoand = Request["bianhaoand"] ?? "";
-            Expression<Func<ord_dingdan, bool>> where = PredicateExtensionses.True<ord_dingdan>();
+            Expression<Func<ord_ordermain_v, bool>> where = PredicateExtensionses.True<ord_ordermain_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
@@ -456,9 +454,8 @@ namespace GROBS.Controllers
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            where = where.And(ord_dingdan => ord_dingdan.KHID == custid && ord_dingdan.IsDelete == false);
 
-            var tempData = ob_ord_dingdanservice.LoadSortEntities(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
         }
@@ -558,8 +555,8 @@ namespace GROBS.Controllers
             _dd.Lianxiren = _lxr;
             _dd.SonghuoDZ = _shdz;
             _dd.XiadanRQ = DateTime.Now;
-            _dd.ZhekouJE = float.Parse(_zkje);            
-            _dd.Zhuangtai = 1;
+            _dd.ZhekouJE = float.Parse(_zkje);
+            _dd.Zhuangtai = 10;
             _dd.Zongjine = float.Parse(_zje);
             _dd.ZongshuCG = float.Parse(_zsl);
             _dd.ShenheTG = false;
@@ -644,6 +641,30 @@ namespace GROBS.Controllers
             }
 
             return Json(1);
+        }
+        public ActionResult CustomerOrderInfo(int id)
+        {
+            int _custid = (int)Session["customer_id"];
+            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.IsDelete == false);
+            if (_dd == null)
+                return View();
+            var _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == _dd.CPXID);
+            if (_cpx == null)
+                ViewBag.cpx = "";
+            else
+                ViewBag.cpx = _cpx.Mingcheng;
+            ViewBag.cglx = _dd.CGLX;
+            ViewBag.sl = _dd.ZongshuCG;
+            ViewBag.je = _dd.Zongjine;
+            ViewBag.khdh = _dd.KehuDH;
+            ViewBag.bz = _dd.Beizhu;
+            ViewBag.zk = _dd.ZhekouJE;
+            ViewBag.lxr = _dd.Lianxiren;
+            ViewBag.lxdh = _dd.LianxiDH;
+            ViewBag.shdz = _dd.SonghuoDZ;
+            var _ddmx = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == _dd.ID && p.IsDelete == false, true, s => s.SPBM).ToList();
+            ViewBag.ord_dingdanmx = _ddmx;
+            return View();
         }
     }
     public class SPList

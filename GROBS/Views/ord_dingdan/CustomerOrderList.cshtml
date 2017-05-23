@@ -69,24 +69,12 @@
     }
 }
 
-<div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home home-icon"></i>
-            <a href="/Home">首页</a>
-        </li>
-        <li class="active">订单</li>
-    </ul>
-</div>
 <div class="page-content">
     @Html.Search_Condition((int)Session["user_id"], "采购_条件组合查询", "/ord_dingdan/customerorderlist", "ord_dingdan_customerorderlist", scms)
     <div class="page-header">
-        <p>
-            <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
-            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+        <p class="align-center">
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
         </p>
     </div>
     <div class="row">
@@ -107,9 +95,9 @@
                     <td>送货地址</td>
                     <td>采购总数</td>
                     <td>总金额</td>
+                    <td>折扣金额</td>
+                    <td>实付金额</td>
                     <td>备注</td>
-                    <td>制单日期</td>
-                    <td>制单人</td>
                 </tr>
             </thead>
             <tbody>
@@ -120,20 +108,20 @@
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
                         <td>@item.Bianhao</td>
-                        <td>@item.Zhuangtai</td>
-                        <td>@Html.GetDataValue_ID("收货单位","名称",(int)item.KHID)</td>
-                        <td>@item.CPXID</td>
-                        <td>@item.CGLX</td>
+                        <td>@Html.GetCommonValue_ID("订单状态",(int)item.Zhuangtai)</td>
+                        <td>@item.KehuMC</td>
+                        <td>@item.Mingcheng</td>
+                        <td>@Html.GetCommonValue_ID("订单类型",(int)item.CGLX)</td>
                         <td>@item.KehuDH</td>
-                        <td>@item.XiadanRQ</td>
+                        <td>@string.Format("{0:yyyy-mm-dd}",item.XiadanRQ==null?"": item.XiadanRQ)</td>
                         <td>@item.Lianxiren</td>
                         <td>@item.LianxiDH</td>
                         <td>@item.SonghuoDZ</td>
                         <td>@item.ZongshuCG</td>
                         <td>@item.Zongjine</td>
+                        <td>@item.Zhekouje</td>
+                        <td>@string.Format("{0:C}",item.Zongjine-item.Zhekouje)</td>
                         <td>@item.Beizhu</td>
-                        <td>@item.MakeDate</td>
-                        <td>@item.MakeMan</td>
                     </tr>
                 }
             </tbody>

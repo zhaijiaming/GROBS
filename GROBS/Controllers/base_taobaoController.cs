@@ -354,6 +354,47 @@ namespace GROBS.Controllers
                 return Json(-2);
             }
         }
+        public JsonResult GetProducts()
+        {
+            var _cpx = Request["cpx"] ?? "";
+            var _imp = Request["imt"] ?? "";
+
+            if (string.IsNullOrEmpty(_cpx) || string.IsNullOrEmpty(_imp))
+                return Json(-1);
+            try
+            {
+                string[] _item = _imp.Split();
+                List<ord_productsViewModel> _products = new List<ord_productsViewModel>();
+                for (int i = 0; i < _item.Count(); i = i + 2)
+                {
+                    string _dm = _item[i];
+                    if (i + 1 >= _item.Count())
+                        break;
+                    string _sh = _item[i + 1];
+                    if (string.IsNullOrEmpty(_dm) || string.IsNullOrEmpty(_sh))
+                        continue;
+                    float _sl = float.Parse(_sh);
+                    var _sp = ob_base_taobaoservice.GetEntityById(p=>p.Daima==_dm && p.CPXID==int.Parse(_cpx) && p.IsDelete==false);
+                    if (_sp==null)
+                        continue;
+                    ord_productsViewModel _pro = new ord_productsViewModel();
+                    _pro.ID = _sp.ID;
+                    _pro.Daima = _sp.Daima;
+                    _pro.Guige = _sp.Miaoshu;
+                    _pro.JiaXS = _sp.JiaXS;
+                    _pro.Mingcheng = _sp.Mingcheng;
+                    _pro.Shuliang = _sl;
+                    _pro.Jine = _pro.JiaXS * _pro.Shuliang;
+                    _products.Add(_pro);
+                }
+                return Json(_products);
+            }
+            catch
+            {
+                return Json(-3);
+            }
+
+        }
     }
 }
 
