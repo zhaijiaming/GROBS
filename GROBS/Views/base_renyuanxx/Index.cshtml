@@ -140,9 +140,9 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "账号", (int)item.UserID)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "账号", (int)(item.UserID == null ? 0 : item.UserID))</td>
                                     <td>@item.Mingcheng</td>
-                                    <td>@Html.GetCommonValue_ID("性别", (int)item.Xingbie)</td>
+                                    <td>@Html.GetCommonValue_ID("性别", (int)(item.Xingbie == null ? 0 : item.Xingbie))</td>
                                     <td>@item.Dianhua</td>
                                     <td>@item.Shengri.ToString("yyyy-MM-dd")</td>
                                     <td>@item.Bumen</td>
@@ -150,7 +150,7 @@
                                     <td>@item.Zhize</td>
                                     <td>@item.Beizhu</td>
                                     <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
                                 </tr>
                             }
                         </tbody>

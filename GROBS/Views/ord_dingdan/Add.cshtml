@@ -80,11 +80,11 @@
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {
             var jxsid = $(this).find(".checkbox").val();
-
+            $("#KehuDM").val($(this).find(".daima").html());
             $("#khname").val($(this).find(".Mingcheng").html());
             $("#jxsid").val(jxsid);
             $("#Lianxiren").val($(this).find(".lianxiren").html());
-            $("#LianxiDH").val($(this).find(".lianxidianhua").html());
+            $("#LianxiDH").val($(this).find(".lianxidianhua").html()); 
             $("#SonghuoDZ").val($(this).find(".songhuodizhi").html());
             getProductLineWithID(jxsid);
             $("#containerJxs").hide();
@@ -143,28 +143,25 @@
                 req_shdz: $("#req_shdz").val()
             },
             success: function (data) {
-                var filltable = "";
                 if (data != -1) {
+                    var str = "";
                     for (var i in data) {
-                        filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
-                        filltable = filltable + data[i].ID;
-                        filltable = filltable + '"/></td><td>';
-                        filltable = filltable + data[i].KehuDM;
-                        filltable = filltable + '</td><td><span class="Mingcheng">';
-                        filltable = filltable + data[i].Mingcheng;
-                        filltable = filltable + '</span></td><td><span class = "lianxiren">';
-                        filltable = filltable + data[i].Lianxiren;
-                        filltable = filltable + '</span></td><td><span class = "lianxidianhua">';
-                        filltable = filltable + data[i].LianxiDH;
-                        filltable = filltable + '</span></td><td><span class = "songhuodizhi">';
-                        filltable = filltable + data[i].SonghuoDZ;
-                        filltable = filltable + '</span></td><tr>';
+                        str += [
+                            '<tr>',
+                            '<td><input type="checkbox" class ="checkbox" value="' + data[i].ID + '"/></td>',
+                            '<td><span class = "daima">' + data[i].KehuDM + '</span></td>',
+                            '<td><span class = "Mingcheng">' + data[i].Mingcheng + '</span></td>',
+                            '<td><span class = "lianxiren">' + data[i].Lianxiren + '</span></td>',
+                            '<td><span class = "lianxidianhua">' + data[i].LianxiDH + '</span></td>',
+                            '<td><span class = "songhuodizhi">' + data[i].SonghuoDZ + '</span></td>',
+                            '</tr>'
+                        ].join();
                     }
                 }
                 else {
                     alert("获取客户信息出错，请联系管理员！");
                 }
-                $("#table_data tbody").html(filltable);
+                $("#tbody_kehu").html(str);
                 markSelect();//记录选过的信息
             }
         });
@@ -216,6 +213,13 @@
                                             <label for="Bianhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>编号</b></label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="Bianhao" name="Bianhao" readonly class="form-control" placeholder="自动生成编号" />
+                                            </div>
+                                        </div>
+                                        @*客户代码*@
+                                        <div class="form-group">
+                                            <label for="KehuDM" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户代码</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="KehuDM" name="KehuDM" readonly class="form-control" placeholder="请选择客户" />
                                             </div>
                                         </div>
                                         @*客户*@
@@ -461,14 +465,14 @@
                                             <thead>
                                                 <tr>
                                                     <th></th>
-                                                    <th>编号</th>
+                                                    <th>代码</th>
                                                     <th>名称</th>
                                                     <th>联系人</th>
                                                     <th>联系电话</th>
                                                     <th>地址</th>
                                                 </tr>
                                             </thead>
-                                            <tbody></tbody>
+                                            <tbody id="tbody_kehu"></tbody>
                                         </table>
                                     </div>
                                 </div>

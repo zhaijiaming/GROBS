@@ -19,7 +19,6 @@
         //table样式
         table_config(mydatatable);
         trResize();//初始化表头
-
     });
     function AddInfo() {
         location.href = "/ord_dingdan/Add";
@@ -101,6 +100,7 @@
                         <tr>
                             <th></th>
                             <th>编号</th>
+                            <th>代码</th>
                             <th>客户</th>
                             <th>产品线</th>
                             <th>采购类型</th>
@@ -128,16 +128,17 @@
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
                                     <td>@item.Bianhao</td>
-                                    <td>@Html.GetDataValue_ID("收货单位", "", (int)item.KHID)</td>
-                                    <td>@Html.GetDataValue_ID("产品线", "", (int)item.CPXID)</td>
-                                    <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
+                                    <td>@item.KehuDM</td>
+                                    <td>@Html.GetDataValue_ID("收货单位", "", (int)(item.KHID == null ? 0 : item.KHID))</td>
+                                    <td>@Html.GetDataValue_ID("产品线", "", (int)(item.CPXID == null ? 0 : item.CPXID))</td>
+                                    <td>@Html.GetCommonValue_ID("订单类型", (int)(item.CGLX == null ? 0 : item.CGLX))</td>
                                     <td>@item.KehuDH</td>
                                     <td>@string.Format("{0:yyyy-MM-dd}", item.XiadanRQ)</td>
                                     <td>@item.Lianxiren</td>
                                     <td>@item.LianxiDH</td>
                                     <td>@item.SonghuoDZ</td>
-                                    <td>@Html.GetDataValue_ID("OPID", "", (int)item.OPID)</td>
-                                    <td>@Html.GetDataValue_ID("ACCID", "", (int)item.ACCID)</td>
+                                    <td>@Html.GetDataValue_ID("OPID", "", (int)(item.OPID == null ? 0 : item.OPID))</td>
+                                    <td>@Html.GetDataValue_ID("ACCID", "", (int)(item.ACCID == null ? 0 : item.ACCID))</td>
                                     <td>@string.Format("{0:0}", item.ShenheTG == bool.Parse("False") ? "否" : "是")</td>
                                     <td>@item.ZongshuCG</td>
                                     <td>@item.Zongjine</td>
@@ -145,7 +146,7 @@
                                     <td>@item.Zhuangtai</td>
                                     <td>@item.Beizhu</td>
                                     <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
                                 </tr>
                             }
                         </tbody>
