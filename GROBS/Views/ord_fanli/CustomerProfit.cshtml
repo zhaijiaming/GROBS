@@ -16,26 +16,119 @@
                 location.href = url_go;
             }
         });
+        getDetailWithKhid();//初始化该客户的'总额'和'可用额'
+        getFanliXiaoFeiWithQuery();//获取返利消费
+        getFanliChongZhiWithQuery();//获取返利充值
     });
-    function AddInfo() {
-        location.href = "/ord_fanli/Add";
-    }
-    function EditInfo() {
-        $("#mydatatable tr input[type=checkbox]").each(function () {
-            if (this.checked)
-                location.href = "/ord_fanli/Edit/" + $(this).val();
+    //格式化日期
+    function formatDate(selector) {
+        var selector = selector;
+        selector.find("tr").each(function () {
+            var new_date = (($(this).find(".makedate").html()).format("yyyy-MM-dd"));
+            $(this).find(".makedate").html(new_date);
         });
     }
-    function DelInfo() {
-        var sDel = "";
-        $("#mydatatable tr input[type=checkbox]").each(function () {
-            if (this.checked)
-                sDel = sDel + ", " + $(this).val()
+    //格式化是否
+    function formatBoolToCHinese() {
+        $("#table_flcz").find("tr").each(function () {
+            var boolT_F = $(this).find(".kysf_flxf").html();
+            if (boolT_F == "true") {
+                $(this).find(".kysf_flxf").html("是");
+            } else {
+                $(this).find(".kysf_flxf").html("否");
+            }
         });
-        if (sDel.length < 2)
-            return;
-        var url_go = "/ord_fanli/Delete/?del=" + sDel;
-        location.href = url_go;
+    }
+    /*
+        获取返利充值
+        实际查询功能还未添加
+    */
+    function getFanliChongZhiWithQuery() {
+        var _khid = $("#khid").val();
+        var str = "";
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
+            },
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: "/ord_fanlicz/getFanliChongZhiWithQuery",
+            data: {
+                khid: _khid
+            },
+            success: function (data) {
+                for (var i in data) {
+                    str += [
+                        '<tr>',
+                        '<td><input type="checkbox" class ="checkbox" value="' + data[i].ID + '"></td>',
+                        '<td><span class="czje_flxf">' + data[i].CZJE + '</span></td>',
+                        '<td><span class="ffyf_flxf">' + data[i].FFYF + '</span></td>',
+                        '<td><span class="kysf_flxf">' + data[i].KYSF + '</span></td>',
+                        '<td><span class="makedate">' + data[i].MakeDate + '</span></td>',
+                        '</tr>'
+                    ].join();
+                }
+                $("#tbody_flcz").html(str);
+                formatBoolToCHinese();//'是否'格式化
+                //formatDate($("#table_flcz"));//'日期'格式化
+            }
+        });
+    }
+    /*
+        获取返利消费
+        实际查询功能还未添加
+    */
+    function getFanliXiaoFeiWithQuery() {
+        var _khid = $("#khid").val();
+        var str = "";
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
+            },
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: "/ord_fanlixf/getFanliXiaoFeiWithQuery",
+            data: {
+                khid: _khid
+            },
+            success: function (data) {
+                for (var i in data) {
+                    str += [
+                        '<tr>',
+                        '<td><input type="checkbox" class ="checkbox" value="' + data[i].ID + '"></td>',
+                        '<td><span class="ddid_flxf">' + data[i].DDID + '</span></td>',
+                        '<td><span class="xfje_flxf">' + data[i].XFJE + '</span></td>',
+                        '<td><span class="makedate">' + data[i].MakeDate + '</span></td>',
+                        '</tr>'
+                    ].join();
+                }
+                $("#tbody_flxf").html(str);
+                //formatDate($("#table_flxf"));//'日期'格式化
+            }
+        });
+    }
+    //初始化该客户的总额和可用额
+    function getDetailWithKhid() {
+        var _khid = $("#khid").val();
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: "/ord_fanli/getDetailWithKhid",
+            data: {
+                khid: _khid
+            },
+            success: function (data) {
+                $("#totalPrice").html(data.Zonge);
+                //console.log(data.Zonge);
+                $("#availablePrice").html(data.Keyong);
+            }
+        });
     }
 </script>
 @{
@@ -67,49 +160,127 @@
         }
     }
 }
-
 <div class="page-content">
-    @Html.Search_Condition((int)Session["user_id"], "返利_条件组合查询", "/ord_fanli/customerprofit", "ord_fanli_customerprofit", scms)
-    <div class="page-header">
-        <p>
-            <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
-            <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
-            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
-            <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
-            <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-        </p>
-    </div>
-    <div class="row">
-        <table class="table" id="mydatatable">
-            <caption></caption>
-            <thead>
-                <tr>
-                    <td></td>
-                    <td>客户</td>
-                    <td>总额</td>
-                    <td>可用</td>
-                    <td>制单日期</td>
-                    <td>制单人</td>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in ViewBag.ord_fanli)
-                {
-                    <tr>
-                        <td>
-                            <label><input type="checkbox" value="@item.ID"></label>
-                        </td>
-                        <td>@item.KHID</td>
-                        <td>@item.Zonge</td>
-                        <td>@item.Keyong</td>
-                        <td>@item.MakeDate</td>
-                        <td>@item.MakeMan</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
-    <div class="pager">
-        @Html.PagedListPager((IPagedList)Model, page => Url.Action("customerprofit", new { page }))
+    <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
+    <input type="hidden" id="khid" value="@ViewBag.khid" />
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="panel">
+                    <div class="panel-body">
+                        @*客户信息*@
+                        <div class="row">
+                            <div class="col-sm-12" style="font-size:18px;">
+                                <i class="icon-user bigger-300"></i>&nbsp;&nbsp;
+                                <b>@Html.GetDataValue_ID("收货单位", "", (int)(ViewBag.khid == null ? 0 : ViewBag.khid))</b>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <b>总额：<span id="totalPrice" class="orange" style="font-size:28px;">0</span></b>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <b>可用：<span id="availablePrice" class="green" style="font-size:28px;">0</span></b>
+                            </div>
+                        </div>
+                        <hr />
+                        @*tab*@
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="tabbable">
+                                    <ul class="nav nav-tabs" id="myTab">
+                                        <li class="active">
+                                            <a data-toggle="tab" href="#tab_flxf">
+                                                <i class="green icon-home bigger-110"></i>
+                                                消费记录
+                                            </a>
+                                        </li>
+                                        <li>
+                                            <a data-toggle="tab" href="#tab_flcz">
+                                                <i class="green icon-money bigger-110"></i>
+                                                充值记录
+                                            </a>
+                                        </li>
+                                    </ul>
+                                    <div class="tab-content">
+                                        <div id="tab_flxf" class="tab-pane in active">
+                                            @*查询条件*@
+                                            @*订单序号*@
+                                            <div class="form-group col-sm-3">
+                                                <label for="req_ddid" class="col-sm-4 control-label"><b>订单序号</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="req_ddid" class="form-control" placeholder="请输入订单序号" />
+                                                </div>
+                                            </div>
+                                            @*消费金额*@
+                                            <div class="form-group col-sm-3">
+                                                <label for="req_xfje" class="col-sm-4 control-label"><b>消费金额</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="req_xfje" class="form-control" placeholder="请输入消费金额" />
+                                                </div>
+                                            </div>
+                                            @*制单日期*@
+                                            <div class="form-group col-sm-3">
+                                                <label for="req_date" class="col-sm-4 control-label"><b>制单日期</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="req_date" class="form-control" placeholder="请输入制单日期" />
+                                                </div>
+                                            </div>
+                                            @*按钮*@
+                                            <div class="form-group col-sm-2">
+                                                <button type="button" id="btn_req_flxf" class="btn btn-white "><i class="icon-search green"></i><b>查询</b></button>
+                                            </div>
+                                            @*列表*@
+                                            <table class="table table-bordered table-hover" id="table_flxf">
+                                                <tr>
+                                                    <th></th>
+                                                    <th>订单序号</th>
+                                                    <th>消费金额</th>
+                                                    <th>制单日期</th>
+                                                </tr>
+                                                <tbody id="tbody_flxf"></tbody>
+                                            </table>
+                                        </div>
+                                        <div id="tab_flcz" class="tab-pane">
+                                            @*查询条件*@
+                                            @*发放月份*@
+                                            <div class="form-group col-sm-3">
+                                                <label for="req_ffyf" class="col-sm-4 control-label"><b>发放月份</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="req_ffyf" class="form-control" placeholder="请输入发放月份" />
+                                                </div>
+                                            </div>
+                                            @*是否可用*@
+                                            <div class="form-group col-sm-3">
+                                                <label for="req_kysf" class="col-sm-4 control-label"><b>是否可用</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="req_kysf" class="form-control" placeholder="请输入'是'或'否'" />
+                                                </div>
+                                            </div>
+                                            @*制单日期*@
+                                            <div class="form-group col-sm-3">
+                                                <label for="req_date" class="col-sm-4 control-label"><b>制单日期</b></label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" id="req_date" class="form-control" placeholder="请输入制单日期" />
+                                                </div>
+                                            </div>
+                                            @*按钮*@
+                                            <div class="form-group col-sm-2">
+                                                <button type="button" id="btn_req_flcz" class="btn btn-white "><i class="icon-search green"></i><b>查询</b></button>
+                                            </div>
+                                            @*列表*@
+                                            <table class="table table-bordered table-hover" id="table_flcz">
+                                                <tr>
+                                                    <th></th>
+                                                    <th>充值金额</th>
+                                                    <th>发放月份</th>
+                                                    <th>是否可用</th>
+                                                    <th>制单日期</th>
+                                                </tr>
+                                                <tbody id="tbody_flcz"></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -272,6 +272,7 @@ namespace GROBS.Controllers
         [OutputCache(Duration =30)]
         public ActionResult CustomerProfit(string page)
         {
+            ViewBag.khid = (int)Session["customer_id"];
             if (string.IsNullOrEmpty(page))
                 page = "1";
             int userid = (int)Session["user_id"];
@@ -333,6 +334,8 @@ namespace GROBS.Controllers
         public ActionResult CustomerProfit()
         {
             int userid = (int)Session["user_id"];
+            ViewBag.khid = (int)Session["customer_id"];
+
             string pagetag = "ord_fanli_customerprofit";
             string page = "1";
             string khid = Request["khid"] ?? "";
@@ -424,6 +427,25 @@ namespace GROBS.Controllers
             if (_fl == null)
                 return Json(-2);
             return Json(_fl.Keyong);
+        }
+        public JsonResult getDetailWithKhid() {
+            string khid = Request["khid"] ?? "";
+            if (string.IsNullOrEmpty(khid))
+            {
+                return Json(-1);
+            }
+            else
+            {
+                var tempdata = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == int.Parse(khid) && p.IsDelete == false);
+                if(tempdata == null)
+                {
+                    return Json("");
+                }
+                else
+                {
+                    return Json(tempdata);
+                }
+            }
         }
     }
 }

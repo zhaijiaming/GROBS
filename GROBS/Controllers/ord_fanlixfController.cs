@@ -269,6 +269,26 @@ namespace GROBS.Controllers
             }
             return RedirectToAction("Index");
         }
+        public JsonResult getFanliXiaoFeiWithQuery()
+        {
+            string khid = Request["khid"] ?? "";
+            if (string.IsNullOrEmpty(khid))
+            {
+                return Json(-1);
+            }
+            else
+            {
+                var tempdata = ServiceFactory.ord_fanlixfservice.LoadSortEntities(p => p.KHID == int.Parse(khid) && p.IsDelete == false,true,p=>p.KHID).ToList<ord_fanlixf>();
+                if (tempdata == null)
+                {
+                    return Json("");
+                }
+                else
+                {
+                    return Json(tempdata);
+                }
+            }
+        }
     }
 }
 
