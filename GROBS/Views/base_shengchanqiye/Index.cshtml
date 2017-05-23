@@ -239,7 +239,7 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
+                                    <td>@Html.GetCommonValue_ID("首营状态", (int)(item.Shouying == null ? 0 : item.Shouying))</td>
                                     <td>@item.Daima</td>
                                     <td>@item.Qiyemingcheng</td>
                                     <td>@item.YingyezhizhaoBH</td>

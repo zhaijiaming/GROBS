@@ -218,7 +218,7 @@
                                     <td>
                                         <label><input class="checkbox" type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
+                                    <td>@Html.GetCommonValue_ID("首营状态", (int)(item.Shouying == null ? 0 : item.Shouying))</td>
                                     @*<td>@Html.GetDataValue_ID("货主", "简称", (int)item.HuozhuID)</td>*@
                                     <td>@item.KehuDM</td>
                                     <td>@item.Mingcheng</td>

@@ -118,12 +118,12 @@
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
                                     <td>@item.JXSDM</td>
-                                    <td>@Html.GetDataValue_ID("收货单位","",(int)item.JXSID)</td>
+                                    <td>@Html.GetDataValue_ID("收货单位","", (int)(item.JXSID == null ? 0 : item.JXSID))</td>
                                     <td>@item.CPXDM</td>
-                                    <td>@Html.GetDataValue_ID("产品线", "", (int)item.CPXID)</td>
+                                    <td>@Html.GetDataValue_ID("产品线", "", (int)(item.CPXID == null ? 0 : item.CPXID))</td>
                                     <td>@string.Format("{0:0}", item.TingyongSF == bool.Parse("False") ? "否" : "是")</td>
                                     <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
                                 </tr>
                             }
                         </tbody>

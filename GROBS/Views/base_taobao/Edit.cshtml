@@ -58,7 +58,7 @@
         $("#btn_tbAdd").click(function () {
             var tbId = $("#tbId").val();
             var cpxid = $("#select_cpx option:selected").val();
-            console.log(cpxid);
+            //console.log(cpxid);
             if (tbId == null || tbId == "") {
                 alert("系统错误，请于管理员联系!");
                 window.open("/base_taobaosp/Add?tbId=" + tbId, "_self");
@@ -175,6 +175,15 @@
             }
         });
     }
+    //取小数点后两位
+    function toDecimal(x) {
+        var f = Number(x);
+        if (isNaN(f)) {
+            return;
+        }
+        f = Math.round(x * 100) / 100;
+        return f;
+    }
     //页面每次加载都要重新初始化一次'销售价'$'采购价'
     function priceInit() {
         var sum_Jiaxs = 0;
@@ -185,8 +194,16 @@
             $("#JiaCG").val(0);
         } else {
             $("#container_tbsp tbody tr").each(function () {
-                sum_Jiaxs += parseFloat($(this).find(".tbsp_jiaxs").html());
-                sum_Jiacg += parseFloat($(this).find(".tbsp_jiacg").html());
+                var _jiaxs = $(this).find(".tbsp_jiaxs").html();
+                var _jiacg = $(this).find(".tbsp_jiacg").html();
+                var _shuliang = $(this).find(".tbsp_shuliang").html();
+
+                var cal_sum_Jiaxs = toDecimal(_jiaxs * _shuliang);
+                var cal_sum_Jiacg = toDecimal(_jiacg * _shuliang);
+                console.log("cal_sum_Jiaxs:" + cal_sum_Jiaxs, "cal_sum_Jiacg:" + cal_sum_Jiacg);
+
+                sum_Jiaxs += cal_sum_Jiaxs;
+                sum_Jiacg += cal_sum_Jiacg;
             });
             $("#JiaXS").val(sum_Jiaxs);
             $("#JiaCG").val(sum_Jiacg);
@@ -239,7 +256,7 @@
     }
     //套包商品明细
     function getTaoBaoData(tbId) {
-        var filltable = "";
+        var str = "";
         var tbId = $("#tbId").val();
         $.post(
             "/base_taobaosp/getdetail",
@@ -249,30 +266,25 @@
                function (data) {
                    if (data.length > 0) {
                        for (var i in data) {
-                           filltable = filltable + '<tr><td><label><input type="checkbox" value="';
-                           filltable = filltable + data[i].ID;
-                           filltable = filltable + '"></label></td>';
-                           filltable = filltable + '<td><span class="daima_tbsp">';
-                           filltable = filltable + data[i].Daima;
-                           filltable = filltable + '</span></td>';
-                           filltable = filltable + '<td><span class="mingcheng_tbsp">';
-                           filltable = filltable + data[i].Mingcheng;
-                           filltable = filltable + '</span></td><td>';
-                           filltable = filltable + data[i].Guige;
-                           filltable = filltable + '</td><td>';
-                           filltable = filltable + data[i].Danwei;
-                           filltable = filltable + '</td><td><span class="tbsp_jiaxs">';
-                           filltable = filltable + data[i].JiaXS;
-                           filltable = filltable + '</span></td><td><span class="tbsp_jiacg">';
-                           filltable = filltable + data[i].JiaCG;
-                           filltable = filltable + '</span></td></tr>';
+                           str += [
+                               '<tr>',
+                               '<td><input type="checkbox" value="' + data[i].ID + '"></td>',
+                               '<td><span class="daima_tbsp">' + data[i].Daima + '</span></td>',
+                               '<td><span class="mingcheng_tbsp">' + data[i].Mingcheng + '</span></td>',
+                               '<td>' + data[i].Guige + '</td>',
+                               '<td>' + data[i].Danwei + '</td>',
+                               '<td><span class="tbsp_jiaxs">' + data[i].JiaXS + '</span></td>',
+                               '<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
+                               '<td><span class="tbsp_shuliang">' + data[i].Shuliang + '</span></td>',
+                               '</tr>'
+                           ].join();
                        }
-                       $("#container_tbsp tbody").html(filltable);
+                       $("#tbody_tbsp").html(str);
                        priceInit();//页面每次加载都要重新初始化一次'销售价'$'采购价'
                    } else {
                        $("#JiaXS").val(0);
                        $("#JiaCG").val(0);
-                       $("#container_tbsp tbody").empty();
+                       $("#tbody_tbsp").empty();
                    }
                }
             );
@@ -477,9 +489,10 @@
                                                     <th>基本单位</th>
                                                     <th>销售价</th>
                                                     <th>采购价</th>
+                                                    <th>数量</th>
                                                 </tr>
                                             </thead>
-                                            <tbody></tbody>
+                                            <tbody id="tbody_tbsp"></tbody>
                                         </table>
                                     </div>
                                 </div>

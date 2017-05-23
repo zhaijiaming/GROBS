@@ -239,7 +239,7 @@
                                             <label><input type="checkbox" value="@item.ID"></label>
                                         </div>
                                     </td>
-                                    <td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>
+                                    <td>@Html.GetCommonValue_ID("首营状态", (int)(item.Shouying == null ? 0 : item.Shouying))</td>
                                     <td>@item.Daima</td>
                                     <td>@item.Jiancheng</td>
                                     <td>@item.Hetongbianhao</td>
@@ -259,7 +259,7 @@
                                     <td>@item.Lianxidianhua</td>
                                     <td>@item.Beizhu</td>
                                     <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
                                 </tr>
                             }
                         </tbody>

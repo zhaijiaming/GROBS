@@ -132,7 +132,7 @@
                                     <td>@string.Format("{0:0}", item.ZhengdanSF == bool.Parse("False") ? "否" : "是")</td>
                                     <td>@string.Format("{0:0}", item.GuanbiSF == bool.Parse("False") ? "否" : "是")</td>
                                     <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
                                 </tr>
                             }
                         </tbody>

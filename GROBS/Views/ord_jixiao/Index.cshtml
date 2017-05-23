@@ -119,7 +119,7 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td>@Html.GetDataValue_ID("收货单位", "", (int)item.KHID)</td>
+                                    <td>@Html.GetDataValue_ID("收货单位", "", (int)(item.KHID == null ? 0 : item.KHID))</td>
                                     <td>@item.Niandu</td>
                                     <td>@item.Yuefen</td>
                                     <td>@item.Zhibiao</td>
@@ -129,7 +129,7 @@
                                     <td>@item.FLFFJE</td>
                                     <td>@string.Format("{0:0}", item.FafangSF == bool.Parse("False") ? "否" : "是")</td>
                                     <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
                                 </tr>
                             }
                         </tbody>

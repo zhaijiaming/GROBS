@@ -22,6 +22,7 @@
                 $("#KYSF").val("false");//不选中=false
             }
         });
+        getYear();//初始化年份
         /*
             经销商客户选择
         */
@@ -59,6 +60,12 @@
             getJxsWithQuery();
         });
     });
+    //获取年份
+    function getYear() {
+        var _date = new Date();
+        console.log(_date);
+        $(".text_month").html(_date.getFullYear());
+    }
     //查询条件搜索经销商
     function getJxsWithQuery() {
         $.ajax({
@@ -173,20 +180,10 @@
                                         <div class="form-group">
                                             <label for="FFYF" class="col-sm-3 control-label"><b>月份</b></label>
                                             <div class="col-sm-8">
-                                                <select name="FFYF" id="FFYF" style="width:100%;">
-                                                    <option>1</option>
-                                                    <option>2</option>
-                                                    <option>3</option>
-                                                    <option>4</option>
-                                                    <option>5</option>
-                                                    <option>6</option>
-                                                    <option>7</option>
-                                                    <option>8</option>
-                                                    <option>9</option>
-                                                    <option>10</option>
-                                                    <option>11</option>
-                                                    <option>12</option>
-                                                </select>
+                                                <div class="input-group">
+                                                    <span class="input-group-addon input-group-sm"><b class="text_month"></b>&nbsp;-&nbsp;</span>
+                                                    <input class="form-control col-sm-10" type="text" id="FFYF" name="FFYF" placeholder="请填写月份" >
+                                                </div>
                                             </div>
                                         </div>
                                         @*是否可用*@

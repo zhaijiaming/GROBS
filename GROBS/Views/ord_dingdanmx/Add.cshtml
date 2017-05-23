@@ -49,7 +49,7 @@
                     $("#XSBJ").val($(this).find(".XSBJ").html());
                     $("#XSDJ").val($(this).find(".XSBJ").html());
                     $("#HSL").val($(this).find(".Huansuanlv").html());
-                    $("#Col1").val($(this).find(".Col1").html());
+                    $("#HSBM").val($(this).find(".HSBM").html());
                     $("#JBDW").val($(this).find(".Danwei").html());
                     $("#XSDW").val($(this).find(".BaozhuangDW").html());
                     $("#CGSL").focus();
@@ -102,7 +102,7 @@
                     $("#XSBJ").val($(this).find(".tb_JiaXS").html());
                     $("#XSDJ").val($(this).find(".tb_JiaXS").html());
                     //$("#HSL").val($(this).find(".Huansuanlv").html());
-                    //$("#Col1").val($(this).find(".Col1").html());
+                    //$("#HSBM").val($(this).find(".HSBM").html());
                     //$("#JBDW").val($(this).find(".Danwei").html());
                     $("#XSDW").val($(this).find(".tb_XSDW").html());
                     $("#CGSL").focus();
@@ -318,7 +318,7 @@
                         filltable = filltable + data[i].BaozhuangDW;
                         filltable = filltable + '</span></td><td><span class="Huansuanlv">';
                         filltable = filltable + data[i].Huansuanlv;
-                        filltable = filltable + '</span></td><td><span class="Col1">';
+                        filltable = filltable + '</span></td><td><span class="HSBM">';
                         filltable = filltable + data[i].Col1;
                         filltable = filltable + '</span></td></tr>';
                     }
@@ -437,9 +437,9 @@
                                         </div>
                                         @*换算编码*@
                                         <div id="display_Col1" class="form-group">
-                                            <label for="Col1" class="col-sm-3 control-label"><b>换算编码</b></label>
+                                            <label for="HSBM" class="col-sm-3 control-label"><b>换算编码</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Col1" name="Col1" class="form-control" placeholder="" />
+                                                <input type="text" id="HSBM" name="HSBM" class="form-control" placeholder="" />
                                             </div>
                                         </div>
                                         @*基本单位*@

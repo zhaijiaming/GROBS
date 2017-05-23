@@ -57,7 +57,7 @@
         //订单商品添加
         $("#btn_Add").click(function () {
             var ddid = $("#ddid").val();//订单ID
-            var cpx = $("#CPXID").val();//产品线ID
+            var cpx = $("#select_cpx option:selected").val();//产品线ID
             var cglx = $("#CGLX").val();//采购类型
             if (ddid == null || ddid == "") {
                 alert("系统错误，请于管理员联系!");
@@ -66,12 +66,12 @@
             } else if (cpx == null || cpx == "") {
                 alert("产品线不可为空");
             } else {
-                window.open("/ord_dingdanmx/Add?ddid=" + ddid + "&" + "cpx=" + cpx + "&" + "cglx=" + cglx, "_self"); 
+                window.open("/ord_dingdanmx/Add?ddid=" + ddid + "&" + "cpx=" + cpx + "&" + "cglx=" + cglx, "_self");
             }
         });
         //订单商品编辑
         $("#btn_Edit").on("click", function () {
-            var cpx = $("#CPXID").val();//产品线ID
+            var cpx = $("#select_cpx option:selected").val();//产品线ID
             var cglx = $("#CGLX").val();//采购类型
             var itemLength = $("#container_ddmx input[type = checkbox]:checked").length;
             if (itemLength > 1) {
@@ -127,6 +127,7 @@
                 alert("您还未选择商品");
             }
         });
+        getProductLineWithID($("#jxsid").val());//初始化产品线
         /*
             经销商客户选择
         */
@@ -173,30 +174,71 @@
         });
         //双击取值
         $("#table_data tbody").on("dblclick", "tr", function () {
+            var jxsid = $(this).find(".checkbox").val();
             $("#khname").val($(this).find(".Mingcheng").html());
-            $("#jxsid").val($(this).find(".checkbox").val());
+            $("#KehuDM").val($(this).find(".daima").html());
+            $("#jxsid").val(jxsid);
             $("#Lianxiren").val($(this).find(".lianxiren").html());
             $("#LianxiDH").val($(this).find(".lianxidianhua").html());
             $("#SonghuoDZ").val($(this).find(".songhuodizhi").html());
+            getProductLineWithID(jxsid);
             $("#containerJxs").hide();
         });
     });
+    //根据经销商获取相应的产品线
+    function getProductLineWithID(jxsid) {
+        var jxsid = jxsid;
+        $.ajax({
+            async: true,
+            type: "POST",
+            url: "/base_chanpinxiansq/getProductLineWithID",
+            data: {
+                jxsid: jxsid
+            },
+            success: function (data) {
+                var str = '<option value="0"></option>';
+                if (data == -1) {
+                    alert("获取信息出错！请联系管理员");
+                } else {
+                    for (var i in data) {
+                        if (data[i].CPXID == $("#chanpinxian").val()) {
+                            str += '<option selected="selected" value="' + data[i].CPXID + '">' + data[i].CPXDM + '</option>';
+                        } else {
+                            str += '<option value="' + data[i].CPXID + '">' + data[i].CPXDM + '</option>';
+                        }
+                    }
+                }
+                $("#select_cpx").html(str);
+            }
+        });
+
+    }
     //计算采购总数和总金额
     function calPriceAndTotal() {
         var sum_caigou = 0;
         var sum_jine = 0;
         $("#container_ddmx tbody tr").each(function () {
-            var jine = $(this).find(".jine").html();
-            var caigousl = $(this).find(".cgsl").html();
+            var jine = toDecimal($(this).find(".jine").html());
+            var caigousl = toDecimal($(this).find(".cgsl").html());
             if (jine != "" && jine != null) {
-                sum_jine += parseFloat(jine);
+                sum_jine += jine;
+                //console.log(sum_jine);
             }
             if (caigousl != "" && caigousl != null) {
-                sum_caigou += parseFloat(caigousl);
+                sum_caigou += caigousl;
             }
         });
         $("#ZongshuCG").val(sum_caigou);
         $("#Zongjine").val(sum_jine);
+    }
+    //取小数点后两位
+    function toDecimal(x) {
+        var f = Number(x);
+        if (isNaN(f)) {
+            return;
+        }
+        f = Math.round(x * 100) / 100;
+        return f;
     }
     function getDingdanMingXi() {
         var _ddid = $("#ddid").val();
@@ -215,37 +257,29 @@
                     ddid: _ddid
                 },
                 success: function (data) {
-                    var filltable = "";
+                    var str = "";
                     if (data.length > 0) {
                         for (var i in data) {
-                            filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
-                            filltable = filltable + data[i].ID;
-                            filltable = filltable + '"></td><td><span class="spmc">';
-                            filltable = filltable + data[i].SPBM;
-                            filltable = filltable + '</span></td><td><span class="spmc">';
-                            filltable = filltable + data[i].SPMC;
-                            filltable = filltable + '</span></td><td><span class="guige">';
-                            filltable = filltable + data[i].Guige;
-                            filltable = filltable + '</span></td><td><span class="cgsl">';
-                            filltable = filltable + data[i].CGSL;
-                            filltable = filltable + '</span></td><td><span class="fhsl">';
-                            filltable = filltable + data[i].FHSL;
-                            filltable = filltable + '</span></td><td><span class="xsbj">';
-                            filltable = filltable + data[i].XSBJ;
-                            filltable = filltable + '</span></td><td><span class="xsdj">';
-                            filltable = filltable + data[i].XSDJ;
-                            filltable = filltable + '</span></td><td><span class="jine">';
-                            filltable = filltable + data[i].Jine;
-                            filltable = filltable + '</span></td><td><span class="zhekou">';
-                            filltable = filltable + data[i].Zhekou;
-                            filltable = filltable + '</span></td><td><span class="zhekoulv">';
-                            filltable = filltable + data[i].Zhekoulv;
-                            filltable = filltable + '</span></td></tr>';
+                            str += [
+                            '<tr>',
+                            '<td><input type="checkbox" class ="checkbox" value="' + data[i].ID + '"/></td>',
+                            '<td><span class = "spbm">' + (data[i].SPBM == null ? "" : data[i].SPBM) + '</span></td>',
+                            '<td><span class = "spmc">' + (data[i].SPMC == null ? "" : data[i].SPMC) + '</span></td>',
+                            '<td><span class = "guige">' + (data[i].Guige == null ? "" : data[i].Guige) + '</span></td>',
+                            '<td><span class = "cgsl">' + (data[i].CGSL == null ? 0 : data[i].CGSL) + '</span></td>',
+                            '<td><span class = "fhsl">' + (data[i].FHSL == null ? 0 : data[i].FHSL) + '</span></td>',
+                            '<td><span class = "xsbj">' + (data[i].XSBJ == null ? 0 : data[i].XSBJ) + '</span></td>',
+                            '<td><span class = "xsdj">' + (data[i].XSDJ == null ? 0 : data[i].XSDJ) + '</span></td>',
+                            '<td><span class = "jine">' + (data[i].Jine == null ? 0 : data[i].Jine) + '</span></td>',
+                            '<td><span class = "zhekou">' + (data[i].Zhekou == null ? 0 : data[i].Zhekou) + '</span></td>',
+                            '<td><span class = "zhekoulv">' + (data[i].Zhekoulv == null ? 0 : data[i].Zhekoulv) + '</span></td>',
+                            '</tr>'
+                            ].join();
                         }
-                        $("#container_ddmx tbody").html(filltable);
+                        $("#tbody_ddmx").html(str);
                         calPriceAndTotal();//初始化总金额和总采购数
                     } else {
-                        $("#container_ddmx tbody").empty();
+                        $("#tbody_ddmx").empty();
                     }
                 }
 
@@ -284,9 +318,9 @@
                     for (var i in data) {
                         filltable = filltable + '<tr><td><input type="checkbox" class ="checkbox" value="';
                         filltable = filltable + data[i].ID;
-                        filltable = filltable + '"/></td><td>';
+                        filltable = filltable + '"/></td><td><span class = "daima">';
                         filltable = filltable + data[i].KehuDM;
-                        filltable = filltable + '</td><td><span class="Mingcheng">';
+                        filltable = filltable + '</span></td><td><span class="Mingcheng">';
                         filltable = filltable + data[i].Mingcheng;
                         if (data[i].ID == $("#jxsid").val()) {
                             $("#khname").val(data[i].Mingcheng)
@@ -353,12 +387,20 @@
                                     <input type="hidden" id="jxsid" name="KHID" value="@ViewData.Model.KHID" />
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
+                                    <input type="hidden" id="chanpinxian" value="@ViewData.Model.CPXID" />
                                     <fieldset>
                                         @*编号*@
                                         <div class="form-group">
                                             <label for="Bianhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>编号</b></label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="Bianhao" name="Bianhao" readonly class="form-control" placeholder="自动生成编号" value="@ViewData.Model.Bianhao" />
+                                            </div>
+                                        </div>
+                                        @*客户代码*@
+                                        <div class="form-group">
+                                            <label for="KehuDM" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户代码</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="KehuDM" name="KehuDM" readonly class="form-control" placeholder="请选择客户" value="@ViewData.Model.KehuDM" />
                                             </div>
                                         </div>
                                         @*客户*@
@@ -380,14 +422,15 @@
                                         <div class="form-group">
                                             <label for="CPXID" class="col-sm-3 control-label"><b>产品线</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Auto("CPXID", "产品线", "", (long)ViewData.Model.CPXID)
+                                                @*@Html.SelectList_Auto("CPXID", "产品线", "", (long)ViewData.Model.CPXID)*@
+                                                <select name="CPXID" id="select_cpx" style="width:100%;"></select>
                                             </div>
                                         </div>
                                         @*采购类型*@
                                         <div class="form-group">
                                             <label for="CGLX" class="col-sm-3 control-label"><b>采购类型</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Common("CGLX", "订单类型",(long)ViewData.Model.CGLX)
+                                                @Html.SelectList_Common("CGLX", "订单类型", (long)ViewData.Model.CGLX)
                                             </div>
                                         </div>
                                         @*客户单号*@
@@ -434,7 +477,7 @@
                                         <div class="form-group">
                                             <label for="OPID" class="col-sm-3 control-label"><b>客服人员</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Auto("OPID", "userinfo", "", (long)(ViewData.Model.OPID==null?0:ViewData.Model.OPID))
+                                                @Html.SelectList_Auto("OPID", "userinfo", "", (long)(ViewData.Model.OPID == null ? 0 : ViewData.Model.OPID))
                                             </div>
                                         </div>
                                         @*审核人员*@
@@ -527,7 +570,7 @@
                                             <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
-                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)ViewData.Model.MakeMan)">
+                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)(ViewData.Model.MakeMan == null ? 0 : ViewData.Model.MakeMan))">
                                                     <span class="input-group-addon">
                                                         <i class="icon-user bigger-110"></i>
                                                     </span>
@@ -581,7 +624,7 @@
                                                     <th>折扣率</th>
                                                 </tr>
                                             </thead>
-                                            <tbody></tbody>
+                                            <tbody id="tbody_ddmx"></tbody>
                                         </table>
                                     </div>
                                 </div>
