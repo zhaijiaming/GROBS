@@ -5,7 +5,6 @@
 @{
     ViewBag.Title = "绩效";
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
-    string _searchcondition = ViewBag.SearchCondition;
 }
 <script type="text/javascript">
     $(document).ready(function () {
@@ -23,35 +22,6 @@
         });
     }
 </script>
-@{
-    List<SearchConditionModel> scms = new List<SearchConditionModel>();
-    if (_searchcondition == null || _searchcondition == "")
-    {
-        SearchConditionModel scm = new SearchConditionModel();
-        scm.ItemCode = "KHID";
-        scm.ItemTitle = "客户";
-        scm.ItemType = "System.Int32";
-        scms.Add(scm);
-    }
-    else
-    {
-        string[] scs = _searchcondition.Split(';');
-        if (scs.Length > 0)
-        {
-            SearchConditionModel scm = new SearchConditionModel();
-            scm.ItemCode = "KHID";
-            scm.ItemTitle = "客户";
-            scm.ItemType = "System.Int32";
-            if (scs.Length > 1)
-            {
-                scm.ItemValue = scs[0].Split(',')[1];
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
-            }
-            scms.Add(scm);
-        }
-    }
-}
 <div class="page-content">
     <input type="hidden" id="khid" value="@ViewBag.khid" />
     <div class="container">
@@ -64,20 +34,20 @@
                             <div class="col-sm-12" style="font-size:18px;">
                                 <i class="icon-signal green bigger-300"></i>&nbsp;&nbsp;
                                 <b>@Html.GetDataValue_ID("收货单位", "", (int)(ViewBag.khid == null ? 0 : ViewBag.khid))</b>&nbsp;&nbsp;&nbsp;&nbsp;
+                                <b class="orange" style="font-size:28px;"><span id="totalPrice" >@ViewBag.thisYear</span>年</b>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <b>绩效清单</b>
                             </div>
                         </div>
                         <hr />
                         <div class="clearfix">
-                            <div class="pull-left">
-                                <i class="icon-double-angle-left bigger" -160></i>&nbsp;&nbsp;<b><a href="/ord_jixiao/customertargetNow">返回</a></b>
+                            <div class="pull-right">
+                                <b><a href="/ord_jixiao/customertarget">查看所有记录</a></b>&nbsp;&nbsp;<i class="icon-double-angle-right bigger"-160></i>
                             </div>
                         </div>
                         <div class="space-2"></div>
                         @*列表*@
                         <table class="table table-bordered table-hover" id="table_thisYearJiXiao">
                             <tr>
-                                <th>年度</th>
                                 <th>月份</th>
                                 <th>指标</th>
                                 <th>业绩</th>
@@ -87,13 +57,12 @@
                                 <th>返利是否发放</th>
                             </tr>
                             <tbody>
-                                @foreach (var item in ViewBag.ord_jixiao)
+                                @foreach (var item in ViewBag.thisYearDate)
                                 {
                                     <tr>
                                         <td style="display:none;">
                                             <label><input type="checkbox" value="@item.ID"></label>
                                         </td>
-                                        <td>@item.Niandu</td>
                                         <td>@item.Yuefen</td>
                                         <td>@item.Zhibiao</td>
                                         <td>@item.Yeji</td>
@@ -105,12 +74,10 @@
                                 }
                             </tbody>
                         </table>
-                        <div class="pager">
-                            @Html.PagedListPager((IPagedList)Model, page => Url.Action("customertarget", new { page }))
-                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+

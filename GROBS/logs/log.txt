@@ -221,3 +221,25 @@ INFO  2017-05-23 19:28:05,153  5578ms 16                     MoveNext           
 INFO  2017-05-23 19:34:39,842 42862ms 16                     MoveNext           - njky login at 2017-05-23 19:34:39!
 INFO  2017-05-23 19:37:58,216  5874ms 16                     MoveNext           - njky login at 2017-05-23 19:37:58!
 INFO  2017-05-23 19:39:09,952  3069ms 16                     MoveNext           - njky login at 2017-05-23 19:39:09!
+INFO  2017-05-24 18:15:14,676  8465ms 16                     MoveNext           - njky login at 2017-05-24 18:15:14!
+INFO  2017-05-24 18:16:03,235 57025ms 16                     LogOut             - njky log out at 2017-05-24 18:16:03
+INFO  2017-05-24 18:16:05,957 59747ms 11                     MoveNext           - 林志勇 login at 2017-05-24 18:16:05!
+INFO  2017-05-24 19:03:27,423  5162ms 11                     MoveNext           - 林志勇 login at 2017-05-24 19:03:27!
+INFO  2017-05-24 19:04:41,279  6468ms 11                     MoveNext           - 林志勇 login at 2017-05-24 19:04:41!
+INFO  2017-05-24 19:22:42,689  7494ms 11                     MoveNext           - 林志勇 login at 2017-05-24 19:22:42!
+INFO  2017-05-24 19:29:06,585  6115ms 11                     MoveNext           - 林志勇 login at 2017-05-24 19:29:06!
+INFO  2017-05-24 19:29:25,751 25281ms 11                     LogOut             - 林志勇 log out at 2017-05-24 19:29:25
+INFO  2017-05-24 19:29:28,237 27767ms 16                     MoveNext           - njky login at 2017-05-24 19:29:28!
+INFO  2017-05-24 19:43:32,909  5883ms 16                     MoveNext           - njky login at 2017-05-24 19:43:32!
+INFO  2017-05-24 19:44:10,178 43152ms 16                     MoveNext           - njky login at 2017-05-24 19:44:10!
+INFO  2017-05-24 19:57:29,046 19043ms 16                     MoveNext           - njky login at 2017-05-24 19:57:29!
+INFO  2017-05-24 20:02:18,358  6155ms 16                     MoveNext           - njky login at 2017-05-24 20:02:18!
+INFO  2017-05-24 20:06:34,705 262502ms 16                     LogOut             - njky log out at 2017-05-24 20:06:34
+INFO  2017-05-24 20:06:37,044 264841ms 11                     MoveNext           - 林志勇 login at 2017-05-24 20:06:37!
+INFO  2017-05-24 20:14:40,229 748026ms 11                     LogOut             - 林志勇 log out at 2017-05-24 20:14:40
+INFO  2017-05-24 20:14:43,086 750883ms 16                     MoveNext           - njky login at 2017-05-24 20:14:43!
+INFO  2017-05-24 20:23:58,446 1306242ms 16                     LogOut             - njky log out at 2017-05-24 20:23:58
+INFO  2017-05-24 20:24:00,765 1308562ms 11                     MoveNext           - 林志勇 login at 2017-05-24 20:24:00!
+INFO  2017-05-24 20:25:08,674 1376471ms 11                     LogOut             - 林志勇 log out at 2017-05-24 20:25:08
+INFO  2017-05-24 20:25:12,194 1379991ms 16                     MoveNext           - njky login at 2017-05-24 20:25:12!
+INFO  2017-05-24 20:28:16,945 1564742ms 16                     MoveNext           - njky login at 2017-05-24 20:28:16!

@@ -12,6 +12,7 @@
         $("#save_bottom").on("click", function () {
             $("#form").submit();
         });
+        SelectDefault();//select默认今年选中
         //'返利是否发放'绑定值
         $("#FafangSF").val("true");//默认赋值
         $("#FafangSF").change(function () {
@@ -21,6 +22,8 @@
                 $("#FafangSF").val("false");//不选中=false
             }
         });
+        //select默认今年选中
+        
         /*
             经销商客户选择
         */
@@ -74,6 +77,16 @@
             $("#containerJxs").hide();
         });
     });
+    //select默认今年选中
+    function SelectDefault() {
+        var thisYear = new Date().getFullYear();
+        console.log(thisYear);
+        $("#Niandu option").each(function () {
+            if ($(this).val() == thisYear) {
+                $(this).attr("selected", "selected");
+            }
+        });
+    }
     //查询条件搜索经销商
     function getJxsWithQuery() {
         $.ajax({
@@ -182,6 +195,7 @@
                                             <label for="Niandu" class="col-sm-3 control-label"><b>年度</b></label>
                                             <div class="col-sm-8">
                                                 <select name="Niandu" id="Niandu" style="width:100%;">
+                                                    <option></option>
                                                     <option>2012</option>
                                                     <option>2013</option>
                                                     <option>2014</option>
@@ -203,6 +217,7 @@
                                             <label for="Niandu" class="col-sm-3 control-label"><b>月份</b></label>
                                             <div class="col-sm-8">
                                                 <select name="Yuefen" id="Yuefen" style="width:100%;">
+                                                    <option></option>
                                                     <option>1</option>
                                                     <option>2</option>
                                                     <option>3</option>

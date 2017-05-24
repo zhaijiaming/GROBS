@@ -823,6 +823,7 @@
     <Content Include="Views\ord_fanlixf\Edit.cshtml" />
     <Content Include="Views\ord_fanlixf\Index.cshtml" />
     <Content Include="Views\ord_dingdan\CustomerOrderInfo.cshtml" />
+    <Content Include="Views\ord_jixiao\CustomerTargetNow.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

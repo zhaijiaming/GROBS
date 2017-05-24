@@ -304,6 +304,8 @@ namespace GROBS.Controllers
         {
             if (string.IsNullOrEmpty(page))
                 page = "1";
+            var _khid = (int)Session["customer_id"];
+            ViewBag.khid = _khid;
             int userid = (int)Session["user_id"];
             string pagetag = "ord_jixiao_customertarget";
             Expression<Func<ord_jixiao, bool>> where = PredicateExtensionses.True<ord_jixiao>();
@@ -353,8 +355,9 @@ namespace GROBS.Controllers
             }
 
             where = where.And(ord_jixiao => ord_jixiao.IsDelete == false);
+            where = where.And(p => p.KHID == _khid);
 
-            var tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, ord_jixiao => ord_jixiao.ID).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, ord_jixiao => ord_jixiao.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_jixiao = tempData;
             return View(tempData);
         }
@@ -363,6 +366,8 @@ namespace GROBS.Controllers
         public ActionResult CustomerTarget()
         {
             int userid = (int)Session["user_id"];
+            var _khid = (int)Session["customer_id"];
+            ViewBag.khid = _khid;
             string pagetag = "ord_jixiao_customertarget";
             string page = "1";
             string khid = Request["khid"] ?? "";
@@ -440,10 +445,23 @@ namespace GROBS.Controllers
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
             where = where.And(ord_jixiao => ord_jixiao.IsDelete == false);
+            where = where.And(p => p.KHID == _khid);
 
-            var tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, ord_jixiao => ord_jixiao.ID).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, ord_jixiao => ord_jixiao.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_jixiao = tempData;
             return View(tempData);
+        }
+
+        public ActionResult CustomerTargetNow()
+        {
+            string thisYear = DateTime.Now.Year.ToString();
+            var khid = (int)Session["customer_id"];
+            ViewBag.khid = khid;
+            ViewBag.thisYear = thisYear;
+
+            var tempdata = ServiceFactory.ord_jixiaoservice.LoadSortEntities(p => p.Niandu == int.Parse(thisYear) && p.KHID == khid && p.IsDelete == false, true, p => p.Yuefen).ToList<ord_jixiao>();
+            ViewBag.thisYearDate = tempdata;
+            return View();
         }
     }
 }
