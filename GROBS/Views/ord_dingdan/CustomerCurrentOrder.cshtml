@@ -22,17 +22,16 @@
         $("#bt_deleteInfo").click(function () {
             var sDel = "";
             $("#mydatatable tr input[type=checkbox]").each(function () {
-                if (this.checked){
-                    var _st=$(this).data("state");
-                    if(Number(_st)>10)
-                    {
+                if (this.checked) {
+                    var _st = $(this).data("state");
+                    if (Number(_st) > 10) {
                         alert("只有新建的未付款订单才能删除，如需删除其他状态订单，需联络平台客服！");
                         return;
                     }
                     sDel = sDel + ", " + $(this).val()
                 }
             });
-            if (sDel.length < 2){
+            if (sDel.length < 2) {
                 alert("请选择需要删除的订单！");
                 return;
             }
@@ -48,7 +47,7 @@
                 type: "POST",
                 url: url_go,
                 data: {
-                    sdel:sDel
+                    sdel: sDel
                 },
                 success: function (data) {
                     if (data == 1) {
@@ -74,75 +73,80 @@
 </script>
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
-    <div class="row">
-        <p><i class="icon-home bigger-200 red"></i><span class="bigger-150 blue">@ViewBag.customername</span></p>
-    </div>
-    <div class="row">
-        <p class="align-center">
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo"><i class="icon-adn"></i>新增</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo"><i class="icon-remove"></i>删除</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_collect"><i class="icon-upload"></i>结算</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_recieve"><i class="icon-shopping-cart"></i>收货</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
-        </p>
-    </div>
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="table-wapper-all">
-                <div class="fixed-table-wapper">
-                    <table class="table table-bordered table-condensed fixed-table-header"></table>
-                </div>
-                <div class="table-wapper">
-                    <table class="table table-bordered table-condensed" id="mydatatable">
-                        <caption><i class="icon-play-circle"></i>正在执行的订单</caption>
-                        <thead>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td>编号</td>
-                                <td>状态</td>
-                                <td>产品线</td>
-                                <td>采购类型</td>
-                                <td>客户单号</td>
-                                <td>下单日期</td>
-                                <td>联系人</td>
-                                <td>联系电话</td>
-                                <td>送货地址</td>
-                                <td>采购总数</td>
-                                <td>采购金额</td>
-                                <td>折扣金额</td>
-                                <td>实付金额</td>
-                                <td>备注</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach (var item in ViewBag.ord_dingdan)
-                            {
-                                <tr>
-                                    <td>
-                                        <label><input type="checkbox" value="@item.ID" data-state="@item.Zhuangtai"></label>
-                                    </td>
-                                    <td><a href="/ord_dingdan/customerorderinfo/@item.ID"><i class="icon-list-alt bigger-150" title="订单详情"></i></a></td>
-                                    <td>@item.Bianhao</td>
-                                    <td>@Html.GetCommonValue_ID("订单状态", (int)item.Zhuangtai)</td>
-                                    <td>@item.Mingcheng</td>
-                                    <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
-                                    <td>@item.KehuDH</td>
-                                    <td>@item.XiadanRQ</td>
-                                    <td>@item.Lianxiren</td>
-                                    <td>@item.LianxiDH</td>
-                                    <td>@item.SonghuoDZ</td>
-                                    <td>@item.ZongshuCG</td>
-                                    <td>@item.Zongjine</td>
-                                    <td>@item.ZhekouJE</td>
-                                    <td>@string.Format("{0:C}", item.Zongjine - item.ZhekouJE)</td>
-                                    <td>@item.Beizhu</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
+    <div class="panel">
+        <div class="panel-body">
+            <div class="row">
+                <p><i class="icon-user bigger-300"></i>&nbsp;&nbsp;<span class="bigger-150 blue">@ViewBag.customername</span></p>
+            </div>
+            <div class="row">
+                <p class="align-center">
+                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_addInfo"><i class="icon-adn"></i>新增</button>
+                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_deleteInfo"><i class="icon-remove"></i>删除</button>
+                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_collect"><i class="icon-upload"></i>结算</button>
+                    <button type="button" class="btn btn-primary btn-xs btn-app " id="bt_recieve"><i class="icon-shopping-cart"></i>收货</button>
+                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
+                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
+                </p>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-wapper-all">
+                        <div class="fixed-table-wapper">
+                            <table class="table table-bordered table-condensed fixed-table-header"></table>
+                        </div>
+                        <div class="table-wapper">
+                            <table class="table table-bordered table-condensed" id="mydatatable">
+                                <caption><i class="icon-play-circle"></i>正在执行的订单</caption>
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td>编号</td>
+                                        <td>状态</td>
+                                        <td>产品线</td>
+                                        <td>订单类型</td>
+                                        <td>客户单号</td>
+                                        <td>下单日期</td>
+                                        @*<td>联系人</td>
+                                            <td>联系电话</td>
+                                            <td>送货地址</td>*@
+                                        <td>采购总数</td>
+                                        <td>采购金额</td>
+                                        <td>折扣金额</td>
+                                        <td>实付金额</td>
+                                        <td>备注</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.ord_dingdan)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <label><input type="checkbox" value="@item.ID" data-state="@item.Zhuangtai"></label>
+                                            </td>
+                                            <td><a href="/ord_dingdan/customerorderinfo/@item.ID"><i class="icon-list-alt bigger-150" title="订单详情"></i></a></td>
+                                            <td>@item.Bianhao</td>
+                                            <td>@Html.GetCommonValue_ID("订单状态", (int)item.Zhuangtai)</td>
+                                            <td>@item.Mingcheng</td>
+                                            <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
+                                            <td>@item.KehuDH</td>
+                                            <td>@item.XiadanRQ</td>
+                                            @*<td>@item.Lianxiren</td>
+                                                <td>@item.LianxiDH</td>
+                                                <td>@item.SonghuoDZ</td>*@
+                                            <td>@item.ZongshuCG</td>
+                                            <td>@item.Zongjine</td>
+                                            <td>@item.ZhekouJE</td>
+                                            <td>@string.Format("{0:C}", item.Zongjine - item.ZhekouJE)</td>
+                                            <td>@item.Beizhu</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

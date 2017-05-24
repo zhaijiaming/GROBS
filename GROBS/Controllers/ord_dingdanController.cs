@@ -472,7 +472,7 @@ namespace GROBS.Controllers
                 ViewBag.customername = "0";
 
             //var tempData = ob_ord_dingdanservice.LoadSortEntities(p => p.KHID == _custid && p.Zhuangtai < 12 && p.IsDelete == false, true, s => s.Bianhao);
-            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid);
+            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p=>p.Bianhao);
             ViewBag.ord_dingdan = tempData;
             return View();
         }

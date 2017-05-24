@@ -60,14 +60,16 @@
                 khid: _khid
             },
             success: function (data) {
+                var _xh = 0;
                 for (var i in data) {
+                    _xh++;
                     str += [
                         '<tr>',
-                        '<td><input type="checkbox" class ="checkbox" value="' + data[i].ID + '"></td>',
+                        '<td><input type="hidden" value="' + data[i].ID + '">'+_xh+'</td>',
                         '<td><span class="czje_flxf">' + data[i].CZJE + '</span></td>',
                         '<td><span class="ffyf_flxf">' + data[i].FFYF + '</span></td>',
                         '<td><span class="kysf_flxf">' + data[i].KYSF + '</span></td>',
-                        '<td><span class="makedate">' + data[i].MakeDate + '</span></td>',
+                        '<td><span class="makedate">' + data[i].MakeDate.toDate().Format("yyyy-MM-dd") + '</span></td>',
                         '</tr>'
                     ].join();
                 }
@@ -98,13 +100,15 @@
                 khid: _khid
             },
             success: function (data) {
+                var _xh = 0;
                 for (var i in data) {
+                    _xh++;
                     str += [
                         '<tr>',
-                        '<td><input type="checkbox" class ="checkbox" value="' + data[i].ID + '"></td>',
-                        '<td><span class="ddid_flxf">' + data[i].DDID + '</span></td>',
+                        '<td><input type="hidden" value="' + data[i].ID + '">'+_xh+'</td>',
+                        '<td><span class="ddid_flxf"><a href="/ord_dingdan/customerorderinfo/' + data[i].DDID + '">' + data[i].Bianhao + '</a></span></td>',
                         '<td><span class="xfje_flxf">' + data[i].XFJE + '</span></td>',
-                        '<td><span class="makedate">' + data[i].MakeDate + '</span></td>',
+                        '<td><span class="makedate">' + data[i].MakeDate.toDate().Format("yyyy-MM-dd") + '</span></td>',
                         '</tr>'
                     ].join();
                 }
@@ -201,9 +205,9 @@
                                             @*查询条件*@
                                             @*订单序号*@
                                             <div class="form-group col-sm-3">
-                                                <label for="req_ddid" class="col-sm-4 control-label"><b>订单序号</b></label>
+                                                <label for="req_ddid" class="col-sm-4 control-label"><b>订单编号</b></label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" id="req_ddid" class="form-control" placeholder="请输入订单序号" />
+                                                    <input type="text" id="req_ddid" class="form-control" placeholder="请输入订单编号" />
                                                 </div>
                                             </div>
                                             @*消费金额*@
@@ -215,7 +219,7 @@
                                             </div>
                                             @*制单日期*@
                                             <div class="form-group col-sm-3">
-                                                <label for="req_date" class="col-sm-4 control-label"><b>制单日期</b></label>
+                                                <label for="req_date" class="col-sm-4 control-label"><b>消费日期</b></label>
                                                 <div class="col-sm-8">
                                                     <input type="text" id="req_date" class="form-control" placeholder="请输入制单日期" />
                                                 </div>
@@ -228,9 +232,9 @@
                                             <table class="table table-bordered table-hover" id="table_flxf">
                                                 <tr>
                                                     <th></th>
-                                                    <th>订单序号</th>
+                                                    <th>订单编号</th>
                                                     <th>消费金额</th>
-                                                    <th>制单日期</th>
+                                                    <th>消费日期</th>
                                                 </tr>
                                                 <tbody id="tbody_flxf"></tbody>
                                             </table>
@@ -253,7 +257,7 @@
                                             </div>
                                             @*制单日期*@
                                             <div class="form-group col-sm-3">
-                                                <label for="req_date" class="col-sm-4 control-label"><b>制单日期</b></label>
+                                                <label for="req_date" class="col-sm-4 control-label"><b>充值日期</b></label>
                                                 <div class="col-sm-8">
                                                     <input type="text" id="req_date" class="form-control" placeholder="请输入制单日期" />
                                                 </div>
@@ -269,7 +273,7 @@
                                                     <th>充值金额</th>
                                                     <th>发放月份</th>
                                                     <th>是否可用</th>
-                                                    <th>制单日期</th>
+                                                    <th>充值日期</th>
                                                 </tr>
                                                 <tbody id="tbody_flcz"></tbody>
                                             </table>

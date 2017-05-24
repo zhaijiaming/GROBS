@@ -357,8 +357,7 @@
                 alert("非法录入，请重新输入商品信息！");
                 return;
             }
-            if (Number(_zsl) == 0)
-            {
+            if (Number(_zsl) == 0) {
                 alert("请选择商品后再保存！");
                 return;
             }
@@ -400,7 +399,7 @@
                     url: "/ord_dingdan/addordernow",
                     data: {
                         cust: $("#cust").val(),
-                        cdm:$("#cdm").val(),
+                        cdm: $("#cdm").val(),
                         cpx: $("#sel_line").val(),
                         lx: $("#sel_type").val(),
                         zsl: $("#tx_zsl").val(),
@@ -411,7 +410,7 @@
                         khdh: $("#tx_khdh").val(),
                         lxr: $("#tx_lxr").val(),
                         lxdh: $("#tx_lxdh").val(),
-                        shdz:$("#tx_shdz").val(),
+                        shdz: $("#tx_shdz").val(),
                         sps: _dt
                     },
                     success: function (data) {
@@ -420,7 +419,7 @@
                             window.open("/ord_dingdan/customercurrentorder", "_parent");
                         }
                         else {
-                            alert("订单信息不正确，请重新录入！"); 
+                            alert("订单信息不正确，请重新录入！");
                         }
                     }
                 });
@@ -470,6 +469,7 @@
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_save"><i class="icon-save"></i>保存订单</button>
         </p>
     </div>
+    <hr />
     <div class="row">
         @*<div class="col-sm-1">
                 <label>订单编号：</label>
@@ -533,19 +533,19 @@
             <label><i class="icon-star red"></i>联系人</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" id="tx_lxr" value="@ViewBag.lxr" placeholder="收货联系人"/>
+            <input class="form-control" type="text" id="tx_lxr" value="@ViewBag.lxr" placeholder="收货联系人" />
         </div>
         <div class="col-sm-1">
             <label><i class="icon-star red"></i>联系电话</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" id="tx_lxdh" value="@ViewBag.lxdh" placeholder="收货联系电话"/>
+            <input class="form-control" type="text" id="tx_lxdh" value="@ViewBag.lxdh" placeholder="收货联系电话" />
         </div>
         <div class="col-sm-1">
             <label><i class="icon-star red"></i>收货地址</label>
         </div>
         <div class="col-sm-5">
-            <input class="form-control" type="text" id="tx_shdz" value="@ViewBag.shdz" placeholder="收货详细地址"/>
+            <input class="form-control" type="text" id="tx_shdz" value="@ViewBag.shdz" placeholder="收货详细地址" />
         </div>
     </div>
     <div class="row">

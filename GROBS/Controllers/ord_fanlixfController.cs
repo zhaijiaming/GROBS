@@ -278,7 +278,7 @@ namespace GROBS.Controllers
             }
             else
             {
-                var tempdata = ServiceFactory.ord_fanlixfservice.LoadSortEntities(p => p.KHID == int.Parse(khid) && p.IsDelete == false,true,p=>p.KHID).ToList<ord_fanlixf>();
+                var tempdata = ServiceFactory.ord_fanlixfservice.LoadFanlixf(int.Parse(khid)).ToList();
                 if (tempdata == null)
                 {
                     return Json("");
