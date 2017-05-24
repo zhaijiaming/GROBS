@@ -272,22 +272,23 @@ namespace GROBS.Controllers
         public JsonResult getFanliXiaoFeiWithQuery()
         {
             string khid = Request["khid"] ?? "";
-            if (string.IsNullOrEmpty(khid))
-            {
+            string req_ddid = Request["req_ddid"] ?? "";
+            string req_xfje = Request["req_xfje"] ?? "";
+
+            Expression<Func<ord_fanlixf, bool>> where = PredicateExtensionses.True<ord_fanlixf>();
+            if (!string.IsNullOrEmpty(khid))
+                where = where.And(p => p.KHID == int.Parse(khid));
+            if (!string.IsNullOrEmpty(req_ddid))
+                where = where.And(p => p.DDID == int.Parse(req_ddid));
+            if (!string.IsNullOrEmpty(req_xfje))
+                where = where.And(p => p.XFJE == int.Parse(req_xfje));
+            where = where.And(p => p.IsDelete == false);
+
+            var tempData = ServiceFactory.ord_fanlixfservice.LoadFanlixf(int.Parse(khid));
+            if (tempData == null)
                 return Json(-1);
-            }
-            else
-            {
-                var tempdata = ServiceFactory.ord_fanlixfservice.LoadFanlixf(int.Parse(khid)).ToList();
-                if (tempdata == null)
-                {
-                    return Json("");
-                }
-                else
-                {
-                    return Json(tempdata);
-                }
-            }
+            return Json(tempData);
+
         }
     }
 }

@@ -282,22 +282,22 @@ namespace GROBS.Controllers
         public JsonResult getFanliChongZhiWithQuery()
         {
             string khid = Request["khid"] ?? "";
-            if (string.IsNullOrEmpty(khid))
-            {
+            string req_ffyf = Request["req_ffyf"] ?? "";
+            string req_kysf = Request["req_kysf"] ?? "";
+
+            Expression<Func<ord_fanlicz, bool>> where = PredicateExtensionses.True<ord_fanlicz>();
+            if (!string.IsNullOrEmpty(khid))
+                where = where.And(p => p.KHID == int.Parse(khid));
+            if (!string.IsNullOrEmpty(req_ffyf))
+                where = where.And(p => p.FFYF == req_ffyf);
+            if (!string.IsNullOrEmpty(req_kysf))
+                where = where.And(p => p.KYSF == Boolean.Parse(req_kysf));
+            where = where.And(p => p.IsDelete == false);
+
+            var tempData = ServiceFactory.ord_fanliczservice.LoadSortEntities(where.Compile(), true, p => p.KHID).ToList<ord_fanlicz>();
+            if (tempData == null)
                 return Json(-1);
-            }
-            else
-            {
-                var tempdata = ServiceFactory.ord_fanliczservice.LoadSortEntities(p => p.KHID == int.Parse(khid) && p.IsDelete == false, true, p => p.KHID).ToList<ord_fanlicz>();
-                if (tempdata == null)
-                {
-                    return Json("");
-                }
-                else
-                {
-                    return Json(tempdata);
-                }
-            }
+            return Json(tempData);
         }
         
 

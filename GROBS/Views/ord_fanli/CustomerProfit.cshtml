@@ -19,15 +19,19 @@
         getDetailWithKhid();//初始化该客户的'总额'和'可用额'
         getFanliXiaoFeiWithQuery();//获取返利消费
         getFanliChongZhiWithQuery();//获取返利充值
-    });
-    //格式化日期
-    function formatDate(selector) {
-        var selector = selector;
-        selector.find("tr").each(function () {
-            var new_date = (($(this).find(".makedate").html()).format("yyyy-MM-dd"));
-            $(this).find(".makedate").html(new_date);
+        /*
+            返利消费点击查询事件
+        */
+        $("#btn_req_flxf").on("click", function () {
+            getFanliXiaoFeiWithQuery();
         });
-    }
+        /*
+            返利充值点击查询事件
+        */
+        $("#btn_req_flcz").on("click", function () {
+            getFanliChongZhiWithQuery();
+        });
+    });
     //格式化是否
     function formatBoolToCHinese() {
         $("#table_flcz").find("tr").each(function () {
@@ -45,6 +49,15 @@
     */
     function getFanliChongZhiWithQuery() {
         var _khid = $("#khid").val();
+        var _req_ffyf = $("#req_ffyf").val();
+        var _req_kysf = $("#req_kysf").val();
+        if (_req_kysf == "是") {
+            _req_kysf = "true";
+        } else if (_req_kysf == "否") {
+            _req_kysf = "false";
+        } else {
+            _req_kysf = "";
+        }
         var str = "";
         $.ajax({
             async: true,
@@ -57,7 +70,9 @@
             type: "POST",
             url: "/ord_fanlicz/getFanliChongZhiWithQuery",
             data: {
-                khid: _khid
+                khid: _khid,
+                req_ffyf: _req_ffyf,
+                req_kysf: _req_kysf
             },
             success: function (data) {
                 var _xh = 0;
@@ -75,7 +90,6 @@
                 }
                 $("#tbody_flcz").html(str);
                 formatBoolToCHinese();//'是否'格式化
-                //formatDate($("#table_flcz"));//'日期'格式化
             }
         });
     }
@@ -85,6 +99,16 @@
     */
     function getFanliXiaoFeiWithQuery() {
         var _khid = $("#khid").val();
+        var _req_ddid = "";
+        var _req_bianhao = $("#req_bianhao").val().trim();
+        console.log(_req_bianhao);
+        $("#tbody_flxf tr").each(function () {
+            console.log($(this).find(".bianhao_flxf").html());
+            if ($(this).find(".bianhao_flxf").html() == _req_bianhao) {
+                _req_ddid = $(this).find(".ddid_flxf").html();
+            }
+        });
+        var _req_xfje = $("#req_xfje").val();
         var str = "";
         $.ajax({
             async: true,
@@ -97,7 +121,9 @@
             type: "POST",
             url: "/ord_fanlixf/getFanliXiaoFeiWithQuery",
             data: {
-                khid: _khid
+                khid: _khid,
+                req_ddid: _req_ddid,
+                req_xfje: _req_xfje
             },
             success: function (data) {
                 var _xh = 0;
@@ -106,14 +132,13 @@
                     str += [
                         '<tr>',
                         '<td><input type="hidden" value="' + data[i].ID + '">'+_xh+'</td>',
-                        '<td><span class="ddid_flxf"><a href="/ord_dingdan/customerorderinfo/' + data[i].DDID + '">' + data[i].Bianhao + '</a></span></td>',
+                        '<td><a href="/ord_dingdan/customerorderinfo/' + data[i].DDID + '"><span class="bianhao_flxf">' + data[i].Bianhao + '</a></span><span class="ddid_flxf" style="display:none;">' + data[i].DDID + '</span></td>',
                         '<td><span class="xfje_flxf">' + data[i].XFJE + '</span></td>',
                         '<td><span class="makedate">' + data[i].MakeDate.toDate().Format("yyyy-MM-dd") + '</span></td>',
                         '</tr>'
                     ].join();
                 }
                 $("#tbody_flxf").html(str);
-                //formatDate($("#table_flxf"));//'日期'格式化
             }
         });
     }
@@ -203,11 +228,12 @@
                                     <div class="tab-content">
                                         <div id="tab_flxf" class="tab-pane in active">
                                             @*查询条件*@
+
                                             @*订单序号*@
                                             <div class="form-group col-sm-3">
-                                                <label for="req_ddid" class="col-sm-4 control-label"><b>订单编号</b></label>
+                                                <label for="req_bianhao" class="col-sm-4 control-label"><b>订单编号</b></label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" id="req_ddid" class="form-control" placeholder="请输入订单编号" />
+                                                    <input type="text" id="req_bianhao" class="form-control" placeholder="请输入订单编号" />
                                                 </div>
                                             </div>
                                             @*消费金额*@
@@ -218,12 +244,12 @@
                                                 </div>
                                             </div>
                                             @*制单日期*@
-                                            <div class="form-group col-sm-3">
+                                            @*<div class="form-group col-sm-3">
                                                 <label for="req_date" class="col-sm-4 control-label"><b>消费日期</b></label>
                                                 <div class="col-sm-8">
                                                     <input type="text" id="req_date" class="form-control" placeholder="请输入制单日期" />
                                                 </div>
-                                            </div>
+                                            </div>*@
                                             @*按钮*@
                                             <div class="form-group col-sm-2">
                                                 <button type="button" id="btn_req_flxf" class="btn btn-white "><i class="icon-search green"></i><b>查询</b></button>
@@ -241,6 +267,7 @@
                                         </div>
                                         <div id="tab_flcz" class="tab-pane">
                                             @*查询条件*@
+
                                             @*发放月份*@
                                             <div class="form-group col-sm-3">
                                                 <label for="req_ffyf" class="col-sm-4 control-label"><b>发放月份</b></label>
@@ -256,12 +283,12 @@
                                                 </div>
                                             </div>
                                             @*制单日期*@
-                                            <div class="form-group col-sm-3">
+                                            @*<div class="form-group col-sm-3">
                                                 <label for="req_date" class="col-sm-4 control-label"><b>充值日期</b></label>
                                                 <div class="col-sm-8">
                                                     <input type="text" id="req_date" class="form-control" placeholder="请输入制单日期" />
                                                 </div>
-                                            </div>
+                                            </div>*@
                                             @*按钮*@
                                             <div class="form-group col-sm-2">
                                                 <button type="button" id="btn_req_flcz" class="btn btn-white "><i class="icon-search green"></i><b>查询</b></button>
