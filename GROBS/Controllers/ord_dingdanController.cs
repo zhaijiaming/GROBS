@@ -645,7 +645,7 @@ namespace GROBS.Controllers
         public ActionResult CustomerOrderInfo(int id)
         {
             int _custid = (int)Session["customer_id"];
-            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.IsDelete == false);
+            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.KHID==_custid && p.IsDelete == false);
             if (_dd == null)
                 return View();
             var _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == _dd.CPXID);
@@ -665,6 +665,64 @@ namespace GROBS.Controllers
             var _ddmx = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == _dd.ID && p.IsDelete == false, true, s => s.SPBM).ToList();
             ViewBag.ord_dingdanmx = _ddmx;
             return View();
+        }
+        public ActionResult UploadBankTicket(int id)
+        {
+            int _custid = (int)Session["customer_id"];
+            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.KHID == _custid && p.IsDelete == false);
+            if (_dd == null)
+                return View();
+            var _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == _dd.CPXID);
+            if (_cpx == null)
+                ViewBag.cpx = "";
+            else
+                ViewBag.cpx = _cpx.Mingcheng;
+            ViewBag.cglx = _dd.CGLX;
+            ViewBag.sl = _dd.ZongshuCG;
+            ViewBag.je = _dd.Zongjine;
+            ViewBag.khdh = _dd.KehuDH;
+            ViewBag.bz = _dd.Beizhu;
+            ViewBag.zk = _dd.ZhekouJE;
+            ViewBag.ddid = _dd.ID;
+            if (_dd.FKPZ == null)
+                ViewBag.upfile = "";
+            else
+                ViewBag.upfile = _dd.FKPZ;
+            return View();
+        }
+        public JsonResult TicketUpload()
+        {
+            int _custid = (int)Session["customer_id"];
+            var _ddid = Request["did"] ?? "";
+            var _ddpath = Request["dfl"] ?? "";
+
+            if (string.IsNullOrEmpty(_ddid) || string.IsNullOrEmpty(_ddpath))
+                return Json(-1);
+            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == int.Parse(_ddid) && p.KHID==_custid && p.IsDelete == false);
+            if (_dd == null)
+                return Json(-2);
+            _dd.FKPZ = _ddpath;
+            _dd.Zhuangtai = 20;
+            var _b=ob_ord_dingdanservice.UpdateEntity(_dd);
+            if (!_b)
+                return Json(-3);
+            return Json(1);
+        }
+        public JsonResult RecieveCheck()
+        {
+            int _custid = (int)Session["customer_id"];
+            var _ddid = Request["did"] ?? "";
+            if (string.IsNullOrEmpty(_ddid))
+                return Json(-1);
+            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == int.Parse(_ddid) && p.KHID == _custid && p.IsDelete == false);
+            if (_dd == null)
+                return Json(-2);
+            _dd.Zhuangtai = 70;
+            _dd.MakeDate = DateTime.Now;
+            var _b = ob_ord_dingdanservice.UpdateEntity(_dd);
+            if (!_b)
+                return Json(-3);
+            return Json(1);
         }
     }
     public class SPList
