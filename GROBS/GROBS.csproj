@@ -563,6 +563,10 @@
     <Content Include="Imgs\carousel\carousel-3.jpg" />
     <Content Include="Imgs\ck1.jpg" />
     <Content Include="Imgs\ckflow.jpg" />
+    <Content Include="Imgs\Introduce\tuhuan1.jpg" />
+    <Content Include="Imgs\Introduce\tuhuan2.jpg" />
+    <Content Include="Imgs\Introduce\tuhuan3.jpg" />
+    <Content Include="Imgs\Introduce\tuhuan4.jpg" />
     <Content Include="Imgs\LOADING.gif" />
     <Content Include="Imgs\logo.png" />
     <Content Include="Imgs\page1_pic4.jpg" />

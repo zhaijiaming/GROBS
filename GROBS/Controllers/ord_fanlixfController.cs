@@ -275,16 +275,15 @@ namespace GROBS.Controllers
             string req_ddid = Request["req_ddid"] ?? "";
             string req_xfje = Request["req_xfje"] ?? "";
 
-            Expression<Func<ord_fanlixf, bool>> where = PredicateExtensionses.True<ord_fanlixf>();
+            Expression<Func<ord_fanlixflist_v, bool>> where = PredicateExtensionses.True<ord_fanlixflist_v>();
             if (!string.IsNullOrEmpty(khid))
                 where = where.And(p => p.KHID == int.Parse(khid));
             if (!string.IsNullOrEmpty(req_ddid))
                 where = where.And(p => p.DDID == int.Parse(req_ddid));
             if (!string.IsNullOrEmpty(req_xfje))
                 where = where.And(p => p.XFJE == int.Parse(req_xfje));
-            where = where.And(p => p.IsDelete == false);
 
-            var tempData = ServiceFactory.ord_fanlixfservice.LoadFanlixf(int.Parse(khid));
+            var tempData = ServiceFactory.ord_fanlixfservice.LoadFanlixf(int.Parse(khid), where.Compile()).ToList<ord_fanlixflist_v>();
             if (tempData == null)
                 return Json(-1);
             return Json(tempData);

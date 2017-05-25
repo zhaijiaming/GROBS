@@ -3,7 +3,7 @@
 @using X.PagedList
 @using X.PagedList.Mvc
 @{
-    ViewBag.Title = "绩效";
+    ViewBag.Title = "指标";
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
     string _searchcondition = ViewBag.SearchCondition;
 }
@@ -64,7 +64,6 @@
                             <div class="col-sm-12" style="font-size:18px;">
                                 <i class="icon-signal green bigger-300"></i>&nbsp;&nbsp;
                                 <b>@Html.GetDataValue_ID("收货单位", "", (int)(ViewBag.khid == null ? 0 : ViewBag.khid))</b>&nbsp;&nbsp;&nbsp;&nbsp;
-                                <b>绩效清单</b>
                             </div>
                         </div>
                         <hr />
