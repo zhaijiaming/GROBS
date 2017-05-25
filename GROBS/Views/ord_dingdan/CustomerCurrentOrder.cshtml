@@ -65,6 +65,70 @@
         $("#bt_sendInfo").click(function () {
             window.open("/ord_xiaoshou/getsendlist", "_blank");
         });
+        $("#bt_collect").click(function () {
+            var _sid = 0;
+            var _sst = 0;
+            $("#dt_active tbody tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    _sid = $(this).val();
+                    _sst = $(this).data("state");
+                }
+            });
+            if (_sid == 0)
+            {
+                alert("请选择需要结算的订单！");
+                return;
+            }
+            if (_sst > 10) {
+                alert("该订单已经结算，无需再上传凭证！");
+                return;
+            }
+            window.open("/ord_dingdan/uploadbankticket/"+_sid, "_parent");
+        });
+        $("#bt_recieve").click(function () {
+            var _i = 0;
+            $("#dt_active tbody tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    _i++;
+                    _sid = $(this).val();
+                    _sst = $(this).data("state");
+                }
+            });
+            if (_i == 0) {
+                alert("请选择需要收货的采购订单！");
+                return;
+            }
+            if (_sst == 60) {
+                var _sh = confirm("确定要进行收货吗？");
+                if (_sh == "yes") {
+                    $.ajax({
+                        async: true,
+                        beforeSend: function () {
+                            ShowWait();
+                        },
+                        complete: function () {
+                            HiddenWait();
+                        },
+                        type: "POST",
+                        url: "/ord_dingdan/recievecheck",
+                        data: {
+                            did: _sid
+                        },
+                        success: function (data) {
+                            if (data == 1) {
+                                location.reload();
+                            }
+                            else {
+                                alert("收货操作失败，请与客服联系！");
+                            }
+                        }
+                    });
+                }
+            }
+            else {
+                alert("非正常收货状态，无法收货！");
+            }
+        });
     });
     //function spdetail(oid){
     //    var _durl="/ord_dingdanmx/edit/"+oid;
@@ -83,7 +147,7 @@
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_addInfo"><i class="icon-adn"></i>新增</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_deleteInfo"><i class="icon-remove"></i>删除</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_collect"><i class="icon-upload"></i>结算</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app " id="bt_recieve"><i class="icon-shopping-cart"></i>收货</button>
+                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_recieve"><i class="icon-shopping-cart"></i>收货</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
@@ -97,7 +161,7 @@
                             <table class="table table-bordered table-condensed fixed-table-header"></table>
                         </div>
                         <div class="table-wapper">
-                            <table class="table table-bordered table-condensed" id="mydatatable">
+                            <table class="table table-bordered table-condensed" id="dt_active">
                                 <caption><i class="icon-play-circle"></i>正在执行的订单</caption>
                                 <thead>
                                     <tr>
