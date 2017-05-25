@@ -1,0 +1,169 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "采购结算";
+    Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+    var _i = 1;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            //if (u_id != null) {
+            //    var url_go = "/ord_dingdan/Edit/" + u_id;
+            //    location.href = url_go;
+            //}
+        });
+        //照片的点击事件
+        $(".zcz_browse").click(function () {
+            var img_url = $("#zcz a").attr('href');
+            if (img_url != null && img_url != "") {
+                //console.log(img_url);
+                window.open(img_url);
+            }
+        });
+        $("#bt_up").click(function () {
+            var _file = $("#fkpz").val();
+            if(_file=="")
+            {
+                alert("请选择需要上传的凭证！");
+                return;
+            }
+            
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/ord_dingdan/ticketupload",
+                data: {
+                    did: $("#ddid").val(),
+                    dfl:$("#fkpz").val()
+                },
+                success: function (data) {
+                    if (data == 1) {
+                        window.open("/ord_dingdan/customercurrentorder","_parent");
+                    }
+                    else if (data == -1) {
+                        alert("传送参数失败，请重试！");
+                    }
+                    else if (data == -2) {
+                        alert("非法操作，请重新登录后再试！");
+                    }
+                    else if (data == -3) {
+                        alert("上传失败，请重试！");
+                    }
+                    else {
+                        alert("上传凭证失败，请重试！");
+                    }
+                }
+            });
+        });
+    });
+</script>
+@Html.GetFileUpload("fkpz", "zcz", "z", "ubt", 1, 0, new Dictionary<string, string>() { { "zcz", "fkpz" } })
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
+<div class="page-content">
+    <input type="hidden" id="ddid" value="@ViewBag.ddid" />
+    <div class="panel">
+        <div class="panel-body">
+            <div class="row">
+                <p class="align-center"><i class="icon-picture bigger-200 green"></i><span class="bigger-150 blue">付款凭证上传</span></p>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>订单编号</label>
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" readonly value="@ViewBag.cpx" />
+                </div>
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>产品线</label>
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" readonly value="@ViewBag.cpx" />
+                </div>
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>订单类型</label>
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" readonly value="@Html.GetCommonValue_ID("订单类型",(int)ViewBag.cglx)" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-1">
+                    <label>商品数量</label>
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" readonly value="@ViewBag.sl" />
+                </div>
+                <div class="col-sm-1">
+                    <label>订单金额</label>
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" readonly value="@ViewBag.je" />
+                </div>
+                <div class="col-sm-1">
+                    <label>折扣金额</label>
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" readonly value="@ViewBag.zk" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-1">
+                    <label>客户单号</label>
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" type="text" readonly value="@ViewBag.khdh" />
+                </div>
+                <div class="col-sm-1">
+                    <label>备注</label>
+                </div>
+                <div class="col-sm-7">
+                    <input class="form-control" type="text" readonly value="@ViewBag.bz" />
+                </div>
+            </div>
+            <hr />
+            <div class="row">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-8">
+                    <div class="col-sm-4">
+                        <label for="ZhucezhengTP" class="control-label"><b>付款凭证</b></label>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="input-group">
+                            <input id="fkpz" name="fkpz" readonly placeholder="请上传文件" class="form-control" value="@ViewBag.upfile" type="text">
+                            <span class="input-group-btn">
+                                <button type="button" data-toggle="modal" data-target="#myModalUpload" onclick="btn1()" class="btn btn-primary btn-sm">
+                                    <b>上传</b>
+                                    <i class="icon-cloud-upload icon-on-right bigger-110"></i>
+                                </button>
+                                <span hidden id="zcz"></span>
+                                <button type="button" class="btn btn-primary btn-sm zcz_browse">
+                                    <b>浏览</b>
+                                    <i class="icon-camera icon-on-right bigger-110"></i>
+                                </button>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-2"></div>
+            </div>
+            <div class="row">
+                <div class="col-sm-3"></div>
+                <div class="col-sm-6 center">
+                        <button class="btn btn-primary btn-app" id="bt_up"><i class="icon-upload-alt bigger-120"></i>上传凭证</button>
+                </div>
+                <div class="col-sm-3"></div>
+            </div>
+        </div>
+    </div>
+</div>
