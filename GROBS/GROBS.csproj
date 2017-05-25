@@ -307,6 +307,7 @@
     <Compile Include="Controllers\ord_fanlixfController.cs" />
     <Compile Include="Controllers\ord_jixiaoController.cs" />
     <Compile Include="Controllers\ord_qianhuoController.cs" />
+    <Compile Include="Controllers\ord_qianhuosqController.cs" />
     <Compile Include="Controllers\ord_xiaoshouController.cs" />
     <Compile Include="Controllers\ord_xiaoshoumxController.cs" />
     <Compile Include="Controllers\rmd_myreminderController.cs" />
@@ -330,6 +331,7 @@
     <Compile Include="Models\ord_fanlixfViewModel.cs" />
     <Compile Include="Models\ord_jixiaoViewModel.cs" />
     <Compile Include="Models\ord_productsViewModel.cs" />
+    <Compile Include="Models\ord_qianhuosqViewModel.cs" />
     <Compile Include="Models\ord_qianhuoViewModel.cs" />
     <Compile Include="Models\ord_xiaoshoumxViewModel.cs" />
     <Compile Include="Models\ord_xiaoshouViewModel.cs" />
@@ -825,6 +827,9 @@
     <Content Include="Views\ord_dingdan\CustomerOrderInfo.cshtml" />
     <Content Include="Views\ord_dingdan\UploadBankTicket.cshtml" />
     <Content Include="Views\ord_jixiao\CustomerTargetNow.cshtml" />
+    <Content Include="Views\ord_qianhuosq\Add.cshtml" />
+    <Content Include="Views\ord_qianhuosq\Edit.cshtml" />
+    <Content Include="Views\ord_qianhuosq\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
