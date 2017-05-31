@@ -107,7 +107,7 @@
                         <td>
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
-                        <td>@item.Bianhao</td>
+                        <td><a href="/ord_dingdan/customerorderinfo/@item.ID">@item.Bianhao</a></td>
                         <td>@Html.GetCommonValue_ID("订单状态",(int)item.Zhuangtai)</td>
                         <td>@item.KehuMC</td>
                         <td>@item.Mingcheng</td>
@@ -118,9 +118,9 @@
                         <td>@item.LianxiDH</td>
                         <td>@item.SonghuoDZ</td>
                         <td>@item.ZongshuCG</td>
-                        <td>@item.Zongjine</td>
-                        <td>@item.Zhekouje</td>
-                        <td>@string.Format("{0:C}",item.Zongjine-item.Zhekouje)</td>
+                        <td>@string.Format("{0:C}",item.Zongjine)</td>
+                        <td>@string.Format("{0:C}",item.ZhekouJE==null?0:item.ZhekouJE)</td>
+                        <td>@string.Format("{0:C}",item.Zongjine-(item.ZhekouJE==null?0:item.ZhekouJE))</td>
                         <td>@item.Beizhu</td>
                     </tr>
                 }
