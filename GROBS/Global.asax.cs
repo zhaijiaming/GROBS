@@ -452,6 +452,7 @@ namespace GROBS
             OrderState.Add(40, "配货");
             OrderState.Add(50, "拣货");
             OrderState.Add(60, "出库");
+            OrderState.Add(61, "部分发货");
             OrderState.Add(70, "收货");
             OrderState.Add(80, "关闭");
         }

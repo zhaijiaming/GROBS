@@ -1507,6 +1507,7 @@ namespace GROBS.App_Code
             sb.AppendFormat("$(\"#{0}\").html(\"<a href='/files/zhengzhao/\" + strBack + \"'  target='_blank'>浏览</a>\");", refName);
             sb.AppendLine("break;");
             sb.AppendLine("}");
+            sb.AppendLine("$(\"#upinfo\").text(strWrite);");
             //sb.AppendLine("alert(strWrite);");
             sb.AppendLine("}");
             for (int j = 1; j <= selTime; j++)
@@ -1535,6 +1536,9 @@ namespace GROBS.App_Code
             sb.AppendFormat("<input type=\"hidden\" name=\"uploaditemName\" id=\"uploaditemName\" value=\"{0}_{1}\" />", loadClass, itemValue);
             sb.AppendLine("<div class=\"form-group\">");
             sb.AppendLine("<input type=\"file\" name=\"file\" />");
+            sb.AppendLine("</div>");
+            sb.AppendLine("<div class=\"form-group\">");
+            sb.AppendLine("<label id=\"upinfo\"></label>");
             sb.AppendLine("</div>");
             sb.AppendLine("<div class=\"form-group\">");
             sb.AppendLine("<input type=\"button\" class=\"btn btn-default\" value=\"确 定\" onclick=\"doUpload()\" />");

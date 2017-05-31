@@ -6,6 +6,7 @@
     ViewBag.Title = "采购单";
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
     var _i = 1;
+    var _pz = ViewBag.fkpz;
 }
 <script type="text/javascript">
     $(document).ready(function () {
@@ -20,7 +21,16 @@
 </script>
 <div class="page-content">
     <div class="row">
-        <p class="align-center"><i class="icon-file-text bigger-200 green"></i><span class="bigger-150 blue">订单详情</span></p>
+        <p class="align-center">
+        @if (!string.IsNullOrEmpty(_pz))
+        {
+            <a href="@_pz"><i class="icon-file-text bigger-200 green"></i></a>
+        }
+        else
+        {
+            <i class="icon-file-text bigger-200 green"></i>
+        }
+        <span class="bigger-150 blue">订单详情</span></p>
     </div>
     <hr />
     <div class="row">

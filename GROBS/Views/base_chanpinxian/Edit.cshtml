@@ -83,7 +83,13 @@
                                                 <input type="text" class="form-control" placeholder="请填写说明" name="ob_base_chanpinxian_miaoshu" value="@item.Miaoshu">
                                             </div>
                                         </div>
-                                        @*录入日期*@
+                                        <div class="form-group">
+                                            <label for="KFID" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>供应商</b></label>
+                                            <div class="col-sm-8">
+                                                @Html.SelectList_Auto("KFID", "userinfo", "fullname", (int)item.KFID)
+                                            </div>
+                                        </div>
+                                       @*录入日期*@
                                         <div class="form-group">
                                             <label class="col-sm-3 control-label" for="makedate"><b>录入日期</b></label>
                                             <div class="col-sm-8">

@@ -21,7 +21,7 @@
         });
         $("#bt_deleteInfo").click(function () {
             var sDel = "";
-            $("#mydatatable tr input[type=checkbox]").each(function () {
+            $("#dt_active tr input[type=checkbox]").each(function () {
                 if (this.checked) {
                     var _st = $(this).data("state");
                     if (Number(_st) > 10) {

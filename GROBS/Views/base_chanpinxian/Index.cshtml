@@ -128,6 +128,7 @@
                             <th>供应商</th>
                             <th>名称</th>
                             <th>说明</th>
+                            <th>客服专员</th>
                             <th>录入日期</th>
                             <th>输入人</th>
                         </tr>
@@ -141,6 +142,7 @@
                                     <td>@Html.GetDataValue_ID("供应商", "", (int)(item.GYSID == null ? 0 : item.GYSID))</td>
                                     <td>@item.Mingcheng</td>
                                     <td>@item.Miaoshu</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.KFID == null ? 0 : item.KFID))</td>
                                     <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
                                     <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
                                 </tr>

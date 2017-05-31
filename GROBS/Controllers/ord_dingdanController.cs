@@ -694,6 +694,10 @@ namespace GROBS.Controllers
             ViewBag.lxr = _dd.Lianxiren;
             ViewBag.lxdh = _dd.LianxiDH;
             ViewBag.shdz = _dd.SonghuoDZ;
+            if (_dd.FKPZ == null)
+                ViewBag.fkpz = "";
+            else
+                ViewBag.fkpz = "/files/zhengzhao/" + _dd.FKPZ;
             var _ddmx = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == _dd.ID && p.IsDelete == false, true, s => s.SPBM).ToList();
             ViewBag.ord_dingdanmx = _ddmx;
             return View();
@@ -709,6 +713,7 @@ namespace GROBS.Controllers
                 ViewBag.cpx = "";
             else
                 ViewBag.cpx = _cpx.Mingcheng;
+            ViewBag.ddbh = _dd.Bianhao;
             ViewBag.cglx = _dd.CGLX;
             ViewBag.sl = _dd.ZongshuCG;
             ViewBag.je = _dd.Zongjine;

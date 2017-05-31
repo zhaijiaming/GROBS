@@ -227,6 +227,7 @@ namespace GROBS.Controllers
             string col3 = Request["ob_base_chanpinxian_col3"] ?? "";
             string makedate = Request["ob_base_chanpinxian_makedate"] ?? "";
             string makeman = Request["ob_base_chanpinxian_makeman"] ?? "";
+            string kfid = Request["ob_base_chanpinxian_kfid"] ?? "";
             try
             {
                 base_chanpinxian ob_base_chanpinxian = new base_chanpinxian();
@@ -239,6 +240,7 @@ namespace GROBS.Controllers
                 ob_base_chanpinxian.Col3 = col3.Trim();
                 ob_base_chanpinxian.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_base_chanpinxian.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
+                ob_base_chanpinxian.KFID = kfid == "" ? 0 : int.Parse(kfid);
                 ob_base_chanpinxian = ob_base_chanpinxianservice.AddEntity(ob_base_chanpinxian);
                 ViewBag.base_chanpinxian = ob_base_chanpinxian;
             }
@@ -293,6 +295,7 @@ namespace GROBS.Controllers
             string col3 = Request["ob_base_chanpinxian_col3"] ?? "";
             string makedate = Request["ob_base_chanpinxian_makedate"] ?? "";
             string makeman = Request["ob_base_chanpinxian_makeman"] ?? "";
+            string kfid = Request["ob_base_chanpinxian_kfid"] ?? "";
             int uid = int.Parse(id);
             try
             {
@@ -306,6 +309,7 @@ namespace GROBS.Controllers
                 p.Col3 = col3.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
+                p.KFID = kfid == "" ? 0 : int.Parse(kfid);
                 ob_base_chanpinxianservice.UpdateEntity(p);
                 ViewBag.saveok = ViewAddTag.ModifyOk;
             }
