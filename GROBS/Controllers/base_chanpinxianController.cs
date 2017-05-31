@@ -227,7 +227,7 @@ namespace GROBS.Controllers
             string col3 = Request["ob_base_chanpinxian_col3"] ?? "";
             string makedate = Request["ob_base_chanpinxian_makedate"] ?? "";
             string makeman = Request["ob_base_chanpinxian_makeman"] ?? "";
-            string kfid = Request["ob_base_chanpinxian_kfid"] ?? "";
+            string kfid = Request["kfid"] ?? "";
             try
             {
                 base_chanpinxian ob_base_chanpinxian = new base_chanpinxian();
@@ -295,7 +295,7 @@ namespace GROBS.Controllers
             string col3 = Request["ob_base_chanpinxian_col3"] ?? "";
             string makedate = Request["ob_base_chanpinxian_makedate"] ?? "";
             string makeman = Request["ob_base_chanpinxian_makeman"] ?? "";
-            string kfid = Request["ob_base_chanpinxian_kfid"] ?? "";
+            string kfid = Request["kfid"] ?? "";
             int uid = int.Parse(id);
             try
             {
