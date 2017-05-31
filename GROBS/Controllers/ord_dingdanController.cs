@@ -761,6 +761,23 @@ namespace GROBS.Controllers
                 return Json(-3);
             return Json(1);
         }
+        public JsonResult DeleteOrder()
+        {
+            var _sdel = Request["sdel"] ?? "";
+            if (string.IsNullOrEmpty(_sdel))
+                return Json(-1);
+            foreach (string sD in _sdel.Split(','))
+            {
+                if (sD.Length > 0)
+                {
+                    var id = int.Parse(sD);
+                    var ob_ord_dingdan = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == id && ord_dingdan.IsDelete == false);
+                    ob_ord_dingdan.Zhuangtai = 0;
+                    ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
+                }
+            }
+            return Json(1);
+        }
     }
     public class SPList
     {

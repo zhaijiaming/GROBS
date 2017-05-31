@@ -83,6 +83,10 @@
                 alert("该订单已经结算，无需再上传凭证！");
                 return;
             }
+            if (_sst == 0) {
+                alert("该订单已作废，不能再上传凭证！");
+                return;
+            }
             window.open("/ord_dingdan/uploadbankticket/"+_sid, "_parent");
         });
         $("#bt_recieve").click(function () {

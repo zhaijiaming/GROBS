@@ -1111,7 +1111,7 @@ namespace GROBS.App_Code
                     break;
                 case "userinfo":
                     IuserinfoService us = ServiceFactory.userinfoservice;
-                    userinfo ui = us.GetEntityById(userinfo => userinfo.ID == dataValue);
+                    userinfo ui = us.GetEntityById(userinfo => userinfo.ID == dataValue && userinfo.AccountType<100 && userinfo.IsDelete==false);
                     if (ui == null)
                         returnvalue = "";
                     else
