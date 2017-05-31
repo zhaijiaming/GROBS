@@ -283,22 +283,26 @@ namespace GROBS.Controllers
         public JsonResult getProductLineWithID()
         {
             var jxsid = Request["jxsid"] ?? "";
-            if (!string.IsNullOrEmpty(jxsid))
+
+            var _cpxsq = ServiceFactory.base_chanpinxiansqservice.LoadSortEntities(p => p.JXSID == int.Parse(jxsid) && p.IsDelete == false, true, s => s.CPXDM).ToList();
+            List<base_chanpinxiansqViewModel> cpxsq = new List<base_chanpinxiansqViewModel>();
+            foreach (var sq in _cpxsq)
             {
-                var data = ServiceFactory.base_chanpinxiansqservice.LoadSortEntities(p => p.JXSID == int.Parse(jxsid) && p.IsDelete == false, true, p => p.ID).ToList<base_chanpinxiansq>();
-                if(data != null)
-                {
-                    return Json(data);
-                }
-                else
-                {
-                    return Json("");
-                }
+                base_chanpinxiansqViewModel csq = new base_chanpinxiansqViewModel();
+                csq.ID = sq.ID;
+                var _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == sq.CPXID);
+                csq.CPXDM = _cpx.Mingcheng;
+                csq.CPXID = sq.CPXID;
+                csq.IsDelete = sq.IsDelete;
+                csq.JXSDM = sq.JXSDM;
+                csq.JXSID = sq.JXSID;
+                csq.MakeDate = sq.MakeDate;
+                csq.MakeMan = sq.MakeMan;
+                csq.TingyongSF = sq.TingyongSF;
+                cpxsq.Add(csq);
             }
-            else
-            {
-                return Json(-1);
-            }
+
+            return Json(cpxsq);
         }
     }
 }
