@@ -755,6 +755,7 @@ namespace GROBS.Controllers
             if (_dd == null)
                 return Json(-2);
             _dd.Zhuangtai = 70;
+            _dd.JieshuSF = true;
             _dd.MakeDate = DateTime.Now;
             var _b = ob_ord_dingdanservice.UpdateEntity(_dd);
             if (!_b)
@@ -773,6 +774,7 @@ namespace GROBS.Controllers
                     var id = int.Parse(sD);
                     var ob_ord_dingdan = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == id && ord_dingdan.IsDelete == false);
                     ob_ord_dingdan.Zhuangtai = 0;
+                    ob_ord_dingdan.JieshuSF = true;
                     ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
                 }
             }
