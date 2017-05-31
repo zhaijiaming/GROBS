@@ -445,14 +445,15 @@ namespace GROBS
             OrderType.Add(3, "促销");
 
             OrderState = new Dictionary<int, string>();
-            OrderState.Add(0, "未通过");
-            OrderState.Add(10, "未付款");
-            OrderState.Add(20, "已结算");
-            OrderState.Add(30, "已审核");
-            OrderState.Add(40, "配货中");
-            OrderState.Add(50, "已出库");
-            OrderState.Add(60, "已收货");
-            OrderState.Add(70, "已关闭");
+            OrderState.Add(0, "作废");
+            OrderState.Add(10, "新建");
+            OrderState.Add(20, "结算");
+            OrderState.Add(30, "审核");
+            OrderState.Add(40, "配货");
+            OrderState.Add(50, "拣货");
+            OrderState.Add(60, "出库");
+            OrderState.Add(70, "收货");
+            OrderState.Add(80, "关闭");
         }
     }
 }

@@ -472,7 +472,7 @@ namespace GROBS.Controllers
                 ViewBag.customername = "0";
 
             //var tempData = ob_ord_dingdanservice.LoadSortEntities(p => p.KHID == _custid && p.Zhuangtai < 12 && p.IsDelete == false, true, s => s.Bianhao);
-            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p=>p.Bianhao);
+            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
             ViewBag.ord_dingdan = tempData;
             return View();
         }
@@ -594,31 +594,63 @@ namespace GROBS.Controllers
                            };
             foreach (var spg in _spgroup)
             {
-                var _spxx = ServiceFactory.base_shangpinxxservice.GetEntityById(p => p.ID == spg.Key && p.IsDelete == false);
-                if (_spxx != null)
+                if (_dd.CGLX == 1)
                 {
-                    ord_dingdanmx _mx = new ord_dingdanmx();
-                    _mx.DDID = _dd.ID;
-                    _mx.SPID = _spxx.ID;
-                    _mx.SPBM = _spxx.Daima;
-                    _mx.Guige = _spxx.Guige;
-                    _mx.SPMC = _spxx.Mingcheng;
-                    _mx.JBDW = _spxx.Danwei;
-                    _mx.CGSL = spg.tsl;
-                    _mx.XSBJ = spg.jg;
-                    _mx.XSDJ = spg.jg * _zkl;
-                    _mx.XSDW = _spxx.BaozhuangDW;
-                    _mx.HSL = (float)_spxx.Huansuanlv;
-                    _mx.HSBM = _spxx.Col1;
-                    _mx.Jine = spg.tje;
-                    _mx.Zhekou = spg.tje * (1 - _zkl);
-                    _mx.Zhekoulv = _zkl;
-                    _mx.MakeMan = _userid;
-                    _mx = ServiceFactory.ord_dingdanmxservice.AddEntity(_mx);
+                    var _spxx = ServiceFactory.base_shangpinxxservice.GetEntityById(p => p.ID == spg.Key && p.IsDelete == false);
+                    if (_spxx != null)
+                    {
+                        ord_dingdanmx _mx = new ord_dingdanmx();
+                        _mx.DDID = _dd.ID;
+                        _mx.SPID = _spxx.ID;
+                        _mx.SPBM = _spxx.Daima;
+                        _mx.Guige = _spxx.Guige;
+                        _mx.SPMC = _spxx.Mingcheng;
+                        _mx.JBDW = _spxx.Danwei;
+                        _mx.CGSL = spg.tsl;
+                        _mx.FHSL = 0;
+                        _mx.XSBJ = spg.jg;
+                        _mx.XSDJ = spg.jg * _zkl;
+                        _mx.XSDW = _spxx.BaozhuangDW;
+                        _mx.HSL = (float)_spxx.Huansuanlv;
+                        _mx.HSBM = _spxx.Col1;
+                        _mx.Jine = spg.tje;
+                        _mx.Zhekou = spg.tje * (1 - _zkl);
+                        _mx.Zhekoulv = _zkl;
+                        _mx.MakeMan = _userid;
+                        _mx = ServiceFactory.ord_dingdanmxservice.AddEntity(_mx);
+                    }
                 }
+                else if (_dd.CGLX == 2)
+                {
+                    var _tbxx = ServiceFactory.base_taobaoservice.GetEntityById(p => p.ID == spg.Key && p.IsDelete == false);
+                    if (_tbxx != null)
+                    {
+                        ord_dingdanmx _mx = new ord_dingdanmx();
+                        _mx.DDID = _dd.ID;
+                        _mx.SPID = _tbxx.ID;
+                        _mx.SPBM = _tbxx.Daima;
+                        _mx.Guige = _tbxx.Miaoshu;
+                        _mx.SPMC = _tbxx.Mingcheng;
+                        _mx.JBDW = _tbxx.XSDW;
+                        _mx.CGSL = spg.tsl;
+                        _mx.FHSL = 0;
+                        _mx.XSBJ = spg.jg;
+                        _mx.XSDJ = spg.jg * _zkl;
+                        _mx.XSDW = _tbxx.XSDW;
+                        _mx.HSL = 1;
+                        _mx.HSBM = _tbxx.Col1;
+                        _mx.Jine = spg.tje;
+                        _mx.Zhekou = spg.tje * (1 - _zkl);
+                        _mx.Zhekoulv = _zkl;
+                        _mx.MakeMan = _userid;
+                        _mx = ServiceFactory.ord_dingdanmxservice.AddEntity(_mx);
+                    }
+                }
+                else
+                {
 
+                }
             }
-
             //add minus
             if (_zkl < 1)
             {
@@ -638,14 +670,14 @@ namespace GROBS.Controllers
                 //        ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
                 //    }
                 //}
-            }
 
+            }
             return Json(1);
         }
         public ActionResult CustomerOrderInfo(int id)
         {
             int _custid = (int)Session["customer_id"];
-            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.KHID==_custid && p.IsDelete == false);
+            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.KHID == _custid && p.IsDelete == false);
             if (_dd == null)
                 return View();
             var _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == _dd.CPXID);
@@ -698,12 +730,12 @@ namespace GROBS.Controllers
 
             if (string.IsNullOrEmpty(_ddid) || string.IsNullOrEmpty(_ddpath))
                 return Json(-1);
-            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == int.Parse(_ddid) && p.KHID==_custid && p.IsDelete == false);
+            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == int.Parse(_ddid) && p.KHID == _custid && p.IsDelete == false);
             if (_dd == null)
                 return Json(-2);
             _dd.FKPZ = _ddpath;
             _dd.Zhuangtai = 20;
-            var _b=ob_ord_dingdanservice.UpdateEntity(_dd);
+            var _b = ob_ord_dingdanservice.UpdateEntity(_dd);
             if (!_b)
                 return Json(-3);
             return Json(1);

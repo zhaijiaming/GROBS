@@ -166,7 +166,6 @@
                                 <thead>
                                     <tr>
                                         <td></td>
-                                        <td></td>
                                         <td>编号</td>
                                         <td>状态</td>
                                         <td>产品线</td>
@@ -190,8 +189,7 @@
                                             <td>
                                                 <label><input type="checkbox" value="@item.ID" data-state="@item.Zhuangtai"></label>
                                             </td>
-                                            <td><a href="/ord_dingdan/customerorderinfo/@item.ID"><i class="icon-list-alt bigger-150" title="订单详情"></i></a></td>
-                                            <td>@item.Bianhao</td>
+                                            <td><a href="/ord_dingdan/customerorderinfo/@item.ID">@item.Bianhao</a></td>
                                             <td>@Html.GetCommonValue_ID("订单状态", (int)item.Zhuangtai)</td>
                                             <td>@item.Mingcheng</td>
                                             <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
