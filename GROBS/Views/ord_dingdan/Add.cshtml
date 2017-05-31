@@ -122,7 +122,6 @@
                 $("#select_cpx").html(str);
             }
         });
-
     }
     //获取经销商信息
     function getCust() {
@@ -303,7 +302,7 @@
                                         <div class="form-group">
                                             <label for="ACCID" class="col-sm-3 control-label"><b>审核人员</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="ACCID" name="ACCID" class="form-control" placeholder="请输入审核人员" />
+                                                <input type="text" id="ACCID" readonly class="form-control" placeholder="请输入审核人员" />
                                             </div>
                                         </div>
                                         @*审核通过*@
@@ -344,7 +343,7 @@
                                         <div class="form-group">
                                             <label for="Zhuangtai" class="col-sm-3 control-label"><b>状态</b></label>
                                             <div class="col-sm-8">
-                                                <input type="text" id="Zongjine" name="Zhuangtai" class="form-control" placeholder="请输入状态" />
+                                                @Html.SelectList_Common("Zhuangtai", "订单状态")
                                             </div>
                                         </div>
                                         @*备注*@

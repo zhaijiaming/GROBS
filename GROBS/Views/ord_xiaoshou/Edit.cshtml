@@ -14,12 +14,12 @@
         $("#save_bottom").bind("click", function () {
             $("#form").submit();
         });
-        //'是否合作'绑定值
-        $("#HezuoSF").change(function () {
-            if ($("#HezuoSF").is(":checked")) {
-                $("#HezuoSF").val("true");//选中=true
+        //'是否整单'绑定值
+        $("#ZhengdanSF").change(function () {
+            if ($("#ZhengdanSF").is(":checked")) {
+                $("#ZhengdanSF").val("true");//选中=true
             } else {
-                $("#HezuoSF").val("false");//不选中=false
+                $("#ZhengdanSF").val("false");//不选中=false
             }
         });
         //'是否整单'赋值
