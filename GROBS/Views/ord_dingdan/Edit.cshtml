@@ -155,6 +155,21 @@
         });
         getProductLineWithID($("#jxsid").val());//初始化产品线
         /*
+            采购类型 == 2
+            查看套包商品
+        */
+        $("#containerTbsp").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#tbody_ddmx").on("click", "tr", function (e) {
+            if (e.target.tagName == "BUTTON") {
+                var _tbid = $(this).find(".checkbox").data("tbid");
+                $("#containerTbsp").show();
+                getTaobaoDetail(_tbid);
+            }
+        });
+        $("#container_close_tbsp").on("click", function () {
+            $("#containerTbsp").hide();
+        });
+        /*
             经销商客户选择
         */
         $("#containerJxs").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
@@ -211,6 +226,40 @@
             $("#containerJxs").hide();
         });
     });
+    //套包商品明细
+    function getTaobaoDetail(tbId) {
+        var str = "";
+        var tbId = tbId;
+        $.post(
+            "/base_taobaosp/getdetail",
+                {
+                    tbId: tbId
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       var serialNum = 0;
+                       for (var i in data) {
+                           serialNum++;
+                           str += [
+                               '<tr>',
+                               '<td><input type="hidden" value="' + data[i].ID + '">' + serialNum + '</td>',
+                               '<td><span class="daima_tbsp">' + data[i].Daima + '</span></td>',
+                               '<td><span class="mingcheng_tbsp">' + data[i].Mingcheng + '</span></td>',
+                               '<td>' + data[i].Guige + '</td>',
+                               '<td>' + data[i].Danwei + '</td>',
+                               '<td><span class="tbsp_jiaxs">' + data[i].JiaXS + '</span></td>',
+                               '<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
+                               '<td><span class="tbsp_shuliang">' + data[i].Shuliang + '</span></td>',
+                               '</tr>'
+                           ].join("");
+                       }
+                       $("#tbody_tbsp").html(str);
+                   } else {
+                       $("#tbody_tbsp").empty();
+                   }
+               }
+            );
+    }
     //根据经销商获取相应的产品线
     function getProductLineWithID(jxsid) {
         var jxsid = jxsid;
@@ -268,6 +317,8 @@
     }
     function getDingdanMingXi() {
         var _ddid = $("#ddid").val();
+        var _cglx = $("#CGLX").val();
+        console.log("采购类型:" + _cglx);
         if (_ddid > 0) {
             $.ajax({
                 async: true,
@@ -286,21 +337,23 @@
                     var str = "";
                     if (data.length > 0) {
                         for (var i in data) {
-                            str += [
-                            '<tr>',
-                            '<td><input type="checkbox" class ="checkbox" value="' + data[i].ID + '"/></td>',
-                            '<td><span class = "spbm">' + (data[i].SPBM == null ? "" : data[i].SPBM) + '</span></td>',
-                            '<td><span class = "spmc">' + (data[i].SPMC == null ? "" : data[i].SPMC) + '</span></td>',
-                            '<td><span class = "guige">' + (data[i].Guige == null ? "" : data[i].Guige) + '</span></td>',
-                            '<td><span class = "cgsl">' + (data[i].CGSL == null ? 0 : data[i].CGSL) + '</span></td>',
-                            '<td><span class = "fhsl">' + (data[i].FHSL == null ? 0 : data[i].FHSL) + '</span></td>',
-                            '<td><span class = "xsbj">' + (data[i].XSBJ == null ? 0 : data[i].XSBJ) + '</span></td>',
-                            '<td><span class = "xsdj">' + (data[i].XSDJ == null ? 0 : data[i].XSDJ) + '</span></td>',
-                            '<td><span class = "jine">' + (data[i].Jine == null ? 0 : data[i].Jine) + '</span></td>',
-                            '<td><span class = "zhekou">' + (data[i].Zhekou == null ? 0 : data[i].Zhekou) + '</span></td>',
-                            '<td><span class = "zhekoulv">' + (data[i].Zhekoulv == null ? 0 : data[i].Zhekoulv) + '</span></td>',
-                            '</tr>'
-                            ].join();
+                            str += '<tr>';
+                            str += '<td><input type="checkbox" class ="checkbox" value="' + data[i].ID + '"' + 'data-tbid=' + data[i].SPID + '></td>';
+                            if (_cglx == 2) {
+                                str += '<td class="link_tb"><span class = "spbm"><button id="btn_detail_taobaosp" class="btn btn-link" style="padding:0px!important;">' + data[i].SPBM + '</button></span></td>';
+                            } else {
+                                str += '<td><span class = "spbm">' + data[i].SPBM + '</span></td>';
+                            }
+                            str += '<td><span class = "spmc">' + data[i].SPMC + '</span></td>';
+                            str += '<td><span class = "guige">' + data[i].Guige + '</span></td>';
+                            str += '<td><span class = "cgsl">' + data[i].CGSL + '</span></td>';
+                            str += '<td><span class = "fhsl">' + data[i].FHSL + '</span></td>';
+                            str += '<td><span class = "xsbj">' + data[i].XSBJ + '</span></td>';
+                            str += '<td><span class = "xsdj">' + data[i].XSDJ + '</span></td>';
+                            str += '<td><span class = "jine">' + data[i].Jine + '</span></td>';
+                            str += '<td><span class = "zhekou">' + data[i].Zhekou + '</span></td>';
+                            str += '<td><span class = "zhekoulv">' + data[i].Zhekoulv + '</span></td>';
+                            str += '</tr>';
                         }
                         $("#tbody_ddmx").html(str);
                         calPriceAndTotal();//初始化总金额和总采购数
@@ -642,8 +695,8 @@
                                             <thead>
                                                 <tr>
                                                     <th></th>
-                                                    <th>商品代码</th>
-                                                    <th>商品</th>
+                                                    <th>代码</th>
+                                                    <th>名称</th>
                                                     <th>规格</th>
                                                     <th>采购数量</th>
                                                     <th>发货数量</th>
@@ -729,6 +782,44 @@
                                                 </tr>
                                             </thead>
                                             <tbody></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*套包明细*@
+<div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;max-height:330px;z-index:99;">
+    <div class="panel-heading">
+        <h3 class="panel-title"><b>套包商品</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                                <tr>
+                                                    <th>序号</th>
+                                                    <th>商品代码</th>
+                                                    <th>商品名称</th>
+                                                    <th>规格</th>
+                                                    <th>基本单位</th>
+                                                    <th>销售价</th>
+                                                    <th>采购价</th>
+                                                    <th>数量</th>
+                                                </tr>
+                                            <tbody id="tbody_tbsp"></tbody>
                                         </table>
                                     </div>
                                 </div>

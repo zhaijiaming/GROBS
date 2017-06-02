@@ -280,6 +280,8 @@
                            filltable = filltable + data[i].JiaXS;
                            filltable = filltable + '</span></td><td><span class="tbsp_jiacg">';
                            filltable = filltable + data[i].JiaCG;
+                           filltable = filltable + '</span></td><td><span class="tbsp_shuliang">';
+                           filltable = filltable + data[i].Shuliang;
                            filltable = filltable + '</span></td></tr>';
                        }
                        $("#tbody_tbsp").html(filltable);
@@ -702,6 +704,7 @@
                                                     <th>基本单位</th>
                                                     <th>销售价</th>
                                                     <th>采购价</th>
+                                                    <th>数量</th>
                                                 </tr>
                                                 <tbody id="tbody_tbsp"></tbody>
                                             </table>
