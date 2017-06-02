@@ -177,6 +177,8 @@ namespace GROBS.Controllers
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
             string kehudm = Request["kehudm"] ?? "";
+            string cuoxiaozk = Request["cuoxiaozk"] ?? "";
+            string shenhesj = Request["shenhesj"] ?? "";
             try
             {
                 ord_dingdan ob_ord_dingdan = new ord_dingdan();
@@ -203,7 +205,9 @@ namespace GROBS.Controllers
                 ob_ord_dingdan.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_ord_dingdan.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdan.KehuDM = kehudm.Trim();
+                ob_ord_dingdan.CuoxiaoZK = cuoxiaozk == "" ? 0 : float.Parse(cuoxiaozk);
                 ob_ord_dingdan = ob_ord_dingdanservice.AddEntity(ob_ord_dingdan);
+                ob_ord_dingdan.ShenheSJ = shenhesj == "" ? DateTime.Now : DateTime.Parse(shenhesj);
                 id = ob_ord_dingdan.ID.ToString();
                 ViewBag.ord_dingdan = ob_ord_dingdan;
             }
@@ -248,6 +252,8 @@ namespace GROBS.Controllers
                 ord_dingdanviewmodel.MakeDate = tempData.MakeDate;
                 ord_dingdanviewmodel.MakeMan = tempData.MakeMan;
                 ord_dingdanviewmodel.KehuDM = tempData.KehuDM;
+                ord_dingdanviewmodel.CuoxiaoZK = tempData.CuoxiaoZK;
+                ord_dingdanviewmodel.ShenheSJ = tempData.ShenheSJ;
                 return View(ord_dingdanviewmodel);
             }
         }
@@ -280,6 +286,8 @@ namespace GROBS.Controllers
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
             string kehudm = Request["kehudm"] ?? "";
+            string cuoxiaozk = Request["cuoxiaozk"] ?? "";
+            string shenhesj = Request["shenhesj"] ?? "";
             int uid = int.Parse(id);
             try
             {
@@ -307,6 +315,8 @@ namespace GROBS.Controllers
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 p.KehuDM = kehudm.Trim();
+                p.CuoxiaoZK = cuoxiaozk == "" ? 0 : float.Parse(cuoxiaozk);
+                p.ShenheSJ = shenhesj == "" ? DateTime.Now : DateTime.Parse(shenhesj);
                 ob_ord_dingdanservice.UpdateEntity(p);
                 ViewBag.saveok = ViewAddTag.ModifyOk;
             }

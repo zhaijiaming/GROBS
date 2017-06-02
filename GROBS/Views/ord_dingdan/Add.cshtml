@@ -34,6 +34,19 @@
             }
         });
         /*
+            采购类型为促销时，显示"促销折扣"
+            1:普通
+            2:套包
+            3:促销
+        */
+        //$("#CGLX").change(function () {
+        //    if ($("#CGLX option:selected").val() == 3) {
+        //        $("#CuoxiaoZK").attr("disabled",false);
+        //    } else {
+        //        $("#CuoxiaoZK").attr("disabled", true);
+        //    }
+        //});
+        /*
             经销商客户选择
         */
         $("#containerJxs").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
@@ -322,6 +335,13 @@
                                                 <input type="text" id="ZongshuCG" name="ZongshuCG" class="form-control" placeholder="请输入采购总数" />
                                             </div>
                                         </div>
+                                        @*促销折扣*@
+                                        <div class="form-group">
+                                            <label for="CuoxiaoZK" class="col-sm-3 control-label"><b>促销折扣</b></label>
+                                            <div class="col-sm-8">
+                                                <input type="text" id="CuoxiaoZK" name="CuoxiaoZK" class="form-control" placeholder="" disabled="disabled" />
+                                            </div>
+                                        </div>
                                         @*总金额*@
                                         <div class="form-group">
                                             <label for="Zongjine" class="col-sm-3 control-label"><b>总金额</b></label>
@@ -343,7 +363,7 @@
                                         <div class="form-group">
                                             <label for="Zhuangtai" class="col-sm-3 control-label"><b>状态</b></label>
                                             <div class="col-sm-8">
-                                                @Html.SelectList_Common("Zhuangtai", "订单状态")
+                                                @Html.SelectList_Common("Zhuangtai", "订单状态",10)
                                             </div>
                                         </div>
                                         @*备注*@

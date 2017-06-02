@@ -58,6 +58,10 @@ namespace GROBS.Models
         public bool IsDelete { get; set; }
         [Display(Name = "客户代码")]
         public string KehuDM { get; set; }
+        public float? CuoxiaoZK { get; set; }
+        [Display(Name = "审核时间")]
+        [DataType(DataType.Date)]
+        public DateTime? ShenheSJ { get; set; }
     }
 }
 

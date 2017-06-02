@@ -8,11 +8,13 @@
     try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
     $(document).ready(function () {
         //submit
-        $("#save_top").on("click", function () {
-            $("#form").submit();
-        });
-        $("#save_bottom").on("click", function () {
-            $("#form").submit();
+        $("#save_top,#save_bottom").on("click", function () {
+            var CGSL = isPositiveInt($("#CGSL").val());
+            if (CGSL != true) {
+                alert("您输入的采购数量有错，请重新输入");
+            } else {
+                $("#form").submit();
+            }
         });
         /*
             判断采购类型:判断是选择套包还是普通商品
@@ -126,6 +128,13 @@
                 break;
 
         }
+        //正则判断采购数量
+        $("#CGSL").blur(function () {
+            var CGSL = isPositiveInt($("#CGSL").val());
+            if (CGSL != true) {
+                alert("您输入的采购数量有错，请重新输入");
+            }
+        });
         //金额计算
         $("#CGSL,#XSBJ,#Jine").blur(function () {
             if ($("#CGSL").val() != "" && $("#XSBJ").val() != "" && $("#CGSL").val() != null && $("#XSBJ").val() != null) {
@@ -177,6 +186,12 @@
             }
         });
     });
+    //正则->正整数
+    function isPositiveInt(num) {
+        var pre_num = num;
+        var g = /^[1-9]*[1-9][0-9]*$/;
+        return (g.test(pre_num));
+    }
     //销售单价计算
     function cal_xiaoShouDanJia() {
         if ($("#XSBJ").val() != "" && $("#XSBJ").val() != null && $("#XSBJ").val() != "0" && $("#Zhekoulv").val() != "" && $("#Zhekoulv").val() != null && $("#Zhekoulv").val() != "0") {
