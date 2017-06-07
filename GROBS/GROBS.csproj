@@ -305,7 +305,9 @@
     <Compile Include="Controllers\ord_fanliController.cs" />
     <Compile Include="Controllers\ord_fanliczController.cs" />
     <Compile Include="Controllers\ord_fanlixfController.cs" />
+    <Compile Include="Controllers\ord_guanzhangriController.cs" />
     <Compile Include="Controllers\ord_jixiaoController.cs" />
+    <Compile Include="Controllers\ord_kehufankuiController.cs" />
     <Compile Include="Controllers\ord_qianhuoController.cs" />
     <Compile Include="Controllers\ord_qianhuosqController.cs" />
     <Compile Include="Controllers\ord_xiaoshouController.cs" />
@@ -329,7 +331,9 @@
     <Compile Include="Models\ord_fanliczViewModel.cs" />
     <Compile Include="Models\ord_fanliViewModel.cs" />
     <Compile Include="Models\ord_fanlixfViewModel.cs" />
+    <Compile Include="Models\ord_guanzhangriViewModel.cs" />
     <Compile Include="Models\ord_jixiaoViewModel.cs" />
+    <Compile Include="Models\ord_kehufankuiViewModel.cs" />
     <Compile Include="Models\ord_productsViewModel.cs" />
     <Compile Include="Models\ord_qianhuosqViewModel.cs" />
     <Compile Include="Models\ord_qianhuoViewModel.cs" />
@@ -834,6 +838,12 @@
     <Content Include="Views\ord_qianhuosq\Add.cshtml" />
     <Content Include="Views\ord_qianhuosq\Edit.cshtml" />
     <Content Include="Views\ord_qianhuosq\Index.cshtml" />
+    <Content Include="Views\ord_guanzhangri\Add.cshtml" />
+    <Content Include="Views\ord_guanzhangri\Edit.cshtml" />
+    <Content Include="Views\ord_guanzhangri\Index.cshtml" />
+    <Content Include="Views\ord_kehufankui\Add.cshtml" />
+    <Content Include="Views\ord_kehufankui\Edit.cshtml" />
+    <Content Include="Views\ord_kehufankui\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />

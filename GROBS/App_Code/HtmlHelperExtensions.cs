@@ -478,6 +478,12 @@ namespace GROBS.App_Code
                 case "订单状态":
                     sb.Append(GetCommonSelect(selectedValue, MvcApplication.OrderState));
                     break;
+                case "关帐日类型":
+                    sb.Append(GetCommonSelect(selectedValue, MvcApplication.CloseDayType));
+                    break;
+                case "反馈类型":
+                    sb.Append(GetCommonSelect(selectedValue, MvcApplication.FeedbackType));
+                    break;
                 default:
                     break;
             }
@@ -1426,6 +1432,14 @@ namespace GROBS.App_Code
                 case "订单状态":
                     if (MvcApplication.OrderState.ContainsKey(dataValue))
                         returnvalue = MvcApplication.OrderState[dataValue];
+                    break;
+                case "关帐日类型":
+                    if (MvcApplication.CloseDayType.ContainsKey(dataValue))
+                        returnvalue = MvcApplication.CloseDayType[dataValue];
+                    break;
+                case "反馈类型":
+                    if (MvcApplication.FeedbackType.ContainsKey(dataValue))
+                        returnvalue = MvcApplication.FeedbackType[dataValue];
                     break;
                 default:
                     break;

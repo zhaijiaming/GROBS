@@ -139,6 +139,14 @@ namespace GROBS
         /// 订单状态
         /// </summary>
         public static Dictionary<int, string> OrderState;
+        /// <summary>
+        /// 关帐日类型
+        /// </summary>
+        public static Dictionary<int, string> CloseDayType;
+        /// <summary>
+        /// 反馈类型
+        /// </summary>
+        public static Dictionary<int, string> FeedbackType;
         
         protected void Application_Start()
         {
@@ -455,6 +463,19 @@ namespace GROBS
             OrderState.Add(61, "部分发货");
             OrderState.Add(70, "收货");
             OrderState.Add(80, "关闭");
+
+            CloseDayType = new Dictionary<int, string>();
+            CloseDayType.Add(0, "");
+            CloseDayType.Add(1, "月末关帐");
+            CloseDayType.Add(2, "公休停用");
+            CloseDayType.Add(3, "其他停用");
+
+            FeedbackType = new Dictionary<int, string>();
+            FeedbackType.Add(0, "");
+            FeedbackType.Add(1, "帮助");
+            FeedbackType.Add(2, "建议");
+            FeedbackType.Add(3, "投诉");
+            FeedbackType.Add(4, "合作");
         }
     }
 }
