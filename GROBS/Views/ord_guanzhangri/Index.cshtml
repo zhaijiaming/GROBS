@@ -110,11 +110,11 @@
                         <td>
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
-                        <td>@item.Leixing</td>
-                        <td>@item.Guanzhangri</td>
+                        <td>@Html.GetCommonValue_ID("关帐日类型", (int)(item.Leixing==null?0:item.Leixing))</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}",item.Guanzhangri==null?"":item.Guanzhangri)</td>
                         <td>@item.Memo</td>
                         <td>@item.MakeDate</td>
-                        <td>@item.MakeMan</td>
+                        <td>@Html.GetDataValue_ID("userinfo","全名",(int)item.MakeMan)</td>
                     </tr>
                 }
             </tbody>
