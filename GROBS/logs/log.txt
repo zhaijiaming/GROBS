@@ -257,3 +257,5 @@ INFO  2017-05-25 17:20:47,200 21541ms 16                     MoveNext           
 INFO  2017-05-25 17:31:05,890 10191ms 16                     MoveNext           - njky login at 2017-05-25 17:31:05!
 INFO  2017-05-25 17:32:21,587  8964ms 16                     MoveNext           - njky login at 2017-05-25 17:32:21!
 INFO  2017-05-25 17:32:21,587  8964ms 16                     MoveNext           - njky login at 2017-05-25 17:32:21!
+INFO  2017-06-07 14:33:19,888  9827ms 11                     MoveNext           - 林志勇 login at 2017-06-07 14:33:19!
+INFO  2017-06-07 15:20:32,321 23958ms 11                     MoveNext           - 林志勇 login at 2017-06-07 15:20:32!

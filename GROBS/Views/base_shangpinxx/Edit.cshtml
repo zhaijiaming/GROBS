@@ -106,6 +106,7 @@
             $("#pl_Fanwei").hide();
         });
         $("#makedate").datepicker();
+        //双击取值
         $("#qxdatatable tbody").on("dblclick", "tr", function () {
             $("#Mulu").val($(this).find(".bh").html() + " " + $(this).find(".mc").html());
             $("#muluxuhao").val($(this).find("input[type=checkbox]").val());
@@ -476,7 +477,6 @@
                                     <input type="hidden" name="huozhuid" value="@ViewData.Model.HuozhuID" />
                                     <input type="hidden" id="MakeMan" name="MakeMan" value=@Session["user_id"] />
                                     <input type="hidden" name="MakeDate" value=@string.Format("{0:yyyy-MM-dd}",DateTime.Now) />
-                                    <input type="hidden" name="huozhuid" value="@Model.HuozhuID" />
                                     <fieldset>
                                         @*代码*@
                                         <div class="form-group">
@@ -593,7 +593,7 @@
                                                 <div class="input-group">
                                                     <input id="Mulu" readonly class="form-control" type="text" value="@Html.GetDataValue_ID("分类目录", "", (int)Model.Muluxuhao)">
                                                     <span class="input-group-btn">
-                                                        <button type="button" id="bt_mulu" class="btn btn-grey btn-sm" disabled="disabled">
+                                                        <button type="button" id="bt_mulu" class="btn btn-primary btn-sm">
                                                             选择
                                                             <i class="icon-hand-up icon-on-right bigger-110"></i>
                                                         </button>
@@ -664,9 +664,9 @@
                                             <label class="col-sm-3 control-label" for="Cunchutiaojian"><b>存储条件</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
-                                                    <input id="Cunchutiaojian" name="cunchutiaojian" readonly class="form-control" type="text" value="@ViewData.Model.Cunchutiaojian">
+                                                    <input id="Cunchutiaojian" name="cunchutiaojian" class="form-control" type="text" value="@ViewData.Model.Cunchutiaojian">
                                                     <span class="input-group-btn">
-                                                        <button type="button" id="btn_cctj" class="btn btn-grey btn-sm" disabled="disabled">
+                                                        <button type="button" id="btn_cctj" class="btn btn-primary btn-sm">
                                                             选择
                                                             <i class="icon-hand-up icon-on-right bigger-110"></i>
                                                         </button>
