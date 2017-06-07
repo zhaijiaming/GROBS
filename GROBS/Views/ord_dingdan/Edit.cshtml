@@ -25,6 +25,12 @@
         } else {
             $("#CuoxiaoZK").attr("disabled", true);
         }
+        /*
+            当状态id>30的时候，不可再操作
+        */
+        if ($("#zhuangtai").val() != 0 && $("#zhuangtai").val() != 10 && $("#zhuangtai").val() != 20) {
+            forbiddenDoing();//禁止所有操作
+        }
         //通过
         $("#pass").click(function () {
             //审核人员
@@ -39,6 +45,7 @@
             $("#zhuangtai").val(30);
             //审核时间
             $("#text_shenhesj").val("@DateTime.Now");
+            forbiddenDoing();//禁止所有操作
         });
         //不通过
         $("#notPass").click(function () {
@@ -241,6 +248,18 @@
             $("#containerJxs").hide();
         });
     });
+    //停止所有操作
+    function forbiddenDoing() {
+        $("#returnPast").prop("disabled", true);
+        $("#save_top").prop("disabled", true);
+        $("#pass").prop("disabled", true);
+        $("#notPass").prop("disabled", true);
+        $("#save_bottom").prop("disabled", true);
+        $("#btn_Add").prop("disabled", true);
+        $("#btn_Edit").prop("disabled", true);
+        $("#btn_Del").prop("disabled", true); 
+        $("#btn_zhekouje").prop("disabled", true);
+    }
     //套包商品明细
     function getTaobaoDetail(tbId) {
         var str = "";
@@ -461,7 +480,7 @@
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
     <div class="page-header">
-        <button type="button" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
+        <button type="button" id="returnPast" class="btn btn-app btn-xs btn-primary radius-4" onclick="javascript: history.back(-1); "><i class="icon-reply icon-only"></i><b>返回</b></button>
         <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
         <button type="button" id="pass" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-ok"></i><b>通过</b></button>
         <button type="button" id="notPass" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-remove"></i><b>不通过</b></button>
@@ -508,7 +527,7 @@
                                                 <div class="input-group">
                                                     <input id="khname" placeholder="请选择客户" readonly class="form-control" type="text" value="@Html.GetDataValue_ID("收货单位", "", (int)ViewData.Model.KHID)">
                                                     <span class="input-group-btn">
-                                                        <button type="button" id="btn_select" class="btn btn-primary btn-sm">
+                                                        <button type="button" id="btn_select" disabled class="btn btn-primary btn-sm">
                                                             选择
                                                             <i class="icon-hand-up icon-on-right bigger-110"></i>
                                                         </button>
@@ -619,6 +638,21 @@
                                             <label for="CuoxiaoZK" class="col-sm-3 control-label"><b>促销折扣</b></label>
                                             <div class="col-sm-8">
                                                 <input type="text" id="CuoxiaoZK" disabled name="CuoxiaoZK" class="form-control" placeholder="" value="@ViewData.Model.CuoxiaoZK" />
+                                            </div>
+                                        </div>
+                                        @*折扣金额*@
+                                        <div class="form-group">
+                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>折扣金额</b></label>
+                                            <div class="col-sm-8">
+                                                <div class="input-group">
+                                                    <input id="ZhekouJE" name="ZhekouJE" placeholder="请选择" readonly class="form-control" type="text" >
+                                                    <span class="input-group-btn">
+                                                        <button type="button" id="btn_zhekouje" class="btn btn-primary btn-sm">
+                                                            选择
+                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                        </button>
+                                                    </span>
+                                                </div>
                                             </div>
                                         </div>
                                         @*总金额*@
@@ -828,7 +862,7 @@
     </div>
 </div>
 @*套包明细*@
-<div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;max-height:330px;z-index:99;">
+<div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;z-index:99;">
     <div class="panel-heading">
         <h3 class="panel-title"><b>套包商品</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
     </div>
@@ -841,7 +875,7 @@
                             @*列表*@
                             <div class="row">
                                 <div class="col-sm-12">
-                                    <div style="margin-top:10px;max-height:400px;overflow:auto;">
+                                    <div style="margin-top:10px;max-height:310px;min-height:100px;overflow:auto;">
                                         <table class="table table-hover" id="table_data">
                                             <tr>
                                                 <th>序号</th>
@@ -860,6 +894,45 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_fl" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">返利<button id="pl_fl_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <p>
+                <div class="col-sm-6 align-center"><button class="btn default" id="pl_fl_ok"><i class="icon-ok"></i>确定</button></div>
+                <div class="col-sm-6 align-center"><button class="btn default" id="pl_fl_cancel"><i class="icon-search"></i>取消</button></div>
+            </p>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3">返利总额</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_ze" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">最大折扣</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_zd" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">订单可用</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_mn" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">使用金额</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_sy" class="form-control" />
                 </div>
             </div>
         </div>

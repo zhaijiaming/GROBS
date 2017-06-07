@@ -179,6 +179,7 @@ namespace GROBS.Controllers
             string kehudm = Request["kehudm"] ?? "";
             string cuoxiaozk = Request["cuoxiaozk"] ?? "";
             string shenhesj = Request["shenhesj"] ?? "";
+            string zhekouje = Request["zhekouje"] ?? "";
             try
             {
                 ord_dingdan ob_ord_dingdan = new ord_dingdan();
@@ -206,8 +207,9 @@ namespace GROBS.Controllers
                 ob_ord_dingdan.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdan.KehuDM = kehudm.Trim();
                 ob_ord_dingdan.CuoxiaoZK = cuoxiaozk == "" ? 0 : float.Parse(cuoxiaozk);
-                ob_ord_dingdan = ob_ord_dingdanservice.AddEntity(ob_ord_dingdan);
                 ob_ord_dingdan.ShenheSJ = shenhesj == "" ? DateTime.Now : DateTime.Parse(shenhesj);
+                ob_ord_dingdan.ZhekouJE = zhekouje == "" ? 0 : float.Parse(zhekouje);
+                ob_ord_dingdan = ob_ord_dingdanservice.AddEntity(ob_ord_dingdan);
                 id = ob_ord_dingdan.ID.ToString();
                 ViewBag.ord_dingdan = ob_ord_dingdan;
             }
@@ -254,6 +256,7 @@ namespace GROBS.Controllers
                 ord_dingdanviewmodel.KehuDM = tempData.KehuDM;
                 ord_dingdanviewmodel.CuoxiaoZK = tempData.CuoxiaoZK;
                 ord_dingdanviewmodel.ShenheSJ = tempData.ShenheSJ;
+                ord_dingdanviewmodel.ZhekouJE = tempData.ZhekouJE;
                 return View(ord_dingdanviewmodel);
             }
         }
@@ -288,6 +291,7 @@ namespace GROBS.Controllers
             string kehudm = Request["kehudm"] ?? "";
             string cuoxiaozk = Request["cuoxiaozk"] ?? "";
             string shenhesj = Request["shenhesj"] ?? "";
+            string zhekouje = Request["zhekouje"] ?? "";
             int uid = int.Parse(id);
             try
             {
@@ -317,6 +321,7 @@ namespace GROBS.Controllers
                 p.KehuDM = kehudm.Trim();
                 p.CuoxiaoZK = cuoxiaozk == "" ? 0 : float.Parse(cuoxiaozk);
                 p.ShenheSJ = shenhesj == "" ? DateTime.Now : DateTime.Parse(shenhesj);
+                p.ZhekouJE = zhekouje == "" ? 0 : float.Parse(zhekouje);
                 ob_ord_dingdanservice.UpdateEntity(p);
                 ViewBag.saveok = ViewAddTag.ModifyOk;
             }
