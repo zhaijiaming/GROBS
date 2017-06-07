@@ -12,9 +12,39 @@
         $('#carousel-Medical-instruments').carousel({
             interval: 4000,
         });
+        $("#jxs_search").click(function () {
+            var _sug = $("#tx_suggest").val();
+            if (_sug == "") {
+                alert("请输入信息后再提交！");
+                return;
+            }
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/ord_kehufankui/addfeedback",
+                data: {
+                    lxr: $("#Lianxiren").val(),
+                    memo: _sug,
+                    lx:$("#lx_sel").val()
+                },
+                success: function (data) {
+                    if (data == 1) {
+                        alert("您的信息已传送成功！");
+                        location.reload();
+                    }
+                }
+            });
+        });
     });
 </script>
 @*轮播图*@
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div id="carousel-Medical-instruments" class="carousel slide" data-ride="carousel">
     <!-- 轮播（Carousel）指标 -->
     <ol class="carousel-indicators">
@@ -192,11 +222,14 @@
                         </div>
                         <div class="form-group">
                             <div class="col-sm-12">
-                                <textarea class="form-control" style="height:192px;"></textarea>
+                                <textarea class="form-control" id="tx_suggest" style="height:192px;"></textarea>
                             </div>
                         </div>
                         <div class="form-group">
-                            <div class="col-sm-12">
+                            <div class="col-sm-4">
+                                @Html.SelectList_Common("lx_sel", "反馈类型")
+                            </div>
+                            <div class="col-sm-8">
                                 <button type="button" id="jxs_search" class="btn btn-primary " style="border-radius:6px;">
                                     <span style="font-size:16px!important;"><b>提交</b></span>
                                 </button>

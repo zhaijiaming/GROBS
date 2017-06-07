@@ -269,6 +269,27 @@ namespace GROBS.Controllers
             }
             return RedirectToAction("Index");
         }
+        public JsonResult AddFeedback()
+        {
+            int _userid = (int)Session["user_id"];
+            int _custid = (int)Session["customer_id"];
+            string _custname = (string)Session["customer_name"];
+            var _lxr = Request["lxr"] ?? "";
+            var _memo = Request["memo"] ?? "";
+            var _lx = Request["lx"] ?? "0";
+
+            if (string.IsNullOrEmpty(_memo))
+                return Json(-1);
+            ord_kehufankui _khfk = new ord_kehufankui();
+            _khfk.Leixing = int.Parse(_lx);
+            _khfk.Lianxi = _lxr;
+            _khfk.Memo = _memo;
+            _khfk.MakeMan = _custid;
+            _khfk=ob_ord_kehufankuiservice.AddEntity(_khfk);
+            if (_khfk == null)
+                return Json(-2);
+            return Json(1);
+        }
     }
 }
 

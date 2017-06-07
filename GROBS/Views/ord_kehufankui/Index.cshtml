@@ -84,8 +84,8 @@
     <div class="page-header">
         <p>
             <button type="button" class="btn btn-default " id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
-            <button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
-            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+            @*<button type="button" class="btn btn-default " id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
+            <button type="button" class="btn btn-default " id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>*@
             <button type="button" class="btn btn-default " id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
             <button type="button" class="btn btn-default " id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
         </p>
@@ -99,8 +99,8 @@
                     <td>类型</td>
                     <td>说明</td>
                     <td>联系方式</td>
-                    <td>制单日期</td>
-                    <td>制单人</td>
+                    <td>发送时间</td>
+                    <td>客户名称</td>
                 </tr>
             </thead>
             <tbody>
@@ -110,11 +110,11 @@
                         <td>
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
-                        <td>@item.Leixing</td>
+                        <td>@Html.GetCommonValue_ID("反馈类型", (int)(item.Leixing==null?0:item.Leixing))</td>
                         <td>@item.Memo</td>
                         <td>@item.Lianxi</td>
                         <td>@item.MakeDate</td>
-                        <td>@item.MakeMan</td>
+                        <td>@Html.GetDataValue_ID("收货单位","",(int)item.MakeMan)</td>
                     </tr>
                 }
             </tbody>
