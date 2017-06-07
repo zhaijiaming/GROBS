@@ -10,10 +10,6 @@
     $(document).ready(function () {
         $("tr").bind("dblclick", function () {
             var u_id = $(this).find('td').eq(0).find('input').val();
-            if (u_id != null) {
-                var url_go = "/ord_kehufankui/Edit/" + u_id;
-                location.href = url_go;
-            }
         });
     });
     function AddInfo() {

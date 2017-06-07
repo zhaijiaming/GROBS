@@ -17,7 +17,11 @@
             //}
         });
         $("#bt_addInfo").click(function () {
-            window.open("/ord_dingdan/customeradd", "_parent");
+            var _cd = $("#closeday").val();
+            if (_cd == "0")
+                window.open("/ord_dingdan/customeradd", "_parent");
+            else
+                alert("今天停止下单服务，如需进步资讯可联系客服！");
         });
         $("#bt_deleteInfo").click(function () {
             var sDel = "";
@@ -141,10 +145,11 @@
 </script>
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
+    <input type="hidden" id="closeday" value="@ViewBag.closeday"/>
     <div class="panel">
         <div class="panel-body">
             <div class="row">
-                <p><i class="icon-user bigger-300"></i>&nbsp;&nbsp;<span class="bigger-150 blue">@ViewBag.customername</span></p>
+                <p><i class="icon-user bigger-300 green"></i>&nbsp;&nbsp;<span class="bigger-150 blue">@ViewBag.customername</span></p>
             </div>
             <div class="row">
                 <p class="align-center">

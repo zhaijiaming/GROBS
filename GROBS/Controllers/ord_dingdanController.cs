@@ -485,7 +485,11 @@ namespace GROBS.Controllers
                 ViewBag.customername = _shdw.Mingcheng;
             else
                 ViewBag.customername = "0";
-
+            var _gzr = ServiceFactory.ord_guanzhangriservice.GetEntityById(p => p.Guanzhangri == DateTime.Parse(DateTime.Now.ToShortDateString()) && p.IsDelete == false);
+            if (_gzr == null)
+                ViewBag.closeday = "0";
+            else
+                ViewBag.closeday = "1";
             //var tempData = ob_ord_dingdanservice.LoadSortEntities(p => p.KHID == _custid && p.Zhuangtai < 12 && p.IsDelete == false, true, s => s.Bianhao);
             var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
             ViewBag.ord_dingdan = tempData;
