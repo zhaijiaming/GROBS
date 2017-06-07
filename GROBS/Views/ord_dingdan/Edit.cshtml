@@ -33,34 +33,44 @@
         }
         //通过
         $("#pass").click(function () {
-            //审核人员
-            $("#text_accid").val("@Html.GetDataValue_ID("userinfo", "全名", (int)(Session["user_id"] == null ? 0 : Session["user_id"]))");
-            $("#ACCID").val(@Session["user_id"]);
-            //审核通过打钩
-            $("#ShenheTG").removeAttr("disabled");
-            $("#ShenheTG").val("true");
-            $("#ShenheTG").prop("checked", true);
-            //状态
-            $("#text_zhuangtai").val("@Html.GetCommonValue_ID("订单状态", 30)");
-            $("#zhuangtai").val(30);
-            //审核时间
-            $("#text_shenhesj").val("@DateTime.Now");
-            forbiddenDoing();//禁止所有操作
+            var isConfirm = confirm("确定要添加这些数据吗？");
+            if (isConfirm) {
+                //审核人员
+                $("#text_accid").val("@Html.GetDataValue_ID("userinfo", "全名", (int)(Session["user_id"] == null ? 0 : Session["user_id"]))");
+                $("#ACCID").val(@Session["user_id"]);
+                //审核通过打钩
+                $("#ShenheTG").removeAttr("disabled");
+                $("#ShenheTG").val("true");
+                $("#ShenheTG").prop("checked", true);
+                //状态
+                $("#text_zhuangtai").val("@Html.GetCommonValue_ID("订单状态", 30)");
+                $("#zhuangtai").val(30);
+                //审核时间
+                $("#text_shenhesj").val("@DateTime.Now");
+                //submit
+                $("#form").submit();
+                forbiddenDoing();//禁止所有操作
+            }
         });
         //不通过
         $("#notPass").click(function () {
-            //审核人员
-            $("#text_accid").val("@Html.GetDataValue_ID("userinfo", "全名", (int)(Session["user_id"] == null ? 0 : Session["user_id"]))");
-            $("#ACCID").val(@Session["user_id"]);
-            //审核通过不打钩
-            $("#ShenheTG").removeAttr("disabled");
-            $("#ShenheTG").val("false");
-            $("#ShenheTG").prop("checked", false);
-            //状态
-            $("#text_zhuangtai").val("@Html.GetCommonValue_ID("订单状态", 0)");
-            $("#zhuangtai").val(0);
-            //审核时间
-            $("#text_shenhesj").val("@DateTime.Now");
+            var isConfirm = confirm("确定要添加这些数据吗？");
+            if (isConfirm) {
+                //审核人员
+                $("#text_accid").val("@Html.GetDataValue_ID("userinfo", "全名", (int)(Session["user_id"] == null ? 0 : Session["user_id"]))");
+                $("#ACCID").val(@Session["user_id"]);
+                //审核通过不打钩
+                $("#ShenheTG").removeAttr("disabled");
+                $("#ShenheTG").val("false");
+                $("#ShenheTG").prop("checked", false);
+                //状态
+                $("#text_zhuangtai").val("@Html.GetCommonValue_ID("订单状态", 0)");
+                $("#zhuangtai").val(0);
+                //审核时间
+                $("#text_shenhesj").val("@DateTime.Now");
+                //submit
+                $("#form").submit();
+            }
         });
         //时间
         $("#XiadanRQ").datepicker();
@@ -246,6 +256,72 @@
             $("#SonghuoDZ").val($(this).find(".songhuodizhi").html());
             getProductLineWithID(jxsid);
             $("#containerJxs").hide();
+        });
+        /*
+            使用折扣金额
+        */
+        $("#btn_zhekouje").click(function () {
+            var _zje = $("#Zongjine").val();//订单总金额
+            $.ajax({
+                async: false,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/ord_fanli/GetTotalNumber",
+                data: {
+                    cust: $("#jxsid").val()
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        //alert("查询返利金额失败！");
+                        $("#pl_fl_zd").val("0");//最大折扣
+                    }
+                    else if (data == -2) {
+                        //alert("获取返利金额失败！");
+                        $("#pl_fl_zd").val("0");
+                    }
+                    else {
+                        $("#pl_fl_ze").val(data);//返利总额
+                    }
+                }
+            });
+            if (_zje == "") {
+                $("#pl_fl_zd").val("0");//最大折扣
+                $("#pl_fl_mn").val("0");//订单可用
+                $("#pl_fl_sy").val("0");//使用金额
+            }
+            else {
+                $("#pl_fl_zd").val(Math.round(0.3 * Number(_zje) * 100) / 100);//最大折扣是订单金额的30%
+                if (Number($("#pl_fl_zd").val()) > Number($("#pl_fl_ze").val())) {
+                    $("#pl_fl_mn").val($("#pl_fl_ze").val());
+                }
+                else
+                    $("#pl_fl_mn").val($("#pl_fl_zd").val());
+                $("#pl_fl_sy").val($("#pl_fl_mn").val());
+
+            }
+            $("#pl_fl").show();
+        });
+        $("#pl_fl_ok").click(function () {
+            if (!$.isNumeric($("#pl_fl_sy").val())) {
+                alert("使用返利金额的录入不正确！");
+                return;
+            }
+            if (Number($("#pl_fl_sy").val()) > Number($("#pl_fl_mn").val())) {
+                alert("使用的返利金额不可以超过订单可用的返利金额！");
+                return;
+            }
+            $("#sel_zk").val("1");
+            $("#ZhekouJE").val($("#pl_fl_sy").val());
+            $("#pl_fl").hide();
+        });
+        $("#pl_fl_close").click(function () {
+            $("#sel_zk").val("0");
+            $("#pl_fl").hide();
         });
     });
     //停止所有操作
@@ -505,6 +581,7 @@
                                     <input type="hidden" id="chanpinxian" value="@ViewData.Model.CPXID" />
                                     <input type="hidden" id="zhuangtai" name="zhuangtai" value="@ViewData.Model.Zhuangtai" />
                                     <input type="hidden" id="ACCID" name="ACCID" value="@ViewData.Model.ACCID" />
+                                    <input type="hidden" id="sel_zk" value="0" />
                                     <fieldset>
                                         @*编号*@
                                         <div class="form-group">
@@ -645,7 +722,7 @@
                                             <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>折扣金额</b></label>
                                             <div class="col-sm-8">
                                                 <div class="input-group">
-                                                    <input id="ZhekouJE" name="ZhekouJE" placeholder="请选择" readonly class="form-control" type="text" >
+                                                    <input id="ZhekouJE" name="ZhekouJE" placeholder="请选择" readonly class="form-control" type="text" value="@ViewData.Model.ZhekouJE">
                                                     <span class="input-group-btn">
                                                         <button type="button" id="btn_zhekouje" class="btn btn-primary btn-sm">
                                                             选择
