@@ -85,7 +85,7 @@ namespace GROBS.App_Code
             {
                 case "货主": //"base_weituokehu":
                     Ibase_weituokehuService wtkh = ServiceFactory.base_weituokehuservice;
-                    var tmpwtkh = wtkh.LoadSortEntities(base_weituokehu => base_weituokehu.IsDelete == false, true, base_weituokehu => base_weituokehu.Daima);
+                    var tmpwtkh = wtkh.LoadSortEntitiesNoTracking(base_weituokehu => base_weituokehu.IsDelete == false, true, base_weituokehu => base_weituokehu.Daima);
                     foreach (var i in tmpwtkh)
                     {
                         switch (itemname)
@@ -119,7 +119,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "运输公司":
-                    var _yunshugs = ServiceFactory.base_yunshugsservice.LoadSortEntities(p => p.IsDelete == false, true, s => s.Jiancheng);
+                    var _yunshugs = ServiceFactory.base_yunshugsservice.LoadSortEntitiesNoTracking(p => p.IsDelete == false, true, s => s.Jiancheng);
                     foreach (var i in _yunshugs)
                     {
                         switch (itemname)
@@ -140,18 +140,8 @@ namespace GROBS.App_Code
                         }
                     }
                     break;
-                case "仓库":
-                    //var _cangku = ServiceFactory.wms_cangkuservice.LoadSortEntities(p => p.IsDelete == false, true, s => s.Mingcheng);
-                    //foreach (var i in _cangku)
-                    //{
-                    //    if (i.ID == selectedvalue && selectedvalue != 0)
-                    //        sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", i.ID, i.Mingcheng);
-                    //    else
-                    //        sb.AppendFormat("<option value=\"{0}\">{1}</option>", i.ID, i.Mingcheng);
-                    //}
-                    break;
                 case "医疗器械目录":
-                    var _tmpqxml = ServiceFactory.base_qixiemuluservice.LoadSortEntities(p => p.IsDelete == false, true, s => s.Mingcheng);
+                    var _tmpqxml = ServiceFactory.base_qixiemuluservice.LoadSortEntitiesNoTracking(p => p.IsDelete == false, true, s => s.Mingcheng);
                     foreach (var i in _tmpqxml)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -161,7 +151,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "注册证":
-                    var tmpzcz = ServiceFactory.base_shangpinzczservice.LoadSortEntities(p => p.IsDelete == false && p.ShixiaoSF == false, true, s => s.Bianhao);
+                    var tmpzcz = ServiceFactory.base_shangpinzczservice.LoadSortEntitiesNoTracking(p => p.IsDelete == false && p.ShixiaoSF == false, true, s => s.Bianhao);
                     foreach (var i in tmpzcz)
                     {
                         switch (itemname)
@@ -190,7 +180,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "收货单位":
-                    var tmpshdw = ServiceFactory.base_shouhuodanweiservice.LoadSortEntities(p => p.IsDelete == false && p.HezuoSF == true, true, s => s.Mingcheng);
+                    var tmpshdw = ServiceFactory.base_shouhuodanweiservice.LoadSortEntitiesNoTracking(p => p.IsDelete == false && p.HezuoSF == true, true, s => s.Mingcheng);
                     foreach (var i in tmpshdw)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -201,7 +191,7 @@ namespace GROBS.App_Code
                     break;
                 case "供应商": //"base_gongyingshang":
                     Ibase_gongyingshangService gys = ServiceFactory.base_gongyingshangservice;
-                    var tmpgys = gys.LoadSortEntities(base_gongyingshang => base_gongyingshang.IsDelete == false, true, base_gongyingshang => base_gongyingshang.Daima);
+                    var tmpgys = gys.LoadSortEntitiesNoTracking(base_gongyingshang => base_gongyingshang.IsDelete == false, true, base_gongyingshang => base_gongyingshang.Daima);
                     foreach (var i in tmpgys)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -212,7 +202,7 @@ namespace GROBS.App_Code
                     break;
                 case "厂家": //"base_shengchanqiye":
                     Ibase_shengchanqiyeService scqy = ServiceFactory.base_shengchanqiyeservice;
-                    var tmpscqy = scqy.LoadSortEntities(base_shengchanqiye => base_shengchanqiye.IsDelete == false, true, base_shengchanqiye => base_shengchanqiye.Daima);
+                    var tmpscqy = scqy.LoadSortEntitiesNoTracking(base_shengchanqiye => base_shengchanqiye.IsDelete == false, true, base_shengchanqiye => base_shengchanqiye.Daima);
                     foreach (var i in tmpscqy)
                     {
                         switch (itemname)
@@ -242,7 +232,7 @@ namespace GROBS.App_Code
                     break;
                 case "公司": //"auth_gongsi":
                     Iauth_gongsiService gs = ServiceFactory.auth_gongsiservice;
-                    var tmpgs = gs.LoadSortEntities(auth_gongsi => auth_gongsi.IsDelete == false, true, auth_gongsi => auth_gongsi.Daima);
+                    var tmpgs = gs.LoadSortEntitiesNoTracking(auth_gongsi => auth_gongsi.IsDelete == false, true, auth_gongsi => auth_gongsi.Daima);
                     foreach (var i in tmpgs)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -253,7 +243,7 @@ namespace GROBS.App_Code
                     break;
                 case "产品线": //"auth_gongsi":
                     Ibase_chanpinxianService cpx = ServiceFactory.base_chanpinxianservice;
-                    var tmpcpx = cpx.LoadSortEntities(p => p.IsDelete == false, true, s => s.Mingcheng);
+                    var tmpcpx = cpx.LoadSortEntitiesNoTracking(p => p.IsDelete == false, true, s => s.Mingcheng);
                     foreach (var i in tmpcpx)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -264,7 +254,7 @@ namespace GROBS.App_Code
                     break;
                 case "角色"://auth_juese
                     Iauth_jueseService jueseservice = ServiceFactory.auth_jueseservice;
-                    var tmpjs = jueseservice.LoadSortEntities(auth_juese => auth_juese.IsDelete == false, true, auth_juese => auth_juese.RoleName);
+                    var tmpjs = jueseservice.LoadSortEntitiesNoTracking(auth_juese => auth_juese.IsDelete == false, true, auth_juese => auth_juese.RoleName);
                     foreach (var i in tmpjs)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -275,7 +265,7 @@ namespace GROBS.App_Code
                     break;
                 case "功能":
                     Iauth_gongnengService gongnengservice = ServiceFactory.auth_gongnengservice;
-                    var tmpgn = gongnengservice.LoadSortEntities(auth_gongneng => auth_gongneng.IsDelete == false, true, auth_gongneng => auth_gongneng.Name);
+                    var tmpgn = gongnengservice.LoadSortEntitiesNoTracking(auth_gongneng => auth_gongneng.IsDelete == false, true, auth_gongneng => auth_gongneng.Name);
                     foreach (var i in tmpgn)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -285,7 +275,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "销售":
-                    var tmpsales = ServiceFactory.base_xiaoshouservice.LoadSortEntities(p => p.IsDelete == false && p.ZaizhiSF == true, true, s => s.Xingming);
+                    var tmpsales = ServiceFactory.base_xiaoshouservice.LoadSortEntitiesNoTracking(p => p.IsDelete == false && p.ZaizhiSF == true, true, s => s.Xingming);
                     foreach (var i in tmpsales)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -295,7 +285,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "套包":
-                    var tmptaobao = ServiceFactory.base_taobaoservice.LoadSortEntities(p => p.IsDelete == false && p.TingyongSF == false, true, s=>s.Daima);
+                    var tmptaobao = ServiceFactory.base_taobaoservice.LoadSortEntitiesNoTracking(p => p.IsDelete == false && p.TingyongSF == false, true, s=>s.Daima);
                     foreach(var i in tmptaobao)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
@@ -306,7 +296,7 @@ namespace GROBS.App_Code
                     break;
                 case "userinfo"://用户
                     IuserinfoService uis = ServiceFactory.userinfoservice;
-                    var tmpus = uis.LoadSortEntities(userinfo => userinfo.IsDelete == false && userinfo.AccountType<100, true, userinfo => userinfo.Account);
+                    var tmpus = uis.LoadSortEntitiesNoTracking(userinfo => userinfo.IsDelete == false && userinfo.AccountType<100, true, userinfo => userinfo.Account);
                     switch (itemname)
                     {
                         case "account":
@@ -319,7 +309,7 @@ namespace GROBS.App_Code
                             }
                             break;
                         case "fullname":
-                            foreach (var i in uis.LoadSortEntities(userinfo => userinfo.IsDelete == false, true, userinfo => userinfo.FullName))
+                            foreach (var i in uis.LoadSortEntitiesNoTracking(userinfo => userinfo.IsDelete == false, true, userinfo => userinfo.FullName))
                             {
                                 if (i.ID == selectedvalue && selectedvalue != 0)
                                     sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", i.ID, i.FullName);
@@ -328,7 +318,7 @@ namespace GROBS.App_Code
                             }
                             break;
                         case "bothname":
-                            foreach (var i in uis.LoadSortEntities(userinfo => userinfo.IsDelete == false, true, userinfo => userinfo.Account))
+                            foreach (var i in uis.LoadSortEntitiesNoTracking(userinfo => userinfo.IsDelete == false, true, userinfo => userinfo.Account))
                             {
                                 if (i.ID == selectedvalue && selectedvalue != 0)
                                     sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}_{2}</option>", i.ID, i.Account, i.FullName);
@@ -337,7 +327,7 @@ namespace GROBS.App_Code
                             }
                             break;
                         default:
-                            foreach (var i in uis.LoadSortEntities(userinfo => userinfo.IsDelete == false, true, userinfo => userinfo.FullName))
+                            foreach (var i in uis.LoadSortEntitiesNoTracking(userinfo => userinfo.IsDelete == false, true, userinfo => userinfo.FullName))
                             {
                                 if (i.ID == selectedvalue && selectedvalue != 0)
                                     sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", i.ID, i.FullName);
@@ -1056,7 +1046,7 @@ namespace GROBS.App_Code
             switch (className)
             {
                 case "商品":
-                    base_shangpinxx _shp = ServiceFactory.base_shangpinxxservice.GetEntityById(p => p.ID == dataValue);
+                    base_shangpinxx _shp = ServiceFactory.base_shangpinxxservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_shp == null)
                         returnvalue = "";
                     else
@@ -1065,7 +1055,7 @@ namespace GROBS.App_Code
                         {
                             if (_shp.Chanpinxian != null)
                             {
-                                var _chpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == _shp.Chanpinxian);
+                                var _chpx = ServiceFactory.base_chanpinxianservice.GetEntityByIdNoTracking(p => p.ID == _shp.Chanpinxian);
                                 if (_chpx != null)
                                     returnvalue = _chpx.Mingcheng;
                                 else
@@ -1082,7 +1072,7 @@ namespace GROBS.App_Code
                     break;
                 case "功能":
                     Iauth_gongnengService gnservice = ServiceFactory.auth_gongnengservice;
-                    auth_gongneng gongneng = gnservice.GetEntityById(auth_gongneng => auth_gongneng.ID == dataValue);
+                    auth_gongneng gongneng = gnservice.GetEntityByIdNoTracking(auth_gongneng => auth_gongneng.ID == dataValue);
                     if (gongneng == null)
                         returnvalue = "";
                     else
@@ -1097,7 +1087,7 @@ namespace GROBS.App_Code
                     break;
                 case "角色":
                     Iauth_jueseService jss = ServiceFactory.auth_jueseservice;
-                    auth_juese juese = jss.GetEntityById(auth_juese => auth_juese.ID == dataValue);
+                    auth_juese juese = jss.GetEntityByIdNoTracking(auth_juese => auth_juese.ID == dataValue);
                     if (juese == null)
                         returnvalue = "";
                     else
@@ -1109,7 +1099,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "销售":
-                    base_xiaoshou _xs = ServiceFactory.base_xiaoshouservice.GetEntityById(p => p.ID == dataValue);
+                    base_xiaoshou _xs = ServiceFactory.base_xiaoshouservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_xs == null)
                         returnvalue = "";
                     else
@@ -1117,7 +1107,7 @@ namespace GROBS.App_Code
                     break;
                 case "userinfo":
                     IuserinfoService us = ServiceFactory.userinfoservice;
-                    userinfo ui = us.GetEntityById(userinfo => userinfo.ID == dataValue && userinfo.AccountType<100 && userinfo.IsDelete==false);
+                    userinfo ui = us.GetEntityByIdNoTracking(userinfo => userinfo.ID == dataValue && userinfo.AccountType<100 && userinfo.IsDelete==false);
                     if (ui == null)
                         returnvalue = "";
                     else
@@ -1134,7 +1124,7 @@ namespace GROBS.App_Code
                     break;
                 case "货主":
                     Ibase_weituokehuService wts = ServiceFactory.base_weituokehuservice;
-                    base_weituokehu wt = wts.GetEntityById(base_weituokehu => base_weituokehu.ID == dataValue);
+                    base_weituokehu wt = wts.GetEntityByIdNoTracking(base_weituokehu => base_weituokehu.ID == dataValue);
                     if (wt == null)
                         returnvalue = "";
                     else
@@ -1149,7 +1139,7 @@ namespace GROBS.App_Code
                     break;
                 case "生产企业":
                     Ibase_shengchanqiyeService _scqyservice = ServiceFactory.base_shengchanqiyeservice;
-                    base_shengchanqiye _scqy = _scqyservice.GetEntityById(p => p.ID == dataValue && p.IsDelete == false);
+                    base_shengchanqiye _scqy = _scqyservice.GetEntityByIdNoTracking(p => p.ID == dataValue && p.IsDelete == false);
                     if (_scqy == null)
                         returnvalue = "";
                     else
@@ -1164,42 +1154,42 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "收货单位":
-                    base_shouhuodanwei _shdw = ServiceFactory.base_shouhuodanweiservice.GetEntityById(p => p.ID == dataValue && p.IsDelete == false);
+                    base_shouhuodanwei _shdw = ServiceFactory.base_shouhuodanweiservice.GetEntityByIdNoTracking(p => p.ID == dataValue && p.IsDelete == false);
                     if (_shdw == null)
                         returnvalue = "";
                     else
                         returnvalue = _shdw.Mingcheng;
                     break;
                 case "公司":
-                    auth_gongsi _gs = ServiceFactory.auth_gongsiservice.GetEntityById(p => p.ID == dataValue && p.IsDelete == false);
+                    auth_gongsi _gs = ServiceFactory.auth_gongsiservice.GetEntityByIdNoTracking(p => p.ID == dataValue && p.IsDelete == false);
                     if (_gs == null)
                         returnvalue = "";
                     else
                         returnvalue = _gs.Mingcheng;
                     break;
                 case "供应商":
-                    base_gongyingshang _gys = ServiceFactory.base_gongyingshangservice.GetEntityById(p => p.ID == dataValue);
+                    base_gongyingshang _gys = ServiceFactory.base_gongyingshangservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_gys == null)
                         returnvalue = "";
                     else
                         returnvalue = _gys.Mingcheng;
                     break;
                 case "分类目录":
-                    base_qixiemulu _qxml = ServiceFactory.base_qixiemuluservice.GetEntityById(p => p.ID == dataValue);
+                    base_qixiemulu _qxml = ServiceFactory.base_qixiemuluservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_qxml == null)
                         returnvalue = "";
                     else
                         returnvalue = _qxml.Bianhao + _qxml.Mingcheng;
                     break;
                 case "产品线":
-                    base_chanpinxian _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == dataValue);
+                    base_chanpinxian _cpx = ServiceFactory.base_chanpinxianservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_cpx == null)
                         returnvalue = "";
                     else
                         returnvalue = _cpx.Mingcheng;
                     break;
                 case "运输公司":
-                    base_yunshugs _ysgs = ServiceFactory.base_yunshugsservice.GetEntityById(p => p.ID == dataValue);
+                    base_yunshugs _ysgs = ServiceFactory.base_yunshugsservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_ysgs == null)
                         returnvalue = "";
                     else
@@ -1213,7 +1203,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "订单":
-                    ord_dingdan _dd = ServiceFactory.ord_dingdanservice.GetEntityById(p => p.ID == dataValue);
+                    ord_dingdan _dd = ServiceFactory.ord_dingdanservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_dd == null)
                         returnvalue = "";
                     else
@@ -1225,7 +1215,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "发货单":
-                    ord_xiaoshou _xsd = ServiceFactory.ord_xiaoshouservice.GetEntityById(p => p.ID == dataValue);
+                    ord_xiaoshou _xsd = ServiceFactory.ord_xiaoshouservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_xsd == null)
                         returnvalue = "";
                     else
@@ -1237,7 +1227,7 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "套包":
-                    base_taobao _tb = ServiceFactory.base_taobaoservice.GetEntityById(p => p.ID == dataValue);
+                    base_taobao _tb = ServiceFactory.base_taobaoservice.GetEntityByIdNoTracking(p => p.ID == dataValue);
                     if (_tb == null)
                         returnvalue = "";
                     else
