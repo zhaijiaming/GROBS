@@ -448,8 +448,8 @@ namespace GROBS
 
             OrderType = new Dictionary<int, string>();
             OrderType.Add(0, "");
-            OrderType.Add(1, "普通");
-            OrderType.Add(2, "套包");
+            OrderType.Add(1, "常规");
+            OrderType.Add(2, "合同套包");
             OrderType.Add(3, "促销");
 
             OrderState = new Dictionary<int, string>();

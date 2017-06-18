@@ -1068,6 +1068,8 @@ namespace GROBS.App_Code
                             returnvalue = _shp.ShangpinMS;
                         if (itemName == "商品名称")
                             returnvalue = _shp.Mingcheng;
+                        if (itemName == "商品代码")
+                            returnvalue = _shp.Daima;
                     }
                     break;
                 case "功能":

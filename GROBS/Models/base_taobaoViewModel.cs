@@ -12,11 +12,11 @@ namespace GROBS.Models
         public int? GYSID { get; set; }
         [Display(Name = "产品线")]
         public int? CPXID { get; set; }
-        [Display(Name = "代码")]
+        [Display(Name = "套包号")]
         public string Daima { get; set; }
-        [Display(Name = "名称")]
+        [Display(Name = "套包名称")]
         public string Mingcheng { get; set; }
-        [Display(Name = "描述")]
+        [Display(Name = "套包描述")]
         public string Miaoshu { get; set; }
         [Display(Name = "销售价")]
         public float? JiaXS { get; set; }

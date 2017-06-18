@@ -99,7 +99,8 @@
                     <table class="table table-bordered table-condensed" id="mydatatable">
                         <tr>
                             <th></th>
-                            <th>商品</th>
+                            <th>商品代码</th>
+                           <th>商品名称</th>
                             <th>销售价</th>
                             <th>采购价</th>
                             <th>内部价</th>
@@ -113,6 +114,7 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
+                                    <td>@Html.GetDataValue_ID("商品", "商品代码", (int)(item.SPID == null ? 0 : item.SPID))</td>
                                     <td>@Html.GetDataValue_ID("商品", "商品名称", (int)(item.SPID == null ? 0 : item.SPID))</td>
                                     <td>@item.JiaXS</td>
                                     <td>@item.JiaCG</td>

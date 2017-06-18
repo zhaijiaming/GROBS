@@ -17,10 +17,10 @@ namespace GROBS.Models
         public string Memo { get; set; }
         [Display(Name = "机动1")]
         public string Col1 { get; set; }
-        [Display(Name = "制单日期")]
+        [Display(Name = "设定日期")]
         [DataType(DataType.Date)]
         public DateTime? MakeDate { get; set; }
-        [Display(Name = "制单人")]
+        [Display(Name = "设定人")]
         public int? MakeMan { get; set; }
         [Display(Name = "已删除")]
         public bool IsDelete { get; set; }
