@@ -50,6 +50,7 @@
                 //submit
                 $("#form").submit();
                 forbiddenDoing();//禁止所有操作
+                window.location.href = '/ord_dingdan/index';
             }
         });
         //不通过
@@ -70,6 +71,7 @@
                 $("#text_shenhesj").val("@DateTime.Now");
                 //submit
                 $("#form").submit();
+                window.location.href = '/ord_dingdan/index';
             }
         });
         //时间
@@ -126,6 +128,80 @@
             } else {
                 window.open("/ord_dingdanmx/Add?ddid=" + ddid + "&" + "cpx=" + cpx + "&" + "cglx=" + cglx, "_self");
             }
+        });
+        /*
+            订单商品导入
+        */
+        $("#pl_im").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#bt_import").click(function () {
+            var cglx = $("#CGLX").val();//采购类型
+            var cpx = $("#select_cpx option:selected").val();//产品线ID
+            //console.log(cglx);
+            if (cpx == "0") {
+                alert("产品线不可为空");
+                return;
+            }
+            if (cglx == "0") {
+                alert("订单类型不可为空");
+                return;
+            }
+            $("#pl_im_text").val("");
+            $("#pl_im").show();
+        });
+        //关闭
+        $("#pl_im_close").click(function () {
+            $("#pl_im").hide();
+        });
+        //取消
+        $("#pl_im_cancel").click(function () {
+            $("#pl_im").hide();
+        });
+        //确认导入
+        $("#pl_im_ok").click(function () {
+            var _imt = $("#pl_im_text").val();//导入的文本域
+            var ddid = $("#ddid").val();//订单ID
+            if (_imt.length == 0) {
+                alert("请先录入需要导入的信息!");
+                return;
+            }
+            var _posturl = "";
+            var _tp = Number($("#CGLX").val());//判断采购类型
+            if (_tp == 1)
+                _posturl = "/ord_dingdanmx/SafeFromImportSP";
+            if (_tp == 2)
+                _posturl = "/ord_dingdanmx/SafeFromImportTB";
+            if (_tp == 3)
+                _posturl = "";
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: _posturl,
+                data: {
+                    cpx: $("#select_cpx option:selected").val(),
+                    imt: _imt,
+                    ddid: ddid
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        alert("导入货品出错!");
+                        $("#pl_im_text").val("");
+                    } else if (data == -3) {
+                        alert("货品格式不正确，请重新导入!");
+                        $("#pl_im_text").val("");
+                    } else if (data == 1) {
+                        alert("导入成功!");
+                        $("#pl_im").hide();
+                        $("#pl_im_text").val("");
+                        getDingdanMingXi();//初始化订单明细
+                    }         
+                }
+            });
         });
         //订单商品编辑
         $("#btn_Edit").on("click", function () {
@@ -326,15 +402,16 @@
     });
     //停止所有操作
     function forbiddenDoing() {
-        $("#returnPast").prop("disabled", true);
+        //$("#returnPast").prop("disabled", true);
         $("#save_top").prop("disabled", true);
         $("#pass").prop("disabled", true);
         $("#notPass").prop("disabled", true);
         $("#save_bottom").prop("disabled", true);
         $("#btn_Add").prop("disabled", true);
         $("#btn_Edit").prop("disabled", true);
-        $("#btn_Del").prop("disabled", true); 
+        $("#btn_Del").prop("disabled", true);
         $("#btn_zhekouje").prop("disabled", true);
+        $("#bt_import").prop("disabled", true);
     }
     //套包商品明细
     function getTaobaoDetail(tbId) {
@@ -428,7 +505,7 @@
     function getDingdanMingXi() {
         var _ddid = $("#ddid").val();
         var _cglx = $("#CGLX").val();
-        console.log("采购类型:" + _cglx);
+        //console.log("采购类型:" + _cglx);
         if (_ddid > 0) {
             $.ajax({
                 async: true,
@@ -829,6 +906,7 @@
                                     <div class="row" id="pl_fun_dizhi">
                                         <div class="col-sm-12">
                                             <button type="button" id="btn_Add" class="btn btn-white"><i class="icon-adn  bigger-120 blue"></i>添加</button>
+                                            <button type="button" id="bt_import" class="btn btn-white" ><i class="icon-exchange"></i>导入商品</button>
                                             <button type="button" id="btn_Edit" class="btn btn-white"><i class="icon-edit  bigger-120"></i>编辑</button>
                                             <button type="button" id="btn_Del" class="btn btn-white"><i class="icon-remove red bigger-120"></i>删除</button>
                                         </div>
@@ -1011,6 +1089,26 @@
                 <div class="col-sm-9">
                     <input type="text" id="pl_fl_sy" class="form-control" />
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*导入*@
+<div id="pl_im" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">导入<button id="pl_im_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <p class="align-center">
+                <div class="col-sm-6"><button class="btn default" id="pl_im_ok"><i class="icon-ok"></i>添加</button></div>
+                <div class="col-sm-6"><button class="btn default" id="pl_im_cancel"><i class="icon-search"></i>取消</button></div>
+            </p>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <p class="align-center">需要导入的货品</p>
+                <textarea id="pl_im_text" class="form-control" rows="10" placeholder="此处粘贴代码和数量，以空格分隔（CY1210CT 1）"></textarea>
             </div>
         </div>
     </div>

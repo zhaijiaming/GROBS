@@ -399,6 +399,112 @@ namespace GROBS.Controllers
                 return Json(-2);
             return Json(_spjg);
         }
+        public JsonResult SafeFromImportTB()
+        {
+            //1.获取订单ID以及文本域
+            var _ddid = Request["ddid"] ?? "";
+            var _cpx = Request["cpx"] ?? "";
+            var _imt = Request["imt"] ?? "";
+            //2.用‘套包代码’获取套包信息，循环文本域，将'套包信息'和'一些字段'保存到ord_dingdanmx对象中
+            if (string.IsNullOrEmpty(_cpx) || string.IsNullOrEmpty(_imt))
+            {
+                return Json(-1);
+            }
+            else
+            {
+                try
+                {
+                    string[] _item = _imt.Split();
+                    for (int i = 0; i < _item.Count(); i = i + 2)
+                    {
+                        string _dm = _item[i];//代码
+                        string _sl = _item[i + 1];//数量
+                        var _taobao = ServiceFactory.base_taobaoservice.GetEntityById(p => p.Daima == _dm && p.CPXID == int.Parse(_cpx) && p.IsDelete == false);
+                        if (_taobao == null)
+                            continue;
+                        ord_dingdanmx ob_ord_dingdanmx = new ord_dingdanmx();
+                        ob_ord_dingdanmx.DDID = _ddid == "" ? 0 : int.Parse(_ddid);
+                        ob_ord_dingdanmx.SPID = _taobao.ID;
+                        ob_ord_dingdanmx.SPBM = _taobao.Daima.Trim();
+                        ob_ord_dingdanmx.SPMC = _taobao.Mingcheng.Trim();
+                        ob_ord_dingdanmx.Guige = _taobao.Miaoshu.Trim();
+                        ob_ord_dingdanmx.CGSL = _sl == "" ? 0 : int.Parse(_sl);
+                        ob_ord_dingdanmx.FHSL = 0;
+                        ob_ord_dingdanmx.XSBJ = _taobao.JiaXS;
+                        ob_ord_dingdanmx.XSDJ = _taobao.JiaXS;
+                        ob_ord_dingdanmx.Jine = _taobao.JiaXS * float.Parse(_sl);
+                        ob_ord_dingdanmx.Zhekou = 0;
+                        ob_ord_dingdanmx.Zhekoulv = 0;
+                        ob_ord_dingdanmx.HSL = 0;
+                        ob_ord_dingdanmx.HSBM = "";
+                        ob_ord_dingdanmx.JBDW = "";
+                        ob_ord_dingdanmx.XSDW = "";
+                        ob_ord_dingdanmx.Col1 = "";
+                        ob_ord_dingdanmx.MakeDate = DateTime.Now;
+                        ob_ord_dingdanmx.MakeMan = (int)Session["user_id"];
+                        ob_ord_dingdanmx = ob_ord_dingdanmxservice.AddEntity(ob_ord_dingdanmx);
+                    }
+                    return Json(1);
+                }
+                catch
+                {
+                    return Json(-3);
+                }
+            }
+        }
+        public JsonResult SafeFromImportSP()
+        {
+            //1.获取订单ID以及文本域
+            var _ddid = Request["ddid"] ?? "";
+            var _cpx = Request["cpx"] ?? "";
+            var _imt = Request["imt"] ?? "";
+            //2.用‘商品代码’获取商品信息，循环文本域，将'商品信息'和'一些字段'保存到ord_dingdanmx对象中
+            if (string.IsNullOrEmpty(_cpx) || string.IsNullOrEmpty(_imt))
+            {
+                return Json(-1);
+            }
+            else
+            {
+                try
+                {
+                    string[] _item = _imt.Split();
+                    for (int i = 0; i < _item.Count(); i = i + 2)
+                    {
+                        string _dm = _item[i];//代码
+                        string _sl = _item[i + 1];//数量
+                        var _spxx = ServiceFactory.base_shangpinxxservice.LoadShangpinPriceAll(p => p.Daima == _dm && p.chanpinxian == int.Parse(_cpx)).ToList();
+                        if (_spxx == null)
+                            continue;
+                        ord_dingdanmx ob_ord_dingdanmx = new ord_dingdanmx();
+                        ob_ord_dingdanmx.DDID = _ddid == "" ? 0 : int.Parse(_ddid);
+                        ob_ord_dingdanmx.SPID = _spxx.First().ID;
+                        ob_ord_dingdanmx.SPBM = _spxx.First().Daima.Trim();
+                        ob_ord_dingdanmx.SPMC = _spxx.First().Mingcheng.Trim();
+                        ob_ord_dingdanmx.Guige = _spxx.First().Guige.Trim();
+                        ob_ord_dingdanmx.CGSL = _sl == "" ? 0 : int.Parse(_sl);
+                        ob_ord_dingdanmx.FHSL = 0;
+                        ob_ord_dingdanmx.XSBJ = _spxx.First().JiaXS;
+                        ob_ord_dingdanmx.XSDJ = _spxx.First().JiaXS;
+                        ob_ord_dingdanmx.Jine = ob_ord_dingdanmx.XSBJ * ob_ord_dingdanmx.CGSL;
+                        ob_ord_dingdanmx.Zhekou = 0;
+                        ob_ord_dingdanmx.Zhekoulv = 0;
+                        ob_ord_dingdanmx.HSL = _spxx.First().Huansuanlv;
+                        ob_ord_dingdanmx.HSBM = _spxx.First().Col1;
+                        ob_ord_dingdanmx.JBDW = _spxx.First().Danwei;
+                        ob_ord_dingdanmx.XSDW = _spxx.First().BaozhuangDW;
+                        ob_ord_dingdanmx.Col1 = "";
+                        ob_ord_dingdanmx.MakeDate = DateTime.Now;
+                        ob_ord_dingdanmx.MakeMan = (int)Session["user_id"];
+                        ob_ord_dingdanmx = ob_ord_dingdanmxservice.AddEntity(ob_ord_dingdanmx);
+                    }
+                    return Json(1);
+                }
+                catch
+                {
+                    return Json(-3);
+                }
+            }
+        }
     }
 }
 
