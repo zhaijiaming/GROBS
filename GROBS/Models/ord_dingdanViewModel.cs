@@ -62,7 +62,10 @@ namespace GROBS.Models
         [Display(Name = "审核时间")]
         [DataType(DataType.Date)]
         public DateTime? ShenheSJ { get; set; }
+        [Display(Name ="促销折扣")]
         public float? ZhekouJE { get; set; }
+        [Display(Name ="付款凭证")]
+        public string FKPZ { get; set; }
     }
 }
 

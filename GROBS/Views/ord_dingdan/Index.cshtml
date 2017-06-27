@@ -133,7 +133,7 @@
                                     <td>@Html.GetDataValue_ID("产品线", "", (int)(item.CPXID == null ? 0 : item.CPXID))</td>
                                     <td>@Html.GetCommonValue_ID("订单类型", (int)(item.CGLX == null ? 0 : item.CGLX))</td>
                                     <td>@item.KehuDH</td>
-                                    <td>@string.Format("{0:yyyy-MM-dd}", item.XiadanRQ)</td>
+                                    <td>@item.XiadanRQ.ToString()</td>
                                     <td>@item.Lianxiren</td>
                                     <td>@item.LianxiDH</td>
                                     <td>@item.SonghuoDZ</td>
