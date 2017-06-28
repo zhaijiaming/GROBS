@@ -314,6 +314,8 @@
     <Compile Include="Controllers\base_zhucezhengjlController.cs" />
     <Compile Include="Controllers\ord_dingdanController.cs" />
     <Compile Include="Controllers\ord_dingdanmxController.cs" />
+    <Compile Include="Controllers\ord_fahuodanController.cs" />
+    <Compile Include="Controllers\ord_fahuomxController.cs" />
     <Compile Include="Controllers\ord_fanliController.cs" />
     <Compile Include="Controllers\ord_fanliczController.cs" />
     <Compile Include="Controllers\ord_fanlixfController.cs" />
@@ -340,6 +342,8 @@
     <Compile Include="Models\base_zhucezhengjlViewModel.cs" />
     <Compile Include="Models\ord_dingdanmxViewModel.cs" />
     <Compile Include="Models\ord_dingdanViewModel.cs" />
+    <Compile Include="Models\ord_fahuodanViewModel.cs" />
+    <Compile Include="Models\ord_fahuomxViewModel.cs" />
     <Compile Include="Models\ord_fanliczViewModel.cs" />
     <Compile Include="Models\ord_fanliViewModel.cs" />
     <Compile Include="Models\ord_fanlixfViewModel.cs" />
@@ -856,6 +860,12 @@
     <Content Include="Views\ord_kehufankui\Add.cshtml" />
     <Content Include="Views\ord_kehufankui\Edit.cshtml" />
     <Content Include="Views\ord_kehufankui\Index.cshtml" />
+    <Content Include="Views\ord_fahuodan\Add.cshtml" />
+    <Content Include="Views\ord_fahuodan\Edit.cshtml" />
+    <Content Include="Views\ord_fahuodan\Index.cshtml" />
+    <Content Include="Views\ord_fahuomx\Add.cshtml" />
+    <Content Include="Views\ord_fahuomx\Edit.cshtml" />
+    <Content Include="Views\ord_fahuomx\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
