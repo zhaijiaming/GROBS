@@ -9,11 +9,9 @@
 }
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#carousel-Medical-instruments').carousel({
-            interval: 4000,
-        });
+   
         $("#jxs_search").click(function () {
-            var _sug = $("#tx_suggest").val();
+            var _sug = $("#text").val();
             if (_sug == "") {
                 alert("请输入信息后再提交！");
                 return;
@@ -45,216 +43,213 @@
 </script>
 @*轮播图*@
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
-<div id="carousel-Medical-instruments" class="carousel slide" data-ride="carousel">
-    <!-- 轮播（Carousel）指标 -->
-    <ol class="carousel-indicators">
-        <li data-target="#carousel-Medical-instruments" data-slide-to="0" class="active"></li>
-        <li data-target="#carousel-Medical-instruments" data-slide-to="1"></li>
-        <li data-target="#carousel-Medical-instruments" data-slide-to="2"></li>
-    </ol>
 
-    <!-- 轮播（Carousel）项目 -->
-    <div class="carousel-inner" role="listbox">
-        <div class="item active">
-            <img src="~/Imgs/carousel/carousel-1.jpg" class="img-responsive" alt="欢迎来到嘉事国润：我们以客户中心|创新为驱动|质量为生命|人才为基础" width="100%">
-            @*<div class="carousel-caption">
-                    ...可选标题
-                </div>*@
-        </div>
-        <div class="item">
-            <img src="~/Imgs/carousel/carousel-2.jpg" class="img-responsive" alt="我们的使命：与客户精诚合作，致力于提高医疗保健水平" width="100%">
-            @*<div class="carousel-caption">
-                    ...可选标题
-                </div>*@
-        </div>
-        <div class="item">
-            <img src="~/Imgs/carousel/carousel-3.jpg" class="img-responsive" alt="坚持质量第一：我们致力于通过有效的质量体系，为客户提供符合法规要求的创新产品和服务" width="100%">
-            @*<div class="carousel-caption">
-                    ...可选标题
-                </div>*@
+<section class="swiper-container proportionate p3_1">
+    <div class="swiper-wrapper content">
+        <div class="swiper-slide"><img src="~/Imgs/carousel/swiper-slide-1.jpg" alt="" /></div>
+        <div class="swiper-slide"><img src="~/Imgs/carousel/swiper-slide-2.jpg" alt="" /></div>
+        <div class="swiper-slide"><img src="~/Imgs/carousel/swiper-slide-3.jpg" alt="" /></div>
+    </div>
+    <div class="swiper-pagination"></div>
+    <!-- Add Arrows -->
+    <div class="swiper-button-next"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'><path d='M27,22L27,22L5,44l-2.1-2.1L22.8,22L2.9,2.1L5,0L27,22L27,22z' fill='#ffffff' /></svg></div>
+    <div class="swiper-button-prev"><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 27 44'><path d='M0,22L22,0l2.1,2.1L4.2,22l19.9,19.9L22,44L0,22L0,22L0,22z' fill='#ffffff' /></svg></div>
+</section>
+
+
+
+@*关于我们部分*@  
+<section class="about-us">
+    <div class="">
+        <div class="content identification">
+            <div class="title">关于我们</div>
+            <div class="split-bar"></div>
+            <div class="content">About us</div>
+            <p>嘉事国润</p>
         </div>
     </div>
-
-    <!-- 轮播（Carousel）导航 -->
-    <a class="left carousel-control" href="#carousel-Medical-instruments" role="button" data-slide="prev">
-        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-        <span class="sr-only">Previous</span>
-    </a>
-    <a class="right carousel-control" href="#carousel-Medical-instruments" role="button" data-slide="next">
-        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-        <span class="sr-only">Next</span>
-    </a>
-</div>
-@*内容*@
-<div class="container">
-    @*part1*@
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="" style="margin:100px 0 80px;">
-                <div class="row center">
-                    <h3 class="" style="font-size:24px;font-weight:bold;">源自医疗、助力医疗、根植医疗</h3>
-                    <div class="" style="font-size:14px;">
-                        <p class="line" style="border-top:1px solid #0094ff;width:30px;margin:20px auto 40px;"></p>
-                        <p class="linh25">国润，以创新科技驱动，以绝对的医学专业为前提和基石，将移动互联网、数据技术应用于健康领域</p>
-                        <p class="linh25">用科技，改善医疗服务的效率和连续性；用科技，让优质医疗资源惠及更多的家庭；用科技，让更多的人受惠于医疗保健的预防价值，而不只是“因病治疗”</p>
-                        <p class="linh25">国润，帮助您获得更便捷的医疗健康服务与更优质的健康维护方案</p>
-                    </div>
-
-                </div>
-            </div>
-            @*一组缩略图*@
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <img src="~/Imgs/Introduce/tuhuan1.jpg" alt="..." class="img-responsive">
-                        <div class="caption center" style="font-size:14px;">
-                            <h4 style="font-weight:bold;">普惠</h4>
-                            <div class="f12">为大众提供更高品质的医疗健康服务</div>
-                            <div class="f12" style="margin-top: 2px;">帮助大众在健康维护中获益</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <img src="~/Imgs/Introduce/tuhuan2.jpg" alt="..." class="img-responsive">
-                        <div class="caption center" style="font-size:14px;">
-                            <h4 style="font-weight:bold;">创新</h4>
-                            <div class="f12">协同现有医疗体系，以主动管理式医疗服务</div>
-                            <div class="f12" style="margin-top: 2px;">更好的维护大众健康、实现价值医疗</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="thumbnail">
-                        <img src="~/Imgs/Introduce/tuhuan3.jpg" alt="..." class="img-responsive">
-                        <div class="caption center" style="font-size:14px;">
-                            <h4 style="font-weight:bold;">重构</h4>
-                            <div class="f12">以前瞻视野重构医疗健康服务模式</div>
-                            <div class="f12" style="margin-top: 2px;">实现大众健康价值与医生医疗价值回归</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    @*part2*@
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="" style="margin:100px 0 80px;">
-                <div class="row center">
-                    <h3 class="" style="font-size:24px;font-weight:bold;">联系我们</h3>
-                    <div class="" style="font-size:14px;">
-                        <p class="line" style="border-top:1px solid #0094ff;width:30px;margin:20px auto 40px;"></p>
-                        <p class="linh25 f12">国润—让优质医疗资源发挥更广泛价值，让大众获得更便捷可及、优质高效与值得信赖的医疗健康服务</p>
-                    </div>
-
-                </div>
-            </div>
-            @*一组缩略图*@
-            <div class="row">
-                <div class="col-sm-4">
-                    <div class="thumbnail" style="border:none;">
-                        <div class="caption center" style="font-size:14px;">
-                            <i class="icon-user green" style="font-size:500%;"></i>
-                            <h4 style="font-weight:bold;margin:30px 0 20px;">联系客服</h4>
-                            <div class="f12">电话：021-63055648</div>
-                            <div class="f12" style="margin-top: 2px;">邮箱：service@cachetsh.com</div>
-                            <div class="f12" style="margin-top: 2px;">工作时间：8:30-17:30（周一至周五）</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="thumbnail" style="border:none;">
-                        <div class="caption center">
-                            <i class="icon-coffee green" style="font-size:500%;"></i>
-                            <h4 style="font-weight:bold;margin:30px 0 20px;">商务合作</h4>
-                            <div class="f12">联系人：春经理</div>
-                            <div class="f12" style="margin-top: 2px;">电话：021-63055648-205</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-sm-4">
-                    <div class="thumbnail" style="border:none;">
-                        <div class="caption center" style="font-size:14px;">
-                            <i class="icon-map-marker  green" style="font-size:500%;"></i>
-                            <h4 style="font-weight:bold;margin:30px 0 20px;">公司地址</h4>
-                            <div class="f12">上海市制造局路787号4楼</div>
-                            <div class="f12" style="margin-top: 2px;">邮编：200011</div>
-                            <div class="f12" style="margin-top: 2px;">传真：63082892</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-    @*part3*@
-    <div class="row">
-        <div class="col-sm-12">
-            <div class="" style="margin:100px 0 80px;">
-                <div class="row center">
-                    <h3 class="" style="font-size:24px;font-weight:bold;">反馈意见</h3>
-                    <div class="" style="font-size:14px;">
-                        <p class="line" style="border-top:1px solid #0094ff;width:30px;margin:20px auto 40px;"></p>
-                        <p class="mtop40 mb8">感谢使用国润产品和服务</p>
-                        <p class="linh25">您宝贵的建议是途欢前进的动力，我们期待您的反馈和建议</p>
-                    </div>
-
+    <div class="proportionate p2_1">
+        <div class="content display-flex split2" style="background-color:#3085b1;">
+            <div><img src="~/Imgs/carousel/img1.jpg" alt="" /></div>
+            <div class="center-container">
+                <div class="content introduction">
+                    <label></label><br /> 一站式创新医疗产品采购服务平台
+                    <br /> 致力于为广大合作伙伴提供
+                    <br /> 安全、优质、高效的
+                    <br /> 医疗产品
+                    <br /> 为现代智慧医疗提供创新持续源动力
                 </div>
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="feedback">
-            <div class="col-md-5 col-sm-12">
-                <div class="feedback-l">
-                    <img class="img-responsive" src="~/Imgs/Introduce/tuhuan4.jpg" alt="..." />
-                </div>
+    <div class="proportionate p2_1">
+        <div class="content center-container">
+            <div class="content introduction">
+                <label></label><br /> 同时，
+                <br /> 我们以专业的态度，
+                <br /> 以诚信、平等、规范、共赢的原则
+                <br /> 为每个客户提供
+                <br /> 全方位的医疗产品供应链
+                <br /> 成为大健康产业不可或缺的一部分。
             </div>
-            <div class="col-sm-12 col-md-7" style="min-height:300px;">
-                <div class="feedback-r">
-                    <form class="form-horizontal" id="form" role="form" action="" method="post">
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <input type="text" id="Lianxiren" name="Lianxiren" class="form-control" placeholder="请输入邮箱或密码，便于我们联系您" value="" />
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-12">
-                                <textarea class="form-control" id="tx_suggest" style="height:192px;"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-4">
-                                @Html.SelectList_Common("lx_sel", "反馈类型")
-                            </div>
-                            <div class="col-sm-8">
-                                <button type="button" id="jxs_search" class="btn btn-primary " style="border-radius:6px;">
-                                    <span style="font-size:16px!important;"><b>提交</b></span>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-            
         </div>
     </div>
-</div>
-<div class="space-10"></div>
-<div class="copyright" style="background-color:#333;">
-    <div class="container" style="padding:0px;">
-        <div>
-            <div class="row">
-                <div style="font-size:14px;font-weight:bold;color:#fff;">
-                    <div class="col-sm-6 col-sm-offset-3" style="padding:20px;">
-                        <div class="align-center align-middle">
-                            &copy; @DateTime.Now.Year 嘉事国润
-                        </div>
-                    </div>
+    <div class="proportionate p2_1">
+        <div class="content display-flex split2" style="background-color:#2cbba4;">
+            <div><img src="~/Imgs/carousel/img2.jpg" alt="" /></div>
+            <div class="center-container">
+                <div class="content introduction">
+                    <label></label><br /> 我们一直追求卓越的品质，
+                    <br /> 给予专业、完善、可靠的供应链服务
+                    <br /> 携手同行，
+                    <br /> 保障大众健康，提高生活品质
                 </div>
             </div>
         </div>
     </div>
-</div>
+</section>
+
+@*中间banner部分*@
+
+<section class="proportionate center-container p2_1 tag-container">
+    <div class="content display-flex">
+        <div class="tag">
+            <div class="proportionate p62">
+                <div class="content">
+                    <img src="~/Imgs/carousel/img4.jpg" alt="">
+                </div>
+            </div>
+            <div class="proportionate p1_1">
+                <div class="content identification">
+
+                    <div class="title">创新</div>
+                    <div class="split-bar"></div>
+                    <div class="content">innovative</div>
+                    <p>
+                        为合作客户提供<br /> 方便快捷的线上采购平台
+                        <br /> 快速下单，物流到贵公司
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="tag">
+            <div class="proportionate p62">
+                <div class="content">
+                    <img src="~/Imgs/carousel/img5.jpg" alt="">
+                </div>
+            </div>
+            <div class="proportionate p1_1">
+                <div class="content identification">
+                    <div class="title">专业</div>
+                    <div class="split-bar"></div>
+                    <div class="content">professional</div>
+                    <p>
+                        所有产品订单后台查询<br />
+                        全线跟踪，并进行数据保存<br />
+                        还可以进行分配管理<br />为客户市场管理和拓展提供便利
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="tag">
+            <div class="proportionate p62">
+                <div class="content">
+                    <img src="~/Imgs/carousel/img6.jpg" alt="">
+                </div>
+            </div>
+            <div class="proportionate p1_1">
+                <div class="content identification">
+                    <div class="title">卓越</div>
+                    <div class="split-bar"></div>
+                    <div class="content">prominent</div>
+                    <p>
+                        平台定期推出优惠服务<br />
+                        和共享服务整合产业供应链，<br />
+                        为客户提供优质、<br />优惠的产品和卓越的服务
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="feedback-container">
+    <div class="introduction">
+        <div class="identification">
+            <div class="title">反馈意见</div>
+            <div class="split-bar"></div>
+            <div class="content">Feedback</div>
+            <p>
+                感谢使用嘉事国润一站式创新医疗采购平台<br /> 您宝贵的意见，是我们前行的动力
+                <br /> 期待您的反馈和建议！
+            </p>
+        </div>
+    </div>
+    <div class="proportionate p2_1">
+        <div class="content display-flex split2" style="background-color:#ffffff;">
+            <div><img src="~/Imgs/carousel/img3.jpg" alt="" /></div>
+            <div class="center-container">
+                <div class="content feedback">
+                    <input class="input-area"  id="lianxiren" type="text" placeholder="请输入邮箱或手机号，便于我们联系您">
+                    <textarea class="input-area" name="" id="text" cols="20" rows="6"></textarea>
+                    <select class="" name="lx_sel" id="lx_sel"></select>
+                    <input class="btn1"  id="jxs_search" type="button" value="提交">
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+  @*结尾部分*@
+<footer>
+    <section class="corp-introduction">
+        <div class="logo">
+            <img src="~/Imgs/carousel/logo.png" alt="">
+        </div>
+        <div class="content">
+            <section>
+                <div class="title">关于我们</div>
+                <div class="split-bar"></div>
+                <div>
+                    嘉事国润（上海）医疗科技有限公司<br /> 公司地址：上海市制造局路787号4楼
+                    <br /> 邮编：200011
+                </div>
+            </section>
+            <section>
+                <div class="title">联系客服</div>
+                <div class="split-bar"></div>
+                <div>
+                    电话：021-63055648<br /> 邮箱：service@cachetsh.com
+                    <br /> 工作时间：8:30-17:30（周一至周五）
+                </div>
+            </section>
+            <section>
+                <div class="title">商务合作</div>
+                <div class="split-bar"></div>
+                <div>
+                    联系人：杨经理<br /> 电话：021-63153091
+                </div>
+            </section>
+            <section class="qrcode">
+                <img src="~/Imgs/carousel/qrcode.jpg" alt="">
+            </section>
+        </div>
+        <section class="clear"></section>
+    </section>
+    <section class="corp">©&nbsp;&nbsp;2017嘉事国润&nbsp;&nbsp;&nbsp;&nbsp;京ICP备12039647</section>
+</footer>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
+            
 namespace GROBS.Models
 {
     public partial class base_taobaospViewModel
