@@ -14,8 +14,10 @@
     <link rel="stylesheet"  href="~/assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/assets/css/jquery-ui-1.10.3.full.min.css">
+    <link href="~/assets/css/swiper-3.4.2.min.css" rel="stylesheet" />
+    <link href="~/assets/css/jsgr.css" rel="stylesheet" />
 
-    <!--[if IE7]>
+    <!--[if IE7]>F
       <link rel="stylesheet" href="~/assets/css/font-awesome-ie7.min.css" />
     <![endif]-->
     <!-- page specific plugin styles -->
@@ -62,31 +64,24 @@
         } navbar-fixed-top u-navbar
     </style>*@
 </head>
-<body style="background-color:#fff;">
-    <div class="navbar navbar-default">
-        <div class="container">
-            <div class="row">
-                <div class="navbar-header">
-                    <a href="http://www.cachet.com.cn/" class="navbar-brand">
-                        <img style="width:66px; height:33px; top:0px; left:0px;" src="~/Imgs/cachet0.png" alt="Catche's icon" />
-                        <small>
-                            嘉事国润（上海）医疗科技有限公司
-                        </small>
-                    </a>
-                </div>
-                <div class="navbar-collapse collapse navbar-right" style="height: auto;">
-                    <!-- Main navigation -->
-                    <ul class="nav navbar-nav">
-                        <li><a href="/home/about">关于我们</a></li>
-                        <li><a href="/ord_dingdan/customercurrentorder">采购单</a></li>
-                        <li><a href="/ord_jixiao/customertargetNow">指标</a></li>
-                        <li><a href="/ord_fanli/customerprofit">返利</a></li>
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
+<body>
+    <header>
+    <section class="content">
+        <section class="logo">
+            <a href="http://www.cachet.com.cn/">
+                <img src="~/Imgs/carousel/logo.png" alt="">
+            </a>
+        </section>
+        <nav>
+            <ul>
+                <li><a href="/home/about">关于我们</a></li>
+                <li><a href="/ord_fanli/customerprofit">返利</a></li>
+                <li><a href="/ord_jixiao/customertargetNow">目标</a></li>
+                <li><a href="/ord_dingdan/customercurrentorder">采购单</a></li>
+            </ul>
+        </nav>
+    </section>
+</header>
     @RenderBody()
     @*<hr />
     <footer>
@@ -131,6 +126,11 @@
 
     <script src="~/assets/js/ace-elements.min.js"></script>
     <script src="~/assets/js/ace.min.js"></script>
+
+     @*new*@
+    <script src="~/assets/js/jsgr.js"></script>
+    <script src="~/assets/js/swiper.min.js"></script>
+    
 
     <!-- inline scripts related to this page -->
 
