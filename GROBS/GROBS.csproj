@@ -577,6 +577,7 @@
     <Content Include="Dlls\MySql.Data.dll" />
     <Content Include="Dlls\MySql.Data.Entity.EF6.dll" />
     <Content Include="favicon.ico" />
+    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Imgs\20140321021230992.jpg" />
@@ -626,6 +627,9 @@
     <Content Include="assets\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="assets\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="assets\fonts\glyphicons-halflings-regular.woff" />
+    <Content Include="fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\davis-ck.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck1.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck2.pubxml" />
@@ -899,7 +903,6 @@
     <Folder Include="files\other\" />
     <Folder Include="files\yewu\" />
     <Folder Include="files\zhengzhao\" />
-    <Folder Include="fonts\" />
     <Folder Include="logs\" />
   </ItemGroup>
   <ItemGroup>
