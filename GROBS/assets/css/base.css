@@ -1,0 +1,101 @@
+﻿body, div, dl, dt, dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote，th,td{margin:0;padding:0;}
+
+body {
+  padding: 0;
+  margin: 0 auto;
+  background-color: #eceded !important;
+  font-size: 16px !important;
+  font-family: 'Segoe UI', Arial, 'Microsoft Yahei', sans-serif, Simsun;
+  min-width: 320px;
+
+}
+table {
+  border-collapse: collapse;
+  position: relative;
+}
+
+a {
+  text-decoration: none;
+}
+
+
+ul>li {
+  list-style: none;
+}
+ul{
+    margin:0!important;
+}
+img {
+  border: none;
+}
+input
+{
+  border:0; 
+    }
+textarea
+{
+    resize:none
+     }
+select,textarea
+{
+    outline:none;
+    }
+
+.f-z{
+  font-size: 12px;
+}
+
+
+
+
+
+
+/*输入框*/
+
+input[type='date'], input[type='datetime'], input[type='datetime-local'], input[type='email'], input[type='month'], input[type='number'], input[type='password'], input[type='text'], input[type='time'], input[type='url'], input[type='week'], select {
+  font-size: 1.6rem;
+  padding: 12px 8px;
+  border: 1px solid #dddddd;
+  outline: none;
+  font-family: 'Segoe UI', Arial, 'Microsoft Yahei', Simsun, sans-serif;
+}
+
+input[type='date']:hover, input[type='datetime']:hover, input[type='datetime-local']:hover, input[type='email']:hover, input[type='month']:hover, input[type='number']:hover, input[type='password']:hover, input[type='text']:hover, input[type='time']:hover, input[type='url']:hover, input[type='week']:hover, select:hover {
+  border: 1px solid #53BCFF !important;
+}
+
+input[type='date']:focus, input[type='datetime']:focus, input[type='datetime-local']:focus, input[type='email']:focus, input[type='month']:focus, input[type='number']:focus, input[type='password']:focus, input[type='text']:focus, input[type='time']:focus, input[type='url']:focus, input[type='week']:focus, select:focus {
+  border: 1px solid #1170AD !important;
+}
+
+textarea {
+  font-size: 1.6em;
+  padding: 8px 5px;
+  border: 1px solid #dddddd;
+  outline: none;
+  font-family: 'Segoe UI', Arial, 'Microsoft Yahei', Simsun, sans-serif;
+}
+
+textarea:hover {
+  border: 1px solid #53BCFF !important;
+}
+
+textarea:focus {
+  border: 1px solid #1170AD !important;
+}
+
+/*提交按钮*/
+
+input[type="submit"], input[type="button"], input[type="reset"] {
+  font-size: 1.0rem;
+  padding: 13px 0;
+  border: none;
+  cursor: pointer;
+  font-family: 'Segoe UI', Arial, 'Microsoft Yahei', Simsun, sans-serif;
+  border: 1px solid;
+} 
+
+
+.f-z14{
+  font-size: 14px;
+}

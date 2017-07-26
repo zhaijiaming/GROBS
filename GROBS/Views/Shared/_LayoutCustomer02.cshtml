@@ -11,10 +11,14 @@
     <title>@ViewBag.Title - 嘉事国润订单系统</title>
     <!-- basic styles -->
 
-    <link rel="stylesheet"  href="~/assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet"  href="~/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/assets/css/jquery-ui-1.10.3.full.min.css">
-    <link href="~/assets/css/swiper-3.4.2.min.css" rel="stylesheet" />
+  
+
+
+    @*new*@
+    <link href="~/assets/css/base.css" rel="stylesheet" />
     <link href="~/assets/css/jsgr.css" rel="stylesheet" />
 
     <!--[if IE7]>F
@@ -25,8 +29,8 @@
     <link rel="stylesheet" href="~/assets/css/select2.css" />
     <link rel="stylesheet" href="~/Content/FrameworkList.css" />
     <!-- fonts -->
-    @*<link rel='stylesheet' href='http://fonts.gmirror.org/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>*@
-    @*<link rel='stylesheet' href='http://fonts.useso.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>*@
+    @*@*<link rel='stylesheet' href='http://fonts.gmirror.org/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>
+    <link rel='stylesheet' href='http://fonts.useso.com/css?family=Open+Sans:300,400,600&subset=latin,latin-ext'>*@
     <!-- ace styles -->
 
     <link rel="stylesheet" href="~/assets/css/ace.min.css">
@@ -65,23 +69,31 @@
     </style>*@
 </head>
 <body>
+    <!--头部导航栏-->
     <header>
-    <section class="content">
-        <section class="logo">
-            <a href="http://www.cachet.com.cn/">
-                <img src="~/Imgs/carousel/logo.png" alt="">
-            </a>
-        </section>
-        <nav>
-            <ul>
-                <li><a href="/home/about">关于我们</a></li>
-                <li><a href="/ord_fanli/customerprofit">返利</a></li>
-                <li><a href="/ord_jixiao/customertargetNow">目标</a></li>
-                <li><a href="/ord_dingdan/customercurrentorder">采购单</a></li>
-            </ul>
-        </nav>
-    </section>
-</header>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-xs-6" style="padding-left:0">
+                    <div class="logo">
+                        <img src="~/Imgs/carousel/logo.png" alt="嘉事国润">
+                    </div>
+                </div>
+                <div class="col-lg-6 col-xs-6" style="padding-left:0 ;padding-right:0">
+                    <div class="list">
+                        <ul>
+                            <li><a href="/home/about">关于我们</a></li>
+                            <li><a href="/ord_fanli/customerprofit">返利</a></li>
+                            <li><a href="/ord_jixiao/customertargetNow">目标</a></li>
+                            <li><a href="/ord_dingdan/customercurrentorder">采购单</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+   
     @RenderBody()
     @*<hr />
     <footer>
@@ -129,7 +141,6 @@
 
      @*new*@
     <script src="~/assets/js/jsgr.js"></script>
-    <script src="~/assets/js/swiper.min.js"></script>
     
 
     <!-- inline scripts related to this page -->

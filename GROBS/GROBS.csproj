@@ -457,6 +457,8 @@
     <Content Include="assets\avatars\avatar5.png" />
     <Content Include="assets\avatars\profile-pic.jpg" />
     <Content Include="assets\avatars\user.jpg" />
+    <Content Include="assets\css\base.css" />
+    <Content Include="assets\css\jsgr.css" />
     <Content Include="assets\css\ace-ie.min.css" />
     <Content Include="assets\css\ace-rtl.min.css" />
     <Content Include="assets\css\ace-skins.min.css" />
@@ -478,11 +480,9 @@
     <Content Include="assets\css\jquery-ui-1.10.3.custom.min.css" />
     <Content Include="assets\css\jquery-ui-1.10.3.full.min.css" />
     <Content Include="assets\css\jquery.gritter.css" />
-    <Content Include="assets\css\jsgr.css" />
     <Content Include="assets\css\select2.css" />
-    <Content Include="assets\css\swiper-3.4.2.min.css" />
     <Content Include="assets\css\ui.jqgrid.css" />
-    <Content Include="assets\font\glyphicons-halflings-regular.svg" />
+    <Content Include="assets\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="assets\images\gallery\image-1.jpg" />
     <Content Include="assets\images\gallery\image-2.jpg" />
     <Content Include="assets\images\gallery\image-3.jpg" />
@@ -576,7 +576,6 @@
     <Content Include="Dlls\MySql.Data.dll" />
     <Content Include="Dlls\MySql.Data.Entity.EF6.dll" />
     <Content Include="favicon.ico" />
-    <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Imgs\20140321021230992.jpg" />
@@ -615,14 +614,14 @@
     </Content>
     <Content Include="assets\avatars\Thumbs.db" />
     <Content Include="assets\css\images\Thumbs.db" />
-    <Content Include="assets\font\fontawesome-webfont.woff" />
+    <Content Include="assets\fonts\fontawesome-webfont.woff" />
     <Content Include="App_Code\HelpersView.cshtml" />
     <Content Include="CommonValue.json" />
     <Content Include="Metadata\deploymentTemplates\apiappconfig.azureresource.json" />
     <Content Include="apiapp.json" />
-    <Content Include="assets\font\glyphicons-halflings-regular.eot" />
-    <Content Include="assets\font\glyphicons-halflings-regular.ttf" />
-    <Content Include="assets\font\glyphicons-halflings-regular.woff" />
+    <Content Include="assets\fonts\glyphicons-halflings-regular.eot" />
+    <Content Include="assets\fonts\glyphicons-halflings-regular.ttf" />
+    <Content Include="assets\fonts\glyphicons-halflings-regular.woff" />
     <None Include="Properties\PublishProfiles\davis-ck.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck1.pubxml" />
     <None Include="Properties\PublishProfiles\davis-ck2.pubxml" />
@@ -882,9 +881,6 @@
     <Content Include="Views\ord_fahuomx\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="fonts\glyphicons-halflings-regular.woff" />
-    <Content Include="fonts\glyphicons-halflings-regular.ttf" />
-    <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
