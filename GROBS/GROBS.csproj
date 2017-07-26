@@ -483,6 +483,7 @@
     <Content Include="assets\css\select2.css" />
     <Content Include="assets\css\ui.jqgrid.css" />
     <Content Include="assets\fonts\glyphicons-halflings-regular.svg" />
+    <Content Include="assets\font\glyphicons-halflings-regular.svg" />
     <Content Include="assets\images\gallery\image-1.jpg" />
     <Content Include="assets\images\gallery\image-2.jpg" />
     <Content Include="assets\images\gallery\image-3.jpg" />
@@ -614,11 +615,14 @@
     </Content>
     <Content Include="assets\avatars\Thumbs.db" />
     <Content Include="assets\css\images\Thumbs.db" />
-    <Content Include="assets\fonts\fontawesome-webfont.woff" />
+    <Content Include="assets\font\fontawesome-webfont.woff" />
     <Content Include="App_Code\HelpersView.cshtml" />
     <Content Include="CommonValue.json" />
     <Content Include="Metadata\deploymentTemplates\apiappconfig.azureresource.json" />
     <Content Include="apiapp.json" />
+    <Content Include="assets\font\glyphicons-halflings-regular.eot" />
+    <Content Include="assets\font\glyphicons-halflings-regular.ttf" />
+    <Content Include="assets\font\glyphicons-halflings-regular.woff" />
     <Content Include="assets\fonts\glyphicons-halflings-regular.eot" />
     <Content Include="assets\fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="assets\fonts\glyphicons-halflings-regular.woff" />
@@ -895,6 +899,7 @@
     <Folder Include="files\other\" />
     <Folder Include="files\yewu\" />
     <Folder Include="files\zhengzhao\" />
+    <Folder Include="fonts\" />
     <Folder Include="logs\" />
   </ItemGroup>
   <ItemGroup>
