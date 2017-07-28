@@ -592,6 +592,7 @@
     <Content Include="Imgs\carousel\img5.jpg" />
     <Content Include="Imgs\carousel\img6.jpg" />
     <Content Include="Imgs\carousel\logo.png" />
+    <Content Include="Imgs\carousel\logoj.png" />
     <Content Include="Imgs\carousel\qrcode.jpg" />
     <Content Include="Imgs\carousel\swiper-slide-1.jpg" />
     <Content Include="Imgs\carousel\swiper-slide-2.jpg" />
