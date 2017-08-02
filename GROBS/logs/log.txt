@@ -479,3 +479,11 @@ INFO  2017-07-28 10:14:58,653 34996ms 28                     MoveNext           
 INFO  2017-07-28 13:56:21,345 108385ms 28                     MoveNext           - du login at 2017/7/28 星期五 下午 1:56:21!
 INFO  2017-07-28 15:42:59,628 33587ms 28                     MoveNext           - du login at 2017/7/28 星期五 下午 3:42:59!
 INFO  2017-07-31 09:28:10,819 325178ms 26                     MoveNext           - duchen login at 2017/7/31 星期一 上午 9:28:10!
+INFO  2017-08-01 08:42:03,940 146695ms 27                     MoveNext           - shhp login at 2017/8/1 星期二 上午 8:42:03!
+INFO  2017-08-01 08:42:03,943 146698ms 27                     MoveNext           - shhp login at 2017/8/1 星期二 上午 8:42:03!
+INFO  2017-08-01 08:42:03,940 146695ms 27                     MoveNext           - shhp login at 2017/8/1 星期二 上午 8:42:03!
+INFO  2017-08-01 08:45:28,015 350769ms 27                     MoveNext           - shhp login at 2017/8/1 星期二 上午 8:45:28!
+INFO  2017-08-01 08:46:12,005 394760ms 27                     MoveNext           - shhp login at 2017/8/1 星期二 上午 8:46:12!
+INFO  2017-08-01 08:52:53,760 83004ms 27                     MoveNext           - shhp login at 2017/8/1 星期二 上午 8:52:53!
+INFO  2017-08-01 08:53:24,245 113489ms 27                     MoveNext           - shhp login at 2017/8/1 星期二 上午 8:53:24!
+INFO  2017-08-01 08:53:49,700 138944ms 28                     MoveNext           - du login at 2017/8/1 星期二 上午 8:53:49!
