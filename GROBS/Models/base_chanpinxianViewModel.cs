@@ -29,6 +29,14 @@ namespace GROBS.Models
         public int? MakeMan { get; set; }
         [Display(Name = "已删除")]
         public bool IsDelete { get; set; }
+        [Display(Name = "客服序号")]
+        public int KFID { get; set; }
+        [Display(Name = "产品线代码")]
+        public string CPXDM { get; set; }
+        [Display(Name = "客服电话")]
+        public string KFDH { get; set; }
+        [Display(Name = "客服QQ")]
+        public string KFQQ { get; set; }
     }
 }
 

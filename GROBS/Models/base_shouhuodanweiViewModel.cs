@@ -84,6 +84,16 @@ namespace GROBS.Models
         public string LianxiDH { get; set; }
         [Display(Name = "客户代码")]
         public string KehuDM { get; set; }
+        [Display(Name = "订货人")]
+        public string DHR { get; set; }
+        [Display(Name = "订货人电话")]
+        public string DHRDH { get; set; }
+        [Display(Name = "收票人")]
+        public string SPR { get; set; }
+        [Display(Name = "收票人电话")]
+        public string SPRDH { get; set; }
+        [Display(Name = "收票人地址")]
+        public string SPRDZ { get; set; }
     }
 }
 
