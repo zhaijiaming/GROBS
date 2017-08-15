@@ -8,12 +8,16 @@ namespace GROBS.Models
     {
         [Display(Name = "序号")]
         public int? ID { get; set; }
+
         [Display(Name = "编号")]
         public string Bianhao { get; set; }
+
         [Display(Name = "客户")]
         public int? KHID { get; set; }
+
         [Display(Name = "产品线")]
         public int? CPXID { get; set; }
+
         [Display(Name = "采购类型")]
         public int? CGLX { get; set; }
         [Display(Name = "客户单号")]
@@ -64,6 +68,8 @@ namespace GROBS.Models
         public DateTime? ShenheSJ { get; set; }
         [Display(Name ="促销折扣")]
         public float? ZhekouJE { get; set; }
+
+
         [Display(Name ="付款凭证")]
         public string FKPZ { get; set; }
     }

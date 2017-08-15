@@ -176,6 +176,16 @@ namespace GROBS.Controllers
             return View();
         }
 
+
+        //新增加的
+        [AllowAnonymous]
+        public ActionResult Changepassword()
+           {
+            return View();
+        }
+
+
+
         //
         // POST: /Account/Register
         [HttpPost]

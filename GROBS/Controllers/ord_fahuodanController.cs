@@ -16,6 +16,8 @@ namespace GROBS.Controllers
     public class ord_fahuodanController : Controller
     {
         private Iord_fahuodanService ob_ord_fahuodanservice = ServiceFactory.ord_fahuodanservice;
+        private object ob_ord_fanhuodanservice;
+
         [OutputCache(Duration = 30)]
         public ActionResult Index(string page)
         {
@@ -149,6 +151,9 @@ namespace GROBS.Controllers
             return View();
         }
 
+      
+
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Save()
@@ -226,6 +231,101 @@ namespace GROBS.Controllers
                 return View(ord_fahuodanviewmodel);
             }
         }
+
+        //新增加的方法
+     
+        public ActionResult Fahuodanlist(string page)
+        {
+            if (string.IsNullOrEmpty(page))
+                page = "1";
+            int userid = (int)Session["user_id"];
+            string pagetag = "ord_fahuodan_index";
+            Expression<Func<ord_fahuodan, bool>> where = PredicateExtensionses.True<ord_fahuodan>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc != null && sc.ConditionInfo != null)
+            {
+                string[] sclist = sc.ConditionInfo.Split(';');
+                foreach (string scl in sclist)
+                {
+                    string[] scld = scl.Split(',');
+                    switch (scld[0])
+                    {
+                        case "chukudanbh":
+                            string chukudanbh = scld[1];
+                            string chukudanbhequal = scld[2];
+                            string chukudanbhand = scld[3];
+                            if (!string.IsNullOrEmpty(chukudanbh))
+                            {
+                                if (chukudanbhequal.Equals("="))
+                                {
+                                    if (chukudanbhand.Equals("and"))
+                                        where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                                    else
+                                        where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                                }
+                                if (chukudanbhequal.Equals("like"))
+                                {
+                                    if (chukudanbhand.Equals("and"))
+                                        where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                                    else
+                                        where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                ViewBag.SearchCondition = sc.ConditionInfo;
+            }
+
+            where = where.And(ord_fahuodan => ord_fahuodan.IsDelete == false);
+
+            var tempData = ob_ord_fahuodanservice.LoadSortEntities(where.Compile(), false, ord_fahuodan => ord_fahuodan.ID).ToPagedList<ord_fahuodan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_fahuodan = tempData;
+            return View(tempData);
+        }
+
+
+
+
+           
+        public ActionResult Fahuodandetails(int id)
+        {
+         //string _custid = (string)Session["customer_id"];
+            var _dd = ob_ord_fahuodanservice.GetEntityById(p => p.ID == id && p.IsDelete == false);
+            if (_dd == null)
+                return View();
+            //发货单号
+            ViewBag.fhdh = _dd.ChukudanBH;
+            //销售单号
+            ViewBag.xsdh = _dd.KehuDH;
+            //订单序号
+            ViewBag.ddxh = _dd.DDID;
+            //定单编号
+            ViewBag.ddbh = _dd.DDBH;
+            //发货日期
+            ViewBag.fhrq =Convert.ToDateTime(_dd.ChukuRQ).ToString("yyyy-MM-dd"); 
+            //备注
+            ViewBag.bz = _dd.Beizhu;
+            //制单日期
+            ViewBag.zdrq = Convert.ToDateTime(_dd.MakeDate).ToString("yyyy-MM-dd");
+            //联系人
+            ViewBag.lxr = _dd.Lianxiren;
+            //联系电话
+            ViewBag.lxdh = _dd.LianxiDH;
+            //运送地址
+            ViewBag.ysdz = _dd.Yunsongdizhi;
+
+            var _fhmx = ServiceFactory.ord_fahuomxservice.LoadSortEntities(p => p.ChukuID == _dd.ID && p.IsDelete == false, true, s => s.ShangpinDM).ToList();
+            ViewBag.ord_fahuomx = _fhmx;
+            return View();
+
+
+        }
+
+
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

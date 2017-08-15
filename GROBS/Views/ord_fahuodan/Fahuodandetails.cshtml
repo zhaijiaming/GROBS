@@ -22,61 +22,62 @@
 <div class="page-content">
     <div class="row">
         <p class="align-center">
-        @if (!string.IsNullOrEmpty(_pz))
-        {
-            <a href="@_pz"><i class="icon-file-text bigger-200 green"></i></a>
-        }
-        else
-        {
-            <i class="icon-file-text bigger-200 green"></i>
-        }
-        <span class="bigger-150 blue">订单详情</span></p>
+            @if (!string.IsNullOrEmpty(_pz))
+            {
+                <a href="@_pz"><i class="icon-file-text bigger-200 green"></i></a>
+            }
+            else
+            {
+                <i class="icon-file-text bigger-200 green"></i>
+            }
+            <span class="bigger-150 blue">发货单详情</span>
+        </p>
     </div>
     <hr />
     <div class="row">
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>产品线</label>
+            <label><i class="icon-star red"></i>发货单号</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@ViewBag.cpx"/>
+            <input class="form-control" type="text" readonly value="@ViewBag.fhdh" />
         </div>
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>订单类型</label>
+            <label><i class="icon-star red"></i>销售单号</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@Html.GetCommonValue_ID("订单类型",(int)ViewBag.cglx)" />
+            <input class="form-control" type="text" readonly value="@ViewBag.xsdh" />
         </div>
         <div class="col-sm-1">
-            <label>商品数量</label>
+            <label>订单序号</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@ViewBag.sl" />
+            <input class="form-control" type="text" readonly value="@ViewBag.ddxh" />
         </div>
         <div class="col-sm-1">
-            <label>订单金额</label>
+            <label>订单编号</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@ViewBag.je" />
+            <input class="form-control" type="text" readonly value="@ViewBag.ddbh " />
         </div>
     </div>
     <div class="row">
         <div class="col-sm-1">
-            <label>客户单号</label>
+            <label>发货日期</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@ViewBag.khdh"/>
+            <input class="form-control" type="text" readonly value="@ViewBag.fhrq" />
         </div>
         <div class="col-sm-1">
             <label>备注</label>
         </div>
         <div class="col-sm-5">
-            <input class="form-control" type="text" readonly value="@ViewBag.bz"/>
+            <input class="form-control" type="text" readonly value="@ViewBag.bz" />
         </div>
-        <div class="col-sm-1">aaaaaa
-            <label>折扣金额</label>
+        <div class="col-sm-1">
+            <label>制单日期</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@ViewBag.zk" />
+            <input class="form-control" type="text" readonly value="@ViewBag.zdrq" />
         </div>
     </div>
     <div class="row">
@@ -93,10 +94,10 @@
             <input class="form-control" type="text" readonly value="@ViewBag.lxdh" />
         </div>
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>收货地址</label>
+            <label><i class="icon-star red"></i>运送地址</label>
         </div>
         <div class="col-sm-5">
-            <input class="form-control" type="text" readonly value="@ViewBag.shdz" />
+            <input class="form-control" type="text" readonly value="@ViewBag.ysdz" />
         </div>
     </div>
     <div class="row">
@@ -112,26 +113,29 @@
                             <tr>
                                 <td></td>
                                 <td>代码</td>
+                                <td>注册证</td>
                                 <td>规格</td>
-                                <td>描述</td>
-                                <td>数量</td>
-                                <td>单价</td>
-                                <td>金额</td>
+                                <td>生产日期</td>
+                                <td>发货数量</td>
+                                <td>套包号</td>
+                                <td>批号</td>
+                                
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach (var item in ViewBag.ord_dingdanmx)
+                            @foreach (var item in ViewBag.ord_fahuomx)
                             {
                                 <tr>
                                     <td>
-                                        <label>@string.Format("{0:d}",_i++)</label>
+                                        <label>@string.Format("{0:d}", _i++)</label>
                                     </td>
-                                    <td>@item.SPBM</td>
+                                    <td>@item.ShangpinDM </td>
+                                    <td>@item.Zhucezheng</td>
                                     <td>@item.Guige</td>
-                                    <td>@item.SPMC</td>
-                                    <td>@item.CGSL</td>
-                                    <td>@item.XSBJ</td>
-                                    <td>@item.Jine</td>
+                                    <td>@item.ShengchanRQ</td>                                    
+                                    <td>@item.ChukuSL</td>
+                                    <td>@item.Taobaohao</td>
+                                    <td>@item.Pihao</td>
                                 </tr>
                             }
                         </tbody>

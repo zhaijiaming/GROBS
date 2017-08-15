@@ -483,6 +483,7 @@ namespace GROBS.Controllers
             var _shdw = ServiceFactory.base_shouhuodanweiservice.GetEntityById(p => p.ID == _custid);
             if (_shdw != null)
                 ViewBag.customername = _shdw.Mingcheng;
+
             else
                 ViewBag.customername = "0";
             var _gzr = ServiceFactory.ord_guanzhangriservice.GetEntityById(p => p.Guanzhangri == DateTime.Parse(DateTime.Now.ToShortDateString()) && p.IsDelete == false);

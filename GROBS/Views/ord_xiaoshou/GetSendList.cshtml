@@ -53,7 +53,7 @@
 }
 <div class="page-content">
     @Html.Search_Condition((int)Session["user_id"], "发货单_条件组合查询", "/ord_xiaoshou/getsendlist", "ord_xiaoshou_sendlist", scms)
-    <div class="page-header">
+    <div class="page-header" style="text-align:center">
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
@@ -85,8 +85,9 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
+
                                     <td>@item.DDBH</td>
-                                    <td>@item.XSDH</td>
+                                    <td><a href="/ord_fahuodan/fahuodandetails/@item.XSDH">@item.XSDH</a></td>
                                     <td>@item.KDDH</td>
                                     <td>@string.Format("{0:yyyy-MM-dd}",item.FahuoRQ)</td>
                                     <td>@item.Kefu</td>

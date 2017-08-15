@@ -888,6 +888,9 @@
     <Content Include="Views\ord_fahuomx\Add.cshtml" />
     <Content Include="Views\ord_fahuomx\Edit.cshtml" />
     <Content Include="Views\ord_fahuomx\Index.cshtml" />
+    <Content Include="Views\Account\Changepassword.cshtml" />
+    <Content Include="Views\ord_fahuodan\Fahuodandetails.cshtml" />
+    <Content Include="Views\ord_fahuodan\Fahuodanlist.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

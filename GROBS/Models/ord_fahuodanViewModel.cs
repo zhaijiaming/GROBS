@@ -8,14 +8,19 @@ namespace GROBS.Models
     {
         [Display(Name = "序号")]
         public int? ID { get; set; }
+
         [Display(Name = "发货单号")]
         public string ChukudanBH { get; set; }
+
         [Display(Name = "销售单号")]
         public string KehuDH { get; set; }
+
         [Display(Name = "订单序号")]
         public int? DDID { get; set; }
+
         [Display(Name = "订单编号")]
         public string DDBH { get; set; }
+
         [Display(Name = "运送地址")]
         public string Yunsongdizhi { get; set; }
         [Display(Name = "发货日期")]
