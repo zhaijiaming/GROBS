@@ -23,7 +23,7 @@ namespace GROBS.Controllers
                 page = "1";
             int userid = (int)Session["user_id"];
             string pagetag = "ord_dingdan_index";
-            Expression<Func<ord_ordermain_v, bool>> where = PredicateExtensionses.True<ord_ordermain_v>();
+            Expression<Func<ord_dingdan, bool>> where = PredicateExtensionses.True<ord_dingdan>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
             {
@@ -46,28 +46,12 @@ namespace GROBS.Controllers
                                     else
                                         where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
                                 }
-
-                            }
-                            break;
-                        case "kehumc":
-                            string kehumc = scld[1];
-                            string kehumcequal = scld[2];
-                            string kehumcand = scld[3];
-                            if (!string.IsNullOrEmpty(kehumc))
-                            {
-                                if (kehumcequal.Equals("="))
+                                if (bianhaoequal.Equals("like"))
                                 {
-                                    if (kehumcand.Equals("and"))
-                                        where = where.And(ord_dingdan => ord_dingdan.KehuMC == kehumc);
+                                    if (bianhaoand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
                                     else
-                                        where = where.Or(ord_dingdan => ord_dingdan.KehuMC == kehumc);
-                                }
-                                if (kehumcequal.Equals("like"))
-                                {
-                                    if (kehumcand.Equals("and"))
-                                        where = where.And(ord_dingdan => ord_dingdan.KehuMC.Contains(kehumc));
-                                    else
-                                        where = where.Or(ord_dingdan => ord_dingdan.KehuMC.Contains(kehumc));
+                                        where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
                                 }
                             }
                             break;
@@ -78,9 +62,9 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            //where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
 
-            var tempData = ob_ord_dingdanservice.LoadOrdersAll(where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_dingdanservice.LoadSortEntitiesNoTracking(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
         }
@@ -92,24 +76,16 @@ namespace GROBS.Controllers
             int userid = (int)Session["user_id"];
             string pagetag = "ord_dingdan_index";
             string page = "1";
-
-            //bianhao
             string bianhao = Request["bianhao"] ?? "";
             string bianhaoequal = Request["bianhaoequal"] ?? "";
             string bianhaoand = Request["bianhaoand"] ?? "";
-            //Mingcheng
-            string kehumc = Request["kehumc"] ?? "";
-            string kehumcequal = Request["kehumcequal"] ?? "";
-            string kehumcand = Request["kehumcand"] ?? "";
-            Expression<Func<ord_ordermain_v, bool>> where = PredicateExtensionses.True<ord_ordermain_v>();
+            Expression<Func<ord_dingdan, bool>> where = PredicateExtensionses.True<ord_dingdan>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
-
-                //bianhao
                 if (!string.IsNullOrEmpty(bianhao))
                 {
                     if (bianhaoequal.Equals("="))
@@ -119,41 +95,23 @@ namespace GROBS.Controllers
                         else
                             where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
                     }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
                 }
                 if (!string.IsNullOrEmpty(bianhao))
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
                 else
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
-
-
-                //mingcheng
-                if (!string.IsNullOrEmpty(kehumc))
-                {
-                    if (kehumcequal.Equals("="))
-                    {
-                        if (kehumcand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.KehuMC == kehumc);
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.KehuMC == kehumc);
-                    }
-                    if (kehumcequal.Equals("like"))
-                    {
-                        if (kehumcand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.KehuMC.Contains(kehumc));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.KehuMC.Contains(kehumc));
-                    }
-                }
-                if (!string.IsNullOrEmpty(kehumc))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "kehumc", kehumc, kehumcequal, kehumcand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "kehumc", "", kehumcequal, kehumcand);
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
             {
                 sc.ConditionInfo = "";
-
                 if (!string.IsNullOrEmpty(bianhao))
                 {
                     if (bianhaoequal.Equals("="))
@@ -163,38 +121,24 @@ namespace GROBS.Controllers
                         else
                             where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
                     }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
                 }
                 if (!string.IsNullOrEmpty(bianhao))
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
                 else
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
-                if (!string.IsNullOrEmpty(kehumc))
-                {
-                    if (kehumcequal.Equals("="))
-                    {
-                        if (kehumcand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.KehuMC == kehumc);
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.KehuMC == kehumc);
-                    }
-                    if (kehumcequal.Equals("like"))
-                    {
-                        if (kehumcand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.KehuMC.Contains(kehumc));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.KehuMC.Contains(kehumc));
-                    }
-                }
-                if (!string.IsNullOrEmpty(kehumc))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mingcheng", kehumc, kehumcequal, kehumcand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mingcheng", "", kehumcequal, kehumcand);
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            //where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
 
-            var tempData = ob_ord_dingdanservice.LoadOrdersAll(where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_dingdanservice.LoadSortEntitiesNoTracking(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
         }

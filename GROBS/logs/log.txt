@@ -770,3 +770,12 @@ INFO  2017-08-28 14:40:57,409 14496ms 28                     MoveNext           
 INFO  2017-08-28 14:44:55,696 29898ms 28                     MoveNext           - du login at 2017-08-28 14:44:55!
 INFO  2017-08-28 14:46:02,716  5183ms 28                     MoveNext           - du login at 2017-08-28 14:46:02!
 INFO  2017-08-28 14:49:01,263  5360ms 28                     MoveNext           - du login at 2017-08-28 14:49:01!
+INFO  2017-08-28 15:20:50,020 25494ms 28                     MoveNext           - du login at 2017-08-28 15:20:50!
+INFO  2017-08-28 15:25:57,488  5843ms 28                     MoveNext           - du login at 2017-08-28 15:25:57!
+INFO  2017-08-28 15:44:19,669 15730ms 28                     MoveNext           - du login at 2017-08-28 15:44:19!
+INFO  2017-08-28 15:48:35,654  5671ms 28                     MoveNext           - du login at 2017-08-28 15:48:35!
+INFO  2017-08-28 16:00:47,968 46343ms 28                     MoveNext           - du login at 2017-08-28 16:00:47!
+INFO  2017-08-28 16:08:49,675 10403ms 28                     MoveNext           - du login at 2017-08-28 16:08:49!
+INFO  2017-08-28 16:11:46,686  9084ms 28                     MoveNext           - du login at 2017-08-28 16:11:46!
+INFO  2017-08-28 16:16:37,302 18141ms 28                     MoveNext           - du login at 2017-08-28 16:16:37!
+INFO  2017-08-28 16:22:36,071  7998ms 28                     MoveNext           - du login at 2017-08-28 16:22:36!
