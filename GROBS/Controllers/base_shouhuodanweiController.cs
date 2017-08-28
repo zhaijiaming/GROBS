@@ -246,6 +246,16 @@ namespace GROBS.Controllers
             string songhuodz = Request["songhuodz"] ?? "";
             string shenchasf = Request["shenchasf"] ?? "";
             string hezuosf = Request["hezuosf"] ?? "";
+
+            //新增五个录入信息
+            string dhr = Request["dhr"] ?? "";
+            string dhdianhua = Request["dhdianhua"] ?? "";
+            string spr = Request["spr"] ?? "";
+            string sprdianhua = Request["sprdianhua"] ?? "";
+            string sprdizhi = Request["sprdizhi"] ?? "";
+
+
+
             if (shenchasf.IndexOf("true") > -1)
                 shenchasf = "true";
             if (hezuosf.IndexOf("true") > -1)
@@ -280,6 +290,13 @@ namespace GROBS.Controllers
                 ob_base_shouhuodanwei.HezuoSF = hezuosf == "" ? false : Boolean.Parse(hezuosf);
                 ob_base_shouhuodanwei.QiyeDZ = qiyedz.Trim();
                 ob_base_shouhuodanwei.SonghuoDZ = songhuodz.Trim();
+                //新增五个录入信息
+                ob_base_shouhuodanwei.DHR= dhr.Trim();
+                ob_base_shouhuodanwei.DHRDH = dhdianhua.Trim();
+                ob_base_shouhuodanwei.SPR = spr.Trim();
+                ob_base_shouhuodanwei.SPRDH = sprdianhua.Trim();
+                ob_base_shouhuodanwei.SPRDZ = sprdizhi.Trim();
+
 
                 ob_base_shouhuodanwei = ob_base_shouhuodanweiservice.AddEntity(ob_base_shouhuodanwei);
                 id = ob_base_shouhuodanwei.ID.ToString();
@@ -339,6 +356,14 @@ namespace GROBS.Controllers
             string songhuodz = Request["songhuodz"] ?? "";
             string shenchasf = Request["shenchasf"] ?? "";
             string hezuosf = Request["hezuosf"] ?? "";
+            //新增五个录入信息
+            string dhr = Request["dhr"] ?? "";
+            string dhdianhua = Request["dhdianhua"] ?? "";
+            string spr = Request["spr"] ?? "";
+            string sprdianhua=Request["sprdianhua"] ?? "";
+            string sprdizhi = Request["sprdizhi"] ?? "";
+
+
             if (shenchasf.IndexOf("true") > -1)
                 shenchasf = "true";
             if (hezuosf.IndexOf("true") > -1)
@@ -378,6 +403,12 @@ namespace GROBS.Controllers
                 p.HezuoSF = hezuosf == "" ? false : Boolean.Parse(hezuosf);
                 p.Lianxiren = Lianxiren.Trim();
                 p.LianxiDH = LianxiDH.Trim();
+                //新增五个录入信息
+                p.DHR = dhr.Trim();
+                p.DHRDH = dhdianhua.Trim();
+                p.SPR = spr.Trim();
+                p.SPRDH = sprdianhua.Trim();
+                p.SPRDZ = sprdizhi.Trim();
 
                 ob_base_shouhuodanweiservice.UpdateEntity(p);
                 ViewBag.saveok = ViewAddTag.ModifyOk;

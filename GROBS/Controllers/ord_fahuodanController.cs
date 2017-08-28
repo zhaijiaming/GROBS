@@ -57,8 +57,31 @@ namespace GROBS.Controllers
                                 }
                             }
                             break;
+
+                        case "ddbh":
+                            string ddbh = scld[1];
+                            string ddbhequal = scld[2];
+                            string ddbhand = scld[3];
+                            if (!string.IsNullOrEmpty(ddbh))
+                            {
+                                if (ddbhequal.Equals("="))
+                                {
+                                    if (ddbhand.Equals("and"))
+                                        where = where.And(ord_fahuodan => ord_fahuodan.DDBH == ddbh);
+                                    else
+                                        where = where.Or(ord_fahuodan => ord_fahuodan.DDBH == ddbh);
+                                }
+                                if (ddbhequal.Equals("like"))
+                                {
+                                    if (ddbhand.Equals("and"))
+                                        where = where.And(ord_fahuodan => ord_fahuodan.DDBH.Contains(ddbh));
+                                    else
+                                        where = where.Or(ord_fahuodan => ord_fahuodan.DDBH.Contains(ddbh));
+                                }
+                            }
+                         break;
                         default:
-                            break;
+                         break;
                     }
                 }
                 ViewBag.SearchCondition = sc.ConditionInfo;
@@ -78,9 +101,15 @@ namespace GROBS.Controllers
             int userid = (int)Session["user_id"];
             string pagetag = "ord_fahuodan_index";
             string page = "1";
+            //chukudanbh
             string chukudanbh = Request["chukudanbh"] ?? "";
             string chukudanbhequal = Request["chukudanbhequal"] ?? "";
             string chukudanbhand = Request["chukudanbhand"] ?? "";
+            //ddbh
+            string ddbh = Request["ddbh"] ?? "";
+            string ddbhequal = Request["ddbhequal"] ?? "";
+            string ddbhand = Request["ddbhand"] ?? "";
+
             Expression<Func<ord_fahuodan, bool>> where = PredicateExtensionses.True<ord_fahuodan>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
@@ -103,6 +132,29 @@ namespace GROBS.Controllers
                             where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
                         else
                             where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                    }
+                }
+                if (!string.IsNullOrEmpty(chukudanbh))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "chukudanbh", chukudanbh, chukudanbhequal, chukudanbhand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "chukudanbh", "", chukudanbhequal, chukudanbhand);
+
+                //ddbh
+                if (!string.IsNullOrEmpty(ddbh))
+                {
+                    if (ddbhequal.Equals("="))
+                    {
+                        if (ddbhand.Equals("and"))
+                            where = where.And(ord_fahuodan => ord_fahuodan.DDBH == ddbh);
+                        else
+                            where = where.Or(ord_fahuodan => ord_fahuodan.DDBH == ddbh);
+                    }
+                    if (ddbhequal.Equals("like"))
+                    {
+                        if (ddbhand.Equals("and"))
+                            where = where.And(ord_fahuodan => ord_fahuodan.DDBH.Contains(ddbh));
+                        else
+                            where = where.Or(ord_fahuodan => ord_fahuodan.DDBH.Contains(ddbh));
                     }
                 }
                 if (!string.IsNullOrEmpty(chukudanbh))
@@ -135,6 +187,29 @@ namespace GROBS.Controllers
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "chukudanbh", chukudanbh, chukudanbhequal, chukudanbhand);
                 else
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "chukudanbh", "", chukudanbhequal, chukudanbhand);
+
+                //ddbh
+                if (!string.IsNullOrEmpty(ddbh))
+                {
+                    if (ddbhequal.Equals("="))
+                    {
+                        if (ddbhand.Equals("and"))
+                            where = where.And(ord_fahuodan => ord_fahuodan.DDBH == ddbh);
+                        else
+                            where = where.Or(ord_fahuodan => ord_fahuodan.DDBH == ddbh);
+                    }
+                    if (ddbhequal.Equals("like"))
+                    {
+                        if (ddbhand.Equals("and"))
+                            where = where.And(ord_fahuodan => ord_fahuodan.DDBH.Contains(ddbh));
+                        else
+                            where = where.And(ord_fahuodan => ord_fahuodan.DDBH.Contains(ddbh));
+                    }
+                }
+                if (!string.IsNullOrEmpty(ddbh))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddbh", ddbh, ddbhequal, ddbhand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddbh", "", ddbhequal, ddbhand);
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
@@ -232,15 +307,15 @@ namespace GROBS.Controllers
             }
         }
 
-        //新增加的方法
-     
+        //新增加的"Fahuodanlist"方法    
         public ActionResult Fahuodanlist(string page)
         {
             if (string.IsNullOrEmpty(page))
                 page = "1";
             int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
             string pagetag = "ord_fahuodan_index";
-            Expression<Func<ord_fahuodan, bool>> where = PredicateExtensionses.True<ord_fahuodan>();
+            Expression<Func<ord_inventoryout_v, bool>> where = PredicateExtensionses.True<ord_inventoryout_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
             {
@@ -279,9 +354,10 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(ord_fahuodan => ord_fahuodan.IsDelete == false);
+            //where = where.And(ord_fahuodan => ord_fahuodan.IsDelete == false);
 
-            var tempData = ob_ord_fahuodanservice.LoadSortEntities(where.Compile(), false, ord_fahuodan => ord_fahuodan.ID).ToPagedList<ord_fahuodan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            //var tempData = ob_ord_fahuodanservice.LoadOutList(custid,where.Compile(), false, ord_fahuodan => ord_fahuodan.ID).ToPagedList<ord_sendlist_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_fahuodanservice.LoadOutList(custid, where.Compile()).ToPagedList<ord_inventoryout_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_fahuodan = tempData;
             return View(tempData);
         }
@@ -289,7 +365,7 @@ namespace GROBS.Controllers
 
 
 
-           
+        //   
         public ActionResult Fahuodandetails(int id)
         {
          //string _custid = (string)Session["customer_id"];
@@ -316,12 +392,9 @@ namespace GROBS.Controllers
             ViewBag.lxdh = _dd.LianxiDH;
             //运送地址
             ViewBag.ysdz = _dd.Yunsongdizhi;
-
             var _fhmx = ServiceFactory.ord_fahuomxservice.LoadSortEntities(p => p.ChukuID == _dd.ID && p.IsDelete == false, true, s => s.ShangpinDM).ToList();
             ViewBag.ord_fahuomx = _fhmx;
             return View();
-
-
         }
 
 

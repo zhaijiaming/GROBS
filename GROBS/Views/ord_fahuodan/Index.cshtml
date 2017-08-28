@@ -47,7 +47,13 @@
     {
         SearchConditionModel scm = new SearchConditionModel();
         scm.ItemCode = "ChukudanBH";
-        scm.ItemTitle = "发货单号";
+        scm.ItemTitle = "发货单编号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "DDBH";
+        scm.ItemTitle = "订单编号";
         scm.ItemType = "System.String";
         scms.Add(scm);
     }
@@ -58,7 +64,21 @@
         {
             SearchConditionModel scm = new SearchConditionModel();
             scm.ItemCode = "ChukudanBH";
-            scm.ItemTitle = "发货单号";
+            scm.ItemTitle = "发货单编号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "DDBH";
+            scm.ItemTitle = "订单编号";
             scm.ItemType = "System.String";
             if (scs.Length > 1)
             {
@@ -102,7 +122,7 @@
                     <table class="table table-bordered table-condensed" id="mydatatable">
                         <tr>
                             <th></th>
-                            <th>发货单号</th>
+                            <th>发货单编号</th>
                             <th>销售单号</th>
                             <th>订单序号</th>
                             <th>订单编号</th>

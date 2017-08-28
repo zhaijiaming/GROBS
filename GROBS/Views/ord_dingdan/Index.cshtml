@@ -50,6 +50,12 @@
         scm.ItemTitle = "编号";
         scm.ItemType = "System.String";
         scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "KehuMC";
+        scm.ItemTitle = "客户名称";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
     }
     else
     {
@@ -67,6 +73,20 @@
                 scm.ItemJion = scs[0].Split(',')[3];
             }
             scms.Add(scm);
+
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "KehuMC";
+            scm.ItemTitle = "客户名称";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
         }
     }
 }
@@ -109,16 +129,17 @@
                             <th>联系人</th>
                             <th>联系电话</th>
                             <th>送货地址</th>
-                            <th>客服人员</th>
-                            <th>审核人员</th>
+                            @*<th>客服人员</th>
+                            <th>审核人员</th>*@
                             <th>审核通过</th>
+                            @*<th>审核时间</th>*@
                             <th>采购总数</th>
                             <th>总金额</th>
                             <th>是否结束</th>
                             <th>状态</th>
                             <th>备注</th>
-                            <th>制单日期</th>
-                            <th>制单人</th>
+                            @*<th>制单日期</th>
+                            <th>制单人</th>*@
                         </tr>
                         <tbody>
                             @foreach (var item in ViewBag.ord_dingdan)
@@ -129,7 +150,7 @@
                                     </td>
                                     <td>@item.Bianhao</td>
                                     <td>@item.KehuDM</td>
-                                    <td>@Html.GetDataValue_ID("收货单位", "", (int)(item.KHID == null ? 0 : item.KHID))</td>
+                                    <td>@item.KehuMC</td>
                                     <td>@Html.GetDataValue_ID("产品线", "", (int)(item.CPXID == null ? 0 : item.CPXID))</td>
                                     <td>@Html.GetCommonValue_ID("订单类型", (int)(item.CGLX == null ? 0 : item.CGLX))</td>
                                     <td>@item.KehuDH</td>
@@ -137,16 +158,17 @@
                                     <td>@item.Lianxiren</td>
                                     <td>@item.LianxiDH</td>
                                     <td>@item.SonghuoDZ</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.OPID == null ? 0 : item.OPID))</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.ACCID == null ? 0 : item.ACCID))</td>
+                                    @*<td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.OPID == null ? 0 : item.OPID))</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.ACCID == null ? 0 : item.ACCID))</td>*@
                                     <td>@string.Format("{0:0}", item.ShenheTG == bool.Parse("False") ? "否" : "是")</td>
+                                    @*<td>@item.ShenheSJ</td>*@
                                     <td>@item.ZongshuCG</td>
                                     <td>@item.Zongjine</td>
                                     <td>@string.Format("{0:0}", item.JieshuSF == bool.Parse("False") ? "否" : "是")</td>
                                     <td>@Html.GetCommonValue_ID("订单状态", (int)(item.Zhuangtai == null ? 0 : item.Zhuangtai))</td>
                                     <td>@item.Beizhu</td>
-                                    <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
+                                    @*<td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
+                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>*@
                                 </tr>
                             }
                         </tbody>

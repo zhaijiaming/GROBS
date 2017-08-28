@@ -228,6 +228,8 @@ namespace GROBS.Controllers
             string makedate = Request["ob_base_chanpinxian_makedate"] ?? "";
             string makeman = Request["ob_base_chanpinxian_makeman"] ?? "";
             string kfid = Request["kfid"] ?? "";
+            string kfdh = Request["ob_base_chanpinxian_dianhua"] ?? "";
+            string kfqq = Request["ob_base_chanpinxian_kefuqq"] ?? "";
             try
             {
                 base_chanpinxian ob_base_chanpinxian = new base_chanpinxian();
@@ -235,13 +237,15 @@ namespace GROBS.Controllers
                 ob_base_chanpinxian.GYSID = gysid == "" ? 0 : int.Parse(gysid);
                 ob_base_chanpinxian.Mingcheng = mingcheng.Trim();
                 ob_base_chanpinxian.Miaoshu = miaoshu.Trim();
+                ob_base_chanpinxian.KFDH = kfdh.Trim();
+                ob_base_chanpinxian.KFQQ = kfqq.Trim();
                 ob_base_chanpinxian.Col1 = col1.Trim();
                 ob_base_chanpinxian.Col2 = col2.Trim();
                 ob_base_chanpinxian.Col3 = col3.Trim();
                 ob_base_chanpinxian.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_base_chanpinxian.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_base_chanpinxian.KFID = kfid == "" ? 0 : int.Parse(kfid);
-                ob_base_chanpinxian = ob_base_chanpinxianservice.AddEntity(ob_base_chanpinxian);
+                ob_base_chanpinxian = ob_base_chanpinxianservice.AddEntity(ob_base_chanpinxian);//添加的方法，ob_base_chanpinxian为添加的参数
                 ViewBag.base_chanpinxian = ob_base_chanpinxian;
             }
             catch (Exception ex)
@@ -297,6 +301,8 @@ namespace GROBS.Controllers
             string makeman = Request["ob_base_chanpinxian_makeman"] ?? "";
             string kfid = Request["kfid"] ?? "";
             int uid = int.Parse(id);
+            string kfdh = Request["ob_base_chanpinxian_dianhua"] ?? "";
+            string kfqq = Request["ob_base_chanpinxian_kefuqq"] ?? "";
             try
             {
                 base_chanpinxian p = ob_base_chanpinxianservice.GetEntityById(base_chanpinxian => base_chanpinxian.ID == uid);
@@ -304,13 +310,15 @@ namespace GROBS.Controllers
                 p.Huozhuxuhao = huozhuxuhao == "" ? 0 : int.Parse(huozhuxuhao);
                 p.Mingcheng = mingcheng.Trim();
                 p.Miaoshu = miaoshu.Trim();
+                p.KFDH = kfdh.Trim();
+                p.KFQQ = kfqq.Trim();
                 p.Col1 = col1.Trim();
                 p.Col2 = col2.Trim();
                 p.Col3 = col3.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 p.KFID = kfid == "" ? 0 : int.Parse(kfid);
-                ob_base_chanpinxianservice.UpdateEntity(p);
+                ob_base_chanpinxianservice.UpdateEntity(p);//更新的方法，p指要更新的参数、
                 ViewBag.saveok = ViewAddTag.ModifyOk;
             }
             catch (Exception ex)

@@ -50,6 +50,12 @@
         scm.ItemTitle = "客户序号";
         scm.ItemType = "System.Int32";
         scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Mingcheng";
+        scm.ItemTitle = "客户名称";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
     }
     else
     {
@@ -60,6 +66,18 @@
             scm.ItemCode = "KHID";
             scm.ItemTitle = "客户序号";
             scm.ItemType = "System.Int32";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Mingcheng";
+            scm.ItemTitle = "客户名称";
+            scm.ItemType = "System.String";
             if (scs.Length > 1)
             {
                 scm.ItemValue = scs[0].Split(',')[1];
@@ -100,7 +118,7 @@
                     <table class="table table-bordered table-condensed" id="mydatatable">
                         <tr>
                             <th></th>
-                            <th>客户</th>
+                            <th>客户名称</th>
                             <th>充值金额</th>
                             <th>发放月份</th>
                             <th>是否可用</th>
@@ -115,7 +133,7 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td>@Html.GetDataValue_ID("收货单位", "", (int)(item.KHID == null ? 0 : item.KHID))</td>
+                                    <td>@item.Mingcheng</td>
                                     <td>@item.CZJE</td>
                                     <td>@item.FFYF</td>
                                     <td>@string.Format("{0:0}", item.KYSF == bool.Parse("False") ? "否" : "是")</td>

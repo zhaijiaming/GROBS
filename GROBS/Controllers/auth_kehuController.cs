@@ -27,7 +27,7 @@ namespace GROBS.Controllers
                 page = "1";
             int userid = (int)Session["user_id"];
             string pagetag = "auth_kehu_index";
-            Expression<Func<auth_kehu, bool>> where = PredicateExtensionses.True<auth_kehu>();
+            Expression<Func<auth_custacct_v, bool>> where = PredicateExtensionses.True<auth_custacct_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
             {
@@ -37,33 +37,27 @@ namespace GROBS.Controllers
                     string[] scld = scl.Split(',');
                     switch (scld[0])
                     {
-                        case "kehuid":
-                            string kehuid = scld[1];
-                            string kehuidequal = scld[2];
-                            string kehuidand = scld[3];
-                            if (!string.IsNullOrEmpty(kehuid))
+                        case "mingcheng":
+                            string mingcheng = scld[1];
+                            string mingchengequal = scld[2];
+                            string mingchengand = scld[3];
+                            if (!string.IsNullOrEmpty(mingcheng))
                             {
-                                if (kehuidequal.Equals("="))
+                                if (mingchengequal.Equals("="))
                                 {
-                                    if (kehuidand.Equals("and"))
-                                        where = where.And(auth_kehu => auth_kehu.KehuID == int.Parse(kehuid));
+                                    if (mingchengand.Equals("and"))
+                                        where = where.And(auth_kehu => auth_kehu.Mingcheng == mingcheng);
                                     else
-                                        where = where.Or(auth_kehu => auth_kehu.KehuID == int.Parse(kehuid));
+                                        where = where.Or(auth_kehu => auth_kehu.Mingcheng == mingcheng);
                                 }
-                                if (kehuidequal.Equals(">"))
+                                if (mingchengequal.Equals("like"))
                                 {
-                                    if (kehuidand.Equals("and"))
-                                        where = where.And(auth_kehu => auth_kehu.KehuID > int.Parse(kehuid));
+                                    if (mingchengand.Equals("and"))
+                                        where = where.And(auth_kehu =>auth_kehu.Mingcheng.Contains(mingcheng));
                                     else
-                                        where = where.Or(auth_kehu => auth_kehu.KehuID > int.Parse(kehuid));
+                                        where = where.Or(auth_kehu =>auth_kehu.Mingcheng.Contains(mingcheng));
                                 }
-                                if (kehuidequal.Equals("<"))
-                                {
-                                    if (kehuidand.Equals("and"))
-                                        where = where.And(auth_kehu => auth_kehu.KehuID < int.Parse(kehuid));
-                                    else
-                                        where = where.Or(auth_kehu => auth_kehu.KehuID < int.Parse(kehuid));
-                                }
+                            
                             }
                             break;
                         default:
@@ -73,10 +67,10 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(auth_kehu => auth_kehu.IsDelete == false);
+            //where = where.And(auth_kehu => auth_kehu.IsDelete == false);
 
-            var tempData = ob_auth_kehuservice.LoadSortEntities(where.Compile(), false, auth_kehu => auth_kehu.ID).ToPagedList<auth_kehu>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-            ViewBag.auth_kehu = tempData;
+            var tempData = ob_auth_kehuservice.LoadCustomerAccount(where.Compile()).ToPagedList<auth_custacct_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+           ViewBag.auth_kehu = tempData;
             return View(tempData);
         }
 
@@ -87,83 +81,66 @@ namespace GROBS.Controllers
             int userid = (int)Session["user_id"];
             string pagetag = "auth_kehu_index";
             string page = "1";
-            string kehuid = Request["kehuid"] ?? "";
-            string kehuidequal = Request["kehuidequal"] ?? "";
-            string kehuidand = Request["kehuidand"] ?? "";
-            Expression<Func<auth_kehu, bool>> where = PredicateExtensionses.True<auth_kehu>();
+            string mingcheng = Request["mingcheng"] ?? "";
+            string mingchengequal = Request["mingchengequal"] ?? "";
+            string mingchengand = Request["mingchengand"] ?? "";
+            Expression<Func<auth_custacct_v, bool>> where = PredicateExtensionses.True<auth_custacct_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
-                if (!string.IsNullOrEmpty(kehuid))
+                if (!string.IsNullOrEmpty(mingcheng))
                 {
-                    if (kehuidequal.Equals("="))
+                    if (mingchengequal.Equals("="))
                     {
-                        if (kehuidand.Equals("and"))
-                            where = where.And(auth_kehu => auth_kehu.KehuID == int.Parse(kehuid));
+                        if (mingchengand.Equals("and"))
+                            where = where.And(auth_kehu => auth_kehu.Mingcheng == mingcheng);
                         else
-                            where = where.Or(auth_kehu => auth_kehu.KehuID == int.Parse(kehuid));
+                            where = where.Or(auth_kehu => auth_kehu.Mingcheng == mingcheng);
                     }
-                    if (kehuidequal.Equals(">"))
+                    if (mingchengequal.Equals("like"))
                     {
-                        if (kehuidand.Equals("and"))
-                            where = where.And(auth_kehu => auth_kehu.KehuID > int.Parse(kehuid));
+                        if (mingchengand.Equals("and"))
+                            where = where.And(auth_kehu => auth_kehu.Mingcheng.Contains(mingcheng));
                         else
-                            where = where.Or(auth_kehu => auth_kehu.KehuID > int.Parse(kehuid));
+                            where = where.Or(auth_kehu => auth_kehu.Mingcheng.Contains(mingcheng));
                     }
-                    if (kehuidequal.Equals("<"))
-                    {
-                        if (kehuidand.Equals("and"))
-                            where = where.And(auth_kehu => auth_kehu.KehuID < int.Parse(kehuid));
-                        else
-                            where = where.Or(auth_kehu => auth_kehu.KehuID < int.Parse(kehuid));
-                    }
-                }
-                if (!string.IsNullOrEmpty(kehuid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "kehuid", kehuid, kehuidequal, kehuidand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "kehuid", "", kehuidequal, kehuidand);
+                
+                }            
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
             {
                 sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(kehuid))
+                if (!string.IsNullOrEmpty(mingcheng))
                 {
-                    if (kehuidequal.Equals("="))
+                    if (mingchengequal.Equals("="))
                     {
-                        if (kehuidand.Equals("and"))
-                            where = where.And(auth_kehu => auth_kehu.KehuID == int.Parse(kehuid));
+                        if (mingchengand.Equals("and"))
+                            where = where.And(auth_kehu => auth_kehu.Mingcheng == mingcheng);
                         else
-                            where = where.Or(auth_kehu => auth_kehu.KehuID == int.Parse(kehuid));
+                            where = where.Or(auth_kehu => auth_kehu.Mingcheng == mingcheng);
                     }
-                    if (kehuidequal.Equals(">"))
+                    if (mingchengequal.Equals("like"))
                     {
-                        if (kehuidand.Equals("and"))
-                            where = where.And(auth_kehu => auth_kehu.KehuID > int.Parse(kehuid));
+                        if (mingchengand.Equals("and"))
+                            where = where.And(auth_kehu => auth_kehu.Mingcheng.Contains(mingcheng));
                         else
-                            where = where.Or(auth_kehu => auth_kehu.KehuID > int.Parse(kehuid));
-                    }
-                    if (kehuidequal.Equals("<"))
-                    {
-                        if (kehuidand.Equals("and"))
-                            where = where.And(auth_kehu => auth_kehu.KehuID < int.Parse(kehuid));
-                        else
-                            where = where.Or(auth_kehu => auth_kehu.KehuID < int.Parse(kehuid));
-                    }
+                            where = where.Or(auth_kehu => auth_kehu.Mingcheng.Contains(mingcheng));
+                    }               
                 }
-                if (!string.IsNullOrEmpty(kehuid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "kehuid", kehuid, kehuidequal, kehuidand);
+                if (!string.IsNullOrEmpty(mingcheng))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mingcheng", mingcheng, mingchengequal, mingchengand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "kehuid", "", kehuidequal, kehuidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mingcheng", "", mingchengequal, mingchengand);
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            where = where.And(auth_kehu => auth_kehu.IsDelete == false);
+            //where = where.And(auth_kehu => auth_kehu.IsDelete == false);
 
-            var tempData = ob_auth_kehuservice.LoadSortEntities(where.Compile(), false, auth_kehu => auth_kehu.ID).ToPagedList<auth_kehu>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_auth_kehuservice.LoadCustomerAccount(where.Compile()).ToPagedList<auth_custacct_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.auth_kehu = tempData;
             return View(tempData);
         }

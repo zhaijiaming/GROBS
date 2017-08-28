@@ -111,7 +111,7 @@
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i><b>查询</b></button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i><b>新增</b></button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i><b>编辑</b></button>
-            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
+            @*<button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>*@
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i><b>刷新</b></button>
         </p>
     </div>
@@ -126,9 +126,11 @@
                         <tr>
                             <th></th>
                             <th>供应商</th>
-                            <th>名称</th>
+                            <th>名称</th>                           
                             <th>说明</th>
                             <th>客服专员</th>
+                            <th>客服电话</th>
+                            <th>客服QQ</th>
                             <th>录入日期</th>
                             <th>输入人</th>
                         </tr>
@@ -140,9 +142,11 @@
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
                                     <td>@Html.GetDataValue_ID("供应商", "", (int)(item.GYSID == null ? 0 : item.GYSID))</td>
-                                    <td>@item.Mingcheng</td>
+                                    <td>@item.Mingcheng</td>                                   
                                     <td>@item.Miaoshu</td>
                                     <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.KFID == null ? 0 : item.KFID))</td>
+                                    <td>@item.KFDH</td>
+                                    <td>@item.KFQQ</td>
                                     <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
                                     <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
                                 </tr>

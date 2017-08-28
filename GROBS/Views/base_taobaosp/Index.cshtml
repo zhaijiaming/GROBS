@@ -46,9 +46,9 @@
     if (_searchcondition == null || _searchcondition == "")
     {
         SearchConditionModel scm = new SearchConditionModel();
-        scm.ItemCode = "TBID";
-        scm.ItemTitle = "套包序号";
-        scm.ItemType = "System.Int32";
+        scm.ItemCode = "TBDM";
+        scm.ItemTitle = "套包号";
+        scm.ItemType = "System.String";
         scms.Add(scm);
     }
     else
@@ -57,9 +57,9 @@
         if (scs.Length > 0)
         {
             SearchConditionModel scm = new SearchConditionModel();
-            scm.ItemCode = "TBID";
-            scm.ItemTitle = "套包序号";
-            scm.ItemType = "System.Int32";
+            scm.ItemCode = "TBDM";
+            scm.ItemTitle = "套包号";
+            scm.ItemType = "System.String";
             if (scs.Length > 1)
             {
                 scm.ItemValue = scs[0].Split(',')[1];
@@ -100,15 +100,15 @@
                         <tr>
                             <th></th>
                             @*<th>套包</th>*@
-                            <th>商品</th>
+                            <th>商品代码</th>
+                            <th>商品名称</th>
                             <th>数量</th>
-                            <th>换算率</th>
-                            <th>基本单位</th>
-                            <th>销售单位</th>
+                            <th>规格</th> 
+                            <th>套包号</th>                  
                             <th>销售价</th>
                             <th>采购价</th>
                             <th>制单日期</th>
-                            <th>制单人</th>
+                            <th>制单人</th>          
                         </tr>
                         <tbody>
                             @foreach (var item in ViewBag.base_taobaosp)
@@ -118,15 +118,16 @@
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
                                     @*<td>@item.TBID</td>*@
-                                    <td>@item.SPID</td>
+                                    <td>@item.Daima</td>
+                                    <td>@item.Mingcheng</td>
                                     <td>@item.Shuliang</td>
-                                    <td>@item.HSL</td>
-                                    <td>@item.JBDW</td>
-                                    <td>@item.XSDW</td>
+                                    <td>@item.Guige</td>
+                                    <td>@item.TBDM</td>
                                     <td>@item.JiaXS</td>
                                     <td>@item.JiaCG</td>
                                     <td>@string.Format("{0:yyyy-MM-dd}", item.MakeDate)</td>
                                     <td>@Html.GetDataValue_ID("userinfo", "全名", (int)item.MakeMan)</td>
+ 
                                 </tr>
                             }
                         </tbody>

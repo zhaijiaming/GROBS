@@ -22,8 +22,8 @@ namespace GROBS.Controllers
             if (string.IsNullOrEmpty(page))
                 page = "1";
             int userid = (int)Session["user_id"];
-            string pagetag = "base_taobaosp_index";
-            Expression<Func<base_taobaosp, bool>> where = PredicateExtensionses.True<base_taobaosp>();
+            string pagetag = "base_taobaosp_index";        
+            Expression<Func<base_taobaosp_v, bool>> where = PredicateExtensionses.True<base_taobaosp_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
             {
@@ -33,46 +33,39 @@ namespace GROBS.Controllers
                     string[] scld = scl.Split(',');
                     switch (scld[0])
                     {
-                        case "tbid":
-                            string tbid = scld[1];
-                            string tbidequal = scld[2];
-                            string tbidand = scld[3];
-                            if (!string.IsNullOrEmpty(tbid))
+                        case "tbdm":
+                            string tbdm = scld[1];
+                            string tbdmequal = scld[2];
+                            string tbdmand = scld[3];
+                            if (!string.IsNullOrEmpty(tbdm))
                             {
-                                if (tbidequal.Equals("="))
+                                if (tbdmequal.Equals("="))
                                 {
-                                    if (tbidand.Equals("and"))
-                                        where = where.And(base_taobaosp => base_taobaosp.TBID == int.Parse(tbid));
+                                    if (tbdmand.Equals("and"))
+                                        where = where.And(base_chanpinxian => base_chanpinxian.TBDM == tbdm);
                                     else
-                                        where = where.Or(base_taobaosp => base_taobaosp.TBID == int.Parse(tbid));
+                                        where = where.Or(base_chanpinxian => base_chanpinxian.TBDM == tbdm);
                                 }
-                                if (tbidequal.Equals(">"))
+                                if (tbdmequal.Equals("like"))
                                 {
-                                    if (tbidand.Equals("and"))
-                                        where = where.And(base_taobaosp => base_taobaosp.TBID > int.Parse(tbid));
+                                    if (tbdmand.Equals("and"))
+                                        where = where.And(base_chanpinxian => base_chanpinxian.Mingcheng.Contains(tbdm));
                                     else
-                                        where = where.Or(base_taobaosp => base_taobaosp.TBID > int.Parse(tbid));
-                                }
-                                if (tbidequal.Equals("<"))
-                                {
-                                    if (tbidand.Equals("and"))
-                                        where = where.And(base_taobaosp => base_taobaosp.TBID < int.Parse(tbid));
-                                    else
-                                        where = where.Or(base_taobaosp => base_taobaosp.TBID < int.Parse(tbid));
+                                        where = where.Or(base_chanpinxian => base_chanpinxian.Mingcheng.Contains(tbdm));
                                 }
                             }
                             break;
                         default:
-                            break;
+                            break;                       
                     }
                 }
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(base_taobaosp => base_taobaosp.IsDelete == false);
+            //where = where.And(base_taobaosp => base_taobaosp.IsDelete == false);
 
-            var tempData = ob_base_taobaospservice.LoadSortEntities(where.Compile(), false, base_taobaosp => base_taobaosp.ID).ToPagedList<base_taobaosp>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-            ViewBag.base_taobaosp = tempData;
+            var tempData = ob_base_taobaospservice.LoadPackageDetail(where.Compile() ).ToPagedList<base_taobaosp_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.base_taobaosp = tempData;          
             return View(tempData);
         }
 
@@ -83,86 +76,73 @@ namespace GROBS.Controllers
             int userid = (int)Session["user_id"];
             string pagetag = "base_taobaosp_index";
             string page = "1";
-            string tbid = Request["tbid"] ?? "";
-            string tbidequal = Request["tbidequal"] ?? "";
-            string tbidand = Request["tbidand"] ?? "";
-            Expression<Func<base_taobaosp, bool>> where = PredicateExtensionses.True<base_taobaosp>();
+            string tbdm = Request["tbdm"] ?? "";
+            string tbdmequal = Request["tbdmequal"] ?? "";
+            string tbdmand = Request["tbdmand"] ?? "";
+            Expression<Func<base_taobaosp_v, bool>> where = PredicateExtensionses.True<base_taobaosp_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
-                if (!string.IsNullOrEmpty(tbid))
+                if (!string.IsNullOrEmpty(tbdm))
                 {
-                    if (tbidequal.Equals("="))
+                    if (tbdmequal.Equals("="))
                     {
-                        if (tbidand.Equals("and"))
-                            where = where.And(base_taobaosp => base_taobaosp.TBID == int.Parse(tbid));
+                        if (tbdmand.Equals("and"))
+                            where = where.And(base_taobaosp => base_taobaosp.TBDM == tbdm);
                         else
-                            where = where.Or(base_taobaosp => base_taobaosp.TBID == int.Parse(tbid));
+                            where = where.Or(base_taobaosp => base_taobaosp.TBDM == tbdm);
                     }
-                    if (tbidequal.Equals(">"))
+                    if (tbdmequal.Equals("like"))
                     {
-                        if (tbidand.Equals("and"))
-                            where = where.And(base_taobaosp => base_taobaosp.TBID > int.Parse(tbid));
+                        if (tbdmand.Equals("and"))
+                            where = where.And(base_taobaosp => base_taobaosp.TBDM.Contains(tbdm));
                         else
-                            where = where.Or(base_taobaosp => base_taobaosp.TBID > int.Parse(tbid));
-                    }
-                    if (tbidequal.Equals("<"))
-                    {
-                        if (tbidand.Equals("and"))
-                            where = where.And(base_taobaosp => base_taobaosp.TBID < int.Parse(tbid));
-                        else
-                            where = where.Or(base_taobaosp => base_taobaosp.TBID < int.Parse(tbid));
-                    }
+                            where = where.Or(base_taobaosp => base_taobaosp.TBDM.Contains(tbdm));
+                    }              
                 }
-                if (!string.IsNullOrEmpty(tbid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "tbid", tbid, tbidequal, tbidand);
+                if (!string.IsNullOrEmpty(tbdm))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "tbdm", tbdm, tbdmequal, tbdmand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "tbid", "", tbidequal, tbidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "tbdm", "", tbdmequal, tbdmand);
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
             {
                 sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(tbid))
+                if (!string.IsNullOrEmpty(tbdm))
                 {
-                    if (tbidequal.Equals("="))
+                    if (tbdmequal.Equals("="))
                     {
-                        if (tbidand.Equals("and"))
-                            where = where.And(base_taobaosp => base_taobaosp.TBID == int.Parse(tbid));
+                        if (tbdmand.Equals("and"))
+                            where = where.And(base_taobaosp => base_taobaosp.TBDM == tbdm);
                         else
-                            where = where.Or(base_taobaosp => base_taobaosp.TBID == int.Parse(tbid));
+                            where = where.Or(base_taobaosp => base_taobaosp.TBDM == tbdm);
                     }
-                    if (tbidequal.Equals(">"))
+                    if (tbdmequal.Equals("like"))
                     {
-                        if (tbidand.Equals("and"))
-                            where = where.And(base_taobaosp => base_taobaosp.TBID > int.Parse(tbid));
+                        if (tbdmand.Equals("and"))
+                            where = where.And(base_taobaosp => base_taobaosp.TBDM.Contains(tbdm));
                         else
-                            where = where.Or(base_taobaosp => base_taobaosp.TBID > int.Parse(tbid));
+                            where = where.Or(base_taobaosp => base_taobaosp.TBDM.Contains(tbdm));
                     }
-                    if (tbidequal.Equals("<"))
-                    {
-                        if (tbidand.Equals("and"))
-                            where = where.And(base_taobaosp => base_taobaosp.TBID < int.Parse(tbid));
-                        else
-                            where = where.Or(base_taobaosp => base_taobaosp.TBID < int.Parse(tbid));
-                    }
+                   
                 }
-                if (!string.IsNullOrEmpty(tbid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "tbid", tbid, tbidequal, tbidand);
+                if (!string.IsNullOrEmpty(tbdm))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "tbdm", tbdm, tbdmequal, tbdmand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "tbid", "", tbidequal, tbidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "tbdm", "", tbdmequal, tbdmand);
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            where = where.And(base_taobaosp => base_taobaosp.IsDelete == false);
+            //where = where.And(base_taobaosp => base_taobaosp.IsDelete == false);
 
-            var tempData = ob_base_taobaospservice.LoadSortEntities(where.Compile(), false, base_taobaosp => base_taobaosp.ID).ToPagedList<base_taobaosp>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_base_taobaospservice.LoadPackageDetail(where.Compile()).ToPagedList<base_taobaosp_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.base_taobaosp = tempData;
             return View(tempData);
-        }
+        }     
 
         public ActionResult Add()
         {
@@ -192,6 +172,8 @@ namespace GROBS.Controllers
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
             int _id = int.Parse(tbid);
+
+
             try
             {
                 base_taobaosp ob_base_taobaosp = new base_taobaosp();
@@ -208,6 +190,7 @@ namespace GROBS.Controllers
                 ob_base_taobaosp.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_base_taobaosp = ob_base_taobaospservice.AddEntity(ob_base_taobaosp);
                 ViewBag.base_taobaosp = ob_base_taobaosp;
+
             }
             catch (Exception ex)
             {

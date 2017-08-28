@@ -1,4 +1,5 @@
-﻿@using GROBS.App_Code;
+﻿
+@using GROBS.App_Code;
 @using GROBS.Models;
 @using X.PagedList;
 @using X.PagedList.Mvc;
@@ -211,6 +212,11 @@
                             <th>经营许可编号</th>
                             <th>有效期</th>
                             <th>照片</th>
+                            <th>订货人</th>
+                            <th>订货电话</th>
+                            <th>收票人</th>
+                            <th>收票人电话</th>
+                            <th>收票人地址</th>
                             @*<td>首营状态</td>*@
                         </tr>
                         <tbody>
@@ -241,6 +247,12 @@
                                     </td>
 
                                     @*<td>@Html.GetCommonValue_ID("首营状态", (int)item.Shouying)</td>*@
+                                    <td>@item.DHR</td>
+                                    <td>@item.DHRDH</td>
+                                    <td>@item.SPR</td>
+                                    <td>@item.SPRDH</td>
+                                    <td>@item.SPRDZ</td>
+                                    
                                 </tr>
                             }
                         </tbody>

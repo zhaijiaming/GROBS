@@ -113,9 +113,7 @@
                             <th>备注</th>
                             <th>仓库</th>
                             <th>运送方式</th>
-                            <th>快递单号</th>
-                            <th>制单日期</th>
-                            <th>制单人</th>
+                            <th>快递单号</th>                        
                         </tr>
                         <tbody>
                             @foreach (var item in ViewBag.ord_fahuodan)
@@ -126,7 +124,7 @@
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
                                     <td><a href="/ord_fahuodan/fahuodandetails/@item.ID">@item.ChukudanBH</a></td>                               
-                                    <td>@item.DDBH</td>
+                                    <td><a href="/ord_dingdan/customerorderinfo/@item.DDID">@item.DDBH</a></td>
                                     <td>@item.Yunsongdizhi</td>
                                     <td>@item.ChukuRQ.ToString("yyyy-MM-dd")</td>
                                     <td>@item.Lianxiren</td>
@@ -134,9 +132,7 @@
                                     <td>@item.Beizhu</td>
                                     <td>@item.CKCode</td>
                                     <td>@item.YunsongFS</td>
-                                    <td>@item.Kddanhao</td>
-                                    <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>
-                                    <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.MakeMan == null ? 0 : item.MakeMan))</td>
+                                    <td>@item.Kddanhao</td>                               
                                 </tr>
                             }
                         </tbody>

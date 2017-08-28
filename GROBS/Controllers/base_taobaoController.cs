@@ -33,33 +33,19 @@ namespace GROBS.Controllers
                     string[] scld = scl.Split(',');
                     switch (scld[0])
                     {
-                        case "gysid":
-                            string gysid = scld[1];
-                            string gysidequal = scld[2];
+                        case "daima":
+                            string daima = scld[1];
+                            string daimaequal = scld[2];
                             string gysidand = scld[3];
-                            if (!string.IsNullOrEmpty(gysid))
+                            if (!string.IsNullOrEmpty(daima))
                             {
-                                if (gysidequal.Equals("="))
+                                if (daimaequal.Equals("="))
                                 {
                                     if (gysidand.Equals("and"))
-                                        where = where.And(base_taobao => base_taobao.GYSID == int.Parse(gysid));
+                                        where = where.And(base_taobao => base_taobao.Daima == daima);
                                     else
-                                        where = where.Or(base_taobao => base_taobao.GYSID == int.Parse(gysid));
-                                }
-                                if (gysidequal.Equals(">"))
-                                {
-                                    if (gysidand.Equals("and"))
-                                        where = where.And(base_taobao => base_taobao.GYSID > int.Parse(gysid));
-                                    else
-                                        where = where.Or(base_taobao => base_taobao.GYSID > int.Parse(gysid));
-                                }
-                                if (gysidequal.Equals("<"))
-                                {
-                                    if (gysidand.Equals("and"))
-                                        where = where.And(base_taobao => base_taobao.GYSID < int.Parse(gysid));
-                                    else
-                                        where = where.Or(base_taobao => base_taobao.GYSID < int.Parse(gysid));
-                                }
+                                        where = where.Or(base_taobao => base_taobao.Daima == daima);
+                                }                   
                             }
                             break;
                         default:
@@ -83,9 +69,10 @@ namespace GROBS.Controllers
             int userid = (int)Session["user_id"];
             string pagetag = "base_taobao_index";
             string page = "1";
-            string gysid = Request["gysid"] ?? "";
-            string gysidequal = Request["gysidequal"] ?? "";
-            string gysidand = Request["gysidand"] ?? "";
+            //daima
+            string daima = Request["daima"] ?? "";
+            string daimaequal = Request["daimaequal"] ?? "";
+            string daimaand = Request["daimaand"] ?? "";
             Expression<Func<base_taobao, bool>> where = PredicateExtensionses.True<base_taobao>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
@@ -93,67 +80,40 @@ namespace GROBS.Controllers
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
-                if (!string.IsNullOrEmpty(gysid))
+                if (!string.IsNullOrEmpty(daima))
                 {
-                    if (gysidequal.Equals("="))
+                    if (daimaequal.Equals("="))
                     {
-                        if (gysidand.Equals("and"))
-                            where = where.And(base_taobao => base_taobao.GYSID == int.Parse(gysid));
+                        if (daimaand.Equals("and"))
+                            where = where.And(base_taobao => base_taobao.Daima == daima);
                         else
-                            where = where.Or(base_taobao => base_taobao.GYSID == int.Parse(gysid));
-                    }
-                    if (gysidequal.Equals(">"))
-                    {
-                        if (gysidand.Equals("and"))
-                            where = where.And(base_taobao => base_taobao.GYSID > int.Parse(gysid));
-                        else
-                            where = where.Or(base_taobao => base_taobao.GYSID > int.Parse(gysid));
-                    }
-                    if (gysidequal.Equals("<"))
-                    {
-                        if (gysidand.Equals("and"))
-                            where = where.And(base_taobao => base_taobao.GYSID < int.Parse(gysid));
-                        else
-                            where = where.Or(base_taobao => base_taobao.GYSID < int.Parse(gysid));
-                    }
+                            where = where.Or(base_taobao => base_taobao.Daima == daima);
+                    }       
                 }
-                if (!string.IsNullOrEmpty(gysid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "gysid", gysid, gysidequal, gysidand);
+                if (!string.IsNullOrEmpty(daima))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "daima", daima, daimaequal, daimaand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "gysid", "", gysidequal, gysidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "daima", "", daimaequal, daimaand);
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
             {
                 sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(gysid))
+                if (!string.IsNullOrEmpty(daima))
                 {
-                    if (gysidequal.Equals("="))
+                    if (daimaequal.Equals("="))
                     {
-                        if (gysidand.Equals("and"))
-                            where = where.And(base_taobao => base_taobao.GYSID == int.Parse(gysid));
+                        if (daimaand.Equals("and"))
+                            where = where.And(base_taobao => base_taobao.Daima == daima);
                         else
-                            where = where.Or(base_taobao => base_taobao.GYSID == int.Parse(gysid));
+                            where = where.Or(base_taobao => base_taobao.Daima == daima);
                     }
-                    if (gysidequal.Equals(">"))
-                    {
-                        if (gysidand.Equals("and"))
-                            where = where.And(base_taobao => base_taobao.GYSID > int.Parse(gysid));
-                        else
-                            where = where.Or(base_taobao => base_taobao.GYSID > int.Parse(gysid));
-                    }
-                    if (gysidequal.Equals("<"))
-                    {
-                        if (gysidand.Equals("and"))
-                            where = where.And(base_taobao => base_taobao.GYSID < int.Parse(gysid));
-                        else
-                            where = where.Or(base_taobao => base_taobao.GYSID < int.Parse(gysid));
-                    }
+                   
                 }
-                if (!string.IsNullOrEmpty(gysid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "gysid", gysid, gysidequal, gysidand);
+                if (!string.IsNullOrEmpty(daima))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "daima", daima, daimaequal, daimaand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "gysid", "", gysidequal, gysidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "daima", "", daimaequal, daimaand);
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;

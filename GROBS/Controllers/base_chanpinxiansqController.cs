@@ -23,6 +23,7 @@ namespace GROBS.Controllers
                 page = "1";
             int userid = (int)Session["user_id"];
             string pagetag = "base_chanpinxiansq_index";
+            PageMenu.Set("Index", "base_chanpinxiansq", "»ù´¡Êý¾Ý");
             Expression<Func<base_chanpinxiansq, bool>> where = PredicateExtensionses.True<base_chanpinxiansq>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
@@ -33,32 +34,40 @@ namespace GROBS.Controllers
                     string[] scld = scl.Split(',');
                     switch (scld[0])
                     {
-                        case "jxsid":
-                            string jxsid = scld[1];
-                            string jxsidequal = scld[2];
-                            string jxsidand = scld[3];
-                            if (!string.IsNullOrEmpty(jxsid))
+                        case "jxsdm":
+                            string jxsdm = scld[1];
+                            string jxsdmequal = scld[2];
+                            string jxsdmand = scld[3];
+                            if (!string.IsNullOrEmpty(jxsdm))
                             {
-                                if (jxsidequal.Equals("="))
+                                if (jxsdmequal.Equals("="))
                                 {
-                                    if (jxsidand.Equals("and"))
-                                        where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID == int.Parse(jxsid));
+                                    if (jxsdmand.Equals("and"))
+                                        where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSDM == jxsdm);
                                     else
-                                        where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID == int.Parse(jxsid));
+                                        where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSDM== jxsdm);
+                                }                                                            
+                            }
+                            break;
+                        case "cpxdm":
+                            string cpxdm = scld[1];
+                            string cpxdmequal = scld[2];
+                            string cpxdmand = scld[3];
+                            if (!string.IsNullOrEmpty(cpxdm))
+                            {
+                                if (cpxdmequal.Equals("="))
+                                {
+                                    if (cpxdmand.Equals("and"))
+                                        where = where.And(base_chanpinxiansq => base_chanpinxiansq.CPXDM == cpxdm);
+                                    else
+                                        where = where.Or(base_chanpinxiansq => base_chanpinxiansq.CPXDM == cpxdm);
                                 }
-                                if (jxsidequal.Equals(">"))
+                                if (cpxdmequal.Equals("like"))
                                 {
-                                    if (jxsidand.Equals("and"))
-                                        where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID > int.Parse(jxsid));
+                                    if (cpxdmand.Equals("and"))
+                                        where = where.And(base_chanpinxiansq => base_chanpinxiansq.CPXDM.Contains(cpxdm));
                                     else
-                                        where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID > int.Parse(jxsid));
-                                }
-                                if (jxsidequal.Equals("<"))
-                                {
-                                    if (jxsidand.Equals("and"))
-                                        where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID < int.Parse(jxsid));
-                                    else
-                                        where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID < int.Parse(jxsid));
+                                        where = where.Or(base_chanpinxiansq => base_chanpinxiansq.CPXDM.Contains(cpxdm));
                                 }
                             }
                             break;
@@ -83,9 +92,14 @@ namespace GROBS.Controllers
             int userid = (int)Session["user_id"];
             string pagetag = "base_chanpinxiansq_index";
             string page = "1";
-            string jxsid = Request["jxsid"] ?? "";
-            string jxsidequal = Request["jxsidequal"] ?? "";
-            string jxsidand = Request["jxsidand"] ?? "";
+            //jxsdm
+            string jxsdm = Request["jxsdm"] ?? "";
+            string jxsdmequal = Request["jxsdmequal"] ?? "";
+            string jxsdmand = Request["jxsdmand"] ?? "";
+            //cpxdm
+            string cpxdm = Request["cpxdm"] ?? "";
+            string cpxdmequal = Request["cpxdmequal"] ?? "";
+            string cpxdmand = Request["cpxdmand"] ?? "";        
             Expression<Func<base_chanpinxiansq, bool>> where = PredicateExtensionses.True<base_chanpinxiansq>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
@@ -93,67 +107,86 @@ namespace GROBS.Controllers
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
-                if (!string.IsNullOrEmpty(jxsid))
+
+                //jxsdm
+                if (!string.IsNullOrEmpty(jxsdm))
                 {
-                    if (jxsidequal.Equals("="))
+                    if (jxsdmequal.Equals("="))
                     {
-                        if (jxsidand.Equals("and"))
-                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID == int.Parse(jxsid));
+                        if (jxsdmand.Equals("and"))
+                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSDM == jxsdm);
                         else
-                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID == int.Parse(jxsid));
+                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSDM == jxsdm);
+                    }                       
+                }
+                if (!string.IsNullOrEmpty(jxsdm))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsdm", jxsdm, jxsdmequal, jxsdmand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsdm", "", jxsdmequal, jxsdmand);
+
+                //cpxdm
+                if (!string.IsNullOrEmpty(cpxdm))
+                {
+                    if (cpxdmequal.Equals("="))
+                    {
+                        if (cpxdmand.Equals("and"))
+                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.CPXDM == cpxdm);
+                        else
+                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.CPXDM == cpxdm);
                     }
-                    if (jxsidequal.Equals(">"))
+                    if (cpxdmequal.Equals("like"))
                     {
-                        if (jxsidand.Equals("and"))
-                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID > int.Parse(jxsid));
+                        if (cpxdmand.Equals("and"))
+                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.CPXDM.Contains(cpxdm));
                         else
-                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID > int.Parse(jxsid));
-                    }
-                    if (jxsidequal.Equals("<"))
-                    {
-                        if (jxsidand.Equals("and"))
-                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID < int.Parse(jxsid));
-                        else
-                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID < int.Parse(jxsid));
+                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.CPXDM.Contains(cpxdm));
                     }
                 }
-                if (!string.IsNullOrEmpty(jxsid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsid", jxsid, jxsidequal, jxsidand);
+                if (!string.IsNullOrEmpty(jxsdm))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsdm", jxsdm, jxsdmequal, jxsdmand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsid", "", jxsidequal, jxsidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsdm", "", jxsdmequal, jxsdmand);
+
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
             {
                 sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(jxsid))
+                if (!string.IsNullOrEmpty(jxsdm))
                 {
-                    if (jxsidequal.Equals("="))
+                    if (jxsdmequal.Equals("="))
                     {
-                        if (jxsidand.Equals("and"))
-                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID == int.Parse(jxsid));
+                        if (jxsdmand.Equals("and"))
+                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSDM == jxsdm);
                         else
-                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID == int.Parse(jxsid));
+                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSDM== jxsdm);
+                    }   
+                }
+                if (!string.IsNullOrEmpty(jxsdm))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsdm", jxsdm, jxsdmequal, jxsdmand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsdm", "", jxsdmequal, jxsdmand);
+                if (!string.IsNullOrEmpty(cpxdm))
+                {
+                    if (cpxdmequal.Equals("="))
+                    {
+                        if (cpxdmand.Equals("and"))
+                            where = where.And(base_chanpinxian => base_chanpinxian.CPXDM == cpxdm);
+                        else
+                            where = where.Or(base_chanpinxian => base_chanpinxian.CPXDM == cpxdm);
                     }
-                    if (jxsidequal.Equals(">"))
+                    if (cpxdmequal.Equals("like"))
                     {
-                        if (jxsidand.Equals("and"))
-                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID > int.Parse(jxsid));
+                        if (cpxdmand.Equals("and"))
+                            where = where.And(base_chanpinxian => base_chanpinxian.CPXDM.Contains(cpxdm));
                         else
-                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID > int.Parse(jxsid));
-                    }
-                    if (jxsidequal.Equals("<"))
-                    {
-                        if (jxsidand.Equals("and"))
-                            where = where.And(base_chanpinxiansq => base_chanpinxiansq.JXSID < int.Parse(jxsid));
-                        else
-                            where = where.Or(base_chanpinxiansq => base_chanpinxiansq.JXSID < int.Parse(jxsid));
+                            where = where.Or(base_chanpinxian => base_chanpinxian.CPXDM.Contains(cpxdm));
                     }
                 }
-                if (!string.IsNullOrEmpty(jxsid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsid", jxsid, jxsidequal, jxsidand);
+                if (!string.IsNullOrEmpty(cpxdm))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "cpxdm", cpxdm, cpxdmequal, cpxdmand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "jxsid", "", jxsidequal, jxsidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "cpxdm", "", cpxdmequal, cpxdmand);
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;

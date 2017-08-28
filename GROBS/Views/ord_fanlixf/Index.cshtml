@@ -47,9 +47,9 @@
     if (_searchcondition == null || _searchcondition == "")
     {
         SearchConditionModel scm = new SearchConditionModel();
-        scm.ItemCode = "DDID";
-        scm.ItemTitle = "订单序号";
-        scm.ItemType = "System.Int32";
+        scm.ItemCode = "Mingcheng";
+        scm.ItemTitle = "客户名称";
+        scm.ItemType = "System.String";
         scms.Add(scm);
     }
     else
@@ -58,9 +58,9 @@
         if (scs.Length > 0)
         {
             SearchConditionModel scm = new SearchConditionModel();
-            scm.ItemCode = "DDID";
-            scm.ItemTitle = "订单序号";
-            scm.ItemType = "System.Int32";
+            scm.ItemCode = "Mingcheng";
+            scm.ItemTitle = "客户名称";
+            scm.ItemType = "System.String";
             if (scs.Length > 1)
             {
                 scm.ItemValue = scs[0].Split(',')[1];
@@ -100,7 +100,7 @@
                     <table class="table table-bordered table-condensed" id="mydatatable">
                         <tr>
                             <th></th>
-                            <th>客户</th>
+                            <th>客户名称</th>
                             <th>订单序号</th>
                             <th>消费金额</th>
                             <th>制单日期</th>
@@ -113,7 +113,7 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td>@Html.GetDataValue_ID("收货单位", "", (int)(item.KHID == null ? 0 : item.KHID))</td>
+                                    <td>@item.Mingcheng</td>
                                     <td>@item.DDID</td>
                                     <td>@item.XFJE</td>
                                     <td>@item.MakeDate.ToString("yyyy-MM-dd")</td>

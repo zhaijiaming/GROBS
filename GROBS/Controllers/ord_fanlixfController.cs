@@ -23,7 +23,7 @@ namespace GROBS.Controllers
                 page = "1";
             int userid = (int)Session["user_id"];
             string pagetag = "ord_fanlixf_index";
-            Expression<Func<ord_fanlixf, bool>> where = PredicateExtensionses.True<ord_fanlixf>();
+            Expression<Func<ord_commisionpay_v, bool>> where = PredicateExtensionses.True<ord_commisionpay_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
             {
@@ -33,33 +33,26 @@ namespace GROBS.Controllers
                     string[] scld = scl.Split(',');
                     switch (scld[0])
                     {
-                        case "ddid":
-                            string ddid = scld[1];
-                            string ddidequal = scld[2];
-                            string ddidand = scld[3];
-                            if (!string.IsNullOrEmpty(ddid))
+                        case "mingcheng":
+                            string mingcheng = scld[1];
+                            string mingchengequal = scld[2];
+                            string mingchengand = scld[3];
+                            if (!string.IsNullOrEmpty(mingcheng))
                             {
-                                if (ddidequal.Equals("="))
+                                if (mingchengequal.Equals("="))
                                 {
-                                    if (ddidand.Equals("and"))
-                                        where = where.And(ord_fanlixf => ord_fanlixf.DDID == int.Parse(ddid));
+                                    if (mingchengand.Equals("and"))
+                                        where = where.And(ord_fanlixf => ord_fanlixf.Mingcheng==mingcheng);
                                     else
-                                        where = where.Or(ord_fanlixf => ord_fanlixf.DDID == int.Parse(ddid));
+                                        where = where.Or(ord_fanlixf => ord_fanlixf.Mingcheng == mingcheng);
                                 }
-                                if (ddidequal.Equals(">"))
+                                if (mingchengequal.Equals("like"))
                                 {
-                                    if (ddidand.Equals("and"))
-                                        where = where.And(ord_fanlixf => ord_fanlixf.DDID > int.Parse(ddid));
+                                    if (mingchengand.Equals("and"))
+                                        where = where.And(ord_fanlixf => ord_fanlixf.Mingcheng.Contains(mingcheng));
                                     else
-                                        where = where.Or(ord_fanlixf => ord_fanlixf.DDID > int.Parse(ddid));
-                                }
-                                if (ddidequal.Equals("<"))
-                                {
-                                    if (ddidand.Equals("and"))
-                                        where = where.And(ord_fanlixf => ord_fanlixf.DDID < int.Parse(ddid));
-                                    else
-                                        where = where.Or(ord_fanlixf => ord_fanlixf.DDID < int.Parse(ddid));
-                                }
+                                        where = where.Or(ord_fanlixf => ord_fanlixf.Mingcheng.Contains(mingcheng));
+                                }                          
                             }
                             break;
                         default:
@@ -69,9 +62,9 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(ord_fanlixf => ord_fanlixf.IsDelete == false);
+            //where = where.And(ord_fanlixf => ord_fanlixf.IsDelete == false);
 
-            var tempData = ob_ord_fanlixfservice.LoadSortEntities(where.Compile(), false, ord_fanlixf => ord_fanlixf.ID).ToPagedList<ord_fanlixf>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_fanlixfservice.LoadCommisionPay(where.Compile()).ToPagedList<ord_commisionpay_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_fanlixf = tempData;
             return View(tempData);
         }
@@ -83,83 +76,65 @@ namespace GROBS.Controllers
             int userid = (int)Session["user_id"];
             string pagetag = "ord_fanlixf_index";
             string page = "1";
-            string ddid = Request["ddid"] ?? "";
-            string ddidequal = Request["ddidequal"] ?? "";
-            string ddidand = Request["ddidand"] ?? "";
-            Expression<Func<ord_fanlixf, bool>> where = PredicateExtensionses.True<ord_fanlixf>();
+            string mingcheng = Request["mingcheng"] ?? "";
+            string mingchengequal = Request["mingchengequal"] ?? "";
+            string mingchengand = Request["mingchengand"] ?? "";
+            Expression<Func<ord_commisionpay_v, bool>> where = PredicateExtensionses.True<ord_commisionpay_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
-                if (!string.IsNullOrEmpty(ddid))
+                if (!string.IsNullOrEmpty(mingcheng))
                 {
-                    if (ddidequal.Equals("="))
+                    if (mingchengequal.Equals("="))
                     {
-                        if (ddidand.Equals("and"))
-                            where = where.And(ord_fanlixf => ord_fanlixf.DDID == int.Parse(ddid));
+                        if (mingchengand.Equals("and"))
+                            where = where.And(ord_fanlixf => ord_fanlixf.Mingcheng == mingcheng);
                         else
-                            where = where.Or(ord_fanlixf => ord_fanlixf.DDID == int.Parse(ddid));
+                            where = where.Or(ord_fanlixf => ord_fanlixf.Mingcheng == mingcheng);
                     }
-                    if (ddidequal.Equals(">"))
+                    if (mingchengequal.Equals("like"))
                     {
-                        if (ddidand.Equals("and"))
-                            where = where.And(ord_fanlixf => ord_fanlixf.DDID > int.Parse(ddid));
+                        if (mingchengand.Equals("and"))
+                            where = where.And(ord_fanlixf => ord_fanlixf.Mingcheng.Contains(mingcheng));
                         else
-                            where = where.Or(ord_fanlixf => ord_fanlixf.DDID > int.Parse(ddid));
-                    }
-                    if (ddidequal.Equals("<"))
-                    {
-                        if (ddidand.Equals("and"))
-                            where = where.And(ord_fanlixf => ord_fanlixf.DDID < int.Parse(ddid));
-                        else
-                            where = where.Or(ord_fanlixf => ord_fanlixf.DDID < int.Parse(ddid));
-                    }
+                            where = where.Or(ord_fanlixf => ord_fanlixf.Mingcheng.Contains(mingcheng));
+                    }                 
                 }
-                if (!string.IsNullOrEmpty(ddid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddid", ddid, ddidequal, ddidand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddid", "", ddidequal, ddidand);
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
             {
                 sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(ddid))
+                if (!string.IsNullOrEmpty(mingcheng))
                 {
-                    if (ddidequal.Equals("="))
+                    if (mingchengequal.Equals("="))
                     {
-                        if (ddidand.Equals("and"))
-                            where = where.And(ord_fanlixf => ord_fanlixf.DDID == int.Parse(ddid));
+                        if (mingchengand.Equals("and"))
+                            where = where.And(ord_fanlixf =>ord_fanlixf.Mingcheng == mingcheng);
                         else
-                            where = where.Or(ord_fanlixf => ord_fanlixf.DDID == int.Parse(ddid));
+                            where = where.Or(ord_fanlixf =>ord_fanlixf.Mingcheng == mingcheng);
                     }
-                    if (ddidequal.Equals(">"))
+                    if (mingchengequal.Equals("like"))
                     {
-                        if (ddidand.Equals("and"))
-                            where = where.And(ord_fanlixf => ord_fanlixf.DDID > int.Parse(ddid));
+                        if (mingchengand.Equals("and"))
+                            where = where.And(ord_fanlixf => ord_fanlixf.Mingcheng.Contains(mingcheng));
                         else
-                            where = where.Or(ord_fanlixf => ord_fanlixf.DDID > int.Parse(ddid));
-                    }
-                    if (ddidequal.Equals("<"))
-                    {
-                        if (ddidand.Equals("and"))
-                            where = where.And(ord_fanlixf => ord_fanlixf.DDID < int.Parse(ddid));
-                        else
-                            where = where.Or(ord_fanlixf => ord_fanlixf.DDID < int.Parse(ddid));
-                    }
+                            where = where.Or(ord_fanlixf => ord_fanlixf.Mingcheng.Contains(mingcheng));
+                    }        
                 }
-                if (!string.IsNullOrEmpty(ddid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddid", ddid, ddidequal, ddidand);
+                if (!string.IsNullOrEmpty(mingcheng))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mingcheng", mingcheng, mingchengequal, mingchengand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddid", "", ddidequal, ddidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mingcheng", "", mingchengequal, mingchengand);
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            where = where.And(ord_fanlixf => ord_fanlixf.IsDelete == false);
+            //where = where.And(ord_fanlixf => ord_fanlixf.IsDelete == false);
 
-            var tempData = ob_ord_fanlixfservice.LoadSortEntities(where.Compile(), false, ord_fanlixf => ord_fanlixf.ID).ToPagedList<ord_fanlixf>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_fanlixfservice.LoadCommisionPay(where.Compile()).ToPagedList<ord_commisionpay_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_fanlixf = tempData;
             return View(tempData);
         }

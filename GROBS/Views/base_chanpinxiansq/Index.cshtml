@@ -46,9 +46,15 @@
     if (_searchcondition == null || _searchcondition == "")
     {
         SearchConditionModel scm = new SearchConditionModel();
-        scm.ItemCode = "JXSID";
-        scm.ItemTitle = "经销商序号";
-        scm.ItemType = "System.Int32";
+        scm.ItemCode = "JXSDM";
+        scm.ItemTitle = "经销商代码";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "CPXDM";
+        scm.ItemTitle = "U8代码";
+        scm.ItemType = "System.String";
         scms.Add(scm);
     }
     else
@@ -57,9 +63,26 @@
         if (scs.Length > 0)
         {
             SearchConditionModel scm = new SearchConditionModel();
-            scm.ItemCode = "JXSID";
-            scm.ItemTitle = "经销商序号";
-            scm.ItemType = "System.Int32";
+            scm.ItemCode = "JXSDM";
+            scm.ItemTitle = "经销商代码";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "CPXDM";
+            scm.ItemTitle = "U8代码";
+            scm.ItemType = "System.String";
             if (scs.Length > 1)
             {
                 scm.ItemValue = scs[0].Split(',')[1];

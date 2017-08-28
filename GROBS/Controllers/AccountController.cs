@@ -177,7 +177,7 @@ namespace GROBS.Controllers
         }
 
 
-        //新增加的
+        //新增加的"Changepassword"
         [AllowAnonymous]
         public ActionResult Changepassword()
            {

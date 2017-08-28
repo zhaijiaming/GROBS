@@ -850,19 +850,19 @@ namespace GROBS.App_Code
                     switch (sc.ItemType)
                     {
                         case "System.String":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.Double":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.Int16":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.Decimal":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.DateTime":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.Boolean":
                             if (sc.ItemValue == null)
@@ -876,7 +876,7 @@ namespace GROBS.App_Code
                             }
                             break;
                         default:
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                     }
                 }
