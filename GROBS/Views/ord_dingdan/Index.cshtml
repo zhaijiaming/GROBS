@@ -105,14 +105,14 @@
                             <th>产品线</th>
                             <th>采购类型</th>
                             <th>客户单号</th>
-                            <th>下单日期</th>
+                            <th style="width:84px;">下单日期</th>
                             <th>联系人</th>
-                            <th>联系电话</th>
+                            <th style="width:95px">联系电话</th>
                             <th>送货地址</th>
                             <th>客服人员</th>
                             <th>审核人员</th>
                             <th>审核通过</th>
-                            <th>审核时间</th>
+                            <th style="width:84px;">审核时间</th>
                             <th>采购总数</th>
                             <th style="width:60px">总金额</th>
                             <th>是否结束</th>
@@ -134,14 +134,14 @@
                                     <td>@Html.GetDataValue_ID("产品线", "", (int)(item.CPXID == null ? 0 : item.CPXID))</td>
                                     <td>@Html.GetCommonValue_ID("订单类型", (int)(item.CGLX == null ? 0 : item.CGLX))</td>
                                     <td>@item.KehuDH</td>
-                                    <td>@item.XiadanRQ.ToString()</td>
+                                    <td style="width:84px;">@item.XiadanRQ.ToString()</td>
                                     <td>@item.Lianxiren</td>
-                                    <td>@item.LianxiDH</td>
+                                    <td style="width:95px;">@item.LianxiDH</td>
                                     <td>@item.SonghuoDZ</td>
                                     <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.OPID == null ? 0 : item.OPID))</td>
                                     <td>@Html.GetDataValue_ID("userinfo", "全名", (int)(item.ACCID == null ? 0 : item.ACCID))</td>
                                     <td>@string.Format("{0:0}", item.ShenheTG == bool.Parse("False") ? "否" : "是")</td>
-                                    <td>@item.ShenheSJ</td>
+                                    <td style="width:84px;">@item.ShenheSJ</td>
                                     <td>@item.ZongshuCG</td>
                                     <td style="width:60px">@item.Zongjine</td>
                                     <td>@string.Format("{0:0}", item.JieshuSF == bool.Parse("False") ? "否" : "是")</td>
