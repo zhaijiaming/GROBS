@@ -138,6 +138,7 @@ namespace GROBS.Controllers
             ViewBag.SearchCondition = sc.ConditionInfo;
             where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
 
+
             var tempData = ob_ord_dingdanservice.LoadSortEntitiesNoTracking(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
             return View(tempData);

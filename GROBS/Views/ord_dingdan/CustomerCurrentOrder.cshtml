@@ -208,9 +208,9 @@
                                                 <td>@item.LianxiDH</td>
                                                 <td>@item.SonghuoDZ</td>*@
                                             <td>@item.ZongshuCG</td>
-                                            <td>@item.Zongjine</td>
-                                            <td>@item.ZhekouJE</td>
-                                            <td>@string.Format("{0:C}", item.Zongjine - (item.ZhekouJE==null?0:item.ZhekouJE))</td>
+                                            <td>@String.Format("{0:N}", item.Zongjine)</td>
+                                            <td>@String.Format("{0:N}", item.ZhekouJE)</td>
+                                            <td>@String.Format("{0:C}", item.Zongjine - (item.ZhekouJE==null?0:item.ZhekouJE))</td>
                                             <td>@item.Beizhu</td>
                                         </tr>
                                     }

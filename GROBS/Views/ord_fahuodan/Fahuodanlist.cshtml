@@ -124,7 +124,7 @@
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
                                     <td><a href="/ord_fahuodan/fahuodandetails/@item.ID">@item.ChukudanBH</a></td>                               
-                                    <td><a href="/ord_dingdan/customerorderinfo/@item.DDID">@item.DDBH</a></td>
+                                    <td>@*<a href="/ord_dingdan/customerorderinfo/@item.DDID">*@@item.DDBH@*</a>*@</td>
                                     <td>@item.Yunsongdizhi</td>
                                     <td>@item.ChukuRQ.ToString("yyyy-MM-dd")</td>
                                     <td>@item.Lianxiren</td>

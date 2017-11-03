@@ -21,7 +21,10 @@
             }
         });
     }
+    
 </script>
+
+
 <div class="page-content">
     <input type="hidden" id="khid" value="@ViewBag.khid" />
     <div class="container">
@@ -48,7 +51,7 @@
                         <table class="table table-bordered table-hover" id="table_thisYearJiXiao">
                             <tr>
                                 <th>月份</th>
-                                <th>目标</th>
+                                <th>目标(元)</th>
                                 <th>业绩</th>
                                 <th>达成率</th>
                                 <th>返利申请金额</th>
@@ -63,7 +66,7 @@
                                             <label><input type="checkbox" value="@item.ID"></label>
                                         </td>
                                         <td>@item.Yuefen</td>
-                                        <td>@item.Zhibiao</td>
+                                        <td>@string.Format("{0:C}", item.Zhibiao)</td>
                                         <td>@item.Yeji</td>
                                         <td>@item.Dachenglv</td>
                                         <td>@item.FLSQJE</td>

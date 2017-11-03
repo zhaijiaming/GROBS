@@ -8,6 +8,10 @@
 }
 <script type="text/javascript">
     $(document).ready(function () {
+
+ 
+
+
         $("tr").bind("dblclick", function () {
             var u_id = $(this).find('td').eq(0).find('input').val();
             //if (u_id != null) {
@@ -15,6 +19,11 @@
             //    location.href = url_go;
             //}
         });
+        //返回上一页
+
+        $("#bt_return").click(function () {
+            window.location.href = "/ord_dingdan/customercurrentorder";
+        })
 
         $("#bt_add").click(function () {
             var _type = Number($("#sel_type").val());
@@ -523,6 +532,7 @@
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_import"><i class="icon-exchange"></i>导入商品</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_com"><i class="icon-dollar"></i>使用返利</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_save"><i class="icon-save"></i>保存订单</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_return"><i class="icon-circle-arrow-left"></i>返回</button>
         </p>
     </div>
     <hr />

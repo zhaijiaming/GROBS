@@ -17,8 +17,14 @@
             //    location.href = url_go;
             //}
         });
+
+        $("#bt_return").click(function () {
+            window.history.back(-1);
+        })
     });
 </script>
+
+
 <div class="page-content">
     <div class="row">
         <p class="align-center">
@@ -30,7 +36,9 @@
         {
             <i class="icon-file-text bigger-200 green"></i>
         }
-        <span class="bigger-150 blue">订单详情</span></p>
+        <span class="bigger-150 blue">订单详情</span>
+            <button type="button" class="btn btn-primary btn-xs btn-dingdan" id="bt_return"><i class="icon-circle-arrow-left"></i>返回</button>
+        </p>
     </div>
     <hr />
     <div class="row">
@@ -56,7 +64,7 @@
             <label>订单金额</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@ViewBag.je" />
+            <input class="form-control" type="text" readonly value="@string.Format("{0:C}", ViewBag.je)" />
         </div>
     </div>
     <div class="row">
@@ -78,7 +86,7 @@
         <div class="col-sm-2">
             <input class="form-control" type="text" readonly value="@ViewBag.zk" />
         </div>
-    </div>
+    </div>   
     <div class="row">
         <div class="col-sm-1">
             <label><i class="icon-star red"></i>联系人</label>
@@ -130,8 +138,8 @@
                                     <td>@item.Guige</td>
                                     <td>@item.SPMC</td>
                                     <td>@item.CGSL</td>
-                                    <td>@item.XSBJ</td>
-                                    <td>@item.Jine</td>
+                                    <td>@string.Format("{0:C}", item.XSBJ)</td>
+                                    <td>@string.Format("{0:C}", item.Jine)</td>
                                 </tr>
                             }
                         </tbody>

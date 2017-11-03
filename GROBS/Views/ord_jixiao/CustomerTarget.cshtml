@@ -1,4 +1,4 @@
-﻿@using GROBS.App_Code
+﻿  @using GROBS.App_Code
 @using GROBS.Models
 @using X.PagedList
 @using X.PagedList.Mvc
@@ -78,7 +78,7 @@
                             <tr>
                                 <th>年度</th>
                                 <th>月份</th>
-                                <th>目标</th>
+                                <th>目标(元</th>
                                 <th>业绩</th>
                                 <th>达成率</th>
                                 <th>返利申请金额</th>
@@ -94,7 +94,7 @@
                                         </td>
                                         <td>@item.Niandu</td>
                                         <td>@item.Yuefen</td>
-                                        <td>@item.Zhibiao</td>
+                                        <td>@string.Format("{0:C}", item.Zhibiao)</td>
                                         <td>@item.Yeji</td>
                                         <td>@item.Dachenglv</td>
                                         <td>@item.FLSQJE</td>

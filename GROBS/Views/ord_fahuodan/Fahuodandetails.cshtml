@@ -17,6 +17,10 @@
             //    location.href = url_go;
             //}
         });
+
+        $("#bt_return").click(function () {
+            window.history.back(-1);
+        })
     });
 </script>
 <div class="page-content">
@@ -31,6 +35,7 @@
                 <i class="icon-file-text bigger-200 green"></i>
             }
             <span class="bigger-150 blue">发货单详情</span>
+            <button type="button" class="btn btn-primary btn-xs btn-dingdan" id="bt_return"><i class="icon-circle-arrow-left"></i>返回</button>
         </p>
     </div>
     <hr />

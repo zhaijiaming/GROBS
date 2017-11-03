@@ -38,7 +38,12 @@
         var url_go = "/ord_dingdan/Delete/?del=" + sDel;
         location.href = url_go;
     }
+
+ 
+
 </script>
+
+    
 @{
     List<SearchConditionModel> scms = new List<SearchConditionModel>();
     if (_searchcondition == null || _searchcondition == "")
@@ -108,7 +113,7 @@
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
                         <td><a href="/ord_dingdan/customerorderinfo/@item.ID">@item.Bianhao</a></td>
-                        <td>@Html.GetCommonValue_ID("订单状态",(int)item.Zhuangtai)</td>
+                        <td class="zhuangtai">@Html.GetCommonValue_ID("订单状态",(int)item.Zhuangtai)</td>
                         <td>@item.KehuMC</td>
                         <td>@item.Mingcheng</td>
                         <td>@Html.GetCommonValue_ID("订单类型",(int)item.CGLX)</td>

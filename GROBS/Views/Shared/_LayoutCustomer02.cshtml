@@ -14,7 +14,7 @@
     <link rel="stylesheet"  href="~/assets/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/assets/css/font-awesome.min.css">
     <link rel="stylesheet" href="~/assets/css/jquery-ui-1.10.3.full.min.css">
-  
+     
 
 
     @*new*@
@@ -67,6 +67,15 @@
             margin-right: auto;
         } navbar-fixed-top u-navbar
     </style>*@
+
+    <style>
+        .btn-dingdan{
+            margin-top: -7px !important;
+            border-radius: 4px !important;
+        }
+
+
+    </style>
 </head>
 <body>
     <!--头部导航栏-->
@@ -75,12 +84,13 @@
             <div class="row">
                 <div class="col-lg-6 col-xs-6" style="padding-left:0">
                     <div class="logo">
-                        <a href="./home/about"><img src="~/Imgs/carousel/logo.png" alt="嘉事国润"></a>
+                        <a href="/home/about"><img src="~/Imgs/carousel/logo.png" alt="嘉事国润"></a>
                     </div>
                 </div>
-                <div class="col-lg-4 col-xs-4" style="padding-left:0 ;padding-right:0">
+                <div class="col-lg-6 col-xs-6" style="padding-left:0 ;padding-right:0">
                     <div class="list">
                         <ul>
+                             <li><a href="/Account/LogOut">退出</a></li>
                             <li><a href="/home/about">关于我们</a></li>
                             <li><a href="/ord_fanli/customerprofit">返利</a></li>
                             <li><a href="/ord_jixiao/customertargetNow">目标</a></li>
@@ -88,47 +98,6 @@
                         </ul>
                     </div>
                 </div>
-
-                <div class="col-lg-2 col-xs-2">
-                    <div class="navbar-header pull-right" role="navigation">
-                        <ul class="nav">
-                            <li>
-                                <a data-toggle="dropdown" href="#" class="dropdown-toggle">
-                                    <img class="nav-user-photo" src="/assets/avatars/avatar2.png" alt="Yao's Photo">
-                                    <span class="white">
-                                        <small style="color:black;">ruikang，欢迎您！</small>
-                                    </span>
-
-                                    <i class="icon-caret-down"></i>
-                                </a>
-
-                                <ul class="user-menu pull-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
-                                    <li>
-                                        <a href="\home">
-                                            <i class="icon-cog"></i>
-                                            设置
-                                        </a>
-                                    </li>
-
-                                    <li>
-                                        <a href="\userinfo\Edit\14">
-                                            <i class="icon-user"></i>
-                                            资料
-                                        </a>
-                                    </li>
-
-                                    <li class="divider"></li>
-
-                                    <li>
-
-                                        <a href="/Account/LogOut"><i class="icon-eye-close"></i>退出</a>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul><!-- /.ace-nav -->
-                    </div>
-                </div>
-
             </div>
         </div>
     </header>
