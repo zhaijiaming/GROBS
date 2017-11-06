@@ -64,7 +64,7 @@
             <label>订单金额</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@string.Format("{0:C}", ViewBag.je)" />
+            <input class="form-control" type="text" readonly value="@string.Format("{0:N}", ViewBag.je)" />
         </div>
     </div>
     <div class="row">
@@ -138,8 +138,8 @@
                                     <td>@item.Guige</td>
                                     <td>@item.SPMC</td>
                                     <td>@item.CGSL</td>
-                                    <td>@string.Format("{0:C}", item.XSBJ)</td>
-                                    <td>@string.Format("{0:C}", item.Jine)</td>
+                                    <td>@string.Format("{0:N}", item.XSBJ)</td>
+                                    <td>@string.Format("{0:N}", item.Jine)</td>
                                 </tr>
                             }
                         </tbody>

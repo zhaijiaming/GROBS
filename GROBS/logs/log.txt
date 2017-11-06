@@ -930,3 +930,6 @@ INFO  2017-11-06 14:57:17,518 255448ms 14                     LogOut            
 INFO  2017-11-06 14:57:27,895 265825ms 14                     MoveNext           - ruikang login at 2017-11-06 14:57:27!
 INFO  2017-11-06 15:05:38,015 23167ms 14                     MoveNext           - ruikang login at 2017-11-06 15:05:38!
 INFO  2017-11-06 15:09:35,307  4513ms 14                     MoveNext           - ruikang login at 2017-11-06 15:09:35!
+INFO  2017-11-06 15:39:03,312 16945ms 14                     MoveNext           - ruikang login at 2017-11-06 15:39:03!
+INFO  2017-11-06 15:46:10,232  6427ms 14                     MoveNext           - ruikang login at 2017-11-06 15:46:10!
+INFO  2017-11-06 15:49:23,918  6655ms 14                     MoveNext           - ruikang login at 2017-11-06 15:49:23!

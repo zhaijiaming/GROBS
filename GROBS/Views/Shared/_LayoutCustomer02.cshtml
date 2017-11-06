@@ -90,7 +90,7 @@
                 <div class="col-lg-6 col-xs-6" style="padding-left:0 ;padding-right:0">
                     <div class="list">
                         <ul>
-                             <li><a href="/Account/LogOut">退出</a></li>
+                            <li><a href="#" onclick="pro()">退出</a><li>
                             <li><a href="/home/about">关于我们</a></li>
                             <li><a href="/ord_fanli/customerprofit">返利</a></li>
                             <li><a href="/ord_jixiao/customertargetNow">目标</a></li>
@@ -153,7 +153,15 @@
     
 
     <!-- inline scripts related to this page -->
-
+    <script>
+        function pro() {
+            if (confirm("您确定要退出么？")) {
+               window.location.href = "/Account/LogOut";
+            } else {
+                return false;
+            }
+        }
+    </script>
 
 
 

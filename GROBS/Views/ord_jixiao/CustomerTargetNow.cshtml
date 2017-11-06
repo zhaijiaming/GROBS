@@ -66,11 +66,11 @@
                                             <label><input type="checkbox" value="@item.ID"></label>
                                         </td>
                                         <td>@item.Yuefen</td>
-                                        <td>@string.Format("{0:C}", item.Zhibiao)</td>
-                                        <td>@item.Yeji</td>
+                                        <td>@String.Format("{0:N}", item.Zhibiao)</td>
+                                        <td>@String.Format("{0:N}", item.Yeji == null ? "" : item.Yeji)</td>
                                         <td>@item.Dachenglv</td>
-                                        <td>@item.FLSQJE</td>
-                                        <td>@item.FLFFJE</td>
+                                        <td>@String.Format("{0:N}", item.FLSQJE == null ? "" : item.FLSQJE)</td>
+                                        <td>@String.Format("{0:N}", item.FLFFJE == null ? "" : item.FLFFJE)</td>
                                         <td class="faFangSF">@item.FafangSF</td>
                                     </tr>
                                 }
