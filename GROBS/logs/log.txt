@@ -921,3 +921,12 @@ INFO  2017-11-03 17:25:00,133 100327ms 14                     MoveNext          
 INFO  2017-11-03 17:29:43,862 384056ms 14                     LogOut             - ruikang log out at 2017-11-03 17:29:43
 INFO  2017-11-03 17:29:45,478 385673ms 14                     MoveNext           - ruikang login at 2017-11-03 17:29:45!
 INFO  2017-11-03 17:42:05,357 17350ms 14                     MoveNext           - ruikang login at 2017-11-03 17:42:05!
+INFO  2017-11-06 11:54:06,618 28260ms 14                     MoveNext           - ruikang login at 2017-11-06 11:54:06!
+INFO  2017-11-06 11:55:44,382  9588ms 14                     MoveNext           - ruikang login at 2017-11-06 11:55:44!
+INFO  2017-11-06 12:08:37,410 14712ms 14                     MoveNext           - ruikang login at 2017-11-06 12:08:37!
+INFO  2017-11-06 14:36:10,918  8706ms 14                     MoveNext           - ruikang login at 2017-11-06 14:36:10!
+INFO  2017-11-06 14:53:09,800  7730ms 14                     MoveNext           - ruikang login at 2017-11-06 14:53:09!
+INFO  2017-11-06 14:57:17,518 255448ms 14                     LogOut             - ruikang log out at 2017-11-06 14:57:17
+INFO  2017-11-06 14:57:27,895 265825ms 14                     MoveNext           - ruikang login at 2017-11-06 14:57:27!
+INFO  2017-11-06 15:05:38,015 23167ms 14                     MoveNext           - ruikang login at 2017-11-06 15:05:38!
+INFO  2017-11-06 15:09:35,307  4513ms 14                     MoveNext           - ruikang login at 2017-11-06 15:09:35!

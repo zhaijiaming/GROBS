@@ -62,7 +62,7 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false && ord_dingdan.Zhuangtai!=0);
 
             var tempData = ob_ord_dingdanservice.LoadSortEntitiesNoTracking(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
@@ -136,7 +136,7 @@ namespace GROBS.Controllers
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false);
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false && ord_dingdan.Zhuangtai != 0);
 
 
             var tempData = ob_ord_dingdanservice.LoadSortEntitiesNoTracking(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
@@ -397,6 +397,7 @@ namespace GROBS.Controllers
                 }
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
 
             var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
@@ -470,6 +471,7 @@ namespace GROBS.Controllers
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
 
             var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
@@ -489,9 +491,15 @@ namespace GROBS.Controllers
                 ViewBag.customername = "0";
             var _gzr = ServiceFactory.ord_guanzhangriservice.GetEntityById(p => p.Guanzhangri == DateTime.Parse(DateTime.Now.ToShortDateString()) && p.IsDelete == false);
             if (_gzr == null)
+            {
                 ViewBag.closeday = "0";
+                ViewBag.closereason = "";
+            }
             else
+            {
                 ViewBag.closeday = "1";
+                ViewBag.closereason = _gzr.Memo;
+            }
             //var tempData = ob_ord_dingdanservice.LoadSortEntities(p => p.KHID == _custid && p.Zhuangtai < 12 && p.IsDelete == false, true, s => s.Bianhao);
             var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
             ViewBag.ord_dingdan = tempData;
