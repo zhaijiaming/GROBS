@@ -1,0 +1,805 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "新增采购单";
+    Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+    var _i = 1;
+    var _pz = ViewBag.fkpz;
+}
+<script type="text/javascript">
+    $(document).ready(function () {
+
+ 
+
+
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            //if (u_id != null) {
+            //    var url_go = "/ord_dingdan/Edit/" + u_id;
+            //    location.href = url_go;
+            //}
+        });
+        //返回上一页
+
+        $("#bt_return").click(function () {
+            window.location.href = "/ord_dingdan/customercurrentorder";
+        })
+
+        $("#bt_add").click(function () {
+            var _type = Number($("#sel_type").val());
+            var _line = Number($("#sel_line").val());
+            if (_line == 0 || _type == 0) {
+                alert("请选择产品线和订单类型后才能添加商品信息！");
+                return;
+            }
+            if (_type == 1) {
+                $("#pl_spdm").val("");
+                $("#pl_cgsl").val("");
+                $("#pl_sp").show();
+            }
+            if (_type == 2) {
+                $("#pl_tb_tbdm").val("");
+                $("#pl_tb_cgsl").val("");
+                $("#pl_tb").show();
+            }
+            if (_type == 3)
+                $("pl_cx").show();
+        });
+        $("#pl_sp").draggable({ handle: ".panel-heading" });
+        $("#pl_sp_close").click(function () {
+            $("#pl_sp").hide();
+        });
+        $("#pl_sp_cancel").click(function () {
+            $("#pl_sp").hide();
+        });
+        $("#pl_sp_ok").click(function () {
+            var _dm = $("#pl_spdm").val();
+            var _sl = $("#pl_cgsl").val();
+            if (_dm.length == 0) {
+                alert("请录入商品代码后添加！");
+                return;
+            }
+            if (_sl.length == 0) {
+                alert("请输入采购数量！");
+                return;
+            }
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/base_shangpinxx/getproductbycust",
+                data: {
+                    cpx: $("#sel_line").val(),
+                    dm: _dm,
+                    sl: _sl
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        alert("添加套包商品出错！");
+                    }
+                    else if (data == -2) {
+                        alert("输入格式不正确！");
+                    }
+                    else if (data == -3) {
+                        alert("该商品不存在！");
+                    }
+                    else {
+                        var _filltr = '';
+                        _filltr = _filltr + '<tr>';
+                        _filltr = _filltr + '<td><i class="icon-minus-sign bigger-150 red"></i><input type="hidden" value="';
+                        _filltr = _filltr + data.ID;
+                        _filltr = _filltr + '"/></td>';
+                        _filltr = _filltr + '<td>';
+                        _filltr = _filltr + data.Daima;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + data.Guige;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + data.Mingcheng;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + _sl;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + data.JiaXS;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
+                        _filltr = _filltr + '</td>';
+                        _filltr = _filltr + '</tr>';
+                        $("#dt_sp tbody").append(_filltr);
+                        DatarowCount();
+                        $("#pl_sp").hide();
+                    }
+                }
+            });
+        });
+        $("#dt_sp").on("click", ".icon-minus-sign", function () {
+            var _dtr = $(this).parent().parent();
+            _dtr.remove();
+            DatarowCount();
+        });
+        $("#cpx").change(function () {
+            $("#sel_line").val($("#cpx").val());
+        });
+        $("#ordertype").change(function () {
+            $("#sel_type").val($("#ordertype").val());
+        });
+        $("#pl_tb").draggable({ handle: ".panel-heading" });
+        $("#pl_tb_close").click(function () {
+            $("#pl_tb").hide();
+        });
+        $("#pl_tb_cancel").click(function () {
+            $("#pl_tb").hide();
+        });
+        $("#pl_tb_ok").click(function () {
+            var _dm = $("#pl_tb_tbdm").val();
+            var _sl = $("#pl_tb_cgsl").val();
+            if (_dm.length == 0) {
+                alert("请录入套包代码后添加！");
+                return;
+            }
+            if (_sl.length == 0) {
+                alert("请输入采购数量！");
+                return;
+            }
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/base_taobao/getpackagebycust",
+                data: {
+                    cpx: $("#sel_line").val(),
+                    dm: _dm,
+                    sl: _sl
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        alert("添加套包商品出错！");
+                    }
+                    else if (data == -2) {
+                        alert("输入格式不正确！");
+                    }
+                    else if (data == -3) {
+                        alert("该套包不存在！");
+                    }
+                    else if (data == -4) {
+                        alert("该套包不支持网络下单，需要通知客服手工下单！");
+                    }
+                    else {
+                        var _filltr = "";
+                        _filltr = _filltr + "<tr>";
+                        _filltr = _filltr + "<td><i class='icon-minus-sign bigger-150 red'></i><input type='hidden' id='tbid' value='";
+                        _filltr = _filltr + data.ID;
+                        _filltr = _filltr + "'/></td>";
+                        _filltr = _filltr + '<td class="link_tb"><span class = "spbm"><button class="btn btn-link" style="padding:0px!important;">';
+                        _filltr = _filltr + data.Daima;
+                        _filltr = _filltr + "</button></span></td><td>";
+                        _filltr = _filltr + data.Miaoshu;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + data.Mingcheng;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + _sl;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + data.JiaXS;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
+                        _filltr = _filltr + "</td>";
+                        _filltr = _filltr + "</tr>";
+                        $("#dt_sp tbody").append(_filltr);
+                        DatarowCount();
+                        $("#pl_tb").hide();
+                    }
+                }
+            });
+        });
+        /*
+            采购类型 == 2
+            查看套包商品
+        */
+        $("#containerTbsp").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#dt_sp tbody").on("click", "tr", function (e) {
+            if (e.target.tagName == "BUTTON") {
+                var _tbid = $(this).find("#tbid").val();
+                $("#containerTbsp").show();
+                getTaobaoDetail(_tbid);
+            }
+        });
+        $("#container_close_tbsp").on("click", function () {
+            $("#containerTbsp").hide();
+        });
+
+        $("#bt_import").click(function () {
+            if ($("#sel_line").val() == "0") {
+                alert("产品线必须选择！");
+                return;
+            }
+            if ($("#sel_type").val() == "0") {
+                alert("订单类型必须选择！")
+                return;
+            }
+            $("#pl_im_text").val("");
+            $("#pl_im").show();
+        });
+        $("#pl_im").draggable({ handle: ".panel-heading" });
+        $("#pl_im_close").click(function () {
+            $("#pl_im").hide();
+        });
+        $("#pl_im_cancel").click(function () {
+            $("#pl_im").hide();
+        });
+        $("#pl_im_ok").click(function () {
+            var _imt = $("#pl_im_text").val();
+            if (_imt.length == 0) {
+                alert("请先录入需要导入的信息!");
+                return;
+            }
+            var _posturl = "";
+            var _tp = Number($("#sel_type").val());
+            if (_tp == 1)
+                _posturl = "/base_shangpinxx/getproductsbycode";
+            if (_tp == 2)
+                _posturl = "/base_taobao/getproducts";
+            if (_tp == 3)
+                _posturl = "";
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: _posturl,
+                data: {
+                    cpx: $("#sel_line").val(),
+                    imt: _imt
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        alert("导入货品出错！");
+                    }
+                    else if (data == -3) {
+                        alert("货品格式不正确，请重新导入！");
+                    }
+                    else {
+                        var _filltr = '';
+                        for (var i in data) {
+                            _filltr = _filltr + '<tr>';
+                            _filltr = _filltr + '<td><i class="icon-minus-sign bigger-150 red"></i><input type="hidden" id="tbid" value="';
+                            _filltr = _filltr + data[i].ID;
+                            _filltr = _filltr + '"/></td>';
+                            if (_tp == 2) {
+                                _filltr = _filltr + '<td class="link_tb"><span class = "spbm"><button class="btn btn-link" style="padding:0px!important;">';
+                                _filltr = _filltr + data[i].Daima;
+                                _filltr = _filltr + '</button></span></td><td>';
+                            } else {
+                                _filltr = _filltr + '<td>';
+                                _filltr = _filltr + data[i].Daima;
+                                _filltr = _filltr + '</td><td>';
+                            }
+                            _filltr = _filltr + data[i].Guige;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].Mingcheng;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].Shuliang;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].JiaXS;
+                            _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].Jine;
+                            _filltr = _filltr + '</td>';
+                            _filltr = _filltr + '</tr>';
+                        }
+                        $("#dt_sp tbody").append(_filltr);
+                        DatarowCount();
+                        $("#pl_im").hide();
+                    }
+                }
+            });
+        });
+        $("#pl_fl").draggable({ handle: ".panel-heading" });
+        $("#bt_com").click(function () {
+            var _zje = $("#tx_zje").val();//订单金额
+            $.ajax({
+                async: false,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/ord_fanli/GetTotalNumber",
+                data: {
+                    cust: $("#cust").val()
+                },
+                success: function (data) {
+                    if (data == -1) {
+                        //alert("查询返利金额失败！");
+                        $("#pl_fl_zd").val("0");//最大折扣
+                    }
+                    else if (data == -2) {
+                        //alert("获取返利金额失败！");
+                        $("#pl_fl_zd").val("0");
+                    }
+                    else {
+                        $("#pl_fl_ze").val(data);//返利总额
+                    }
+                }
+            });
+            if (_zje == "") {
+                $("#pl_fl_zd").val("0");//最大折扣
+                $("#pl_fl_mn").val("0");//订单可用
+                $("#pl_fl_sy").val("0");//使用金额
+            }
+            else {
+                $("#pl_fl_zd").val(Math.round(0.3 * Number(_zje) * 100) / 100);//最大折扣是订单金额的30%
+                if (Number($("#pl_fl_zd").val()) > Number($("#pl_fl_ze").val())) {
+                    $("#pl_fl_mn").val($("#pl_fl_ze").val());
+                }
+                else
+                    $("#pl_fl_mn").val($("#pl_fl_zd").val());
+                $("#pl_fl_sy").val($("#pl_fl_mn").val());
+
+            }
+            $("#pl_fl").show();
+        });
+        $("#pl_fl_ok").click(function () {
+            if (!$.isNumeric($("#pl_fl_sy").val())) {
+                alert("使用返利金额的录入不正确！");
+                return;
+            }
+            if (Number($("#pl_fl_sy").val()) > Number($("#pl_fl_mn").val())) {
+                alert("使用的返利金额不可以超过订单可用的返利金额！");
+                return;
+            }
+            $("#sel_zk").val("1");
+            $("#tx_zk").val($("#pl_fl_sy").val());
+            $("#pl_fl").hide();
+        });
+        $("#pl_fl_close").click(function () {
+            $("#sel_zk").val("0");
+            $("#pl_fl").hide();
+        });
+        $("#pl_fl_cancel").click(function () {
+            $("#sel_zk").val("0");
+            $("#pl_fl").hide();
+        });
+
+        $("#bt_save").click(function () {
+            if ($("#sel_line").val() == "0") {
+                alert("产品线必须选择！");
+                return;
+            }
+            if ($("#sel_type").val() == "0") {
+                alert("订单类型必须选择！")
+                return;
+            }
+            var _zsl = $("#tx_zsl").val();
+            var _zje = $("#tx_zje").val();
+            if (_zsl == "NaN" || _zje == "NaN") {
+                alert("非法录入，请重新输入商品信息！");
+                return;
+            }
+            if (Number(_zsl) == 0) {
+                alert("请选择商品后再保存！");
+                return;
+            }
+            var _khdh = $("#tx_khdh").val();
+            var _lxr = $("#tx_lxr").val();
+            if (_lxr == "") {
+                alert("收货联系人必须录入！");
+                return;
+            }
+            var _lxdh = $("#tx_lxdh").val();
+            if (_lxdh == "") {
+                alert("联系电话必须录入！");
+                return;
+            }
+            var _shdz = $("#tx_shdz").val();
+            if (_shdz == "") {
+                alert("收货地址必须录入！");
+                return;
+            }
+            var _dt = "";
+            $("#dt_sp tbody tr").each(function () {
+                var _rtd = $(this).find("td");
+                var _sp = _rtd.eq(0).find("input").val();
+                var _sl = _rtd.eq(4).text();
+                var _dj = _rtd.eq(5).text();
+                var _je = _rtd.eq(6).text();
+                _dt = _dt + _sp + "," + _sl + "," + _dj + "," + _je + ";";
+            });
+            if (_dt.length > 10) {
+                $.ajax({
+                    async: true,
+                    beforeSend: function () {
+                        ShowWait();
+                    },
+                    complete: function () {
+                        HiddenWait();
+                    },
+                    type: "POST",
+                    url: "/ord_dingdan/addordernow",
+                    data: {
+                        ddid: $("#ddid").val(),
+                        cust: $("#cust").val(),
+                        cdm: $("#cdm").val(),
+                        cpx: $("#sel_line").val(),
+                        lx: $("#sel_type").val(),
+                        zsl: $("#tx_zsl").val(),
+                        zje: $("#tx_zje").val(),
+                        bz: $("#tx_bz").val(),
+                        zk: $("#sel_zk").val(),
+                        zkje: $("#tx_zk").val(),
+                        khdh: $("#tx_khdh").val(),
+                        lxr: $("#tx_lxr").val(),
+                        lxdh: $("#tx_lxdh").val(),
+                        shdz: $("#tx_shdz").val(),
+                        sps: _dt
+                    },
+                    success: function (data) {
+                        if (data == 1) {
+                            //location.reload();
+                            window.open("/ord_dingdan/customercurrentorder", "_parent");
+                        }
+                        else {
+                            alert("订单信息不正确，请重新录入！");
+                        }
+                    }
+                });
+
+            }
+            else
+                alert("请录入需要购买的商品！");
+        });
+    });
+    //套包商品明细
+    function getTaobaoDetail(tbId) {
+        var str = "";
+        var tbId = tbId;
+        $.post(
+            "/base_taobaosp/getdetail",
+                {
+                    tbId: tbId
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       var serialNum = 0;
+                       for (var i in data) {
+                           serialNum++;
+                           str += [
+                               '<tr>',
+                               '<td><input type="hidden" value="' + data[i].ID + '">' + serialNum + '</td>',
+                               '<td><span class="daima_tbsp">' + data[i].Daima + '</span></td>',
+                               '<td><span class="mingcheng_tbsp">' + data[i].Mingcheng + '</span></td>',
+                               '<td>' + data[i].Guige + '</td>',
+                               '<td>' + data[i].Danwei + '</td>',
+                               '<td><span class="tbsp_jiaxs">' + data[i].JiaXS + '</span></td>',
+                               '<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
+                               '<td><span class="tbsp_shuliang">' + data[i].Shuliang + '</span></td>',
+                               '</tr>'
+                           ].join("");
+                       }
+                       $("#tbody_tbsp").html(str);
+                   } else {
+                       $("#tbody_tbsp").empty();
+                   }
+               }
+            );
+    }
+    function DatarowCount() {
+        var _rc = 0;
+        var _tje = 0;
+        var _tsl = 0;
+        $("#dt_sp tbody tr").each(function () {
+            _rc++;
+            var _je = $(this).find("td").eq(6).text();
+            var _sl = $(this).find("td").eq(4).text();
+            _tje = _tje + Number(_je);
+            _tsl = _tsl + Number(_sl);
+        });
+        $("#tx_zje").val(Math.round(Number(_tje) * 100) / 100);
+        $("#tx_zsl").val(_tsl);
+        $("#tx_zk").val("0");
+        if (_rc == 0) {
+            $("#cpx").attr("disabled", false);
+            $("#ordertype").attr("disabled", false);
+        }
+        if (_rc >= 1) {
+            $("#cpx").attr("disabled", true);
+            $("#ordertype").attr("disabled", true);
+        }
+        return _rc;
+    }
+</script>
+<div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
+<div class="page-content">
+    <input type="hidden" id="ddid" value="@ViewBag.ddid" />
+    <input type="hidden" id="sel_line" value="@ViewBag.CPXDM" />
+    <input type="hidden" id="sel_type" value="@ViewBag.cglx" />
+    <input type="hidden" id="sel_zk" value="0" />
+    <input type="hidden" id="cust" value="@ViewBag.customer" />
+    <input type="hidden" id="cdm" value="@ViewBag.custcode" />
+    <div class="row">
+        <p class="align-center">
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_add"><i class="icon-adn"></i>添加商品</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_import"><i class="icon-exchange"></i>导入商品</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_com"><i class="icon-dollar"></i>使用返利</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_save"><i class="icon-save"></i>保存订单</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_return"><i class="icon-circle-arrow-left"></i>返回</button>
+        </p>
+    </div>
+    <hr />
+    <div class="row">
+        @*<div class="col-sm-1">
+                <label>订单编号：</label>
+            </div>
+            <div class="col-sm-3">
+                <input type="text" readonly placeholder="系统自动生成" />
+            </div>*@
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>产品线</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.cpx" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>订单类型</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@Html.GetCommonValue_ID("订单类型",(int)ViewBag.cglx)" />
+        </div>
+        <div class="col-sm-1">
+            <label>商品数量</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_zsl" readonly value="@ViewBag.sl" />
+        </div>
+        <div class="col-sm-1">
+            <label>订单金额</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_zje" readonly value="@ViewBag.je" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label>客户单号</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_khdh" value="@ViewBag.khdh" placeholder="客户自有编号" />
+        </div>
+        <div class="col-sm-1">
+            <label>备注</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" id="@ViewBag.bz" placeholder="订单说明录入" />
+        </div>
+        <div class="col-sm-1">
+            <label>折扣金额</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_zk" readonly value="@ViewBag.zk" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>联系人</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_lxr" value="@ViewBag.lxr" placeholder="收货联系人" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>联系电话</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" id="tx_lxdh" value="@ViewBag.lxdh" placeholder="收货联系电话" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>收货地址</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" id="tx_shdz" value="@ViewBag.shdz" placeholder="收货详细地址" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="dt_sp">
+                        <caption><i class="icon-edit"></i>采购商品列表</caption>
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>代码</td>
+                                <td>规格</td>
+                                <td>描述</td>
+                                <td>数量</td>
+                                <td>单价</td>
+                                <td>金额</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.ord_dingdanmx)
+                            {
+                                <tr>
+                                    <td>
+                                        @*<label>@string.Format("{0:d}", _i++)</label>*@
+                                        <i class="icon-minus-sign bigger-150 red"></i><input type="hidden" value="@item.SPID">
+                                    </td>
+                                    <td>@item.SPBM</td>
+                                    <td>@item.Guige</td>
+                                    <td>@item.SPMC</td>
+                                    <td>@item.CGSL</td>
+                                    <td>@item.XSBJ</td>
+                                    <td>@item.Jine</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_sp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">商品登记<button id="pl_sp_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <div class="col-sm-6"><p class="btn default" id="pl_sp_ok"><i class="icon-ok"></i>添加</p></div>
+            <div class="col-sm-6"><p class="btn default" id="pl_sp_cancel"><i class="icon-search"></i>取消</p></div>
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3">商品代码</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_spdm" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">采购数量</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_cgsl" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_tb" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">套包登记<button id="pl_tb_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="center">
+            <div class="col-sm-6"><p class="btn default" id="pl_tb_ok"><i class="icon-ok"></i>添加</p></div>
+            <div class="col-sm-6"><p class="btn default" id="pl_tb_cancel"><i class="icon-search"></i>取消</p></div>
+        </div>
+        <br /><br />
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3">套包代码</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_tb_tbdm" class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">采购数量</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_tb_cgsl" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_im" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">导入<button id="pl_im_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <p class="align-center">
+                <div class="col-sm-6"><button class="btn default" id="pl_im_ok"><i class="icon-ok"></i>添加</button></div>
+                <div class="col-sm-6"><button class="btn default" id="pl_im_cancel"><i class="icon-search"></i>取消</button></div>
+            </p>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <p class="align-center">需要导入的货品</p>
+                <textarea id="pl_im_text" class="form-control" rows="10" placeholder="此处粘贴代码和数量，以空格分隔（CY1210CT 1）"></textarea>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="pl_fl" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:200px;width:400px;z-index:999;">
+    <div class="panel-heading">
+        <h3 class="panel-title">返利<button id="pl_fl_close" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <p>
+                <div class="col-sm-6 align-center"><button class="btn default" id="pl_fl_ok"><i class="icon-ok"></i>确定</button></div>
+                <div class="col-sm-6 align-center"><button class="btn default" id="pl_fl_cancel"><i class="icon-search"></i>取消</button></div>
+            </p>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                <label class="col-sm-3">返利总额</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_ze" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">最大折扣</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_zd" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">订单可用</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_mn" readonly class="form-control" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-3">使用金额</label>
+                <div class="col-sm-9">
+                    <input type="text" id="pl_fl_sy" class="form-control" />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*套包明细*@
+<div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;z-index:99;">
+    <div class="panel-heading">
+        <h3 class="panel-title"><b>套包商品</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:310px;min-height:100px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>商品代码</th>
+                                                <th>商品名称</th>
+                                                <th>规格</th>
+                                                <th>基本单位</th>
+                                                <th>销售价</th>
+                                                <th>采购价</th>
+                                                <th>数量</th>
+                                            </tr>
+                                            <tbody id="tbody_tbsp"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

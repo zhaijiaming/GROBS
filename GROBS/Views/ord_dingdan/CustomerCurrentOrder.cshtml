@@ -24,6 +24,32 @@
             else
                 alert("今天停止下单服务，原因：" + _cr + "\r\n" + "如需进步资讯可联系客服！");
         });
+        $("#bt_updateInfo").click(function () {
+            var sDel = 0;
+            var did = 0;
+            $("#dt_active tr input[type=checkbox]").each(function () {
+                if (this.checked) {
+                    var _st = $(this).data("state");
+                    if (Number(_st) != 10) {
+                        alert("只有新建的订单才能编辑，如有特殊问题，需联络平台客服！");
+                        sDel++;
+                        return;
+                    }
+                    did = $(this).val();
+                    sDel++;
+                }
+            });
+            if (did == 0)
+            {
+                return;
+            }
+            if (sDel != 1) {
+                alert("请选中一个订单");
+            }
+            else {
+                location.href = "/ord_dingdan/customerorderedit/" + did;
+            }
+        });
         $("#bt_deleteInfo").click(function () {
             var sDel = "";
             $("#dt_active tr input[type=checkbox]").each(function () {
@@ -188,6 +214,8 @@
                                             <td>联系电话</td>
                                             <td>送货地址</td>*@
                                         <td>采购总数</td>
+                                        <td>发货数量</td>
+                                        <td>欠货数量</td>
                                         <td>采购金额</td>
                                         <td>折扣金额</td>
                                         <td>实付金额</td>
@@ -195,8 +223,9 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    @foreach (var item in ViewBag.ord_dingdan)
-                                    {
+                                    @{  var i = 0;
+                                        foreach (var item in ViewBag.ord_dingdan)
+                                        {
                                         <tr>
                                             <td>
                                                 <label><input type="checkbox" value="@item.ID" data-state="@item.Zhuangtai"></label>
@@ -211,12 +240,45 @@
                                                 <td>@item.LianxiDH</td>
                                                 <td>@item.SonghuoDZ</td>*@
                                             <td>@item.ZongshuCG</td>
+                                            <td>@ViewBag.fhsl[i]</td>
+                                            @*<td>@(item.ZongshuCG - float.Parse(ViewBag.fhsl[i] == "" ? 0 : ViewBag.fhsl[i]))</td>*@
+                                            @*<td>@float.Parse(ViewBag.fhsl[i] == "" ? "0" : ViewBag.fhsl[i])</td>*@
+                                            <td>@String.Format("{0:N0}", ViewBag.fhsl[i] == "" ? "" : (item.ZongshuCG - float.Parse(ViewBag.fhsl[i])))</td>
                                             <td>@String.Format("{0:N}", item.Zongjine)</td>
                                             <td>@String.Format("{0:N}", item.ZhekouJE)</td>
-                                            <td>@String.Format("{0:C}", item.Zongjine - (item.ZhekouJE==null?0:item.ZhekouJE))</td>
+                                            <td>@String.Format("{0:C}", item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE))</td>
                                             <td>@item.Beizhu</td>
                                         </tr>
-                                    }
+                                                i++;
+                                            }
+                                        }
+                                    @*@for (int i = 0; i < (int)ViewBag.cc; i++,j++)
+                                    {
+                                        
+                                        <tr>
+                                            <td>
+                                                <label><input type="checkbox" value="@ViewBag.ord_dingdan[i].ID" data-state="@ViewBag.ord_dingdan[i].Zhuangtai"></label>
+                                            </td>
+                                            <td><a href="/ord_dingdan/customerorderinfo/@ViewBag.ord_dingdan[i].ID">@ViewBag.ord_dingdan[i].Bianhao</a></td>
+                                            <td>@Html.GetCommonValue_ID("订单状态", (int)ViewBag.ord_dingdan[i].Zhuangtai)</td>
+                                            <td>@ViewBag.ord_dingdan[i].Mingcheng</td>
+                                            <td>@Html.GetCommonValue_ID("订单类型", (int)ViewBag.ord_dingdan[i].CGLX)</td>
+                                            <td>@ViewBag.ord_dingdan[i].KehuDH</td>
+                                            <td>@ViewBag.ord_dingdan[i].XiadanRQ</td>
+                                            <td>@ViewBag.ord_dingdan[i].ZongshuCG</td>
+                                            <td>@String.Format("{0:N}", ViewBag.ord_dingdan[i].Zongjine)</td>
+                                            <td>@String.Format("{0:N}", ViewBag.ord_dingdan[i].ZhekouJE)</td>
+                                            <td>@String.Format("{0:C}", ViewBag.ord_dingdan[i].Zongjine - (ViewBag.ord_dingdan[i].ZhekouJE == null ? 0 : ViewBag.ord_dingdan[i].ZhekouJE))</td>
+                                            <td>@ViewBag.ord_dingdan[i].Beizhu</td>
+                                        </tr>
+
+                                        <tr>
+                                            <td>@ViewBag.lll[i]</td>
+                                        </tr>
+                                        <tr>
+                                            <td>@ViewBag.lll[j]</td>
+                                        </tr>
+                                    }*@
                                 </tbody>
                             </table>
                         </div>

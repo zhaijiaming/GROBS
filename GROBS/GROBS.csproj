@@ -898,6 +898,7 @@
     <Content Include="Views\Account\Changepassword.cshtml" />
     <Content Include="Views\ord_fahuodan\Fahuodandetails.cshtml" />
     <Content Include="Views\ord_fahuodan\Fahuodanlist.cshtml" />
+    <Content Include="Views\ord_dingdan\CustomerOrderEdit.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

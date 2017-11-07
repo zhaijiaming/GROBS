@@ -16,6 +16,8 @@ namespace GROBS.Controllers
     public class ord_dingdanController : Controller
     {
         private Iord_dingdanService ob_ord_dingdanservice = ServiceFactory.ord_dingdanservice;
+        private Iord_fahuodanService ob_ord_fahuodanservice = ServiceFactory.ord_fahuodanservice;
+        private Iord_fahuomxService ob_ord_fahuomxservice = ServiceFactory.ord_fahuomxservice;
         [OutputCache(Duration = 30)]
         public ActionResult Index(string page)
         {
@@ -503,6 +505,41 @@ namespace GROBS.Controllers
             //var tempData = ob_ord_dingdanservice.LoadSortEntities(p => p.KHID == _custid && p.Zhuangtai < 12 && p.IsDelete == false, true, s => s.Bianhao);
             var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
             ViewBag.ord_dingdan = tempData;
+            List<string> fh = new List<string>();
+            //for (int i = 0; i < tempData.Count(); i++)
+            //{
+            //    fh.Add(i);
+            //}
+            //ViewBag.cc = tempData.Count();
+            foreach (var ob_ord_dingdan in tempData)
+            {
+                float con = 0;
+                ord_fahuodan ff = ob_ord_fahuodanservice.GetEntityById(ord_fahuodan => ord_fahuodan.DDID == ob_ord_dingdan.ID && ord_fahuodan.IsDelete == false);
+                if (ff == null)
+                {
+                    fh.Add("");
+                    continue;
+                }
+                else
+                {
+                    var ffmx = ServiceFactory.ord_fahuomxservice.LoadEntities(ord_fahuomx => ord_fahuomx.ChukuID == ff.ID && ord_fahuomx.IsDelete == false).ToList<ord_fahuomx>();
+                    if (ffmx.Count == 0)
+                    {
+                        fh.Add("");
+                        continue;
+                    }
+                    else
+                    {
+                        foreach (var ord_fahuomx in ffmx)
+                        {
+                            con += ord_fahuomx.ChukuSL.Value;
+                        }
+                    }
+                }
+                fh.Add(con.ToString());
+            }
+
+            ViewBag.fhsl = fh;
             return View();
         }
         public ActionResult CustomerAdd()
@@ -550,6 +587,7 @@ namespace GROBS.Controllers
         public JsonResult AddOrderNow()
         {
             int _userid = (int)Session["user_id"];
+            var _ddid = Request["ddid"] ?? "";
             var _cust = Request["cust"] ?? "";
             var _cdm = Request["cdm"] ?? "";
             var _cpx = Request["cpx"] ?? "";
@@ -572,7 +610,8 @@ namespace GROBS.Controllers
             string[] _splist = _sps.Split(';');
 
             //add order
-            ord_dingdan _dd = new ord_dingdan();
+            ord_dingdan _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == int.Parse(_ddid) && p.IsDelete == false);
+            //ord_dingdan _dd = new ord_dingdan();
             _dd.Beizhu = _bz;
             _dd.CGLX = int.Parse(_lx);
             _dd.CPXID = int.Parse(_cpx);
@@ -591,8 +630,8 @@ namespace GROBS.Controllers
             _dd.ShenheTG = false;
             _dd.HH = _splist.Count();
             _dd.MakeMan = _userid;
-            _dd = ob_ord_dingdanservice.AddEntity(_dd);
-            if (_dd == null)
+            bool suc = ob_ord_dingdanservice.UpdateEntity(_dd);
+            if (suc == false)
                 return Json(-2);
 
             float _zkl = 1 - (float)(_dd.ZhekouJE / _dd.Zongjine);
@@ -621,6 +660,14 @@ namespace GROBS.Controllers
                                tsl = g.Sum(p => p.spsl),
                                tje = g.Sum(p => p.spje)
                            };
+            //删除之前的订单表体信息
+            var delmx = ServiceFactory.ord_dingdanmxservice.LoadEntities(p => p.DDID == _dd.ID && p.IsDelete == false).ToList<ord_dingdanmx>(); ;
+            foreach (ord_dingdanmx _delmx in delmx)
+            {
+                _delmx.IsDelete = true;
+                ServiceFactory.ord_dingdanmxservice.UpdateEntity(_delmx);
+            }
+            
             foreach (var spg in _spgroup)
             {
                 if (_dd.CGLX == 1)
@@ -714,6 +761,41 @@ namespace GROBS.Controllers
                 ViewBag.cpx = "";
             else
                 ViewBag.cpx = _cpx.Mingcheng;
+            ViewBag.cglx = _dd.CGLX;
+            ViewBag.sl = _dd.ZongshuCG;
+            ViewBag.je = _dd.Zongjine;
+            ViewBag.khdh = _dd.KehuDH;
+            ViewBag.bz = _dd.Beizhu;
+            ViewBag.zk = _dd.ZhekouJE;
+            ViewBag.lxr = _dd.Lianxiren;
+            ViewBag.lxdh = _dd.LianxiDH;
+            ViewBag.shdz = _dd.SonghuoDZ;
+            if (_dd.FKPZ == null)
+                ViewBag.fkpz = "";
+            else
+                ViewBag.fkpz = "/files/zhengzhao/" + _dd.FKPZ;
+            var _ddmx = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == _dd.ID && p.IsDelete == false, true, s => s.SPBM).ToList();
+            ViewBag.ord_dingdanmx = _ddmx;
+            return View();
+        }
+
+        public ActionResult CustomerOrderEdit(int id)
+        {
+            int _custid = (int)Session["customer_id"];
+            var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.KHID == _custid && p.IsDelete == false);
+            if (_dd == null)
+                return View();
+            var _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == _dd.CPXID);
+            if (_cpx == null)
+                ViewBag.cpx = "";
+            else
+            {
+                ViewBag.cpx = _cpx.Mingcheng;
+                ViewBag.CPXDM = _cpx.ID;
+            }
+            ViewBag.ddid = id;
+            ViewBag.customer = _dd.KHID;
+            ViewBag.custcode = _dd.KehuDM;
             ViewBag.cglx = _dd.CGLX;
             ViewBag.sl = _dd.ZongshuCG;
             ViewBag.je = _dd.Zongjine;
