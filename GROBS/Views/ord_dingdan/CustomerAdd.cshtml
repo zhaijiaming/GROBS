@@ -9,7 +9,11 @@
 <script type="text/javascript">
     $(document).ready(function () {
 
- 
+        //离开页面弹出提醒
+        //绑定beforeunload事件 
+        $(window).bind('beforeunload', function () {
+            return '您输入的内容尚未保存，确定离开此页面吗？';
+        });
 
 
         $("tr").bind("dblclick", function () {
