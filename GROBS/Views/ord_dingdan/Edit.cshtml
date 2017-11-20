@@ -622,6 +622,14 @@
         });
     }
 </script>
+
+<style>
+    .form-group{
+        margin-bottom:0px! important;
+    }
+
+
+</style>
 <div class="breadcrumbs" id="breadcrumbs">
     <ul class="breadcrumb">
         <li>
@@ -643,9 +651,9 @@
         <button type="button" id="notPass" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-remove"></i><b>不通过</b></button>
     </div>
     <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
-        <div class="container-fluid">
+        <div class="container-  fluid">
             <div class="row">
-                <div class="col-sm-5 col-sm-offset-1">
+                <div>
                     <div class="widget-box radius-4">
                         <div class="widget-header">
                             <h4><b>订单信息</b></h4>
@@ -663,250 +671,271 @@
                                     <input type="hidden" id="zhuangtai" name="zhuangtai" value="@ViewData.Model.Zhuangtai" />
                                     <input type="hidden" id="ACCID" name="ACCID" value="@ViewData.Model.ACCID" />
                                     <input type="hidden" id="sel_zk" value="0" />
+
+
+
                                     <fieldset>
-                                        @*编号*@
-                                        <div class="form-group">
-                                            <label for="Bianhao" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>编号</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="Bianhao" name="Bianhao" readonly class="form-control" placeholder="自动生成编号" value="@ViewData.Model.Bianhao" />
+                                        @*编号*@  
+                                        <div class="one">
+                                            <div class="form-group">
+                                                <div class="col-sm-6">
+                                                    <label for="Bianhao" class="control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>编号</b></label>
+                                                    <input type="text" id="Bianhao" name="Bianhao" readonly class="form-control" placeholder="自动生成编号" value="@ViewData.Model.Bianhao" />
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label for="text_accid" class="control-label"><b>审核人员</b></label>
+                                                    <input type="text" id="text_accid" readonly class="form-control" placeholder="请输入审核人员" value="@Html.GetDataValue_ID("userinfo", "全名", (int)(ViewData.Model.ACCID == null ? 0 : ViewData.Model.ACCID))" />
+                                                </div> 
                                             </div>
                                         </div>
-                                       @*客户代码*@
-                                        <div class="form-group">
-                                            <label for="KehuDM" class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户代码</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="KehuDM" name="KehuDM" readonly class="form-control" placeholder="请选择客户" value="@ViewData.Model.KehuDM" />
+                                    
+                                        <div class="two">
+                                            <div class="form-group">
+
+                                                <div class="col-sm-6">
+                                                    <label for="KehuDM" class="control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户代码</b></label>
+                                                    <input type="text" id="KehuDM" name="KehuDM" readonly class="form-control" placeholder="请选择客户" value="@ViewData.Model.KehuDM" />
+                                                </div>
+                                                <div class="col-sm-6" style="margin-top:20px;">
+                                                    <label class="control-label" for="ShenheTG"><b>审核通过</b></label>
+                                                    <label class="control-group">
+                                                        <input name="shenhetg" id="ShenheTG" disabled class="ace ace-switch ace-switch-7" type="checkbox">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </div>
+                                            
+                                               
                                             </div>
                                         </div>
-                                        @*客户*@
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <input id="khname" placeholder="请选择客户" readonly class="form-control" type="text" value="@Html.GetDataValue_ID("收货单位", "", (int)ViewData.Model.KHID)">
-                                                    <span class="input-group-btn">
-                                                        <button type="button" id="btn_select" disabled class="btn btn-primary btn-sm">
-                                                            选择
-                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
-                                                        </button>
-                                                    </span>
+
+
+                                        @*采购类型*@@*客户单号*@
+                                        <div class="three">
+                                            <div class="form-group">
+
+                                                <div class="col-sm-6">
+                                                    <label class="control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>客户</b></label>
+                                                    <div class="input-group">
+                                                        <input id="khname" placeholder="请选择客户" readonly class="form-control" type="text" value="@Html.GetDataValue_ID("收货单位", "", (int)ViewData.Model.KHID)">
+                                                        <span class="input-group-btn">
+                                                            <button type="button" id="btn_select" disabled class="btn btn-primary btn-sm">
+                                                                选择
+                                                                <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="control-label" for="shenhesj"><b>审核时间</b></label>
+                                                    <div class="input-group">
+                                                        <input name="shenhesj" id="text_shenhesj" disabled="disabled" class="form-control" value="@ViewData.Model.ShenheSJ" type="text">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-calendar bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                             
+                                               
+                                            </div>
+                                        </div>
+
+                                        @*付款凭证*@@*下单日期*@
+                                        <div class="four">
+                                            <div class="form-group">
+
+                                                <div class="col-sm-6">
+                                                    <label for="CPXID" class="control-label"><b>产品线</b></label>
+                                                    @*@Html.SelectList_Auto("CPXID", "产品线", "", (long)ViewData.Model.CPXID)*@
+                                                    <select name="CPXID" id="select_cpx" style="width:100%;"></select>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label for="ZongshuCG" class="control-label"><b>采购总数</b></label>
+                                                    <input type="text" id="ZongshuCG" name="ZongshuCG" class="form-control" placeholder="请输入采购总数" value="@ViewData.Model.ZongshuCG" />
+                                                </div>
+                                               
+                                               
+                                            </div>
+                                        </div>
+
+                                        @*联系人*@ @*联系电话*@
+                                        <div class="five">
+                                            <div class="form-group">
+                                                <div class="col-sm-6">
+                                                    <label for="CGLX" class="control-label"><b>采购类型</b></label>
+                                                    @Html.SelectList_Common("CGLX", "订单类型", (long)ViewData.Model.CGLX)
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label for="CuoxiaoZK" class="control-label"><b>促销折扣</b></label>
+                                                    <input type="text" id="CuoxiaoZK" disabled name="CuoxiaoZK" class="form-control" placeholder="" value="@ViewData.Model.CuoxiaoZK" />
+                                                </div>
+                                                
+                                               
+                                            </div>
+                                        </div>
+
+                                        @*送货地址*@ @*客服人员*@
+                                        <div class="six">
+                                            <div class="form-group">
+                                                <div class="col-sm-6">
+                                                    <label for="KehuDH" class="control-label"><b>客户单号</b></label>
+                                                    <input type="text" id="KehuDH" name="KehuDH" class="form-control" placeholder="请输入客户单号" value="@ViewData.Model.KehuDH" />
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label class="control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>折扣金额</b></label>
+                                                    <div class="input-group">
+                                                        <input id="ZhekouJE" name="ZhekouJE" placeholder="请选择" readonly class="form-control" type="text" value="@ViewData.Model.ZhekouJE">
+                                                        <span class="input-group-btn">
+                                                            <button type="button" id="btn_zhekouje" class="btn btn-primary btn-sm">
+                                                                选择
+                                                                <i class="icon-hand-up icon-on-right bigger-110"></i>
+                                                            </button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                
+                                                
+                                            </div>
+                                        </div>
+
+
+                                        @*审核人员*@@*审核通过*@
+                                        <div class="seven">
+                                            <div class="form-group">
+                                                <div class="col-sm-6" style="margin-top:20px;">
+                                                    <label for="FKPZ" class="control-label"><b>付款凭证</b></label>
+                                                    <a href="@ViewData.Model.FKPZ" target="_blank">浏览</a>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <label for="Zongjine" class="control-label"><b>总金额</b></label>
+                                                    <input type="text" id="Zongjine" name="Zongjine" class="form-control" placeholder="请输入总金额" value="@ViewData.Model.Zongjine" />
+                                                </div>
+                                                </div>
+                                         </div>
+
+                                        @*审核时间*@ @*采购总数*@
+                                        <div class="eight">
+                                            <div class="form-group">
+                                                <div class="col-sm-6">
+                                                    <label for="XiadanRQ" class="control-label"><b>下单日期</b></label>
+                                                    <div class="input-group">
+                                                        <input id="XiadanRQ" name="XiadanRQ" placeholder="请填写下单日期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.XiadanRQ)" type="date">
+                                                        <span class="input-group-addon">
+                                                            <i class="icon-calendar bigger-110"></i>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-6" style="margin-top:20px;">
+                                                    <label class="control-group">
+                                                        <input name="JieshuSF" id="JieshuSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        @*产品线*@
-                                        <div class="form-group">
-                                            <label for="CPXID" class="col-sm-3 control-label"><b>产品线</b></label>
-                                            <div class="col-sm-8">
-                                                @*@Html.SelectList_Auto("CPXID", "产品线", "", (long)ViewData.Model.CPXID)*@
-                                                <select name="CPXID" id="select_cpx" style="width:100%;"></select>
-                                            </div>
-                                        </div>
-                                        @*采购类型*@
-                                        <div class="form-group">
-                                            <label for="CGLX" class="col-sm-3 control-label"><b>采购类型</b></label>
-                                            <div class="col-sm-8">
-                                                @Html.SelectList_Common("CGLX", "订单类型", (long)ViewData.Model.CGLX)
-                                            </div>
-                                        </div>
-                                        @*客户单号*@
-                                        <div class="form-group">
-                                            <label for="KehuDH" class="col-sm-3 control-label"><b>客户单号</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="KehuDH" name="KehuDH" class="form-control" placeholder="请输入客户单号" value="@ViewData.Model.KehuDH" />
-                                            </div>
-                                        </div>
-                                        @*付款凭证*@
-                                        <div class="form-group">
-                                            <label for="FKPZ" class="col-sm-3 control-label"><b>付款凭证</b></label>
-                                            <div class="col-sm-8">
-                                                <a href="@ViewData.Model.FKPZ" target="_blank">浏览</a>
-                                            </div>
-                                        </div>
-                                        @*下单日期*@
-                                        <div class="form-group">
-                                            <label for="XiadanRQ" class="col-sm-3 control-label"><b>下单日期</b></label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <input id="XiadanRQ" name="XiadanRQ" placeholder="请填写下单日期" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.XiadanRQ)" type="date">
-                                                    <span class="input-group-addon">
-                                                        <i class="icon-calendar bigger-110"></i>
-                                                    </span>
+                                            
+                                      @*促销折扣*@ @*折扣金额*@
+                                          <div class="nine">
+                                              <div class="form-group">
+                                                  <div class="col-sm-6">
+                                                      <label for="Lianxiren" class="control-label"><b>收货人</b></label>
+                                                      <input type="text" id="Lianxiren" name="Lianxiren" class="form-control" placeholder="请输入联系人" value="@ViewData.Model.Lianxiren" />
+                                                  </div>
+                                                  <div class="col-sm-6">
+                                                      <label for="text_zhuangtai" class="control-label"><b>状态</b></label>
+                                                      <input type="text" id="text_zhuangtai" readonly class="form-control" placeholder="" value="@Html.GetCommonValue_ID("订单状态", (int)ViewData.Model.Zhuangtai)" />
+                                                  </div>  
+                                              </div>
+                                          </div>
+  
+                                            @*总金额*@@*是否控制*@
+
+                                            <div class="ten">
+                                                <div class="form-group">
+                                                    <div class="col-sm-6">
+                                                        <label for="LianxiDH" class="control-label"><b>联系电话</b></label>
+                                                        <input type="text" id="LianxiDH" name="LianxiDH" class="form-control" placeholder="请输入联系电话" value="@ViewData.Model.LianxiDH" />
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <label for="Beizhu" class="control-label"><b>备注</b></label>
+                                                        <input type="text" id="Beizhu" name="Beizhu" class="form-control" placeholder="请输入备注" value="@ViewData.Model.Beizhu" />
+                                                    </div>
+                                                   </div>
                                                 </div>
-                                            </div>
-                                        </div>
-                                        @*联系人*@
-                                        <div class="form-group">
-                                            <label for="Lianxiren" class="col-sm-3 control-label"><b>收货人</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="Lianxiren" name="Lianxiren" class="form-control" placeholder="请输入联系人" value="@ViewData.Model.Lianxiren" />
-                                            </div>
-                                        </div>
-                                        @*联系电话*@
-                                        <div class="form-group">
-                                            <label for="LianxiDH" class="col-sm-3 control-label"><b>联系电话</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="LianxiDH" name="LianxiDH" class="form-control" placeholder="请输入联系电话" value="@ViewData.Model.LianxiDH" />
-                                            </div>
-                                        </div>
-                                        @*送货地址*@
-                                        <div class="form-group">
-                                            <label for="SonghuoDZ" class="col-sm-3 control-label"><b>送货地址</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="SonghuoDZ" name="SonghuoDZ" class="form-control" placeholder="请输入送货地址" value="@ViewData.Model.SonghuoDZ" />
-                                            </div>
-                                        </div>
-                                        @*客服人员*@
-                                        <div class="form-group">
-                                            <label for="OPID" class="col-sm-3 control-label"><b>客服人员</b></label>
-                                            <div class="col-sm-8">
-                                                @Html.SelectList_Auto("OPID", "userinfo", "", (long)(ViewData.Model.OPID == null ? 0 : ViewData.Model.OPID))
-                                            </div>
-                                        </div>
-                                        @*审核人员*@
-                                        <div class="form-group">
-                                            <label for="text_accid" class="col-sm-3 control-label"><b>审核人员</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="text_accid" readonly class="form-control" placeholder="请输入审核人员" value="@Html.GetDataValue_ID("userinfo", "全名", (int)(ViewData.Model.ACCID == null ? 0 : ViewData.Model.ACCID))" />
-                                            </div>
-                                        </div>
-                                        @*审核通过*@
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="ShenheTG"><b>审核通过</b></label>
-                                            <div class="col-sm-4">
-                                                <label class="control-group">
-                                                    <input name="shenhetg" id="ShenheTG" disabled class="ace ace-switch ace-switch-7" type="checkbox">
-                                                    <span class="lbl"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        @*审核时间*@
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="shenhesj"><b>审核时间</b></label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <input name="shenhesj" id="text_shenhesj" disabled="disabled" class="form-control" value="@ViewData.Model.ShenheSJ" type="text" >
-                                                    <span class="input-group-addon">
-                                                        <i class="icon-calendar bigger-110"></i>
-                                                    </span>
+                                        
+
+                                        @*状态*@@*备注*@
+                                              <div class="eleven">
+                                                  <div class="form-group">
+                                                      <div class="col-sm-6">
+                                                          <label for="SonghuoDZ" class="control-label"><b>送货地址</b></label>
+                                                          <input type="text" id="SonghuoDZ" name="SonghuoDZ" class="form-control" placeholder="请输入送货地址" value="@ViewData.Model.SonghuoDZ" />
+                                                      </div>
+                                                      <div class="col-sm-6">
+                                                          <label class="control-label" for="MakeDate"><b>录入日期</b></label>
+                                                          <div class="input-group">
+                                                              <input id="MakeDate" disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)" type="text">
+                                                              <span class="input-group-addon">
+                                                                  <i class="icon-calendar bigger-110"></i>
+                                                              </span>
+                                                          </div>
+                                                      </div>  
+                                                 
+                                                  </div>
+                                              </div>
+          
+                                            @*<div class="form-group" style="display:none;">
+                                                @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-10">
+                                                    @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
                                                 </div>
-                                            </div>
-                                        </div>
-                                        @*采购总数*@
-                                        <div class="form-group">
-                                            <label for="ZongshuCG" class="col-sm-3 control-label"><b>采购总数</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="ZongshuCG" name="ZongshuCG" class="form-control" placeholder="请输入采购总数" value="@ViewData.Model.ZongshuCG" />
-                                            </div>
-                                        </div>
-                                        @*促销折扣*@
-                                        <div class="form-group">
-                                            <label for="CuoxiaoZK" class="col-sm-3 control-label"><b>促销折扣</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="CuoxiaoZK" disabled name="CuoxiaoZK" class="form-control" placeholder="" value="@ViewData.Model.CuoxiaoZK" />
-                                            </div>
-                                        </div>
-                                        @*折扣金额*@
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label"><i class="red glyphicon glyphicon-asterisk"></i> <b>折扣金额</b></label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <input id="ZhekouJE" name="ZhekouJE" placeholder="请选择" readonly class="form-control" type="text" value="@ViewData.Model.ZhekouJE">
-                                                    <span class="input-group-btn">
-                                                        <button type="button" id="btn_zhekouje" class="btn btn-primary btn-sm">
-                                                            选择
-                                                            <i class="icon-hand-up icon-on-right bigger-110"></i>
-                                                        </button>
-                                                    </span>
+                                            </div>*@
+                                            @*<div class="form-group" style="display:none;">
+                                                @Html.LabelFor(m => m.Col2, new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-10">
+                                                    @Html.TextBoxFor(m => m.Col2, new { @class = "form-control" })
                                                 </div>
-                                            </div>
-                                        </div>
-                                        @*总金额*@
-                                        <div class="form-group">
-                                            <label for="Zongjine" class="col-sm-3 control-label"><b>总金额</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="Zongjine" name="Zongjine" class="form-control" placeholder="请输入总金额" value="@ViewData.Model.Zongjine" />
-                                            </div>
-                                        </div>
-                                        @*是否控制*@
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="JieshuSF"><b>是否控制</b></label>
-                                            <div class="col-sm-4">
-                                                <label class="control-group">
-                                                    <input name="JieshuSF" id="JieshuSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
-                                                    <span class="lbl"></span>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        @*状态*@
-                                        <div class="form-group">
-                                            <label for="text_zhuangtai" class="col-sm-3 control-label"><b>状态</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="text_zhuangtai" readonly class="form-control" placeholder="" value="@Html.GetCommonValue_ID("订单状态", (int)ViewData.Model.Zhuangtai)" />
-                                            </div>
-                                        </div>
-                                        @*备注*@
-                                        <div class="form-group">
-                                            <label for="Beizhu" class="col-sm-3 control-label"><b>备注</b></label>
-                                            <div class="col-sm-8">
-                                                <input type="text" id="Beizhu" name="Beizhu" class="form-control" placeholder="请输入备注" value="@ViewData.Model.Beizhu" />
-                                            </div>
-                                        </div>
-                                        <div class="form-group" style="display:none;">
-                                            @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
-                                            <div class="col-sm-10">
-                                                @Html.TextBoxFor(m => m.Col1, new { @class = "form-control" })
-                                            </div>
-                                        </div>
-                                        <div class="form-group" style="display:none;">
-                                            @Html.LabelFor(m => m.Col2, new { @class = "control-label col-sm-2" })
-                                            <div class="col-sm-10">
-                                                @Html.TextBoxFor(m => m.Col2, new { @class = "form-control" })
-                                            </div>
-                                        </div>
-                                        <div class="form-group" style="display:none;">
-                                            @Html.LabelFor(m => m.Col3, new { @class = "control-label col-sm-2" })
-                                            <div class="col-sm-10">
-                                                @Html.TextBoxFor(m => m.Col3, new { @class = "form-control" })
-                                            </div>
-                                        </div>
-                                        @*录入日期*@
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="MakeDate"><b>录入日期</b></label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <input id="MakeDate" disabled="disabled" class="form-control" value="@string.Format("{0:yyyy-MM-dd}",ViewData.Model.MakeDate)" type="text">
-                                                    <span class="input-group-addon">
-                                                        <i class="icon-calendar bigger-110"></i>
-                                                    </span>
+                                            </div>*@
+                                            @*<div class="form-group" style="display:none;">
+                                                @Html.LabelFor(m => m.Col3, new { @class = "control-label col-sm-2" })
+                                                <div class="col-sm-10">
+                                                    @Html.TextBoxFor(m => m.Col3, new { @class = "form-control" })
                                                 </div>
+                                            </div>*@
+
+                                             @*录入日期*@ @*录入人*@
+                                               <div class="twelve">
+                                                   <div class="form-group">
+                                                       <div class="col-sm-6">
+                                                           <label for="OPID" class="control-label"><b>客服人员</b></label>
+                                                           @Html.SelectList_Auto("OPID", "userinfo", "", (long)(ViewData.Model.OPID == null ? 0 : ViewData.Model.OPID))
+                                                       </div>
+                                                       <div class="col-sm-6">
+                                                           <label class="control-label" for="MakeMan"><b>录入人</b></label>
+                                                           <div class="input-group">
+                                                               <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)(ViewData.Model.MakeMan == null ? 0 : ViewData.Model.MakeMan))">
+                                                               <span class="input-group-addon">
+                                                                   <i class="icon-user bigger-110"></i>
+                                                               </span>
+                                                           </div>
+                                                       </div>
+                                                   </div>
+                                               </div>                                      
+
+                                            </fieldset>
+
+                                            <div class="form-actions center">
+                                                <button id="save_bottom" class="btn btn-primary" type="button">
+                                                    <b>更新</b>
+                                                    <i class="icon-save bigger-110"></i>
+                                                </button>
                                             </div>
-                                        </div>
-                                        @*录入人*@
-                                        <div class="form-group">
-                                            <label class="col-sm-3 control-label" for="MakeMan"><b>录入人</b></label>
-                                            <div class="col-sm-8">
-                                                <div class="input-group">
-                                                    <input placeholder="录入人" disabled="disabled" class="form-control" type="text" value="@Html.GetDataValue_ID("userinfo", "全名", (int)(ViewData.Model.MakeMan == null ? 0 : ViewData.Model.MakeMan))">
-                                                    <span class="input-group-addon">
-                                                        <i class="icon-user bigger-110"></i>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </fieldset>
-                                    <div class="form-actions center">
-                                        <button id="save_bottom" class="btn btn-primary" type="button">
-                                            <b>更新</b>
-                                            <i class="icon-save bigger-110"></i>
-                                        </button>
-                                    </div>
                                 }
                             </div>
                         </div>
                     </div>
                 </div>
                 @*订单明细*@
-                <div class="col-sm-5">
+                <div ">
                     <div style="max-height:1058px;">
                         <div class="widget-box radius-4">
                             <div class="widget-header">
@@ -915,7 +944,7 @@
                             <div class="widget-body">
                                 <div class="widget-main">
                                     <div class="row" id="pl_fun_dizhi">
-                                        <div class="col-sm-12">
+                                        <div class="col-sm-12" style="text-align:center;">
                                             <button type="button" id="btn_Add" class="btn btn-white"><i class="icon-adn  bigger-120 blue"></i>添加</button>
                                             <button type="button" id="bt_import" class="btn btn-white" ><i class="icon-exchange"></i>导入商品</button>
                                             <button type="button" id="btn_Edit" class="btn btn-white"><i class="icon-edit  bigger-120"></i>编辑</button>

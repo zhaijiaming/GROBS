@@ -498,6 +498,7 @@
   .feedback-container .introduction .identification .title{
   font-size: 1.8rem;
   color: #3085b1;
+  text-align:left;
   }
   .feedback-container .identification p {
   font-size: 14px;
@@ -516,7 +517,7 @@
         }
 
         .my-footer .my-row {
-            width: 80%;
+            width: 85%;
             margin: 100px 10%;
             text-align: center;
             line-height: 200%;
@@ -541,6 +542,7 @@
         .my-footer .container .my-row .title {
             height: 30px;
             font-size: 1.85rem;
+            text-align:left;
         }
 
         .my-footer .container .split-bar {
@@ -548,7 +550,7 @@
             width: 10px;
             height: 2px;
             background-color: #2cbba4;
-            margin: 0 0 20px 50px !important;
+            margin: 3px 0 20px 0px !important;
         }
         
 
@@ -565,6 +567,10 @@
         .my-footer .container  .split-bar:after {
             left: 0;
             margin-left: 120%;
+        }
+
+        .my-footer .photos img{
+            width:80%;
         }
         .last{
             background-color: #000000;
