@@ -241,8 +241,6 @@
                                                 <td>@item.SonghuoDZ</td>*@
                                             <td>@item.ZongshuCG</td>
                                             <td>@ViewBag.fhsl[i]</td>
-                                            @*<td>@(item.ZongshuCG - float.Parse(ViewBag.fhsl[i] == "" ? 0 : ViewBag.fhsl[i]))</td>*@
-                                            @*<td>@float.Parse(ViewBag.fhsl[i] == "" ? "0" : ViewBag.fhsl[i])</td>*@
                                             <td>@String.Format("{0:N0}", ViewBag.fhsl[i] == "" ? "" : (item.ZongshuCG - float.Parse(ViewBag.fhsl[i])))</td>
                                             <td>@String.Format("{0:N}", item.Zongjine)</td>
                                             <td>@String.Format("{0:N}", item.ZhekouJE)</td>
@@ -251,34 +249,7 @@
                                         </tr>
                                                 i++;
                                             }
-                                        }
-                                    @*@for (int i = 0; i < (int)ViewBag.cc; i++,j++)
-                                    {
-                                        
-                                        <tr>
-                                            <td>
-                                                <label><input type="checkbox" value="@ViewBag.ord_dingdan[i].ID" data-state="@ViewBag.ord_dingdan[i].Zhuangtai"></label>
-                                            </td>
-                                            <td><a href="/ord_dingdan/customerorderinfo/@ViewBag.ord_dingdan[i].ID">@ViewBag.ord_dingdan[i].Bianhao</a></td>
-                                            <td>@Html.GetCommonValue_ID("订单状态", (int)ViewBag.ord_dingdan[i].Zhuangtai)</td>
-                                            <td>@ViewBag.ord_dingdan[i].Mingcheng</td>
-                                            <td>@Html.GetCommonValue_ID("订单类型", (int)ViewBag.ord_dingdan[i].CGLX)</td>
-                                            <td>@ViewBag.ord_dingdan[i].KehuDH</td>
-                                            <td>@ViewBag.ord_dingdan[i].XiadanRQ</td>
-                                            <td>@ViewBag.ord_dingdan[i].ZongshuCG</td>
-                                            <td>@String.Format("{0:N}", ViewBag.ord_dingdan[i].Zongjine)</td>
-                                            <td>@String.Format("{0:N}", ViewBag.ord_dingdan[i].ZhekouJE)</td>
-                                            <td>@String.Format("{0:C}", ViewBag.ord_dingdan[i].Zongjine - (ViewBag.ord_dingdan[i].ZhekouJE == null ? 0 : ViewBag.ord_dingdan[i].ZhekouJE))</td>
-                                            <td>@ViewBag.ord_dingdan[i].Beizhu</td>
-                                        </tr>
-
-                                        <tr>
-                                            <td>@ViewBag.lll[i]</td>
-                                        </tr>
-                                        <tr>
-                                            <td>@ViewBag.lll[j]</td>
-                                        </tr>
-                                    }*@
+                                        }                                 
                                 </tbody>
                             </table>
                         </div>
