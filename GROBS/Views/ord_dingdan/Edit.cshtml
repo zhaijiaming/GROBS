@@ -779,7 +779,7 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                                <div class="col-sm-4" style="margin-top:20px;">
+                                                <div class="col-sm-4" style="margin-top:30px;">
                                                     <label for="FKPZ" class="control-label"><b>付款凭证</b></label>
                                                     <a href="@ViewData.Model.FKPZ" target="_blank">浏览</a>
                                                 </div>
@@ -816,32 +816,8 @@
                                         </div>
 
 
-                                       @*采购总数，审核通过，是否控制*@
+                                      @*备注，录入日期，录入人*@
                                         <div class="seven">
-                                            <div class="form-group">
-                                                <div class="col-sm-4">
-                                                    <label for="ZongshuCG" class="control-label"><b>采购总数</b></label>
-                                                    <input type="text" id="ZongshuCG" name="ZongshuCG" class="form-control" placeholder="请输入采购总数" value="@ViewData.Model.ZongshuCG" />
-                                                </div>
-                                                <div class="col-sm-4" style="margin-top:20px;">
-                                                    <label class="control-label" for="ShenheTG"><b>审核通过</b></label>
-                                                    <label class="control-group">
-                                                        <input name="shenhetg" id="ShenheTG" disabled class="ace ace-switch ace-switch-7" type="checkbox">
-                                                        <span class="lbl"></span>
-                                                    </label>
-                                                </div>
-                                                <div class="col-sm-4" style="margin-top:20px;">
-                                                    <label class="control-label" for="JieshuSF"><b>是否控制</b></label>
-                                                    <label class="control-group">
-                                                        <input name="JieshuSF" id="JieshuSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
-                                                        <span class="lbl"></span>
-                                                    </label>
-                                                </div>
-                                            
-                                                </div>
-                                         </div>
-                                         @*备注，录入日期，录入人*@
-                                        <div class="eight">
                                             <div class="form-group">
                                                 <div class="col-sm-4">
                                                     <label for="Beizhu" class="control-label"><b>备注</b></label>
@@ -855,7 +831,7 @@
                                                             <i class="icon-calendar bigger-110"></i>
                                                         </span>
                                                     </div>
-                                                </div>  
+                                                </div>
                                                 <div class="col-sm-4">
                                                     <label class="control-label" for="MakeMan"><b>录入人</b></label>
                                                     <div class="input-group">
@@ -865,7 +841,31 @@
                                                         </span>
                                                     </div>
                                                 </div>
+                                            </div>
+                                         </div>
+
+                                        @*采购总数，审核通过，是否控制*@
+                                        <div class="eight">
+                                            <div class="form-group">
+                                                <div class="col-sm-4">
+                                                    <label for="ZongshuCG" class="control-label"><b>采购总数</b></label>
+                                                    <input type="text" id="ZongshuCG" name="ZongshuCG" class="form-control" placeholder="请输入采购总数" value="@ViewData.Model.ZongshuCG" />
                                                 </div>
+                                                <div class="col-sm-4" style="margin-top:30px;">
+                                                    <label class="control-label" for="ShenheTG"><b>审核通过</b></label>
+                                                    <label class="control-group">
+                                                        <input name="shenhetg" id="ShenheTG" disabled class="ace ace-switch ace-switch-7" type="checkbox">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </div>
+                                                <div class="col-sm-4" style="margin-top:30px;">
+                                                    <label class="control-label" for="JieshuSF"><b>是否控制</b></label>
+                                                    <label class="control-group">
+                                                        <input name="JieshuSF" id="JieshuSF" class="ace ace-switch ace-switch-7" checked="checked" type="checkbox">
+                                                        <span class="lbl"></span>
+                                                    </label>
+                                                </div>
+                                            </div>
                                             </div>                                           
                                             @*<div class="form-group" style="display:none;">
                                                 @Html.LabelFor(m => m.Col1, new { @class = "control-label col-sm-2" })
