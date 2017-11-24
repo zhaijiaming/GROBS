@@ -1106,3 +1106,4 @@ INFO  2017-11-20 09:49:18,925  7441ms 14                     MoveNext           
 INFO  2017-11-20 09:54:24,046 15804ms 14                     MoveNext           - ruikang login at 2017-11-20 09:54:24!
 INFO  2017-11-20 09:57:01,285 15284ms 14                     MoveNext           - ruikang login at 2017-11-20 09:57:01!
 INFO  2017-11-20 09:58:48,539  9162ms 14                     MoveNext           - ruikang login at 2017-11-20 09:58:48!
+INFO  2017-11-24 09:26:37,443 12671ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-11-24 09:26:37!
