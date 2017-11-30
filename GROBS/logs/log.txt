@@ -1121,3 +1121,15 @@ INFO  2017-11-24 16:27:26,013  5216ms 10                     MoveNext           
 INFO  2017-11-24 16:29:59,583  6503ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-11-24 16:29:59!
 INFO  2017-11-24 17:46:17,604 10414ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-11-24 17:46:17!
 INFO  2017-11-24 17:48:33,552  9798ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-11-24 17:48:33!
+INFO  2017-11-29 09:21:23,585  7869ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-11-29 9:21:23!
+INFO  2017-11-29 09:45:22,969 11405ms 14                     MoveNext           - ruikang login at 2017-11-29 9:45:22!
+INFO  2017-11-29 10:47:55,202  3706ms 14                     MoveNext           - ruikang login at 2017-11-29 10:47:55!
+INFO  2017-11-29 10:55:37,516 466020ms 14                     LogOut             - ruikang log out at 2017-11-29 10:55:37
+INFO  2017-11-29 10:55:38,656 467160ms 14                     MoveNext           - ruikang login at 2017-11-29 10:55:38!
+INFO  2017-11-29 10:57:01,864 550368ms 14                     LogOut             - ruikang log out at 2017-11-29 10:57:01
+INFO  2017-11-29 10:57:02,965 551469ms 14                     MoveNext           - ruikang login at 2017-11-29 10:57:02!
+INFO  2017-11-29 11:04:49,685  4696ms 14                     MoveNext           - ruikang login at 2017-11-29 11:04:49!
+INFO  2017-11-29 13:37:21,031 5545216ms 14                     MoveNext           - ruikang login at 2017-11-29 13:37:21!
+INFO  2017-11-29 13:47:08,246  3591ms 14                     MoveNext           - ruikang login at 2017-11-29 13:47:08!
+INFO  2017-11-29 14:36:55,429 2990774ms 14                     MoveNext           - ruikang login at 2017-11-29 14:36:55!
+INFO  2017-11-29 16:34:16,774 19452ms 14                     MoveNext           - ruikang login at 2017-11-29 16:34:16!

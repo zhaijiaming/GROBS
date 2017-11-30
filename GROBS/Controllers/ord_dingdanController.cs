@@ -191,7 +191,8 @@ namespace GROBS.Controllers
                 ob_ord_dingdan.CPXID = cpxid == "" ? 0 : int.Parse(cpxid);
                 ob_ord_dingdan.CGLX = cglx == "" ? 0 : int.Parse(cglx);
                 ob_ord_dingdan.KehuDH = kehudh.Trim();
-                ob_ord_dingdan.XiadanRQ = xiadanrq == "" ? DateTime.Now : DateTime.Parse(xiadanrq);
+                //ob_ord_dingdan.XiadanRQ = xiadanrq == "" ? DateTime.Now : DateTime.Parse(xiadanrq);
+                ob_ord_dingdan.XiadanRQ = DateTime.Now;
                 ob_ord_dingdan.Lianxiren = lianxiren.Trim();
                 ob_ord_dingdan.LianxiDH = lianxidh.Trim();
                 ob_ord_dingdan.SonghuoDZ = songhuodz.Trim();
@@ -206,7 +207,8 @@ namespace GROBS.Controllers
                 ob_ord_dingdan.Col1 = col1.Trim();
                 ob_ord_dingdan.Col2 = col2.Trim();
                 ob_ord_dingdan.Col3 = col3.Trim();
-                ob_ord_dingdan.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
+                //ob_ord_dingdan.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
+                ob_ord_dingdan.MakeDate = DateTime.Now;
                 ob_ord_dingdan.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdan.KehuDM = kehudm.Trim();
                 ob_ord_dingdan.CuoxiaoZK = cuoxiaozk == "" ? 0 : float.Parse(cuoxiaozk);
@@ -506,6 +508,7 @@ namespace GROBS.Controllers
             var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
             ViewBag.ord_dingdan = tempData;
             List<string> fh = new List<string>();
+            List<string> df = new List<string>();
             //for (int i = 0; i < tempData.Count(); i++)
             //{
             //    fh.Add(i);
@@ -514,10 +517,15 @@ namespace GROBS.Controllers
             foreach (var ob_ord_dingdan in tempData)
             {
                 float con = 0;
+                if (ob_ord_dingdan.Zhuangtai < 30)
+                {
+                    fh.Add("");
+                    continue;
+                }
                 ord_fahuodan ff = ob_ord_fahuodanservice.GetEntityById(ord_fahuodan => ord_fahuodan.DDID == ob_ord_dingdan.ID && ord_fahuodan.IsDelete == false);
                 if (ff == null)
                 {
-                    fh.Add("");
+                    fh.Add("0");
                     continue;
                 }
                 else
@@ -525,7 +533,7 @@ namespace GROBS.Controllers
                     var ffmx = ServiceFactory.ord_fahuomxservice.LoadEntities(ord_fahuomx => ord_fahuomx.ChukuID == ff.ID && ord_fahuomx.IsDelete == false).ToList<ord_fahuomx>();
                     if (ffmx.Count == 0)
                     {
-                        fh.Add("");
+                        fh.Add("0");
                         continue;
                     }
                     else
@@ -537,6 +545,7 @@ namespace GROBS.Controllers
                     }
                 }
                 fh.Add(con.ToString());
+                
             }
 
             ViewBag.fhsl = fh;
@@ -1042,6 +1051,23 @@ namespace GROBS.Controllers
                     var ob_ord_dingdan = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == id && ord_dingdan.IsDelete == false);
                     ob_ord_dingdan.Zhuangtai = 0;
                     ob_ord_dingdan.JieshuSF = true;
+                    ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
+                }
+            }
+            return Json(1);
+        }
+        public JsonResult referorder()
+        {
+            var _sid = Request["_sid"] ?? "";
+            if (string.IsNullOrEmpty(_sid))
+                return Json(-1);
+            foreach (string sD in _sid.Split(','))
+            {
+                if (sD.Length > 0)
+                {
+                    var id = int.Parse(sD);
+                    var ob_ord_dingdan = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == id && ord_dingdan.IsDelete == false);
+                    ob_ord_dingdan.Zhuangtai = 12;
                     ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
                 }
             }

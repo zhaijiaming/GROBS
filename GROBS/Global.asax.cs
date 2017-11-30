@@ -455,6 +455,8 @@ namespace GROBS
             OrderState = new Dictionary<int, string>();
             OrderState.Add(0, "作废");
             OrderState.Add(10, "新建");
+            OrderState.Add(12, "提交");
+            OrderState.Add(16, "批复");
             OrderState.Add(20, "结算");
             OrderState.Add(30, "审核");
             OrderState.Add(40, "配货");
