@@ -1133,3 +1133,27 @@ INFO  2017-11-29 13:37:21,031 5545216ms 14                     MoveNext         
 INFO  2017-11-29 13:47:08,246  3591ms 14                     MoveNext           - ruikang login at 2017-11-29 13:47:08!
 INFO  2017-11-29 14:36:55,429 2990774ms 14                     MoveNext           - ruikang login at 2017-11-29 14:36:55!
 INFO  2017-11-29 16:34:16,774 19452ms 14                     MoveNext           - ruikang login at 2017-11-29 16:34:16!
+INFO  2017-12-01 14:45:25,239 143372ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 14:45:25!
+INFO  2017-12-01 15:01:25,129 10902ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 15:01:25!
+INFO  2017-12-01 15:13:30,214 17687ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 15:13:30!
+INFO  2017-12-01 15:27:38,342  6138ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 15:27:38!
+INFO  2017-12-01 16:15:57,900 2905696ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 16:15:57!
+INFO  2017-12-01 17:02:54,302 70945ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 17:02:54!
+INFO  2017-12-01 17:36:52,757 11803ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 17:36:52!
+INFO  2017-12-01 17:39:05,670 11849ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 17:39:05!
+INFO  2017-12-01 17:44:49,416  6329ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 17:44:49!
+INFO  2017-12-01 17:58:54,105 31052ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-01 17:58:54!
+INFO  2017-12-04 11:48:50,155 22358ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-04 11:48:50!
+INFO  2017-12-04 12:26:25,276  4576ms 10                     MoveNext           - µÔ¼ÑÃù login at 2017-12-04 12:26:25!
+INFO  2017-12-04 12:27:43,920 83220ms 10                     LogOut             - µÔ¼ÑÃù log out at 2017-12-04 12:27:43
+INFO  2017-12-04 12:27:46,455 85755ms 14                     MoveNext           - ruikang login at 2017-12-04 12:27:46!
+INFO  2017-12-04 12:43:47,719 1047019ms 14                     LogOut             - ruikang log out at 2017-12-04 12:43:47
+INFO  2017-12-04 12:43:48,937 1048237ms 14                     MoveNext           - ruikang login at 2017-12-04 12:43:48!
+INFO  2017-12-04 12:58:05,062 43430ms 14                     MoveNext           - ruikang login at 2017-12-04 12:58:05!
+INFO  2017-12-04 14:19:11,146 4909514ms 14                     MoveNext           - ruikang login at 2017-12-04 14:19:11!
+INFO  2017-12-04 14:26:52,055  7689ms 14                     MoveNext           - ruikang login at 2017-12-04 14:26:52!
+INFO  2017-12-04 14:53:52,050 15916ms 14                     MoveNext           - ruikang login at 2017-12-04 14:53:52!
+INFO  2017-12-04 15:37:43,900 33221ms 14                     MoveNext           - ruikang login at 2017-12-04 15:37:43!
+INFO  2017-12-04 16:24:31,892 91249ms 14                     MoveNext           - ruikang login at 2017-12-04 16:24:31!
+INFO  2017-12-04 16:52:55,169 1794526ms 14                     MoveNext           - ruikang login at 2017-12-04 16:52:55!
+INFO  2017-12-04 17:18:16,654 15585ms 14                     MoveNext           - ruikang login at 2017-12-04 17:18:16!

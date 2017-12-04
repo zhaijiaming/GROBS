@@ -28,12 +28,53 @@
         /*
             当状态id>30的时候，不可再操作
         */
-        if ($("#zhuangtai").val() != 0 && $("#zhuangtai").val() != 10 && $("#zhuangtai").val() != 20) {
+        //if ($("#zhuangtai").val() != 0 && $("#zhuangtai").val() != 10 && $("#zhuangtai").val() != 20) {
+        //    forbiddenDoing();//禁止所有操作
+        if ($("#zhuangtai").val() >= 30) {
             forbiddenDoing();//禁止所有操作
         }
-        //通过
+        //客服审批
+        $("#save_check").click(function () {
+            var isConfirm = confirm("确定要审批吗？");
+            if (isConfirm) {
+                //审核人员
+                @*$("#OPID").val("@Html.GetDataValue_ID("userinfo", "全名", (int)(Session["user_id"] == null ? 0 : Session["user_id"]))");*@              
+                @*$("#OPID").val("@Html.SelectList_Auto("OPID", "userinfo", "", (long)(Session["user_id"] == null ? 0 : Session["user_id"]))");*@
+                //alert($("#KehuDM").val());
+                //状态
+                $("#text_zhuangtai").val("@Html.GetCommonValue_ID("订单状态", 16)");
+                $("#zhuangtai").val(16);
+                //审批时间
+                $("#MakeDate").val("@DateTime.Now");
+                $.ajax({
+                    async: true,
+                    beforeSend: function () {
+                        ShowWait();
+                    },
+                    complete: function () {
+                        HiddenWait();
+                    },
+                    type: "POST",
+                    url: "/ord_dingdan/check",
+                    data: {
+                        opid: @Session["user_id"],
+                        ddid: $("#ddid").val()   //订单ID
+                    },
+                    success: function (data) {
+                        if (data == -1) {
+                            alert("审批失败!");
+                        } else {
+                            alert("审批完成");
+                        } 
+                    }
+                });
+                window.location.href = '/ord_dingdan/index';
+            }
+        });
+        //财务通过
         $("#pass").click(function () {
-            var isConfirm = confirm("确定要添加这些数据吗？");
+            //var isConfirm = confirm("确定要添加这些数据吗？");
+            var isConfirm = confirm("确定通过财务审核吗？");
             if (isConfirm) {
                 //审核人员
                 $("#text_accid").val("@Html.GetDataValue_ID("userinfo", "全名", (int)(Session["user_id"] == null ? 0 : Session["user_id"]))");
@@ -55,7 +96,8 @@
         });
         //不通过
         $("#notPass").click(function () {
-            var isConfirm = confirm("确定要添加这些数据吗？");
+            //var isConfirm = confirm("确定要添加这些数据吗？");
+            var isConfirm = confirm("确定不通过财务审核吗？");
             if (isConfirm) {
                 //审核人员
                 $("#text_accid").val("@Html.GetDataValue_ID("userinfo", "全名", (int)(Session["user_id"] == null ? 0 : Session["user_id"]))");
@@ -535,6 +577,7 @@
                             str += '<td><span class = "guige">' + data[i].Guige + '</span></td>';
                             str += '<td><span class = "cgsl">' + data[i].CGSL + '</span></td>';
                             str += '<td><span class = "fhsl">' + data[i].FHSL + '</span></td>';
+                            str += '<td><span class = "Col1">' + data[i].Col1 + '</span></td>';
                             str += '<td><span class = "xsbj">' + data[i].XSBJ + '</span></td>';
                             str += '<td><span class = "xsdj">' + data[i].XSDJ + '</span></td>';
                             str += '<td><span class = "jine">' + data[i].Jine + '</span></td>';
@@ -647,7 +690,8 @@
     <div class="page-header">
         <button type="button" id="returnPast" class="btn btn-app btn-xs btn-primary radius-4" onclick="ddgoback()"><i class="icon-reply icon-only"></i><b>返回</b></button>
         <button type="button" id="save_top" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-save"></i><b>更新</b></button>
-        <button type="button" id="pass" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-ok"></i><b>通过</b></button>
+        <button type="button" id="save_check" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-circle"></i><b>客服审批</b></button>
+        <button type="button" id="pass" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-ok"></i><b>财务通过</b></button>
         <button type="button" id="notPass" class="btn btn-app btn-xs btn-primary radius-4"><i class="icon-remove"></i><b>不通过</b></button>
     </div>
     <div class="wrapper" style="background: url('/Imgs/bg-cloud.png') repeat;">
@@ -780,7 +824,7 @@
                                                 <div class="col-sm-1">
                                                     <label for="OPID" class="control-label"><b>客服人员</b></label>
                                                    </div>
-                                                <div class="col-sm-3">
+                                                <div class="col-sm-3" id="OPID">
                                                     @Html.SelectList_Auto("OPID", "userinfo", "", (long)(ViewData.Model.OPID == null ? 0 : ViewData.Model.OPID))
                                                 </div>
                                                            
@@ -984,7 +1028,8 @@
                                                     <th>名称</th>
                                                     <th>规格</th>
                                                     <th>采购数量</th>
-                                                    <th>发货数量</th>
+                                                    <th>已发数量</th>
+                                                    <th>批复数量</th>
                                                     <th>销售报价</th>
                                                     <th>销售单价</th>
                                                     <th>金额</th>

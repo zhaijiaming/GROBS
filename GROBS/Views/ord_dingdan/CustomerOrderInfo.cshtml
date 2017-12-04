@@ -124,6 +124,8 @@
                                 <td>描述</td>
                                 <td>数量</td>
                                 <td>单价</td>
+                                <td>批复数量</td>
+                                <td>批复单价</td>
                                 <td>金额</td>
                             </tr>
                         </thead>
@@ -139,6 +141,8 @@
                                     <td>@item.SPMC</td>
                                     <td>@item.CGSL</td>
                                     <td>@string.Format("{0:N}", item.XSBJ)</td>
+                                    <td>@item.Col1</td>
+                                    <td>@(item.XSDJ==null?"":string.Format("{0:N}", item.XSDJ))</td>
                                     <td>@string.Format("{0:N}", item.Jine)</td>
                                 </tr>
                             }

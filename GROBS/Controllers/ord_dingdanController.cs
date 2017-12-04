@@ -683,8 +683,9 @@ namespace GROBS.Controllers
                         _mx.JBDW = _spxx.Danwei;
                         _mx.CGSL = spg.tsl;
                         _mx.FHSL = 0;
-                        _mx.XSBJ = spg.jg;
-                        _mx.XSDJ = spg.jg * _zkl;
+                        _mx.XSBJ = spg.jg * _zkl;
+                        //_mx.XSBJ = spg.jg;
+                        //_mx.XSDJ = spg.jg * _zkl;
                         _mx.XSDW = _spxx.BaozhuangDW;
                         _mx.HSL = (float)_spxx.Huansuanlv;
                         _mx.HSBM = _spxx.Col1;
@@ -709,8 +710,9 @@ namespace GROBS.Controllers
                         _mx.JBDW = _tbxx.XSDW;
                         _mx.CGSL = spg.tsl;
                         _mx.FHSL = 0;
-                        _mx.XSBJ = spg.jg;
-                        _mx.XSDJ = spg.jg * _zkl;
+                        _mx.XSBJ = spg.jg * _zkl;
+                        //_mx.XSBJ = spg.jg;
+                        //_mx.XSDJ = spg.jg * _zkl;
                         _mx.XSDW = _tbxx.XSDW;
                         _mx.HSL = 1;
                         _mx.HSBM = _tbxx.Col1;
@@ -849,8 +851,9 @@ namespace GROBS.Controllers
                         _mx.JBDW = _spxx.Danwei;
                         _mx.CGSL = spg.tsl;
                         _mx.FHSL = 0;
-                        _mx.XSBJ = spg.jg;
-                        _mx.XSDJ = spg.jg * _zkl;
+                        _mx.XSBJ = spg.jg * _zkl;
+                        //_mx.XSBJ = spg.jg;
+                        //_mx.XSDJ = spg.jg * _zkl;
                         _mx.XSDW = _spxx.BaozhuangDW;
                         _mx.HSL = (float)_spxx.Huansuanlv;
                         _mx.HSBM = _spxx.Col1;
@@ -875,8 +878,9 @@ namespace GROBS.Controllers
                         _mx.JBDW = _tbxx.XSDW;
                         _mx.CGSL = spg.tsl;
                         _mx.FHSL = 0;
-                        _mx.XSBJ = spg.jg;
-                        _mx.XSDJ = spg.jg * _zkl;
+                        _mx.XSBJ = spg.jg * _zkl;
+                        //_mx.XSBJ = spg.jg;
+                        //_mx.XSDJ = spg.jg * _zkl;
                         _mx.XSDW = _tbxx.XSDW;
                         _mx.HSL = 1;
                         _mx.HSBM = _tbxx.Col1;
@@ -1052,7 +1056,27 @@ namespace GROBS.Controllers
                     ob_ord_dingdan.Zhuangtai = 0;
                     ob_ord_dingdan.JieshuSF = true;
                     ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
+
+                    if (ob_ord_dingdan.ZhekouJE != null || ob_ord_dingdan.ZhekouJE != 0)
+                    {
+                        //删除返利消费
+                        var _flxf = ServiceFactory.ord_fanlixfservice.GetEntityById(p => p.DDID == ob_ord_dingdan.ID && p.IsDelete == false);
+                        if (_flxf != null)
+                        {
+                            _flxf.IsDelete = true;
+                            ServiceFactory.ord_fanlixfservice.UpdateEntity(_flxf);
+                        }
+                        //更新返利信息
+                        var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == ob_ord_dingdan.KHID && p.IsDelete == false);
+                        if (_fl != null)
+                        {
+                            _fl.Zonge = _fl.Zonge + ob_ord_dingdan.ZhekouJE;
+                            _fl.Keyong = _fl.Keyong + ob_ord_dingdan.ZhekouJE;
+                            ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                        }
+                    }
                 }
+
             }
             return Json(1);
         }
@@ -1072,6 +1096,29 @@ namespace GROBS.Controllers
                 }
             }
             return Json(1);
+        }
+        public JsonResult check()
+        {
+            var _ddid = Request["ddid"] ?? "";
+            var _opid = Request["opid"] ?? "";
+           
+            if (string.IsNullOrEmpty(_opid))
+                return Json(-1);
+            try
+            {
+                var id = int.Parse(_ddid);
+                var opid = int.Parse(_opid);
+                var ob_ord_dingdan = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == id && ord_dingdan.IsDelete == false);
+                ob_ord_dingdan.Zhuangtai = 16;
+                ob_ord_dingdan.OPID = opid;
+                ob_ord_dingdan.MakeDate = DateTime.Now;
+                ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
+                return Json(1);
+            }
+            catch (Exception)
+            {
+                return Json(-1);
+            }
         }
     }
     public class SPList

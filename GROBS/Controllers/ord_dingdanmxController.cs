@@ -197,8 +197,8 @@ namespace GROBS.Controllers
             string hsl = Request["hsl"] ?? "";
             string hsbm = Request["hsbm"] ?? "";
             string jbdw = Request["jbdw"] ?? "";
-            string xsdw = Request["xsdw"] ?? "";
-            string col1 = Request["col1"] ?? "";
+            string xsdw = Request["xsdw"] ?? ""; 
+            string col1 = Request["col1"] ?? "";       //Åú¸´ÊýÁ¿         
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
             int _id = int.Parse(ddid);
@@ -221,7 +221,7 @@ namespace GROBS.Controllers
                 ob_ord_dingdanmx.HSBM = hsbm.Trim();
                 ob_ord_dingdanmx.JBDW = jbdw.Trim();
                 ob_ord_dingdanmx.XSDW = xsdw.Trim();
-                ob_ord_dingdanmx.Col1 = col1.Trim();
+                ob_ord_dingdanmx.Col1 = col1 == "" ? "0" : col1;
                 ob_ord_dingdanmx.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_ord_dingdanmx.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdanmx = ob_ord_dingdanmxservice.AddEntity(ob_ord_dingdanmx);
@@ -318,7 +318,7 @@ namespace GROBS.Controllers
                 p.HSBM = hsbm.Trim();
                 p.JBDW = jbdw.Trim();
                 p.XSDW = xsdw.Trim();
-                p.Col1 = col1.Trim();
+                p.Col1 = col1 == "" ? "0" : col1;
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdanmxservice.UpdateEntity(p);
