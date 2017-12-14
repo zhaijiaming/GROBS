@@ -226,6 +226,8 @@
             }
         });
     });
+
+ 
     //function spdetail(oid){
     //    var _durl="/ord_dingdanmx/edit/"+oid;
     //    window.open(_durl,"_blank");
@@ -252,6 +254,7 @@
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_qianInfo"><i class="icon-truck"></i>欠货</button>
+                    <a href="/ord_dingdan/CustomerCurrentOrderExportFile"><button type="button" class="btn btn-primary btn-xs btn-app" id="bt_export"><i class="icon-plane"></i>导出</button></a>
                 </p>
             </div>
             <hr />
@@ -267,8 +270,8 @@
                                 <thead>
                                     <tr>
                                         <td></td>
-                                        <td>编号</td>
-                                        <td>状态</td>
+                                        <td data-align="right" data-sortable="false">编号</td>
+                                        <td data-search="true" data-sortable="false" >状态</td>
                                         <td>产品线</td>
                                         <td>订单类型</td>
                                         <td>客户单号</td>

@@ -10,6 +10,8 @@ using GROBS.BSL;
 using GROBS.Common;
 using GROBS.Models;
 using GROBS.Filters;
+using System.Data;
+using System.Web;
 
 namespace GROBS.Controllers
 {
@@ -64,7 +66,7 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false && ord_dingdan.Zhuangtai!=0);
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false && ord_dingdan.Zhuangtai != 0);
 
             var tempData = ob_ord_dingdanservice.LoadSortEntitiesNoTracking(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
@@ -480,6 +482,7 @@ namespace GROBS.Controllers
             var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
+
         }
         [OutputCache(Duration = 30)]
         public ActionResult CustomerCurrentOrder()
@@ -545,7 +548,7 @@ namespace GROBS.Controllers
                     }
                 }
                 fh.Add(con.ToString());
-                
+
             }
 
             ViewBag.fhsl = fh;
@@ -1097,11 +1100,217 @@ namespace GROBS.Controllers
             }
             return Json(1);
         }
+
+        public ActionResult CustomerCurrentOrderExportFile()
+        {
+            int _userid = (int)Session["user_id"];
+            var _acct = (string)Session["account"];
+            int _custid = (int)Session["customer_id"];
+            var _shdw = ServiceFactory.base_shouhuodanweiservice.GetEntityById(p => p.ID == _custid);
+            if (_shdw != null)
+                ViewBag.customername = _shdw.Mingcheng;
+
+            else
+                ViewBag.customername = "0";
+            var _gzr = ServiceFactory.ord_guanzhangriservice.GetEntityById(p => p.Guanzhangri == DateTime.Parse(DateTime.Now.ToShortDateString()) && p.IsDelete == false);
+            if (_gzr == null)
+            {
+                ViewBag.closeday = "0";
+                ViewBag.closereason = "";
+            }
+            else
+            {
+                ViewBag.closeday = "1";
+                ViewBag.closereason = _gzr.Memo;
+            }
+            //var tempData = ob_ord_dingdanservice.LoadSortEntities(p => p.KHID == _custid && p.Zhuangtai < 12 && p.IsDelete == false, true, s => s.Bianhao);
+            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
+            ViewBag.ord_dingdan = tempData;
+            List<string> fh = new List<string>();
+            List<string> df = new List<string>();
+            //for (int i = 0; i < tempData.Count(); i++)
+            //{
+            //    fh.Add(i);
+            //}
+            //ViewBag.cc = tempData.Count();
+            foreach (var ob_ord_dingdan in tempData)
+            {
+                float con = 0;
+                if (ob_ord_dingdan.Zhuangtai < 30)
+                {
+                    fh.Add("");
+                    continue;
+                }
+                ord_fahuodan ff = ob_ord_fahuodanservice.GetEntityById(ord_fahuodan => ord_fahuodan.DDID == ob_ord_dingdan.ID && ord_fahuodan.IsDelete == false);
+                if (ff == null)
+                {
+                    fh.Add("0");
+                    continue;
+                }
+                else
+                {
+                    var ffmx = ServiceFactory.ord_fahuomxservice.LoadEntities(ord_fahuomx => ord_fahuomx.ChukuID == ff.ID && ord_fahuomx.IsDelete == false).ToList<ord_fahuomx>();
+                    if (ffmx.Count == 0)
+                    {
+                        fh.Add("0");
+                        continue;
+                    }
+                    else
+                    {
+                        foreach (var ord_fahuomx in ffmx)
+                        {
+                            con += ord_fahuomx.ChukuSL.Value;
+                        }
+                    }
+                }
+                fh.Add(con.ToString());
+            }
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Bianhao", typeof(string));
+            dt.Columns.Add("Mingcheng", typeof(string));
+            dt.Columns.Add("KehuDH", typeof(string));
+            dt.Columns.Add("XiadanRQ", typeof(string));
+            dt.Columns.Add("ZongshuCG", typeof(string));
+            dt.Columns.Add("Zongjine", typeof(string));
+            dt.Columns.Add("ZhekouJE", typeof(string));
+            dt.Columns.Add("ShiFuJine", typeof(string));
+            dt.Columns.Add("Beizhu", typeof(string));
+            foreach (var item in tempData)
+            {
+                DataRow row = dt.NewRow();
+                row["Bianhao"] = item.Bianhao;
+                row["Mingcheng"] = item.Mingcheng;
+                row["KehuDH"] = item.KehuDH;
+                row["XiadanRQ"] = item.XiadanRQ;
+                row["ZongshuCG"] = item.ZongshuCG;
+                row["Zongjine"] = item.Zongjine;
+                row["ZhekouJE"] = item.ZhekouJE;
+                row["ShiFuJine"] = item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE);
+                row["Beizhu"] = item.Beizhu;
+                dt.Rows.Add(row);
+            }
+            DataSet ds = new DataSet();
+            dt.TableName = "PurchaseOrders";
+            ds.Tables.Add(dt);
+            ExcelHelper.ExportExcel(ds, "PurchaseOrders");
+            return new EmptyResult();
+        }
+
+
+        public ActionResult CustomerOrderListExportFile()
+        {
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+            string pagetag = "ord_dingdan_customerorderlist";
+            string page = "1";
+            string bianhao = Request["bianhao"] ?? "";
+            string bianhaoequal = Request["bianhaoequal"] ?? "";
+            string bianhaoand = Request["bianhaoand"] ?? "";
+            Expression<Func<ord_ordermain_v, bool>> where = PredicateExtensionses.True<ord_ordermain_v>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc == null)
+            {
+                sc = new searchcondition();
+                sc.UserID = userid;
+                sc.PageBrief = pagetag;
+                if (!string.IsNullOrEmpty(bianhao))
+                {
+                    if (bianhaoequal.Equals("="))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                    }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
+                }
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                searchconditionService.GetInstance().AddEntity(sc);
+            }
+            else
+            {
+                sc.ConditionInfo = "";
+                if (!string.IsNullOrEmpty(bianhao))
+                {
+                    if (bianhaoequal.Equals("="))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                    }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
+                }
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                searchconditionService.GetInstance().UpdateEntity(sc);
+            }
+            ViewBag.SearchCondition = sc.ConditionInfo;
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
+
+            var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_dingdan = tempData;
+
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Bianhao", typeof(string));
+            dt.Columns.Add("KehuMC", typeof(string));
+            dt.Columns.Add("Mingcheng", typeof(string));
+            dt.Columns.Add("KehuDH", typeof(string));
+            dt.Columns.Add("XiadanRQ", typeof(string));
+            dt.Columns.Add("Lianxiren",typeof(string));
+            dt.Columns.Add("LianxiDH", typeof(string));
+            dt.Columns.Add("SonghuoDZ", typeof(string));
+            dt.Columns.Add("ZongshuCG", typeof(string));
+            dt.Columns.Add("Zongjine", typeof(string));
+            dt.Columns.Add("ShiJiFu",typeof(string));
+            dt.Columns.Add("ZhekouJE", typeof(string));
+            dt.Columns.Add("Beizhu", typeof(string));
+            foreach (var item in tempData)
+            {
+                DataRow row = dt.NewRow();
+               row["Bianhao"]=item.Bianhao;
+               row["KehuMC"]=item.KehuMC;
+               row["Mingcheng"]=item.Mingcheng;
+               row["KehuDH"]=item.KehuDH;
+               row["XiadanRQ"]=item.XiadanRQ;
+               row["Lianxiren"]=item.Lianxiren;
+               row["LianxiDH"]=item.LianxiDH;
+               row["SonghuoDZ"]=item.SonghuoDZ;
+               row["ZongshuCG"]=item.ZongshuCG;
+               row["Zongjine"]=item.Zongjine;
+               row["ZhekouJE"]=item.ZhekouJE;
+               row["ShiJiFu"] = item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE);
+               row["Beizhu"]=item.Beizhu;
+                dt.Rows.Add(row);
+            }
+            DataSet ds = new DataSet();
+            dt.TableName = "CustomerOrders";
+            ds.Tables.Add(dt);
+            ExcelHelper.ExportExcel(ds, "CustomerOrders");
+            return new EmptyResult();
+        }
         public JsonResult check()
         {
             var _ddid = Request["ddid"] ?? "";
             var _opid = Request["opid"] ?? "";
-           
+
             if (string.IsNullOrEmpty(_opid))
                 return Json(-1);
             try
