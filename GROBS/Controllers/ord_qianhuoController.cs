@@ -16,6 +16,7 @@ namespace GROBS.Controllers
     public class ord_qianhuoController : Controller
     {
         private Iord_qianhuoService ob_ord_qianhuoservice = ServiceFactory.ord_qianhuoservice;
+        private Iord_dingdanService ob_ord_dingdanservice = ServiceFactory.ord_dingdanservice;
         [OutputCache(Duration = 30)]
         public ActionResult Index(string page)
         {
@@ -163,7 +164,132 @@ namespace GROBS.Controllers
             ViewBag.ord_qianhuo = tempData;
             return View(tempData);
         }
+        [OutputCache(Duration = 30)]
+        public ActionResult CustomerOweList(string page)
+        {
+            if (string.IsNullOrEmpty(page))
+                page = "1";
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+            string pagetag = "ord_dingdan_customerowelist";
+            Expression<Func<ord_ordermain_vsss, bool>> where = PredicateExtensionses.True<ord_ordermain_vsss>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc != null && sc.ConditionInfo != null)
+            {
+                string[] sclist = sc.ConditionInfo.Split(';');
+                foreach (string scl in sclist)
+                {
+                    string[] scld = scl.Split(',');
+                    switch (scld[0])
+                    {
+                        case "bianhao":
+                            string bianhao = scld[1];
+                            string bianhaoequal = scld[2];
+                            string bianhaoand = scld[3];
+                            if (!string.IsNullOrEmpty(bianhao))
+                            {
+                                if (bianhaoequal.Equals("="))
+                                {
+                                    if (bianhaoand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                                }
+                                if (bianhaoequal.Equals("like"))
+                                {
+                                    if (bianhaoand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                ViewBag.SearchCondition = sc.ConditionInfo;
+            }
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
 
+            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOwe(custid, where.Compile()).ToPagedList<ord_ordermain_vsss>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_dingdan = tempData;
+            return View(tempData);
+        }
+        [HttpPost]
+        [OutputCache(Duration = 30)]
+        public ActionResult CustomerOweList()
+        {
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+            string pagetag = "ord_dingdan_customerowelist";
+            string page = "1";
+            string bianhao = Request["bianhao"] ?? "";
+            string bianhaoequal = Request["bianhaoequal"] ?? "";
+            string bianhaoand = Request["bianhaoand"] ?? "";
+            Expression<Func<ord_ordermain_vsss, bool>> where = PredicateExtensionses.True<ord_ordermain_vsss>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc == null)
+            {
+                sc = new searchcondition();
+                sc.UserID = userid;
+                sc.PageBrief = pagetag;
+                if (!string.IsNullOrEmpty(bianhao))
+                {
+                    if (bianhaoequal.Equals("="))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                    }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
+                }
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                searchconditionService.GetInstance().AddEntity(sc);
+            }
+            else
+            {
+                sc.ConditionInfo = "";
+                if (!string.IsNullOrEmpty(bianhao))
+                {
+                    if (bianhaoequal.Equals("="))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                    }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
+                }
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                searchconditionService.GetInstance().UpdateEntity(sc);
+            }
+            ViewBag.SearchCondition = sc.ConditionInfo;
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
+
+            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOwe(custid, where.Compile()).ToPagedList<ord_ordermain_vsss>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            ViewBag.ord_dingdan = tempData;
+            return View(tempData);
+        }
         public ActionResult Add()
         {
             ViewBag.userid = (int)Session["user_id"];

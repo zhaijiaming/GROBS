@@ -1070,13 +1070,13 @@ namespace GROBS.Controllers
                             ServiceFactory.ord_fanlixfservice.UpdateEntity(_flxf);
                         }
                         //更新返利信息
-                        var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == ob_ord_dingdan.KHID && p.IsDelete == false);
-                        if (_fl != null)
-                        {
-                            _fl.Zonge = _fl.Zonge + ob_ord_dingdan.ZhekouJE;
-                            _fl.Keyong = _fl.Keyong + ob_ord_dingdan.ZhekouJE;
-                            ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
-                        }
+                        //var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == ob_ord_dingdan.KHID && p.IsDelete == false);
+                        //if (_fl != null)
+                        //{
+                        //    _fl.Zonge = _fl.Zonge + ob_ord_dingdan.ZhekouJE;
+                        //    _fl.Keyong = _fl.Keyong + ob_ord_dingdan.ZhekouJE;
+                        //    ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                        //}
                     }
                 }
 

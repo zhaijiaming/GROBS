@@ -16,6 +16,7 @@ namespace GROBS.Controllers
     public class ord_fanliController : Controller
     {
         private Iord_fanliService ob_ord_fanliservice = ServiceFactory.ord_fanliservice;
+        private Iord_fanlixfService ob_ord_fanlixfservice = ServiceFactory.ord_fanlixfservice;
         [OutputCache(Duration = 30)]
         public ActionResult Index(string page)
         {
@@ -421,12 +422,22 @@ namespace GROBS.Controllers
         public JsonResult GetTotalNumber()
         {
             var _cust = Request["cust"] ?? "";
+            var _ddid = Request["ddid"] ?? "";
             if (string.IsNullOrEmpty(_cust))
                 return Json(-1);
             var _fl = ob_ord_fanliservice.GetEntityById(p => p.KHID == int.Parse(_cust) && p.IsDelete == false);
             if (_fl == null)
                 return Json(-2);
-            return Json(_fl.Keyong);
+            //如果正在编辑的订单已用折扣
+            var _flxf = ob_ord_fanlixfservice.GetEntityById(p => p.DDID == int.Parse(_ddid) && p.IsDelete == false);
+            if (_flxf == null)
+            {
+                return Json(_fl.Keyong);
+            }
+            else
+            {
+                return Json(_fl.Keyong + _flxf.XFJE);
+            }
         }
         public JsonResult getDetailWithKhid() {
             string khid = Request["khid"] ?? "";

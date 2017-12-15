@@ -1,0 +1,136 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "欠货清单";
+    string _searchcondition = ViewBag.SearchCondition;
+    Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            if (u_id != null) {
+                var url_go = "/ord_qianhuo/Edit/" + u_id;
+                location.href = url_go;
+            }
+        });
+    });
+    function AddInfo() {
+        location.href = "/ord_qianhuo/Add";
+    }
+    function EditInfo() {
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                location.href = "/ord_qianhuo/Edit/" + $(this).val();
+        });
+    }
+    function DelInfo() {
+        var sDel = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+                sDel = sDel + ", " + $(this).val()
+        });
+        if (sDel.length < 2)
+            return;
+        var url_go = "/ord_qianhuo/Delete/?del=" + sDel;
+        location.href = url_go;
+    }
+
+
+
+</script>
+
+
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "Bianhao";
+        scm.ItemTitle = "编号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "Bianhao";
+            scm.ItemTitle = "编号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+        }
+    }
+}
+
+<div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "采购_条件组合查询", "/ord_qianhuo/customerowelist", "ord_qianhuo_customerowelist", scms)
+    <div class="page-header">
+        <p class="align-center">
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+        </p>
+    </div>
+    <div class="row">
+        <table class="table" id="mydatatable">
+            <caption></caption>
+            <thead>
+                <tr>
+                    <td></td>
+                    <td>编号</td>
+                    <td>状态</td>
+                    <td>客户</td>
+                    <td>产品线</td>
+                    <td>采购类型</td>
+                    <td>客户单号</td>
+                    <td>下单日期</td>
+                    <td>存货编码</td>
+                    <td>采购数量</td>
+                    <td>欠货数量</td>
+                    <td>销售单价</td>
+                    <td>折扣金额</td>
+                    <td>总金额</td>
+                    <td>备注</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in ViewBag.ord_dingdan)
+                {
+                    <tr>
+                        <td>
+                            <label><input type="checkbox" value="@item.DDID"></label>
+                        </td>
+                        <td><a href="/ord_dingdan/customerorderinfo/@item.DDID">@item.Bianhao</a></td>
+                        <td class="zhuangtai">@Html.GetCommonValue_ID("订单状态", (int)item.Zhuangtai)</td>
+                        <td>@item.KehuMC</td>
+                        <td>@item.Mingcheng</td>
+                        <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
+                        <td>@item.KehuDH</td>
+                        <td>@string.Format("{0:yyyy-mm-dd}", item.XiadanRQ == null ? "" : item.XiadanRQ)</td>
+                        <td>@item.SPBM</td>
+                        <td>@item.CGSL</td>
+                        <td>@item.QHSL</td>
+                        <td>@string.Format("{0:C}", item.XSDJ)</td>
+                        <td>@string.Format("{0:C}", item.Zhekou)</td>
+                        <td>@string.Format("{0:C}", item.Jine == null ? 0 : item.Jine)</td>
+                        <td>@item.Beizhu</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="pager">
+        @Html.PagedListPager((IPagedList)Model, page => Url.Action("CustomerOrderList", new { page }))
+    </div>
+</div>

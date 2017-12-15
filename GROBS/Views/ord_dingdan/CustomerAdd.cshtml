@@ -7,12 +7,16 @@
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
 }
 <script type="text/javascript">
+    var flag = 0;
     $(document).ready(function () {
 
         //离开页面弹出提醒
         //绑定beforeunload事件 
         $(window).bind('beforeunload', function () {
-            return '您输入的内容尚未保存，确定离开此页面吗？';
+            if (flag == 0)
+            { return '您输入的内容尚未保存，确定离开此页面吗？'; }
+            else
+            { flag = 0; }
         });
 
 
@@ -450,6 +454,7 @@
                     },
                     success: function (data) {
                         if (data == 1) {
+                            flag = 1;
                             //location.reload();
                             window.open("/ord_dingdan/customercurrentorder", "_parent");
                         }

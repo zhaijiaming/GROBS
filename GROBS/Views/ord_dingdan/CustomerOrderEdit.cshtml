@@ -320,6 +320,7 @@
                 type: "POST",
                 url: "/ord_fanli/GetTotalNumber",
                 data: {
+                    ddid: $("#ddid").val(),
                     cust: $("#cust").val()
                 },
                 success: function (data) {
