@@ -9,6 +9,7 @@ using GROBS.BSL;
 using GROBS.EFModels;
 using System.Text;
 using Newtonsoft.Json;
+
 namespace GROBS.App_Code
 {
     public static class HtmlHelperExtensions
@@ -241,15 +242,53 @@ namespace GROBS.App_Code
                             sb.AppendFormat("<option value=\"{0}\">{1}</option>", i.ID, i.Mingcheng);
                     }
                     break;
-                case "产品线": //"auth_gongsi":
-                    Ibase_chanpinxianService cpx = ServiceFactory.base_chanpinxianservice;
-                    var tmpcpx = cpx.LoadSortEntitiesNoTracking(p => p.IsDelete == false, true, s => s.Mingcheng);
-                    foreach (var i in tmpcpx)
+                case "订单类型":
+                    Dictionary<int, string> OrderType = MvcApplication.OrderType;
+                    foreach (var orderType in OrderType)
                     {
-                        if (i.ID == selectedvalue && selectedvalue != 0)
-                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", i.ID, i.Mingcheng);
+                        if (orderType.Key == selectedvalue && selectedvalue != 0)
+                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", orderType.Key, orderType.Value);
                         else
-                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", i.ID, i.Mingcheng);
+                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", orderType.Key, orderType.Value);
+                    }
+                    break;
+                case "订单状态":
+                    Dictionary<int, string> orderState = MvcApplication.OrderState;
+                    foreach (var orderType in orderState)
+                    {
+                        if (orderType.Key == selectedvalue && selectedvalue != 0)
+                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", orderType.Key, orderType.Value);
+                        else
+                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", orderType.Key, orderType.Value);
+                    }
+                    break;
+                case "产品线": //"auth_gongsi":
+                    switch (itemname)
+                    {
+                        case "产品线（历史）": //"采购单->历史":
+                            int custid = Convert.ToInt32(HttpContext.Current.Session["customer_id"].ToString());
+                            var _cpxsq = ServiceFactory.base_chanpinxiansqservice.LoadSortEntities(p => p.JXSID == custid && p.IsDelete == false, true, s => s.CPXDM).ToList();
+                            List<base_chanpinxiansqViewModel> cpxsq = new List<base_chanpinxiansqViewModel>();
+                            foreach (var sq in _cpxsq)
+                            {
+                                var _cpx = ServiceFactory.base_chanpinxianservice.GetEntityById(p => p.ID == sq.CPXID);
+                                if (sq.ID == selectedvalue && selectedvalue != 0)
+                                    sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", sq.ID, _cpx.Mingcheng);
+                                else
+                                    sb.AppendFormat("<option value=\"{0}\">{1}</option>", sq.ID, _cpx.Mingcheng);
+                            }
+                            break;
+                        default:
+                            Ibase_chanpinxianService cpx = ServiceFactory.base_chanpinxianservice;
+                            var tmpcpx = cpx.LoadSortEntitiesNoTracking(p => p.IsDelete == false, true, s => s.Mingcheng);
+                            foreach (var i in tmpcpx)
+                            {
+                                if (i.ID == selectedvalue && selectedvalue != 0)
+                                    sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", i.ID, i.Mingcheng);
+                                else
+                                    sb.AppendFormat("<option value=\"{0}\">{1}</option>", i.ID, i.Mingcheng);
+                            }
+                            break;
                     }
                     break;
                 case "角色"://auth_juese
@@ -285,8 +324,8 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "套包":
-                    var tmptaobao = ServiceFactory.base_taobaoservice.LoadSortEntitiesNoTracking(p => p.IsDelete == false && p.TingyongSF == false, true, s=>s.Daima);
-                    foreach(var i in tmptaobao)
+                    var tmptaobao = ServiceFactory.base_taobaoservice.LoadSortEntitiesNoTracking(p => p.IsDelete == false && p.TingyongSF == false, true, s => s.Daima);
+                    foreach (var i in tmptaobao)
                     {
                         if (i.ID == selectedvalue && selectedvalue != 0)
                             sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", i.ID, i.Mingcheng);
@@ -296,7 +335,7 @@ namespace GROBS.App_Code
                     break;
                 case "userinfo"://用户
                     IuserinfoService uis = ServiceFactory.userinfoservice;
-                    var tmpus = uis.LoadSortEntitiesNoTracking(userinfo => userinfo.IsDelete == false && userinfo.AccountType<100, true, userinfo => userinfo.Account);
+                    var tmpus = uis.LoadSortEntitiesNoTracking(userinfo => userinfo.IsDelete == false && userinfo.AccountType < 100, true, userinfo => userinfo.Account);
                     switch (itemname)
                     {
                         case "account":
@@ -906,6 +945,24 @@ namespace GROBS.App_Code
                             else
                                 svs = SelectItem_Common(sc.ItemCode, myclassitem, long.Parse(sc.ItemValue));
                             break;
+                        case "产品线":
+                            if (sc.ItemValue == null)
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, 0);
+                            else
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, long.Parse(sc.ItemValue));
+                            break;
+                        case "订单类型":
+                            if (sc.ItemValue == null)
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, 0);
+                            else
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, long.Parse(sc.ItemValue));
+                            break;
+                        case "订单状态":
+                            if (sc.ItemValue == null)
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, 0);
+                            else
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, long.Parse(sc.ItemValue));
+                            break;
                         default:
                             break;
                     }
@@ -1109,7 +1166,7 @@ namespace GROBS.App_Code
                     break;
                 case "userinfo":
                     IuserinfoService us = ServiceFactory.userinfoservice;
-                    userinfo ui = us.GetEntityByIdNoTracking(userinfo => userinfo.ID == dataValue && userinfo.AccountType<100 && userinfo.IsDelete==false);
+                    userinfo ui = us.GetEntityByIdNoTracking(userinfo => userinfo.ID == dataValue && userinfo.AccountType < 100 && userinfo.IsDelete == false);
                     if (ui == null)
                         returnvalue = "";
                     else

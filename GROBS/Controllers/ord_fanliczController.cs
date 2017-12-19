@@ -10,6 +10,7 @@ using GROBS.BSL;
 using GROBS.Common;
 using GROBS.Models;
 using GROBS.Filters;
+using System.Data;
 
 namespace GROBS.Controllers
 {
@@ -45,10 +46,10 @@ namespace GROBS.Controllers
                                         where = where.And(ord_fanlicz => ord_fanlicz.KHID == int.Parse(khid));
                                     else
                                         where = where.Or(ord_fanlicz => ord_fanlicz.KHID == int.Parse(khid));
-                                }                          
+                                }
                             }
                             break;
-                         case "mingcheng":        
+                        case "mingcheng":
                             string mingcheng = scld[1];
                             string mingchengequal = scld[2];
                             string mingchengand = scld[3];
@@ -315,11 +316,14 @@ namespace GROBS.Controllers
             }
             return RedirectToAction("Index");
         }
+
         public JsonResult getFanliChongZhiWithQuery()
         {
             string khid = Request["khid"] ?? "";
             string req_ffyf = Request["req_ffyf"] ?? "";
             string req_kysf = Request["req_kysf"] ?? "";
+            string req_fl_date_s = Request["req_fl_date_s"] ?? "";
+            string req_fl_date_e = Request["req_fl_date_e"] ?? "";
 
             Expression<Func<ord_fanlicz, bool>> where = PredicateExtensionses.True<ord_fanlicz>();
             if (!string.IsNullOrEmpty(khid))
@@ -328,6 +332,11 @@ namespace GROBS.Controllers
                 where = where.And(p => p.FFYF == req_ffyf);
             if (!string.IsNullOrEmpty(req_kysf))
                 where = where.And(p => p.KYSF == Boolean.Parse(req_kysf));
+            if (!string.IsNullOrEmpty(req_fl_date_s))
+                where = where.And(p => p.MakeDate >= DateTime.Parse(req_fl_date_s));
+            if (!string.IsNullOrEmpty(req_fl_date_e))
+                where = where.And(p => p.MakeDate <= DateTime.Parse(req_fl_date_e));
+
             where = where.And(p => p.IsDelete == false);
 
             var tempData = ServiceFactory.ord_fanliczservice.LoadSortEntities(where.Compile(), true, p => p.KHID).ToList<ord_fanlicz>();
@@ -335,8 +344,53 @@ namespace GROBS.Controllers
                 return Json(-1);
             return Json(tempData);
         }
-        
 
+        public ActionResult exportFanliChongZhiWith()
+        {
+            string khid = Request["khid"] ?? "";
+            string req_ffyf = Request["req_ffyf"] ?? "";
+            string req_kysf = Request["req_kysf"] ?? "";
+            string req_fl_date_s = Request["req_fl_date_s"] ?? "";
+            string req_fl_date_e = Request["req_fl_date_e"] ?? "";
+
+            Expression<Func<ord_fanlicz, bool>> where = PredicateExtensionses.True<ord_fanlicz>();
+            if (!string.IsNullOrEmpty(khid))
+                where = where.And(p => p.KHID == int.Parse(khid));
+            if (!string.IsNullOrEmpty(req_ffyf))
+                where = where.And(p => p.FFYF == req_ffyf);
+            if (!string.IsNullOrEmpty(req_kysf))
+                where = where.And(p => p.KYSF == Boolean.Parse(req_kysf));
+            if (!string.IsNullOrEmpty(req_fl_date_s))
+                where = where.And(p => p.MakeDate >= DateTime.Parse(req_fl_date_s));
+            if (!string.IsNullOrEmpty(req_fl_date_e))
+                where = where.And(p => p.MakeDate <= DateTime.Parse(req_fl_date_e));
+            where = where.And(p => p.IsDelete == false);
+
+            var tempData = ServiceFactory.ord_fanliczservice.LoadSortEntities(where.Compile(), true, p => p.KHID).ToList<ord_fanlicz>();
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ID", typeof(Int32));
+            dt.Columns.Add("CZJE", typeof(string));
+            dt.Columns.Add("FFYF", typeof(string));
+            dt.Columns.Add("KYSF", typeof(string));
+            dt.Columns.Add("MakeDate", typeof(string));
+            var _xh = 0;
+            foreach (var item in tempData)
+            {
+                _xh++;
+                DataRow row = dt.NewRow();
+                row["ID"] = _xh;
+                row["CZJE"] = item.CZJE;
+                row["FFYF"] = item.FFYF;
+                row["KYSF"] = item.KYSF;
+                row["MakeDate"] = item.MakeDate == null ? "" : item.MakeDate.ToString("yyyy-MM-dd");
+                dt.Rows.Add(row);
+            }
+            DataSet ds = new DataSet();
+            dt.TableName = "FanliChongZhi";
+            ds.Tables.Add(dt);
+            ExcelHelper.ExportExcel(ds, "FanliChongZhi");
+            return new EmptyResult();
+        }
 
     }
 }

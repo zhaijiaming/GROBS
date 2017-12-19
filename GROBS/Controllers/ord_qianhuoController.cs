@@ -10,6 +10,7 @@ using GROBS.BSL;
 using GROBS.Common;
 using GROBS.Models;
 using GROBS.Filters;
+using System.Data;
 
 namespace GROBS.Controllers
 {
@@ -290,6 +291,119 @@ namespace GROBS.Controllers
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
         }
+
+        public ActionResult ExportCustomerOweList()
+        {
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+            //string pagetag = "ord_dingdan_customerowelist";
+            //string page = "1";
+            string bianhao = Request["bianhao"] ?? "";
+            string bianhaoequal = Request["bianhaoequal"] ?? "";
+            string bianhaoand = Request["bianhaoand"] ?? "";
+            Expression<Func<ord_ordermain_vsss, bool>> where = PredicateExtensionses.True<ord_ordermain_vsss>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid);
+            //searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc == null)
+            {
+                sc = new searchcondition();
+                sc.UserID = userid;
+                //sc.PageBrief = pagetag;
+                if (!string.IsNullOrEmpty(bianhao))
+                {
+                    if (bianhaoequal.Equals("="))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                    }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
+                }
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                searchconditionService.GetInstance().AddEntity(sc);
+            }
+            else
+            {
+                sc.ConditionInfo = "";
+                if (!string.IsNullOrEmpty(bianhao))
+                {
+                    if (bianhaoequal.Equals("="))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                    }
+                    if (bianhaoequal.Equals("like"))
+                    {
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                    }
+                }
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                searchconditionService.GetInstance().UpdateEntity(sc);
+            }
+            ViewBag.SearchCondition = sc.ConditionInfo;
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
+
+            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOwe(custid, where.Compile()).ToList<ord_ordermain_vsss>();
+            //var tempData = ob_ord_dingdanservice.LoadCustomerActiveOwe(custid, where.Compile()).ToPagedList<ord_ordermain_vsss>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            DataTable dt = new DataTable();
+            dt.Columns.Add("Bianhao", typeof(string));
+            dt.Columns.Add("Zhuangtai", typeof(string));
+            dt.Columns.Add("KehuMC", typeof(string));
+            dt.Columns.Add("Mingcheng", typeof(string));
+            dt.Columns.Add("CGLX", typeof(string));
+            dt.Columns.Add("KehuDH", typeof(string));
+            dt.Columns.Add("XiadanRQ", typeof(string));
+            dt.Columns.Add("SPBM", typeof(string));
+            dt.Columns.Add("CGSL", typeof(string));
+            dt.Columns.Add("QHSL", typeof(string));
+            dt.Columns.Add("XSDJ", typeof(string));
+            dt.Columns.Add("Zhekou", typeof(string));
+            dt.Columns.Add("Jine", typeof(string));
+            dt.Columns.Add("Beizhu", typeof(string));
+            foreach (var item in tempData)
+            {
+                DataRow row = dt.NewRow();
+                row["Bianhao"] = item.Bianhao;
+                row["Zhuangtai"] = MvcApplication.OrderState[(Int32)item.Zhuangtai];//订单状态
+                row["KehuMC"] = item.KehuMC;
+                row["Mingcheng"] = item.Mingcheng;
+                row["CGLX"] = MvcApplication.OrderType[(Int32)item.CGLX];//订单类型
+                row["KehuDH"] = item.KehuDH;
+                row["XiadanRQ"] = item.XiadanRQ == null ? "" : Convert.ToDateTime(item.XiadanRQ).ToString("yyyy-MM-dd");
+                row["SPBM"] = item.SPBM;
+                row["CGSL"] = item.CGSL;
+                row["QHSL"] = item.QHSL;
+                row["XSDJ"] = item.XSDJ;
+                row["Zhekou"] = item.Zhekou;
+                row["Jine"] = item.Jine;
+                row["Beizhu"] = item.Beizhu;
+                dt.Rows.Add(row);
+            }
+            DataSet ds = new DataSet();
+            dt.TableName = "CustomerOweList";
+            ds.Tables.Add(dt);
+            ExcelHelper.ExportExcel(ds, "CustomerOweList");
+            return new EmptyResult();
+        }
+
         public ActionResult Add()
         {
             ViewBag.userid = (int)Session["user_id"];

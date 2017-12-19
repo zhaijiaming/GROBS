@@ -74,25 +74,26 @@
 }
 
 @*<div class="breadcrumbs" id="breadcrumbs">
-    <script type="text/javascript">
-        try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
-    </script>
-    <ul class="breadcrumb">
-        <li>
-            <i class="icon-home home-icon"></i>
-            <a href="/Home">首页</a>
-        </li>
-        <li class="active">发货单</li>
-    </ul>
-</div>*@
+        <script type="text/javascript">
+            try { ace.settings.check('breadcrumbs', 'fixed') } catch (e) { }
+        </script>
+        <ul class="breadcrumb">
+            <li>
+                <i class="icon-home home-icon"></i>
+                <a href="/Home">首页</a>
+            </li>
+            <li class="active">发货单</li>
+        </ul>
+    </div>*@
 <div class="page-content">
     @Html.Search_Condition((int)Session["user_id"], "发货单_条件组合查询", "/ord_fahuodan/index", "ord_fahuodan_index", scms)
     <div class="page-header" style="text-align:center">
         <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
         @*<button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
-        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
-        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>*@
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>*@
         <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_export" onclick="javascript: window.open('/ord_fahuodan/Exportfahuodanlist')"><i class="icon-inbox"></i>导出</button>
     </div>
     <div class="row">
         <div class="col-sm-12">
@@ -104,7 +105,7 @@
                     <table class="table table-bordered table-condensed" id="mydatatable">
                         <tr>
                             <th></th>
-                            <th>发货单号</th>                       
+                            <th>发货单号</th>
                             <th>订单编号</th>
                             <th>运送地址</th>
                             <th>发货日期</th>
@@ -113,17 +114,17 @@
                             <th>备注</th>
                             <th>仓库</th>
                             <th>运送方式</th>
-                            <th>快递单号</th>                        
+                            <th>快递单号</th>
                         </tr>
                         <tbody>
                             @foreach (var item in ViewBag.ord_fahuodan)
                             {
                                 <tr>
-                                   
+
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td><a href="/ord_fahuodan/fahuodandetails/@item.ID">@item.ChukudanBH</a></td>                               
+                                    <td><a href="/ord_fahuodan/fahuodandetails/@item.ID">@item.ChukudanBH</a></td>
                                     <td>@*<a href="/ord_dingdan/customerorderinfo/@item.DDID">*@@item.DDBH@*</a>*@</td>
                                     <td>@item.Yunsongdizhi</td>
                                     <td>@item.ChukuRQ.ToString("yyyy-MM-dd")</td>
@@ -132,7 +133,7 @@
                                     <td>@item.Beizhu</td>
                                     <td>@item.CKCode</td>
                                     <td>@item.YunsongFS</td>
-                                    <td>@item.Kddanhao</td>                               
+                                    <td>@item.Kddanhao</td>
                                 </tr>
                             }
                         </tbody>

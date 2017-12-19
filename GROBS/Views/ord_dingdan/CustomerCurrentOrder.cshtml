@@ -39,8 +39,7 @@
                     sDel++;
                 }
             });
-            if (did == 0)
-            {
+            if (did == 0) {
                 return;
             }
             if (sDel != 1) {
@@ -108,8 +107,7 @@
                     _sst = $(this).data("state");
                 }
             });
-            if (_sid == 0)
-            {
+            if (_sid == 0) {
                 alert("请选择需要结算的订单！");
                 return;
             }
@@ -129,7 +127,7 @@
                 alert("该订单未批复，请等待客服人员批复！");
                 return;
             }
-            window.open("/ord_dingdan/uploadbankticket/"+_sid, "_parent");
+            window.open("/ord_dingdan/uploadbankticket/" + _sid, "_parent");
         });
         $("#bt_refer").click(function () {
             var _sid = "";
@@ -227,7 +225,7 @@
         });
     });
 
- 
+
     //function spdetail(oid){
     //    var _durl="/ord_dingdanmx/edit/"+oid;
     //    window.open(_durl,"_blank");
@@ -235,7 +233,7 @@
 </script>
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
-    <input type="hidden" id="closeday" value="@ViewBag.closeday"/>
+    <input type="hidden" id="closeday" value="@ViewBag.closeday" />
     <input type="hidden" id="closereason" value="@ViewBag.closereason" />
     <div class="panel">
         <div class="panel-body">
@@ -254,7 +252,7 @@
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_qianInfo"><i class="icon-truck"></i>欠货</button>
-                    <a href="/ord_dingdan/CustomerCurrentOrderExportFile"><button type="button" class="btn btn-primary btn-xs btn-app" id="bt_export"><i class="icon-plane"></i>导出</button></a>
+                    <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_export" onclick="javascript: window.open('/ord_dingdan/CustomerCurrentOrderExportFile')"><i class="icon-inbox"></i>导出</button>
                 </p>
             </div>
             <hr />
@@ -271,7 +269,7 @@
                                     <tr>
                                         <td></td>
                                         <td data-align="right" data-sortable="false">编号</td>
-                                        <td data-search="true" data-sortable="false" >状态</td>
+                                        <td data-search="true" data-sortable="false">状态</td>
                                         <td>产品线</td>
                                         <td>订单类型</td>
                                         <td>客户单号</td>
@@ -316,7 +314,7 @@
                                             </tr>
                                             i++;
                                         }
-                                    }                                 
+                                    }
                                 </tbody>
                             </table>
                         </div>

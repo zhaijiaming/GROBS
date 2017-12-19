@@ -10,6 +10,7 @@ using GROBS.BSL;
 using GROBS.Common;
 using GROBS.Models;
 using GROBS.Filters;
+using System.Data;
 
 namespace GROBS.Controllers
 {
@@ -79,9 +80,9 @@ namespace GROBS.Controllers
                                         where = where.Or(ord_fahuodan => ord_fahuodan.DDBH.Contains(ddbh));
                                 }
                             }
-                         break;
+                            break;
                         default:
-                         break;
+                            break;
                     }
                 }
                 ViewBag.SearchCondition = sc.ConditionInfo;
@@ -226,7 +227,7 @@ namespace GROBS.Controllers
             return View();
         }
 
-      
+
 
 
         [HttpPost]
@@ -363,12 +364,92 @@ namespace GROBS.Controllers
         }
 
 
+        public ActionResult Exportfahuodanlist()
+        {
+            //if (string.IsNullOrEmpty(page))
+            //    page = "1";
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+            //string pagetag = "ord_fahuodan_index";
+            Expression<Func<ord_inventoryout_v, bool>> where = PredicateExtensionses.True<ord_inventoryout_v>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid);
+            //searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc != null && sc.ConditionInfo != null)
+            {
+                string[] sclist = sc.ConditionInfo.Split(';');
+                foreach (string scl in sclist)
+                {
+                    string[] scld = scl.Split(',');
+                    switch (scld[0])
+                    {
+                        case "chukudanbh":
+                            string chukudanbh = scld[1];
+                            string chukudanbhequal = scld[2];
+                            string chukudanbhand = scld[3];
+                            if (!string.IsNullOrEmpty(chukudanbh))
+                            {
+                                if (chukudanbhequal.Equals("="))
+                                {
+                                    if (chukudanbhand.Equals("and"))
+                                        where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                                    else
+                                        where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                                }
+                                if (chukudanbhequal.Equals("like"))
+                                {
+                                    if (chukudanbhand.Equals("and"))
+                                        where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                                    else
+                                        where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                ViewBag.SearchCondition = sc.ConditionInfo;
+            }
 
+            var tempData = ob_ord_fahuodanservice.LoadOutList(custid, where.Compile()).ToList<ord_inventoryout_v>();
+            //var tempData = ob_ord_fahuodanservice.LoadOutList(custid, where.Compile()).ToPagedList<ord_inventoryout_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            DataTable dt = new DataTable();
+            dt.Columns.Add("ChukudanBH", typeof(string));
+            dt.Columns.Add("DDBH", typeof(string));
+            dt.Columns.Add("Yunsongdizhi", typeof(string));
+            dt.Columns.Add("ChukuRQ", typeof(string));
+            dt.Columns.Add("Lianxiren", typeof(string));
+            dt.Columns.Add("LianxiDH", typeof(string));
+            dt.Columns.Add("Beizhu", typeof(string));
+            dt.Columns.Add("CKCode", typeof(string));
+            dt.Columns.Add("YunsongFS", typeof(string));
+            dt.Columns.Add("Kddanhao", typeof(string));
+            foreach (var item in tempData)
+            {
+                DataRow row = dt.NewRow();
+                row["ChukudanBH"] = item.ChukudanBH;
+                row["DDBH"] = item.DDBH;
+                row["Yunsongdizhi"] = item.Yunsongdizhi;
+                row["ChukuRQ"] = item.ChukuRQ == null ? "" : Convert.ToDateTime(item.ChukuRQ).ToString("yyyy-MM-dd");
+                row["Lianxiren"] = item.Lianxiren;
+                row["LianxiDH"] = item.LianxiDH;
+                row["Beizhu"] = item.Beizhu;
+                row["CKCode"] = item.CKCode;
+                row["YunsongFS"] = item.YunsongFS;
+                row["Kddanhao"] = item.Kddanhao;
+                dt.Rows.Add(row);
+            }
+            DataSet ds = new DataSet();
+            dt.TableName = "FaHuoDanList";
+            ds.Tables.Add(dt);
+            ExcelHelper.ExportExcel(ds, "FaHuoDanList");
+            return new EmptyResult();
+        }
 
         //   
         public ActionResult Fahuodandetails(int id)
         {
-         //string _custid = (string)Session["customer_id"];
+            //string _custid = (string)Session["customer_id"];
             var _dd = ob_ord_fahuodanservice.GetEntityById(p => p.ID == id && p.IsDelete == false);
             if (_dd == null)
                 return View();
@@ -381,7 +462,7 @@ namespace GROBS.Controllers
             //定单编号
             ViewBag.ddbh = _dd.DDBH;
             //发货日期
-            ViewBag.fhrq =Convert.ToDateTime(_dd.ChukuRQ).ToString("yyyy-MM-dd"); 
+            ViewBag.fhrq = Convert.ToDateTime(_dd.ChukuRQ).ToString("yyyy-MM-dd");
             //备注
             ViewBag.bz = _dd.Beizhu;
             //制单日期

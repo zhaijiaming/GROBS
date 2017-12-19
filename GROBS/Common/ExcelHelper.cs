@@ -490,10 +490,11 @@ namespace GROBS.Common
             if (ds == null) throw new ArgumentNullException("DataSet Is Null");
             HttpContext curContext = HttpContext.Current;
             curContext.Response.ContentType = "application/vnd.ms-excel";
-            curContext.Response.ContentEncoding = Encoding.UTF8;
+            curContext.Response.ContentEncoding = Encoding.Default;
             curContext.Response.Charset = "";
             curContext.Response.AppendHeader("Content-Disposition",
-                "attachment;filename=" + HttpUtility.UrlEncode(strFileName + ".xls", Encoding.UTF8));
+                "attachment;filename=" + strFileName + "_" + DateTime.Now.ToShortDateString() + ".xls");
+            //HttpUtility.UrlEncode(strFileName + DateTime.Now.ToShortDateString() + ".xls", Encoding.Unicode));
 
             curContext.Response.BinaryWrite(Export(ds).GetBuffer());
             curContext.ApplicationInstance.CompleteRequest();
@@ -583,6 +584,15 @@ namespace GROBS.Common
                             switch (column.DataType.ToString())
                             {
                                 case "System.String"://字符串类型
+                                    if (drValue == "True")
+                                    {
+                                        drValue = "是";
+                                    }
+                                    else if (drValue == "False")
+                                    {
+                                        drValue = "否";
+                                    }
+
                                     newCell.SetCellValue(drValue);
                                     break;
                                 case "System.DateTime"://日期类型
@@ -666,14 +676,18 @@ namespace GROBS.Common
             if (dtSource.TableName == "PurchaseOrders")
             {
                 headerRow.CreateCell(0).SetCellValue("编号");
-                headerRow.CreateCell(1).SetCellValue("产品线");
-                headerRow.CreateCell(2).SetCellValue("客户单号");
-                headerRow.CreateCell(3).SetCellValue("下单日期");
-                headerRow.CreateCell(4).SetCellValue("采购总数");
-                headerRow.CreateCell(5).SetCellValue("采购金额");
-                headerRow.CreateCell(6).SetCellValue("实付金额");
-                headerRow.CreateCell(7).SetCellValue("折扣金额");
-                headerRow.CreateCell(8).SetCellValue("备注");
+                headerRow.CreateCell(1).SetCellValue("状态");
+                headerRow.CreateCell(2).SetCellValue("产品线");
+                headerRow.CreateCell(3).SetCellValue("订单类型");
+                headerRow.CreateCell(4).SetCellValue("客户单号");
+                headerRow.CreateCell(5).SetCellValue("下单日期");
+                headerRow.CreateCell(6).SetCellValue("采购总数");
+                headerRow.CreateCell(7).SetCellValue("已发数量");
+                headerRow.CreateCell(8).SetCellValue("欠货数量");
+                headerRow.CreateCell(9).SetCellValue("采购金额");
+                headerRow.CreateCell(10).SetCellValue("折扣金额");
+                headerRow.CreateCell(11).SetCellValue("实付金额");
+                headerRow.CreateCell(12).SetCellValue("备注");
                 //设置列宽度
                 for (int index = 0; index < dtSource.Columns.Count; index++)
                 {
@@ -684,19 +698,21 @@ namespace GROBS.Common
             else if (dtSource.TableName == "CustomerOrders")
             {
                 headerRow.CreateCell(0).SetCellValue("编号");
-                headerRow.CreateCell(1).SetCellValue("客户");
-                headerRow.CreateCell(2).SetCellValue("产品线");
-                headerRow.CreateCell(3).SetCellValue("客户单号");
-                headerRow.CreateCell(4).SetCellValue("下单日期");
-                headerRow.CreateCell(5).SetCellValue("联系人");
-                headerRow.CreateCell(6).SetCellValue("联系电话");
-                headerRow.CreateCell(7).SetCellValue("送货地址");
-                headerRow.CreateCell(8).SetCellValue("采购总数");
-                headerRow.CreateCell(9).SetCellValue("总金额");
-                headerRow.CreateCell(10).SetCellValue("折扣金额");
-                headerRow.CreateCell(11).SetCellValue("实付金额");
-                headerRow.CreateCell(12).SetCellValue("备注");
-               
+                headerRow.CreateCell(1).SetCellValue("状态");
+                headerRow.CreateCell(2).SetCellValue("客户");
+                headerRow.CreateCell(3).SetCellValue("产品线");
+                headerRow.CreateCell(4).SetCellValue("采购类型");
+                headerRow.CreateCell(5).SetCellValue("客户单号");
+                headerRow.CreateCell(6).SetCellValue("下单日期");
+                headerRow.CreateCell(7).SetCellValue("联系人");
+                headerRow.CreateCell(8).SetCellValue("联系电话");
+                headerRow.CreateCell(9).SetCellValue("送货地址");
+                headerRow.CreateCell(10).SetCellValue("采购总数");
+                headerRow.CreateCell(11).SetCellValue("总金额");
+                headerRow.CreateCell(12).SetCellValue("折扣金额");
+                headerRow.CreateCell(13).SetCellValue("实付金额");
+                headerRow.CreateCell(14).SetCellValue("备注");
+
                 //设置列宽度
                 for (int index = 0; index < dtSource.Columns.Count; index++)
                 {
@@ -704,7 +720,113 @@ namespace GROBS.Common
                     SetColumnWidth(index, sheet, headerRow);
                 }
             }
+            else if (dtSource.TableName == "FanliXiaoFei")
+            {
+                headerRow.CreateCell(0).SetCellValue("编号");
+                headerRow.CreateCell(1).SetCellValue("订单编号");
+                headerRow.CreateCell(2).SetCellValue("消费金额");
+                headerRow.CreateCell(3).SetCellValue("消费日期");
 
+                //设置列宽度
+                for (int index = 0; index < dtSource.Columns.Count; index++)
+                {
+                    headerRow.GetCell(index).CellStyle = headStyle;
+                    SetColumnWidth(index, sheet, headerRow);
+                }
+            }
+            else if (dtSource.TableName == "FanliChongZhi")
+            {
+                headerRow.CreateCell(0).SetCellValue("编号");
+                headerRow.CreateCell(1).SetCellValue("返利金额");
+                headerRow.CreateCell(2).SetCellValue("返利月份");
+                headerRow.CreateCell(3).SetCellValue("是否可用");
+                headerRow.CreateCell(4).SetCellValue("返利日期");
+
+                //设置列宽度
+                for (int index = 0; index < dtSource.Columns.Count; index++)
+                {
+                    headerRow.GetCell(index).CellStyle = headStyle;
+                    SetColumnWidth(index, sheet, headerRow);
+                }
+            }
+            else if (dtSource.TableName == "CustomerTargetNow")
+            {
+                headerRow.CreateCell(0).SetCellValue("月份");
+                headerRow.CreateCell(1).SetCellValue("目标(元)");
+                headerRow.CreateCell(2).SetCellValue("业绩");
+                headerRow.CreateCell(3).SetCellValue("达成率");
+                headerRow.CreateCell(4).SetCellValue("返利申请金额");
+                headerRow.CreateCell(5).SetCellValue("返利发放金额");
+                headerRow.CreateCell(6).SetCellValue("返利是否发放");
+
+                //设置列宽度
+                for (int index = 0; index < dtSource.Columns.Count; index++)
+                {
+                    headerRow.GetCell(index).CellStyle = headStyle;
+                    SetColumnWidth(index, sheet, headerRow);
+                }
+            }
+            else if (dtSource.TableName == "CustomerTarget")
+            {
+                headerRow.CreateCell(0).SetCellValue("年度");
+                headerRow.CreateCell(1).SetCellValue("月份");
+                headerRow.CreateCell(2).SetCellValue("目标(元)");
+                headerRow.CreateCell(3).SetCellValue("业绩");
+                headerRow.CreateCell(4).SetCellValue("达成率");
+                headerRow.CreateCell(5).SetCellValue("返利申请金额");
+                headerRow.CreateCell(6).SetCellValue("返利发放金额");
+                headerRow.CreateCell(7).SetCellValue("返利是否发放");
+
+                //设置列宽度
+                for (int index = 0; index < dtSource.Columns.Count; index++)
+                {
+                    headerRow.GetCell(index).CellStyle = headStyle;
+                    SetColumnWidth(index, sheet, headerRow);
+                }
+            }
+            else if (dtSource.TableName == "FaHuoDanList")
+            {
+                headerRow.CreateCell(0).SetCellValue("发货单号");
+                headerRow.CreateCell(1).SetCellValue("订单编号");
+                headerRow.CreateCell(2).SetCellValue("运送地址");
+                headerRow.CreateCell(3).SetCellValue("发货日期");
+                headerRow.CreateCell(4).SetCellValue("联系人");
+                headerRow.CreateCell(5).SetCellValue("联系电话");
+                headerRow.CreateCell(6).SetCellValue("备注");
+                headerRow.CreateCell(7).SetCellValue("仓库");
+                headerRow.CreateCell(8).SetCellValue("运送方式");
+                headerRow.CreateCell(9).SetCellValue("快递单号");
+                //设置列宽度
+                for (int index = 0; index < dtSource.Columns.Count; index++)
+                {
+                    headerRow.GetCell(index).CellStyle = headStyle;
+                    SetColumnWidth(index, sheet, headerRow);
+                }
+            }
+            else if (dtSource.TableName == "CustomerOweList")
+            {
+                headerRow.CreateCell(0).SetCellValue("编号");
+                headerRow.CreateCell(1).SetCellValue("状态");
+                headerRow.CreateCell(2).SetCellValue("客户");
+                headerRow.CreateCell(3).SetCellValue("产品线");
+                headerRow.CreateCell(4).SetCellValue("采购类型");
+                headerRow.CreateCell(5).SetCellValue("客户单号");
+                headerRow.CreateCell(6).SetCellValue("下单日期");
+                headerRow.CreateCell(7).SetCellValue("存货编码");
+                headerRow.CreateCell(8).SetCellValue("采购数量");
+                headerRow.CreateCell(9).SetCellValue("欠货数量");
+                headerRow.CreateCell(10).SetCellValue("销售单价");
+                headerRow.CreateCell(11).SetCellValue("折扣金额");
+                headerRow.CreateCell(12).SetCellValue("总金额");
+                headerRow.CreateCell(13).SetCellValue("备注");
+
+                //设置列宽度
+                for (int index = 0; index < dtSource.Columns.Count; index++)
+                {
+                    headerRow.GetCell(index).CellStyle = headStyle;
+                    SetColumnWidth(index, sheet, headerRow);
+                }
+            }
         }
 
         private static ICellStyle SetDataStyle(HSSFWorkbook workbook)

@@ -1,4 +1,4 @@
-﻿  @using GROBS.App_Code
+﻿@using GROBS.App_Code
 @using GROBS.Models
 @using X.PagedList
 @using X.PagedList.Mvc
@@ -69,7 +69,10 @@
                         <hr />
                         <div class="clearfix">
                             <div class="pull-left">
-                                <i class="icon-double-angle-left bigger" -160></i>&nbsp;&nbsp;<b><a href="/ord_jixiao/customertargetNow">返回</a></b>
+                                <i class="icon-double-angle-left bigger" -160></i>&nbsp;&nbsp;<b>
+                                    <a href="/ord_jixiao/customertargetNow">返回</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="button" id="btn_export" class="btn btn-white" onclick="window.open('/ord_jixiao/ExportCustomerTarget')"><i class="icon-inbox green"></i><b>导出</b></button>
+                                </b>
                             </div>
                         </div>
                         <div class="space-2"></div>
@@ -78,7 +81,7 @@
                             <tr>
                                 <th>年度</th>
                                 <th>月份</th>
-                                <th>目标(元</th>
+                                <th>目标(元)</th>
                                 <th>业绩</th>
                                 <th>达成率</th>
                                 <th>返利申请金额</th>

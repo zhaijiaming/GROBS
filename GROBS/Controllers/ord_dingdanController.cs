@@ -1106,23 +1106,23 @@ namespace GROBS.Controllers
             int _userid = (int)Session["user_id"];
             var _acct = (string)Session["account"];
             int _custid = (int)Session["customer_id"];
-            var _shdw = ServiceFactory.base_shouhuodanweiservice.GetEntityById(p => p.ID == _custid);
-            if (_shdw != null)
-                ViewBag.customername = _shdw.Mingcheng;
+            //var _shdw = ServiceFactory.base_shouhuodanweiservice.GetEntityById(p => p.ID == _custid);
+            //if (_shdw != null)
+            //    ViewBag.customername = _shdw.Mingcheng;
 
-            else
-                ViewBag.customername = "0";
-            var _gzr = ServiceFactory.ord_guanzhangriservice.GetEntityById(p => p.Guanzhangri == DateTime.Parse(DateTime.Now.ToShortDateString()) && p.IsDelete == false);
-            if (_gzr == null)
-            {
-                ViewBag.closeday = "0";
-                ViewBag.closereason = "";
-            }
-            else
-            {
-                ViewBag.closeday = "1";
-                ViewBag.closereason = _gzr.Memo;
-            }
+            //else
+            //    ViewBag.customername = "0";
+            //var _gzr = ServiceFactory.ord_guanzhangriservice.GetEntityById(p => p.Guanzhangri == DateTime.Parse(DateTime.Now.ToShortDateString()) && p.IsDelete == false);
+            //if (_gzr == null)
+            //{
+            //    ViewBag.closeday = "0";
+            //    ViewBag.closereason = "";
+            //}
+            //else
+            //{
+            //    ViewBag.closeday = "1";
+            //    ViewBag.closereason = _gzr.Memo;
+            //}
             //var tempData = ob_ord_dingdanservice.LoadSortEntities(p => p.KHID == _custid && p.Zhuangtai < 12 && p.IsDelete == false, true, s => s.Bianhao);
             var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
             ViewBag.ord_dingdan = tempData;
@@ -1165,29 +1165,42 @@ namespace GROBS.Controllers
                 }
                 fh.Add(con.ToString());
             }
+
             DataTable dt = new DataTable();
             dt.Columns.Add("Bianhao", typeof(string));
+            dt.Columns.Add("Zhuangtai", typeof(string));//订单状态
             dt.Columns.Add("Mingcheng", typeof(string));
+            dt.Columns.Add("CGLX", typeof(string));//订单类型
             dt.Columns.Add("KehuDH", typeof(string));
             dt.Columns.Add("XiadanRQ", typeof(string));
             dt.Columns.Add("ZongshuCG", typeof(string));
+
+            dt.Columns.Add("YFQty", typeof(string));
+            dt.Columns.Add("QHQty", typeof(string));
+
             dt.Columns.Add("Zongjine", typeof(string));
             dt.Columns.Add("ZhekouJE", typeof(string));
             dt.Columns.Add("ShiFuJine", typeof(string));
             dt.Columns.Add("Beizhu", typeof(string));
+            var i = 0;
             foreach (var item in tempData)
             {
                 DataRow row = dt.NewRow();
                 row["Bianhao"] = item.Bianhao;
+                row["Zhuangtai"] = MvcApplication.OrderState[(Int32)item.Zhuangtai];//订单状态
                 row["Mingcheng"] = item.Mingcheng;
+                row["CGLX"] = MvcApplication.OrderType[(Int32)item.CGLX];//订单类型
                 row["KehuDH"] = item.KehuDH;
                 row["XiadanRQ"] = item.XiadanRQ;
                 row["ZongshuCG"] = item.ZongshuCG;
+                row["YFQty"] = fh[i];
+                row["QHQty"] = fh[i] == "" ? "" : (item.ZongshuCG - float.Parse(fh[i])).ToString();
                 row["Zongjine"] = item.Zongjine;
                 row["ZhekouJE"] = item.ZhekouJE;
                 row["ShiFuJine"] = item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE);
                 row["Beizhu"] = item.Beizhu;
                 dt.Rows.Add(row);
+                i++;
             }
             DataSet ds = new DataSet();
             dt.TableName = "PurchaseOrders";
@@ -1201,18 +1214,19 @@ namespace GROBS.Controllers
         {
             int userid = (int)Session["user_id"];
             int custid = (int)Session["customer_id"];
-            string pagetag = "ord_dingdan_customerorderlist";
-            string page = "1";
+            //string pagetag = "ord_dingdan_customerorderlist";
+            //string page = "1";
             string bianhao = Request["bianhao"] ?? "";
             string bianhaoequal = Request["bianhaoequal"] ?? "";
             string bianhaoand = Request["bianhaoand"] ?? "";
             Expression<Func<ord_ordermain_v, bool>> where = PredicateExtensionses.True<ord_ordermain_v>();
-            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            //searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid);
             if (sc == null)
             {
                 sc = new searchcondition();
                 sc.UserID = userid;
-                sc.PageBrief = pagetag;
+                //sc.PageBrief = pagetag;
                 if (!string.IsNullOrEmpty(bianhao))
                 {
                     if (bianhaoequal.Equals("="))
@@ -1265,39 +1279,43 @@ namespace GROBS.Controllers
             ViewBag.SearchCondition = sc.ConditionInfo;
             where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
 
-            var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-            ViewBag.ord_dingdan = tempData;
+            var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToList<ord_ordermain_v>();
+            //var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
 
             DataTable dt = new DataTable();
             dt.Columns.Add("Bianhao", typeof(string));
+            dt.Columns.Add("Zhuangtai", typeof(string));
             dt.Columns.Add("KehuMC", typeof(string));
             dt.Columns.Add("Mingcheng", typeof(string));
+            dt.Columns.Add("CGLX", typeof(string));
             dt.Columns.Add("KehuDH", typeof(string));
             dt.Columns.Add("XiadanRQ", typeof(string));
-            dt.Columns.Add("Lianxiren",typeof(string));
+            dt.Columns.Add("Lianxiren", typeof(string));
             dt.Columns.Add("LianxiDH", typeof(string));
             dt.Columns.Add("SonghuoDZ", typeof(string));
             dt.Columns.Add("ZongshuCG", typeof(string));
             dt.Columns.Add("Zongjine", typeof(string));
-            dt.Columns.Add("ShiJiFu",typeof(string));
             dt.Columns.Add("ZhekouJE", typeof(string));
+            dt.Columns.Add("ShiJiFu", typeof(string));
             dt.Columns.Add("Beizhu", typeof(string));
             foreach (var item in tempData)
             {
                 DataRow row = dt.NewRow();
-               row["Bianhao"]=item.Bianhao;
-               row["KehuMC"]=item.KehuMC;
-               row["Mingcheng"]=item.Mingcheng;
-               row["KehuDH"]=item.KehuDH;
-               row["XiadanRQ"]=item.XiadanRQ;
-               row["Lianxiren"]=item.Lianxiren;
-               row["LianxiDH"]=item.LianxiDH;
-               row["SonghuoDZ"]=item.SonghuoDZ;
-               row["ZongshuCG"]=item.ZongshuCG;
-               row["Zongjine"]=item.Zongjine;
-               row["ZhekouJE"]=item.ZhekouJE;
-               row["ShiJiFu"] = item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE);
-               row["Beizhu"]=item.Beizhu;
+                row["Bianhao"] = item.Bianhao;
+                row["Zhuangtai"] = MvcApplication.OrderState[(Int32)item.Zhuangtai];
+                row["KehuMC"] = item.KehuMC;
+                row["Mingcheng"] = item.Mingcheng;
+                row["CGLX"] = MvcApplication.OrderType[(Int32)item.CGLX];
+                row["KehuDH"] = item.KehuDH;
+                row["XiadanRQ"] = item.XiadanRQ == null ? "" : Convert.ToDateTime(item.XiadanRQ).ToString("yyyy-MM-dd");
+                row["Lianxiren"] = item.Lianxiren;
+                row["LianxiDH"] = item.LianxiDH;
+                row["SonghuoDZ"] = item.SonghuoDZ;
+                row["ZongshuCG"] = item.ZongshuCG;
+                row["Zongjine"] = item.Zongjine;
+                row["ZhekouJE"] = item.ZhekouJE == null ? 0 : item.ZhekouJE;
+                row["ShiJiFu"] = item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE);
+                row["Beizhu"] = item.Beizhu;
                 dt.Rows.Add(row);
             }
             DataSet ds = new DataSet();
@@ -1306,6 +1324,7 @@ namespace GROBS.Controllers
             ExcelHelper.ExportExcel(ds, "CustomerOrders");
             return new EmptyResult();
         }
+
         public JsonResult check()
         {
             var _ddid = Request["ddid"] ?? "";

@@ -39,11 +39,11 @@
         location.href = url_go;
     }
 
- 
+
 
 </script>
 
-    
+
 @{
     List<SearchConditionModel> scms = new List<SearchConditionModel>();
     if (_searchcondition == null || _searchcondition == "")
@@ -53,6 +53,37 @@
         scm.ItemTitle = "编号";
         scm.ItemType = "System.String";
         scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Zhuangtai";
+        scm.ItemTitle = "订单状态";
+        scm.ItemType = "订单状态.订单状态";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Mingcheng";
+        scm.ItemTitle = "产品线";
+        scm.ItemType = "产品线.产品线（历史）";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "CGLX";
+        scm.ItemTitle = "订单类型";
+        scm.ItemType = "订单类型.订单类型";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "KehuDH";
+        scm.ItemTitle = "客户单号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "XiadanRQ";
+        scm.ItemTitle = "下单日期";
+        scm.ItemType = "System.DateTime";
+        scms.Add(scm);
+
     }
     else
     {
@@ -70,6 +101,79 @@
                 scm.ItemJion = scs[0].Split(',')[3];
             }
             scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Zhuangtai";
+            scm.ItemTitle = "订单状态";
+            scm.ItemType = "订单状态.订单状态";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Mingcheng";
+            scm.ItemTitle = "产品线";
+            scm.ItemType = "产品线.产品线（历史）";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "CGLX";
+            scm.ItemTitle = "订单类型";
+            scm.ItemType = "订单类型.订单类型";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "KehuDH";
+            scm.ItemTitle = "客户单号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "XiadanRQ_S";
+            scm.ItemTitle = "下单日期";
+            scm.ItemType = "System.DateTime";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
         }
     }
 }
@@ -80,8 +184,7 @@
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-            <a href="/ord_dingdan/CustomerOrderListExportFile"><button type="button" class="btn btn-primary btn-xs btn-app" id="bt_export"><i class="icon-plane"></i>导出</button></a>
-
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_export" onclick="javascript: window.open('/ord_dingdan/CustomerOrderListExportFile')"><i class="icon-inbox"></i>导出</button>
         </p>
     </div>
     <div class="row">
@@ -115,19 +218,19 @@
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
                         <td><a href="/ord_dingdan/customerorderinfo/@item.ID">@item.Bianhao</a></td>
-                        <td class="zhuangtai">@Html.GetCommonValue_ID("订单状态",(int)item.Zhuangtai)</td>
+                        <td class="zhuangtai">@Html.GetCommonValue_ID("订单状态", (int)item.Zhuangtai)</td>
                         <td>@item.KehuMC</td>
                         <td>@item.Mingcheng</td>
-                        <td>@Html.GetCommonValue_ID("订单类型",(int)item.CGLX)</td>
+                        <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
                         <td>@item.KehuDH</td>
-                        <td>@string.Format("{0:yyyy-mm-dd}",item.XiadanRQ==null?"": item.XiadanRQ)</td>
+                        <td>@string.Format("{0:yyyy-mm-dd}", item.XiadanRQ == null ? "" : item.XiadanRQ)</td>
                         <td>@item.Lianxiren</td>
                         <td>@item.LianxiDH</td>
                         <td>@item.SonghuoDZ</td>
                         <td>@item.ZongshuCG</td>
-                        <td>@string.Format("{0:C}",item.Zongjine)</td>
-                        <td>@string.Format("{0:C}",item.ZhekouJE==null?0:item.ZhekouJE)</td>
-                        <td>@string.Format("{0:C}",item.Zongjine-(item.ZhekouJE==null?0:item.ZhekouJE))</td>
+                        <td>@string.Format("{0:C}", item.Zongjine)</td>
+                        <td>@string.Format("{0:C}", item.ZhekouJE == null ? 0 : item.ZhekouJE)</td>
+                        <td>@string.Format("{0:C}", item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE))</td>
                         <td>@item.Beizhu</td>
                     </tr>
                 }

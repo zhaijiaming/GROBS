@@ -1189,3 +1189,76 @@ INFO  2017-12-15 09:57:56,911 75290ms 14                     MoveNext           
 INFO  2017-12-15 10:18:02,174 85878ms 14                     MoveNext           - ruikang login at 2017-12-15 10:18:02!
 INFO  2017-12-15 10:25:52,212 555916ms 14                     LogOut             - ruikang log out at 2017-12-15 10:25:52
 INFO  2017-12-15 10:25:55,605 559309ms 10                     MoveNext           - 翟佳鸣 login at 2017-12-15 10:25:55!
+INFO  2017-12-17 18:51:34,298 43632ms 14                     MoveNext           - ruikang login at 2017/12/17 18:51:34!
+INFO  2017-12-17 18:58:53,132  7117ms 14                     MoveNext           - ruikang login at 2017/12/17 18:58:53!
+INFO  2017-12-17 19:22:05,216 1399201ms 14                     MoveNext           - ruikang login at 2017/12/17 19:22:05!
+INFO  2017-12-17 20:24:38,117 5152102ms 14                     MoveNext           - ruikang login at 2017/12/17 20:24:38!
+INFO  2017-12-17 20:55:57,418 11471ms 14                     MoveNext           - ruikang login at 2017/12/17 20:55:57!
+INFO  2017-12-17 21:00:37,001 35554ms 14                     MoveNext           - ruikang login at 2017/12/17 21:00:36!
+INFO  2017-12-17 21:15:38,796 18100ms 14                     MoveNext           - ruikang login at 2017/12/17 21:15:38!
+INFO  2017-12-17 22:03:53,510  7018ms 14                     MoveNext           - ruikang login at 2017/12/17 22:03:53!
+INFO  2017-12-17 22:22:39,253 311410ms 14                     MoveNext           - ruikang login at 2017/12/17 22:22:39!
+INFO  2017-12-18 08:37:32,404 13021ms 14                     MoveNext           - ruikang login at 2017/12/18 8:37:32!
+INFO  2017-12-18 09:16:56,999 44870ms 14                     MoveNext           - ruikang login at 2017/12/18 9:16:56!
+INFO  2017-12-18 09:36:58,277 119087ms 14                     MoveNext           - ruikang login at 2017/12/18 9:36:58!
+INFO  2017-12-18 09:43:04,654  7757ms 14                     MoveNext           - ruikang login at 2017/12/18 9:43:04!
+INFO  2017-12-18 09:47:21,875  6797ms 14                     MoveNext           - ruikang login at 2017/12/18 9:47:21!
+INFO  2017-12-18 09:50:42,003 11736ms 14                     MoveNext           - ruikang login at 2017/12/18 9:50:42!
+INFO  2017-12-18 10:20:35,118 634635ms 14                     MoveNext           - ruikang login at 2017/12/18 10:20:35!
+INFO  2017-12-18 10:22:37,878  7658ms 14                     MoveNext           - ruikang login at 2017/12/18 10:22:37!
+INFO  2017-12-18 10:29:38,500 37836ms 14                     MoveNext           - ruikang login at 2017/12/18 10:29:38!
+INFO  2017-12-18 10:32:33,183  8523ms 14                     MoveNext           - ruikang login at 2017/12/18 10:32:33!
+INFO  2017-12-18 10:41:38,388  7636ms 14                     MoveNext           - ruikang login at 2017/12/18 10:41:38!
+INFO  2017-12-18 10:45:19,219 10605ms 14                     MoveNext           - ruikang login at 2017/12/18 10:45:19!
+INFO  2017-12-18 10:51:58,826  7525ms 14                     MoveNext           - ruikang login at 2017/12/18 10:51:58!
+INFO  2017-12-18 11:13:57,718  6661ms 14                     MoveNext           - ruikang login at 2017/12/18 11:13:57!
+INFO  2017-12-18 11:21:30,831 11967ms 14                     MoveNext           - ruikang login at 2017/12/18 11:21:30!
+INFO  2017-12-18 11:22:51,463  6169ms 14                     MoveNext           - ruikang login at 2017/12/18 11:22:51!
+INFO  2017-12-18 11:37:38,634 802608ms 14                     MoveNext           - ruikang login at 2017/12/18 11:37:38!
+INFO  2017-12-18 12:18:59,450 3283424ms 14                     MoveNext           - ruikang login at 2017/12/18 12:18:59!
+INFO  2017-12-18 12:35:11,174  9735ms 14                     MoveNext           - ruikang login at 2017/12/18 12:35:11!
+INFO  2017-12-18 12:38:07,104  9030ms 14                     MoveNext           - ruikang login at 2017/12/18 12:38:07!
+INFO  2017-12-18 12:40:50,062  6071ms 14                     MoveNext           - ruikang login at 2017/12/18 12:40:50!
+INFO  2017-12-18 12:43:23,069  6048ms 14                     MoveNext           - ruikang login at 2017/12/18 12:43:23!
+INFO  2017-12-18 12:45:52,137 11051ms 14                     MoveNext           - ruikang login at 2017/12/18 12:45:52!
+INFO  2017-12-18 12:47:52,106  5331ms 14                     MoveNext           - ruikang login at 2017/12/18 12:47:52!
+INFO  2017-12-18 12:50:13,667  9779ms 14                     MoveNext           - ruikang login at 2017/12/18 12:50:13!
+INFO  2017-12-18 20:07:29,073 143170ms 14                     MoveNext           - ruikang login at 2017/12/18 20:07:29!
+INFO  2017-12-18 20:38:25,818  7634ms 14                     MoveNext           - ruikang login at 2017/12/18 20:38:25!
+INFO  2017-12-18 20:49:24,042 80969ms 14                     MoveNext           - ruikang login at 2017/12/18 20:49:24!
+INFO  2017-12-18 21:11:43,532 32713ms 14                     MoveNext           - ruikang login at 2017/12/18 21:11:43!
+INFO  2017-12-18 21:38:13,238 254538ms 14                     MoveNext           - ruikang login at 2017/12/18 21:38:13!
+INFO  2017-12-18 21:46:20,761 14183ms 14                     MoveNext           - ruikang login at 2017/12/18 21:46:20!
+INFO  2017-12-18 22:29:27,693  9710ms 14                     MoveNext           - ruikang login at 2017/12/18 22:29:27!
+INFO  2017-12-19 09:21:51,846  8268ms 14                     MoveNext           - ruikang login at 2017/12/19 9:21:51!
+INFO  2017-12-19 10:02:31,062 19738ms 14                     MoveNext           - ruikang login at 2017/12/19 10:02:31!
+INFO  2017-12-19 10:04:59,789 24741ms 14                     MoveNext           - ruikang login at 2017/12/19 10:04:59!
+INFO  2017-12-19 10:08:34,342 239294ms 14                     LogOut             - ruikang log out at 2017/12/19 10:08:34
+INFO  2017-12-19 10:10:43,821 368774ms 14                     MoveNext           - ruikang login at 2017/12/19 10:10:43!
+INFO  2017-12-19 10:41:30,366 26518ms 14                     MoveNext           - ruikang login at 2017/12/19 10:41:30!
+INFO  2017-12-19 11:07:38,805 12383ms 14                     MoveNext           - ruikang login at 2017/12/19 11:07:38!
+INFO  2017-12-19 11:27:16,494 96324ms 14                     MoveNext           - ruikang login at 2017/12/19 11:27:16!
+INFO  2017-12-19 11:52:01,500 47659ms 14                     MoveNext           - ruikang login at 2017/12/19 11:52:01!
+INFO  2017-12-19 12:54:23,890 3790049ms 14                     MoveNext           - ruikang login at 2017/12/19 12:54:23!
+INFO  2017-12-19 13:08:53,116  6803ms 14                     MoveNext           - ruikang login at 2017/12/19 13:08:53!
+INFO  2017-12-19 13:40:58,594 10555ms 14                     MoveNext           - ruikang login at 2017/12/19 13:40:58!
+INFO  2017-12-19 13:49:45,031  5448ms 14                     MoveNext           - ruikang login at 2017/12/19 13:49:45!
+INFO  2017-12-19 14:26:49,046  6548ms 14                     MoveNext           - ruikang login at 2017/12/19 14:26:49!
+INFO  2017-12-19 14:28:07,641  6223ms 14                     MoveNext           - ruikang login at 2017/12/19 14:28:07!
+INFO  2017-12-19 14:36:17,930  8434ms 14                     MoveNext           - ruikang login at 2017/12/19 14:36:17!
+INFO  2017-12-19 14:38:24,510  6844ms 14                     MoveNext           - ruikang login at 2017/12/19 14:38:24!
+INFO  2017-12-19 14:41:23,245 21706ms 14                     MoveNext           - ruikang login at 2017/12/19 14:41:23!
+INFO  2017-12-19 15:21:32,445  7617ms 14                     MoveNext           - ruikang login at 2017/12/19 15:21:32!
+ERROR 2017-12-19 15:47:37,639 1572810ms AppLog                 SearchValueString  - search condition init fail,索引超出了数组界限。
+INFO  2017-12-19 15:49:18,471  6365ms 14                     MoveNext           - ruikang login at 2017/12/19 15:49:18!
+INFO  2017-12-19 15:53:43,358  5036ms 14                     MoveNext           - ruikang login at 2017/12/19 15:53:43!
+INFO  2017-12-19 16:00:49,385  6743ms 14                     MoveNext           - ruikang login at 2017/12/19 16:00:49!
+INFO  2017-12-19 16:29:24,322  9759ms 14                     MoveNext           - ruikang login at 2017/12/19 16:29:24!
+INFO  2017-12-19 16:38:29,207  6115ms 14                     MoveNext           - ruikang login at 2017/12/19 16:38:29!
+INFO  2017-12-19 16:47:31,146  6921ms 14                     MoveNext           - ruikang login at 2017/12/19 16:47:31!
+INFO  2017-12-19 16:51:57,748 12505ms 14                     MoveNext           - ruikang login at 2017/12/19 16:51:57!
+INFO  2017-12-19 17:07:08,025 13634ms 14                     MoveNext           - ruikang login at 2017/12/19 17:07:08!
+ERROR 2017-12-19 17:07:22,555 28164ms AppLog                 SearchValueString  - search condition init fail,索引超出了数组界限。
+ERROR 2017-12-19 17:07:22,999 28608ms AppLog                 SearchValueString  - search condition init fail,索引超出了数组界限。
+ERROR 2017-12-19 17:08:13,109 78718ms AppLog                 SearchValueString  - search condition init fail,索引超出了数组界限。
+ERROR 2017-12-19 17:08:28,121 93730ms AppLog                 SearchValueString  - search condition init fail,索引超出了数组界限。
