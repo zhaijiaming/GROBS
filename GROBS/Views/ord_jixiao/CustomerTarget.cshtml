@@ -49,7 +49,7 @@
     }
     else
     {
-        string[] scs = _searchcondition.Split(';');
+        string[] scs = _searchcondition.Split(new char[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
         if (scs.Length > 0)
         {
             SearchConditionModel scm = new SearchConditionModel();

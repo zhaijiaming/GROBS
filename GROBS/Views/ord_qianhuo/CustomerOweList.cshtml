@@ -165,11 +165,15 @@
             scm.ItemCode = "XiadanRQ";
             scm.ItemTitle = "下单日期";
             scm.ItemType = "System.DateTime";
-            if (scs.Length > 1)
+            if (scs.Length > 5)
             {
-                scm.ItemValue = scs[0].Split(',')[1];
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
+                string[] str = scs[5].Split(',');
+                if (str.Length > 1)
+                {
+                    scm.ItemValue = str[1];
+                    scm.ItemOpValue = str[2];
+                    scm.ItemJion = str[3];
+                }
             }
             scms.Add(scm);
         }

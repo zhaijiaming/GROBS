@@ -659,8 +659,8 @@ namespace GROBS.Controllers
                 }
                 if (!string.IsNullOrEmpty(XiadanRQ))
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
-                //else
-                //    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
 
                 searchconditionService.GetInstance().AddEntity(sc);
             }
@@ -794,8 +794,8 @@ namespace GROBS.Controllers
                 }
                 if (!string.IsNullOrEmpty(XiadanRQ))
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
-                //else
-                //    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
 
 
                 searchconditionService.GetInstance().UpdateEntity(sc);

@@ -94,7 +94,7 @@
             scm.ItemCode = "Bianhao";
             scm.ItemTitle = "编号";
             scm.ItemType = "System.String";
-            if (scs.Length > 1)
+            if (scs.Length > 0)
             {
                 scm.ItemValue = scs[0].Split(',')[1];
                 scm.ItemOpValue = scs[0].Split(',')[2];
@@ -139,7 +139,7 @@
             scm.ItemCode = "CGLX";
             scm.ItemTitle = "订单类型";
             scm.ItemType = "订单类型.订单类型";
-            if (scs.Length > 1)
+            if (scs.Length > 2)
             {
                 scm.ItemValue = scs[3].Split(',')[1];
                 if (scm.ItemValue.Length == 0)
@@ -155,7 +155,7 @@
             scm.ItemCode = "KehuDH";
             scm.ItemTitle = "客户单号";
             scm.ItemType = "System.String";
-            if (scs.Length > 1)
+            if (scs.Length > 3)
             {
                 scm.ItemValue = scs[4].Split(',')[1];
                 scm.ItemOpValue = scs[4].Split(',')[2];
@@ -167,11 +167,15 @@
             scm.ItemCode = "XiadanRQ";
             scm.ItemTitle = "下单日期";
             scm.ItemType = "System.DateTime";
-            if (scs.Length > 1)
+            if (scs.Length > 4)
             {
-                scm.ItemValue = scs[0].Split(',')[1];
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
+                string[] itemStr = scs[5].Split(',');
+                if (itemStr.Length > 1)
+                {
+                    scm.ItemValue = itemStr[1];
+                    scm.ItemOpValue = itemStr[2];
+                    scm.ItemJion = itemStr[3];
+                }
             }
             scms.Add(scm);
         }

@@ -324,27 +324,27 @@ namespace GROBS.Controllers
             //编号
             string bianhao = Request["bianhao"] ?? "";
             string bianhaoequal = Request["bianhaoequal"] ?? "";
-            string bianhaoand = Request["bianhaoand"] ?? "";
+            string bianhaoand = Request["bianhaoand"] ?? "and";
             //订单状态
             string Zhuangtai = Request["Zhuangtai"] ?? "";
             string Zhuangtaiequal = Request["ZhuangtaiEqual"] ?? "";
-            string Zhuangtaiand = Request["Zhuangtaiand"] ?? "";
+            string Zhuangtaiand = Request["Zhuangtaiand"] ?? "and";
             //产品线
             string Mingcheng = Request["Mingcheng"] ?? "";
             string Mingchengequal = Request["Mingchengequal"] ?? "";
-            string Mingchengand = Request["Mingchengand"] ?? "";
+            string Mingchengand = Request["Mingchengand"] ?? "and";
             //订单类型
             string CGLX = Request["CGLX"] ?? "";
             string CGLXequal = Request["CGLXequal"] ?? "";
-            string CGLXand = Request["CGLXand"] ?? "";
+            string CGLXand = Request["CGLXand"] ?? "and";
             //客户单号
             string KehuDH = Request["KehuDH"] ?? "";
             string KehuDHequal = Request["KehuDHequal"] ?? "";
-            string KehuDHand = Request["KehuDHand"] ?? "";
+            string KehuDHand = Request["KehuDHand"] ?? "and";
             //下单日期
             string XiadanRQ = Request["XiadanRQ"] ?? "";
             string XiadanRQequal = Request["XiadanRQequal"] ?? "";
-            string XiadanRQand = Request["XiadanRQand"] ?? "";
+            string XiadanRQand = Request["XiadanRQand"] ?? "and";
             Expression<Func<ord_ordermain_vsss, bool>> where = PredicateExtensionses.True<ord_ordermain_vsss>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
