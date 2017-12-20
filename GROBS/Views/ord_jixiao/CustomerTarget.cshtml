@@ -23,14 +23,28 @@
         });
     }
 </script>
+
+
 @{
     List<SearchConditionModel> scms = new List<SearchConditionModel>();
     if (_searchcondition == null || _searchcondition == "")
     {
         SearchConditionModel scm = new SearchConditionModel();
-        scm.ItemCode = "KHID";
-        scm.ItemTitle = "客户";
-        scm.ItemType = "System.Int32";
+        scm.ItemCode = "Niandu";
+        scm.ItemTitle = "年度";
+        scm.ItemType = "年度.年度";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Yuefen";
+        scm.ItemTitle = "月份";
+        scm.ItemType = "月份.月份";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "FafangSF";
+        scm.ItemTitle = "返利是否发放";
+        scm.ItemType = "System.Boolean";
         scms.Add(scm);
     }
     else
@@ -39,20 +53,58 @@
         if (scs.Length > 0)
         {
             SearchConditionModel scm = new SearchConditionModel();
-            scm.ItemCode = "KHID";
-            scm.ItemTitle = "客户";
-            scm.ItemType = "System.Int32";
+            scm.ItemCode = "Niandu";
+            scm.ItemTitle = "年度";
+            scm.ItemType = "年度.年度";
             if (scs.Length > 1)
             {
-                scm.ItemValue = scs[0].Split(',')[1];
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
+                scm.ItemValue = scs[1].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[1].Split(',')[2];
+                scm.ItemJion = scs[1].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Yuefen";
+            scm.ItemTitle = "月份";
+            scm.ItemType = "月份.月份";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[2].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[2].Split(',')[2];
+                scm.ItemJion = scs[2].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "FafangSF";
+            scm.ItemTitle = "返利是否发放";
+            scm.ItemType = "System.Boolean";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[3].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[3].Split(',')[2];
+                scm.ItemJion = scs[3].Split(',')[3];
             }
             scms.Add(scm);
         }
     }
 }
+
 <div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "目标（全部）_条件组合查询", "/ord_jixiao/CustomerTarget", "ord_jixiao_customertarget", scms)
     <input type="hidden" id="khid" value="@ViewBag.khid" />
     <div class="container">
         <div class="row">
@@ -71,6 +123,7 @@
                             <div class="pull-left">
                                 <i class="icon-double-angle-left bigger" -160></i>&nbsp;&nbsp;<b>
                                     <a href="/ord_jixiao/customertargetNow">返回</a>&nbsp;&nbsp;&nbsp;&nbsp;
+                                    <button type="button" id="bt_searchInfo" class="btn btn-white" data-toggle="modal" data-target="#myModal"><i class="icon-search green"></i><b>查询</b></button>
                                     <button type="button" id="btn_export" class="btn btn-white" onclick="window.open('/ord_jixiao/ExportCustomerTarget')"><i class="icon-inbox green"></i><b>导出</b></button>
                                 </b>
                             </div>

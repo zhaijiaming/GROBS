@@ -260,6 +260,7 @@
         scm.ItemCode = "CGLX";
         scm.ItemTitle = "订单类型";
         scm.ItemType = "订单类型.订单类型";
+        scm.ItemJion = "and";
         scms.Add(scm);
 
         scm = new SearchConditionModel();
@@ -298,13 +299,13 @@
             scm.ItemType = "订单状态.订单状态";
             if (scs.Length > 1)
             {
-                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemValue = scs[1].Split(',')[1];
                 if (scm.ItemValue.Length == 0)
                 {
                     scm.ItemValue = "0";
                 }
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
+                scm.ItemOpValue = scs[1].Split(',')[2];
+                scm.ItemJion = scs[1].Split(',')[3];
             }
             scms.Add(scm);
 
@@ -314,13 +315,13 @@
             scm.ItemType = "产品线.产品线（历史）";
             if (scs.Length > 1)
             {
-                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemValue = scs[2].Split(',')[1];
                 if (scm.ItemValue.Length == 0)
                 {
                     scm.ItemValue = "0";
                 }
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
+                scm.ItemOpValue = scs[2].Split(',')[2];
+                scm.ItemJion = scs[2].Split(',')[3];
             }
             scms.Add(scm);
 
@@ -331,13 +332,13 @@
             scm.ItemType = "订单类型.订单类型";
             if (scs.Length > 1)
             {
-                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemValue = scs[3].Split(',')[1];
                 if (scm.ItemValue.Length == 0)
                 {
                     scm.ItemValue = "0";
                 }
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
+                scm.ItemOpValue = scs[3].Split(',')[2];
+                scm.ItemJion = scs[3].Split(',')[3];
             }
             scms.Add(scm);
 
@@ -347,9 +348,9 @@
             scm.ItemType = "System.String";
             if (scs.Length > 1)
             {
-                scm.ItemValue = scs[0].Split(',')[1];
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
+                scm.ItemValue = scs[4].Split(',')[1];
+                scm.ItemOpValue = scs[4].Split(',')[2];
+                scm.ItemJion = scs[4].Split(',')[3];
             }
             scms.Add(scm);
 
@@ -359,9 +360,9 @@
             scm.ItemType = "System.DateTime";
             if (scs.Length > 1)
             {
-                scm.ItemValue = scs[0].Split(',')[1];
-                scm.ItemOpValue = scs[0].Split(',')[2];
-                scm.ItemJion = scs[0].Split(',')[3];
+                scm.ItemValue = scs[5].Split(',')[1];
+                scm.ItemOpValue = scs[5].Split(',')[2];
+                scm.ItemJion = scs[5].Split(',')[3];
             }
             scms.Add(scm);
         }

@@ -272,6 +272,28 @@ namespace GROBS.App_Code
                             sb.AppendFormat("<option value=\"{0}\">{1}</option>", deliveryType.Key, deliveryType.Value);
                     }
                     break;
+                case "年度":
+                    Int32 startYear = DateTime.Now.Year - 10;
+                    Int32 endYear = DateTime.Now.Year + 1;
+                    while (startYear <= endYear)
+                    {
+                        if (startYear == selectedvalue && selectedvalue != 0)
+                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", startYear, startYear);
+                        else
+                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", startYear, startYear);
+                        startYear++;
+                    }
+                    break;
+                case "月份":
+                    for (int i = 1; i <= 12; i++)
+                    {
+                        string month = i < 10 ? i.ToString().PadLeft(2) : i.ToString();
+                        if (long.Parse(month) == selectedvalue && selectedvalue != 0)
+                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", month, month);
+                        else
+                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", month, month);
+                    }
+                    break;
                 case "产品线": //"auth_gongsi":
                     switch (itemname)
                     {
@@ -899,19 +921,19 @@ namespace GROBS.App_Code
                     switch (sc.ItemType)
                     {
                         case "System.String":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.Double":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.Int16":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.Decimal":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.DateTime":
-                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
+                            svs = string.Format("<input type =\"text\" class=\"form-control\" name=\"{0}\" id=\"{1}\" placeholder=\"请输入{2}\" value=\"{3}\">", sc.ItemCode, sc.ItemCode, sc.ItemTitle, sc.ItemValue);
                             break;
                         case "System.Boolean":
                             if (sc.ItemValue == null)
@@ -974,6 +996,18 @@ namespace GROBS.App_Code
                                 svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, long.Parse(sc.ItemValue));
                             break;
                         case "运送方式":
+                            if (sc.ItemValue == null)
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, 0);
+                            else
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, long.Parse(sc.ItemValue));
+                            break;
+                        case "月份":
+                            if (sc.ItemValue == null)
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, 0);
+                            else
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, long.Parse(sc.ItemValue));
+                            break;
+                        case "年度":
                             if (sc.ItemValue == null)
                                 svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, 0);
                             else

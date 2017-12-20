@@ -208,12 +208,12 @@ namespace GROBS.Controllers
                         case "Zhuangtai":
                             string Zhuangtai = scld[1];
                             string Zhuangtaiequal = scld[2];
-                            string mingchengand = scld[3];
+                            string Zhuangtaiand = scld[3];
                             if (!string.IsNullOrEmpty(Zhuangtai))
                             {
                                 if (Zhuangtaiequal.Equals("="))
                                 {
-                                    if (mingchengand.Equals("and"))
+                                    if (Zhuangtaiand.Equals("and"))
                                         where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
                                     else
                                         where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
@@ -651,12 +651,12 @@ namespace GROBS.Controllers
                         case "Zhuangtai":
                             string Zhuangtai = scld[1];
                             string Zhuangtaiequal = scld[2];
-                            string mingchengand = scld[3];
+                            string Zhuangtaiand = scld[3];
                             if (!string.IsNullOrEmpty(Zhuangtai))
                             {
                                 if (Zhuangtaiequal.Equals("="))
                                 {
-                                    if (mingchengand.Equals("and"))
+                                    if (Zhuangtaiand.Equals("and"))
                                         where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
                                     else
                                         where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));

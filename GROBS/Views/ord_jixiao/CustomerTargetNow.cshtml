@@ -4,6 +4,7 @@
 @using X.PagedList.Mvc
 @{
     ViewBag.Title = "指标";
+    string _searchcondition = ViewBag.SearchCondition;
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
 }
 <script type="text/javascript">
@@ -12,18 +13,8 @@
 
         //导出
         $("#btn_export").on("click", function () {
-            var _req_YF = $("#req_YF").val();
-            var _req_FLType = $("#req_FLType").val();
-            window.open("/ord_jixiao/customerTargetNowExport?Yuefen=" + _req_YF + "&" + "FafangSF=" + _req_FLType, "_self");
+            window.open("/ord_jixiao/customerTargetNowExport", "_self");
         });
-
-        //查询
-        $("#btn_search").on("click", function () {
-            var _req_YF = $("#req_YF").val();
-            var _req_FLType = $("#req_FLType").val();
-
-        });
-
     });
     //格式化是否
     function formatBoolToCHinese() {
@@ -41,7 +32,65 @@
 </script>
 
 
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "Yuefen";
+        scm.ItemTitle = "月份";
+        scm.ItemType = "月份.月份";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "FafangSF";
+        scm.ItemTitle = "返利是否发放";
+        scm.ItemType = "System.Boolean";
+        scms.Add(scm);
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Yuefen";
+            scm.ItemTitle = "月份";
+            scm.ItemType = "月份.月份";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "FafangSF";
+            scm.ItemTitle = "返利是否发放";
+            scm.ItemType = "System.Boolean";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+        }
+    }
+}
+
 <div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "目标_条件组合查询", "/ord_jixiao/CustomerTargetNow", "ord_jixiao_customertargetnow", scms)
     <input type="hidden" id="khid" value="@ViewBag.khid" />
     <div class="container">
         <div class="row">
@@ -58,39 +107,9 @@
                         </div>
                         <hr />
                         <div class="clearfix">
-                            <div class="form-group col-sm-3">
-                                <label for="req_YF" class="col-sm-4 control-label"><b>月份</b></label>
-                                <div class="col-sm-8">
-                                    <select id="req_YF" name="req_YF" class="form-control">
-                                        <option value="">-全部-</option>
-                                        <option value="01">01</option>
-                                        <option value="02">02</option>
-                                        <option value="03">03</option>
-                                        <option value="04">04</option>
-                                        <option value="05">05</option>
-                                        <option value="06">06</option>
-                                        <option value="07">07</option>
-                                        <option value="08">08</option>
-                                        <option value="09">09</option>
-                                        <option value="10">10</option>
-                                        <option value="11">11</option>
-                                        <option value="12">12</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-5">
-                                <label for="req_FLType" class="col-sm-3 control-label"><b>返利是否发放</b></label>
-                                <div class="col-sm-5">
-                                    <select id="req_FLType" name="req_FLType" class="form-control">
-                                        <option value="">-全部-</option>
-                                        <option value="False">否</option>
-                                        <option value="True">是</option>
-                                    </select>
-                                </div>
-                            </div>
                             <div class="pull-right">
                                 <b>
-                                    <button type="button" id="btn_search" class="btn btn-white "><i class="icon-search green"></i><b>查询</b></button>
+                                    <button type="button" id="bt_searchInfo" class="btn btn-white" data-toggle="modal" data-target="#myModal"><i class="icon-search green"></i><b>查询</b></button>
                                     <button type="button" id="btn_export" class="btn btn-white"><i class="icon-inbox green"></i><b>导出</b></button>
                                     &nbsp;&nbsp;&nbsp;&nbsp;
                                     <a href="/ord_jixiao/customertarget">查看所有记录</a>

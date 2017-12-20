@@ -1293,3 +1293,56 @@ INFO  2017-12-20 10:32:19,494  6404ms 14                     MoveNext           
 INFO  2017-12-20 10:36:59,821  5322ms 14                     MoveNext           - ruikang login at 2017/12/20 10:36:59!
 INFO  2017-12-20 10:58:19,326  7601ms 14                     MoveNext           - ruikang login at 2017/12/20 10:58:19!
 INFO  2017-12-20 11:06:39,907  5286ms 14                     MoveNext           - ruikang login at 2017/12/20 11:06:39!
+INFO  2017-12-20 11:16:55,309  4868ms 14                     MoveNext           - ruikang login at 2017/12/20 11:16:55!
+INFO  2017-12-20 11:35:49,875 10562ms 14                     MoveNext           - ruikang login at 2017/12/20 11:35:49!
+INFO  2017-12-20 11:44:12,380 18403ms 14                     MoveNext           - ruikang login at 2017/12/20 11:44:12!
+INFO  2017-12-20 11:49:10,542  5021ms 14                     MoveNext           - ruikang login at 2017/12/20 11:49:10!
+INFO  2017-12-20 11:58:00,374 11354ms 14                     MoveNext           - ruikang login at 2017/12/20 11:58:00!
+INFO  2017-12-20 12:05:01,737  6462ms 14                     MoveNext           - ruikang login at 2017/12/20 12:05:01!
+INFO  2017-12-20 12:31:18,335  6644ms 14                     MoveNext           - ruikang login at 2017/12/20 12:31:18!
+INFO  2017-12-20 12:40:13,056 52130ms 14                     MoveNext           - ruikang login at 2017/12/20 12:40:13!
+INFO  2017-12-20 12:43:31,830  5833ms 14                     MoveNext           - ruikang login at 2017/12/20 12:43:31!
+INFO  2017-12-20 12:45:46,277  9777ms 14                     MoveNext           - ruikang login at 2017/12/20 12:45:46!
+INFO  2017-12-20 12:49:28,390  6150ms 14                     MoveNext           - ruikang login at 2017/12/20 12:49:28!
+INFO  2017-12-20 13:28:31,789 24094ms 14                     MoveNext           - ruikang login at 2017/12/20 13:28:31!
+INFO  2017-12-20 14:03:12,143  5396ms 14                     MoveNext           - ruikang login at 2017/12/20 14:03:12!
+INFO  2017-12-20 14:29:35,735  4954ms 14                     MoveNext           - ruikang login at 2017/12/20 14:29:35!
+INFO  2017-12-20 14:33:24,694  6588ms 14                     MoveNext           - ruikang login at 2017/12/20 14:33:24!
+INFO  2017-12-20 14:44:55,337  8442ms 14                     MoveNext           - ruikang login at 2017/12/20 14:44:55!
+INFO  2017-12-20 14:48:49,137  7443ms 14                     MoveNext           - ruikang login at 2017/12/20 14:48:49!
+INFO  2017-12-20 15:11:53,773 27470ms 14                     MoveNext           - ruikang login at 2017/12/20 15:11:53!
+ERROR 2017-12-20 15:12:12,245 45942ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:12:36,101 69798ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:12:40,644 74341ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:13:17,263 110960ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:13:21,797 115494ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+INFO  2017-12-20 15:15:31,040  6530ms 14                     MoveNext           - ruikang login at 2017/12/20 15:15:31!
+INFO  2017-12-20 15:17:14,908  8107ms 14                     MoveNext           - ruikang login at 2017/12/20 15:17:14!
+ERROR 2017-12-20 15:17:30,180 23379ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:17:41,745 34943ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:19:44,689 157888ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:19:49,314 162513ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:21:58,479 291677ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:22:03,152 296350ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:23:23,790 376989ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:23:28,775 381973ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+INFO  2017-12-20 15:28:57,286  8059ms 14                     MoveNext           - ruikang login at 2017/12/20 15:28:57!
+ERROR 2017-12-20 15:29:15,586 26358ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:29:22,866 33638ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+INFO  2017-12-20 15:32:31,811 21289ms 14                     MoveNext           - ruikang login at 2017/12/20 15:32:31!
+ERROR 2017-12-20 15:32:49,224 38702ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+ERROR 2017-12-20 15:32:55,983 45461ms AppLog                 SearchValueString  - search condition init fail,引发类型为“System.OutOfMemoryException”的异常。
+INFO  2017-12-20 15:35:54,501  8720ms 14                     MoveNext           - ruikang login at 2017/12/20 15:35:54!
+INFO  2017-12-20 15:41:12,154  4172ms 14                     MoveNext           - ruikang login at 2017/12/20 15:41:12!
+INFO  2017-12-20 15:45:33,387 10181ms 14                     MoveNext           - ruikang login at 2017/12/20 15:45:33!
+INFO  2017-12-20 15:50:35,716  5425ms 14                     MoveNext           - ruikang login at 2017/12/20 15:50:35!
+INFO  2017-12-20 15:54:15,111  5359ms 14                     MoveNext           - ruikang login at 2017/12/20 15:54:15!
+INFO  2017-12-20 16:00:54,180  6606ms 14                     MoveNext           - ruikang login at 2017/12/20 16:00:54!
+INFO  2017-12-20 16:06:09,514  5201ms 14                     MoveNext           - ruikang login at 2017/12/20 16:06:09!
+INFO  2017-12-20 16:10:24,786 12405ms 14                     MoveNext           - ruikang login at 2017/12/20 16:10:24!
+INFO  2017-12-20 16:17:33,570  4721ms 14                     MoveNext           - ruikang login at 2017/12/20 16:17:33!
+INFO  2017-12-20 16:36:12,086 237473ms 14                     MoveNext           - ruikang login at 2017/12/20 16:36:12!
+INFO  2017-12-20 16:58:13,853 14137ms 14                     MoveNext           - ruikang login at 2017/12/20 16:58:13!
+INFO  2017-12-20 17:00:08,790  5210ms 14                     MoveNext           - ruikang login at 2017/12/20 17:00:08!
+INFO  2017-12-20 17:04:10,137  7457ms 14                     MoveNext           - ruikang login at 2017/12/20 17:04:10!
+INFO  2017-12-20 17:10:02,115 359435ms 14                     LogOut             - ruikang log out at 2017/12/20 17:10:02

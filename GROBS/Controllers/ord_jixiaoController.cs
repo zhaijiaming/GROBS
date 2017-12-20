@@ -322,7 +322,7 @@ namespace GROBS.Controllers
                         case "khid":
                             string khid = scld[1];
                             string khidequal = scld[2];
-                            string khidand = scld[3];
+                            string khidand = string.IsNullOrEmpty(scld[3]) ? "and" : scld[3];
                             if (!string.IsNullOrEmpty(khid))
                             {
                                 if (khidequal.Equals("="))
@@ -345,6 +345,51 @@ namespace GROBS.Controllers
                                         where = where.And(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
                                     else
                                         where = where.Or(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
+                                }
+                            }
+                            break;
+                        case "Niandu":
+                            string Niandu = scld[1];
+                            string Nianduequal = scld[2];
+                            string Nianduand = string.IsNullOrEmpty(scld[3]) ? "and" : scld[3];
+                            if (!string.IsNullOrEmpty(Niandu))
+                            {
+                                if (Nianduequal.Equals("="))
+                                {
+                                    if (Nianduand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                                }
+                            }
+                            break;
+                        case "Yuefen":
+                            string Yuefen = scld[1];
+                            string Yuefenequal = scld[2];
+                            string Yuefenand = string.IsNullOrEmpty(scld[3]) ? "and" : scld[3];
+                            if (!string.IsNullOrEmpty(Yuefen))
+                            {
+                                if (Yuefenequal.Equals("="))
+                                {
+                                    if (Yuefenand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                                }
+                            }
+                            break;
+                        case "FafangSF":
+                            string FafangSF = scld[1];
+                            string FafangSFequal = scld[2];
+                            string FafangSFand = string.IsNullOrEmpty(scld[3]) ? "and" : scld[3];
+                            if (!string.IsNullOrEmpty(FafangSF))
+                            {
+                                if (FafangSFequal.Equals("="))
+                                {
+                                    if (FafangSFand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
                                 }
                             }
                             break;
@@ -371,9 +416,23 @@ namespace GROBS.Controllers
             ViewBag.khid = _khid;
             string pagetag = "ord_jixiao_customertarget";
             string page = "1";
+
             string khid = Request["khid"] ?? "";
             string khidequal = Request["khidequal"] ?? "";
             string khidand = Request["khidand"] ?? "";
+
+            string Niandu = Request["Niandu"] ?? "";
+            string Nianduequal = Request["Nianduequal"] ?? "";
+            string Nianduand = Request["Nianduand"] ?? "and";
+
+            string Yuefen = Request["Yuefen"] ?? "";
+            string Yuefenequal = Request["Yuefenequal"] ?? "";
+            string Yuefenand = Request["Yuefenand"] ?? "and";
+
+            string FafangSF = Request["FafangSF"] ?? "";
+            string FafangSFequal = Request["FafangSFequal"] ?? "";
+            string FafangSFand = Request["FafangSFand"] ?? "and";
+
             Expression<Func<ord_jixiao, bool>> where = PredicateExtensionses.True<ord_jixiao>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
@@ -409,6 +468,53 @@ namespace GROBS.Controllers
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", khid, khidequal, khidand);
                 else
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", "", khidequal, khidand);
+
+                if (!string.IsNullOrEmpty(Niandu))
+                {
+                    if (Nianduequal.Equals("="))
+                    {
+                        if (Nianduand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Niandu))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Niandu", Niandu, Nianduequal, Nianduand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Niandu", "", Nianduequal, Nianduand);
+
+
+                if (!string.IsNullOrEmpty(Yuefen))
+                {
+                    if (Yuefenequal.Equals("="))
+                    {
+                        if (Yuefenand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Yuefen))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", Yuefen, Yuefenequal, Yuefenand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", "", Yuefenequal, Yuefenand);
+
+                if (!string.IsNullOrEmpty(FafangSF))
+                {
+                    if (FafangSFequal.Equals("="))
+                    {
+                        if (FafangSFand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                    }
+                }
+                if (!string.IsNullOrEmpty(FafangSF))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", FafangSF, FafangSFequal, FafangSFand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
+
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
@@ -442,6 +548,52 @@ namespace GROBS.Controllers
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", khid, khidequal, khidand);
                 else
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", "", khidequal, khidand);
+                if (!string.IsNullOrEmpty(Niandu))
+                {
+                    if (Nianduequal.Equals("="))
+                    {
+                        if (Nianduand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Niandu))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Niandu", Niandu, Nianduequal, Nianduand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Niandu", "", Nianduequal, Nianduand);
+
+
+                if (!string.IsNullOrEmpty(Yuefen))
+                {
+                    if (Yuefenequal.Equals("="))
+                    {
+                        if (Yuefenand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Yuefen))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", Yuefen, Yuefenequal, Yuefenand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", "", Yuefenequal, Yuefenand);
+
+                if (!string.IsNullOrEmpty(FafangSF))
+                {
+                    if (FafangSFequal.Equals("="))
+                    {
+                        if (FafangSFand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                    }
+                }
+                if (!string.IsNullOrEmpty(FafangSF))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", FafangSF, FafangSFequal, FafangSFand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
+
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
@@ -455,90 +607,104 @@ namespace GROBS.Controllers
 
         public ActionResult ExportCustomerTarget()
         {
-            int userid = (int)Session["user_id"];
             var _khid = (int)Session["customer_id"];
+
+            int userid = (int)Session["user_id"];
             string pagetag = "ord_jixiao_customertarget";
-            string page = "1";
-            string khid = Request["khid"] ?? "";
-            string khidequal = Request["khidequal"] ?? "";
-            string khidand = Request["khidand"] ?? "";
             Expression<Func<ord_jixiao, bool>> where = PredicateExtensionses.True<ord_jixiao>();
-            //searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
-            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid);
-            if (sc == null)
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc != null && sc.ConditionInfo != null)
             {
-                sc = new searchcondition();
-                sc.UserID = userid;
-                //sc.PageBrief = pagetag;
-                if (!string.IsNullOrEmpty(khid))
+                string[] sclist = sc.ConditionInfo.Split(';');
+                foreach (string scl in sclist)
                 {
-                    if (khidequal.Equals("="))
+                    string[] scld = scl.Split(',');
+                    switch (scld[0])
                     {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
-                    }
-                    if (khidequal.Equals(">"))
-                    {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
-                    }
-                    if (khidequal.Equals("<"))
-                    {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
+                        case "khid":
+                            string khid = scld[1];
+                            string khidequal = scld[2];
+                            string khidand = scld[3];
+                            if (!string.IsNullOrEmpty(khid))
+                            {
+                                if (khidequal.Equals("="))
+                                {
+                                    if (khidand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
+                                }
+                                if (khidequal.Equals(">"))
+                                {
+                                    if (khidand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
+                                }
+                                if (khidequal.Equals("<"))
+                                {
+                                    if (khidand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
+                                }
+                            }
+                            break;
+                        case "Niandu":
+                            string Niandu = scld[1];
+                            string Nianduequal = scld[2];
+                            string Nianduand = scld[3];
+                            if (!string.IsNullOrEmpty(Niandu))
+                            {
+                                if (Nianduequal.Equals("="))
+                                {
+                                    if (Nianduand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                                }
+                            }
+                            break;
+                        case "Yuefen":
+                            string Yuefen = scld[1];
+                            string Yuefenequal = scld[2];
+                            string Yuefenand = scld[3];
+                            if (!string.IsNullOrEmpty(Yuefen))
+                            {
+                                if (Yuefenequal.Equals("="))
+                                {
+                                    if (Yuefenand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                                }
+                            }
+                            break;
+                        case "FafangSF":
+                            string FafangSF = scld[1];
+                            string FafangSFequal = scld[2];
+                            string FafangSFand = scld[3];
+                            if (!string.IsNullOrEmpty(FafangSF))
+                            {
+                                if (FafangSFequal.Equals("="))
+                                {
+                                    if (FafangSFand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
                     }
                 }
-                if (!string.IsNullOrEmpty(khid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", khid, khidequal, khidand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", "", khidequal, khidand);
-                searchconditionService.GetInstance().AddEntity(sc);
+                ViewBag.SearchCondition = sc.ConditionInfo;
             }
-            else
-            {
-                sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(khid))
-                {
-                    if (khidequal.Equals("="))
-                    {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
-                    }
-                    if (khidequal.Equals(">"))
-                    {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
-                    }
-                    if (khidequal.Equals("<"))
-                    {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
-                    }
-                }
-                if (!string.IsNullOrEmpty(khid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", khid, khidequal, khidand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", "", khidequal, khidand);
-                searchconditionService.GetInstance().UpdateEntity(sc);
-            }
-            ViewBag.SearchCondition = sc.ConditionInfo;
             where = where.And(ord_jixiao => ord_jixiao.IsDelete == false);
             where = where.And(p => p.KHID == _khid);
 
             var tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, ord_jixiao => ord_jixiao.Niandu).ToList<ord_jixiao>();
-            //var tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, ord_jixiao => ord_jixiao.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
 
             DataTable dt = new DataTable();
             dt.Columns.Add("Niandu", typeof(string));
@@ -575,8 +741,99 @@ namespace GROBS.Controllers
             var khid = (int)Session["customer_id"];
             ViewBag.khid = khid;
             ViewBag.thisYear = thisYear;
+            int userid = (int)Session["user_id"];
 
-            var tempdata = ServiceFactory.ord_jixiaoservice.LoadSortEntities(p => p.Niandu == int.Parse(thisYear) && p.KHID == khid && p.IsDelete == false, true, p => p.Yuefen).ToList<ord_jixiao>();
+            string pagetag = "ord_jixiao_customertargetnow";
+
+            string Yuefen = Request["Yuefen"] ?? "";
+            string Yuefenequal = Request["Yuefenequal"] ?? "";
+            string Yuefenand = Request["Yuefenand"] ?? "and";
+
+            string FafangSF = Request["FafangSF"] ?? "";
+            string FafangSFequal = Request["FafangSFequal"] ?? "=";
+            string FafangSFand = Request["FafangSFand"] ?? "and";
+
+            Expression<Func<ord_jixiao, bool>> where = PredicateExtensionses.True<ord_jixiao>();
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc == null)
+            {
+                sc = new searchcondition();
+                sc.UserID = userid;
+                sc.PageBrief = pagetag;
+                if (!string.IsNullOrEmpty(Yuefen))
+                {
+                    if (Yuefenequal.Equals("="))
+                    {
+                        if (Yuefenand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Yuefen))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", Yuefen, Yuefenequal, Yuefenand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", "", Yuefenequal, Yuefenand);
+
+                if (!string.IsNullOrEmpty(FafangSF))
+                {
+                    if (FafangSFequal.Equals("="))
+                    {
+                        if (FafangSFand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                    }
+                }
+                if (!string.IsNullOrEmpty(FafangSF))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", FafangSF, FafangSFequal, FafangSFand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
+
+                searchconditionService.GetInstance().AddEntity(sc);
+            }
+            else
+            {
+                sc.ConditionInfo = "";
+                if (!string.IsNullOrEmpty(Yuefen))
+                {
+                    if (Yuefenequal.Equals("="))
+                    {
+                        if (Yuefenand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Yuefen))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", Yuefen, Yuefenequal, Yuefenand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", "", Yuefenequal, Yuefenand);
+
+                if (!string.IsNullOrEmpty(FafangSF))
+                {
+                    if (FafangSFequal.Equals("="))
+                    {
+                        if (FafangSFand.Equals("and"))
+                            where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                        else
+                            where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                    }
+                }
+                if (!string.IsNullOrEmpty(FafangSF))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", FafangSF, FafangSFequal, FafangSFand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
+
+                searchconditionService.GetInstance().UpdateEntity(sc);
+            }
+            ViewBag.SearchCondition = sc.ConditionInfo;
+
+            where = where.And(p => p.Niandu == int.Parse(thisYear));
+            where = where.And(p => p.KHID == khid);
+            where = where.And(p => p.IsDelete == false);
+
+            var tempdata = ServiceFactory.ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Yuefen).ToList<ord_jixiao>();
             ViewBag.thisYearDate = tempdata;
             return View();
         }
@@ -585,22 +842,62 @@ namespace GROBS.Controllers
         {
             string thisYear = DateTime.Now.Year.ToString();
             var khid = (int)Session["customer_id"];
-            string Yuefen = Request.QueryString["Yuefen"] ?? "";
-            string FafangSF = Request.QueryString["FafangSF"] ?? "";
+            int userid = (int)Session["user_id"];
+            string pagetag = "ord_jixiao_customertargetnow";
 
             Expression<Func<ord_jixiao, bool>> where = PredicateExtensionses.True<ord_jixiao>();
-            if (!string.IsNullOrEmpty(Yuefen))
-                where = where.And(p => p.Yuefen == int.Parse(Yuefen));
-            if (!string.IsNullOrEmpty(FafangSF))
-                where = where.And(p => p.FafangSF == bool.Parse(FafangSF));
+            searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
+            if (sc != null)
+            {
+                string[] sclist = sc.ConditionInfo.Split(';');
+                foreach (string scl in sclist)
+                {
+                    string[] scld = scl.Split(',');
+                    switch (scld[0])
+                    {
+                        case "Yuefen":
+                            string Yuefen = scld[1];
+                            string Yuefenequal = scld[2];
+                            string Yuefenand = scld[3];
+                            if (!string.IsNullOrEmpty(Yuefen))
+                            {
+                                if (Yuefenequal.Equals("="))
+                                {
+                                    if (Yuefenand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                                }
+                            }
+
+                            break;
+                        case "FafangSF":
+                            string FafangSF = scld[1];
+                            string FafangSFequal = scld[2];
+                            string FafangSFand = scld[3];
+                            if (!string.IsNullOrEmpty(FafangSF))
+                            {
+                                if (FafangSFequal.Equals("="))
+                                {
+                                    if (FafangSFand.Equals("and"))
+                                        where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                                    else
+                                        where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                                }
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            ViewBag.SearchCondition = sc.ConditionInfo;
 
             where = where.And(p => p.Niandu == int.Parse(thisYear));
             where = where.And(p => p.KHID == khid);
             where = where.And(p => p.IsDelete == false);
-            where = where.And(p => p.Niandu == int.Parse(thisYear));
 
-            var tempdata = ServiceFactory.ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Yuefen).ToList<ord_jixiao>().ToList<ord_jixiao>();
-            //var tempdata = ServiceFactory.ord_jixiaoservice.LoadSortEntities(p => p.Niandu == int.Parse(thisYear) && p.KHID == khid && p.IsDelete == false, true, p => p.Yuefen).ToList<ord_jixiao>();
+            var tempdata = ServiceFactory.ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Yuefen).ToList<ord_jixiao>();
 
             DataTable dt = new DataTable();
             dt.Columns.Add("Yuefen", typeof(string));
