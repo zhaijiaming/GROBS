@@ -315,7 +315,7 @@ namespace GROBS.Controllers
                 page = "1";
             int userid = (int)Session["user_id"];
             int custid = (int)Session["customer_id"];
-            string pagetag = "ord_fahuodan_index";
+            string pagetag = "ord_fahuodan_fahuodanlist";
             Expression<Func<ord_inventoryout_v, bool>> where = PredicateExtensionses.True<ord_inventoryout_v>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
@@ -326,7 +326,7 @@ namespace GROBS.Controllers
                     string[] scld = scl.Split(',');
                     switch (scld[0])
                     {
-                        case "chukudanbh":
+                        case "ChukudanBH"://发货单号
                             string chukudanbh = scld[1];
                             string chukudanbhequal = scld[2];
                             string chukudanbhand = scld[3];
@@ -348,6 +348,98 @@ namespace GROBS.Controllers
                                 }
                             }
                             break;
+
+                        //case "DDBH"://订单编号
+                        //    string DDBH = scld[1];
+                        //    string DDBHequal = scld[2];
+                        //    string DDBHand = scld[3];
+                        //    if (!string.IsNullOrEmpty(DDBH))
+                        //    {
+                        //        if (chukudanbhequal.Equals("="))
+                        //        {
+                        //            if (chukudanbhand.Equals("and"))
+                        //                where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                        //            else
+                        //                where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                        //        }
+                        //        if (chukudanbhequal.Equals("like"))
+                        //        {
+                        //            if (chukudanbhand.Equals("and"))
+                        //                where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                        //            else
+                        //                where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                        //        }
+                        //    }
+                        //    break
+
+                        //        case "chukudanbh":
+                        //    string chukudanbh = scld[1];
+                        //    string chukudanbhequal = scld[2];
+                        //    string chukudanbhand = scld[3];
+                        //    if (!string.IsNullOrEmpty(chukudanbh))
+                        //    {
+                        //        if (chukudanbhequal.Equals("="))
+                        //        {
+                        //            if (chukudanbhand.Equals("and"))
+                        //                where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                        //            else
+                        //                where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                        //        }
+                        //        if (chukudanbhequal.Equals("like"))
+                        //        {
+                        //            if (chukudanbhand.Equals("and"))
+                        //                where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                        //            else
+                        //                where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                        //        }
+                        //    }
+                        //    break
+
+                        //        case "chukudanbh":
+                        //    string chukudanbh = scld[1];
+                        //    string chukudanbhequal = scld[2];
+                        //    string chukudanbhand = scld[3];
+                        //    if (!string.IsNullOrEmpty(chukudanbh))
+                        //    {
+                        //        if (chukudanbhequal.Equals("="))
+                        //        {
+                        //            if (chukudanbhand.Equals("and"))
+                        //                where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                        //            else
+                        //                where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                        //        }
+                        //        if (chukudanbhequal.Equals("like"))
+                        //        {
+                        //            if (chukudanbhand.Equals("and"))
+                        //                where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                        //            else
+                        //                where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                        //        }
+                        //    }
+                        //    break
+
+                        //        case "chukudanbh":
+                        //    string chukudanbh = scld[1];
+                        //    string chukudanbhequal = scld[2];
+                        //    string chukudanbhand = scld[3];
+                        //    if (!string.IsNullOrEmpty(chukudanbh))
+                        //    {
+                        //        if (chukudanbhequal.Equals("="))
+                        //        {
+                        //            if (chukudanbhand.Equals("and"))
+                        //                where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                        //            else
+                        //                where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH == chukudanbh);
+                        //        }
+                        //        if (chukudanbhequal.Equals("like"))
+                        //        {
+                        //            if (chukudanbhand.Equals("and"))
+                        //                where = where.And(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                        //            else
+                        //                where = where.Or(ord_fahuodan => ord_fahuodan.ChukudanBH.Contains(chukudanbh));
+                        //        }
+                        //    }
+                        //    break
                         default:
                             break;
                     }

@@ -5,6 +5,7 @@
 
 @{
     ViewBag.Title = "采购单管理";
+    string _searchcondition = ViewBag.SearchCondition;
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
 }
 <script type="text/javascript">
@@ -231,8 +232,145 @@
     //    window.open(_durl,"_blank");
     //}
 </script>
+
+
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "Bianhao";
+        scm.ItemTitle = "编号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Zhuangtai";
+        scm.ItemTitle = "订单状态";
+        scm.ItemType = "订单状态.订单状态";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Mingcheng";
+        scm.ItemTitle = "产品线";
+        scm.ItemType = "产品线.产品线（历史）";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "CGLX";
+        scm.ItemTitle = "订单类型";
+        scm.ItemType = "订单类型.订单类型";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "KehuDH";
+        scm.ItemTitle = "客户单号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "XiadanRQ";
+        scm.ItemTitle = "下单日期";
+        scm.ItemType = "System.DateTime";
+        scms.Add(scm);
+
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "Bianhao";
+            scm.ItemTitle = "编号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Zhuangtai";
+            scm.ItemTitle = "订单状态";
+            scm.ItemType = "订单状态.订单状态";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Mingcheng";
+            scm.ItemTitle = "产品线";
+            scm.ItemType = "产品线.产品线（历史）";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "CGLX";
+            scm.ItemTitle = "订单类型";
+            scm.ItemType = "订单类型.订单类型";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "KehuDH";
+            scm.ItemTitle = "客户单号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "XiadanRQ";
+            scm.ItemTitle = "下单日期";
+            scm.ItemType = "System.DateTime";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+        }
+    }
+}
+
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
+    @Html.Search_Condition((int)Session["user_id"], "采购单_条件组合查询", "/ord_dingdan/CustomerCurrentOrder", "ord_dingdan_CustomerCurrentOrder", scms)
     <input type="hidden" id="closeday" value="@ViewBag.closeday" />
     <input type="hidden" id="closereason" value="@ViewBag.closereason" />
     <div class="panel">
@@ -252,6 +390,7 @@
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_qianInfo"><i class="icon-truck"></i>欠货</button>
+                    <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
                     <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_export" onclick="javascript: window.open('/ord_dingdan/CustomerCurrentOrderExportFile')"><i class="icon-inbox"></i>导出</button>
                 </p>
             </div>

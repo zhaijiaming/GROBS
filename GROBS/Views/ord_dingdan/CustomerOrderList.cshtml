@@ -164,7 +164,7 @@
             scms.Add(scm);
 
             scm = new SearchConditionModel();
-            scm.ItemCode = "XiadanRQ_S";
+            scm.ItemCode = "XiadanRQ";
             scm.ItemTitle = "下单日期";
             scm.ItemType = "System.DateTime";
             if (scs.Length > 1)
@@ -179,7 +179,7 @@
 }
 
 <div class="page-content">
-    @Html.Search_Condition((int)Session["user_id"], "采购_条件组合查询", "/ord_dingdan/customerorderlist", "ord_dingdan_customerorderlist", scms)
+    @Html.Search_Condition((int)Session["user_id"], "采购单历史_条件组合查询", "/ord_dingdan/customerorderlist", "ord_dingdan_customerorderlist", scms)
     <div class="page-header">
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
@@ -223,7 +223,7 @@
                         <td>@item.Mingcheng</td>
                         <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
                         <td>@item.KehuDH</td>
-                        <td>@string.Format("{0:yyyy-mm-dd}", item.XiadanRQ == null ? "" : item.XiadanRQ)</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}", item.XiadanRQ == null ? "" : item.XiadanRQ)</td>
                         <td>@item.Lianxiren</td>
                         <td>@item.LianxiDH</td>
                         <td>@item.SonghuoDZ</td>

@@ -253,13 +253,23 @@ namespace GROBS.App_Code
                     }
                     break;
                 case "订单状态":
-                    Dictionary<int, string> orderState = MvcApplication.OrderState;
-                    foreach (var orderType in orderState)
+                    Dictionary<int, string> orderStates = MvcApplication.OrderState;
+                    foreach (var orderState in orderStates)
                     {
-                        if (orderType.Key == selectedvalue && selectedvalue != 0)
-                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", orderType.Key, orderType.Value);
+                        if (orderState.Key == selectedvalue && selectedvalue != 0)
+                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", orderState.Key, orderState.Value);
                         else
-                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", orderType.Key, orderType.Value);
+                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", orderState.Key, orderState.Value);
+                    }
+                    break;
+                case "运送方式":
+                    Dictionary<int, string> deliveryTypes = MvcApplication.DeliveryType;
+                    foreach (var deliveryType in deliveryTypes)
+                    {
+                        if (deliveryType.Key == selectedvalue && selectedvalue != 0)
+                            sb.AppendFormat("<option value=\"{0}\" selected=\"selected\">{1}</option>", deliveryType.Key, deliveryType.Value);
+                        else
+                            sb.AppendFormat("<option value=\"{0}\">{1}</option>", deliveryType.Key, deliveryType.Value);
                     }
                     break;
                 case "产品线": //"auth_gongsi":
@@ -958,6 +968,12 @@ namespace GROBS.App_Code
                                 svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, long.Parse(sc.ItemValue));
                             break;
                         case "订单状态":
+                            if (sc.ItemValue == null)
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, 0);
+                            else
+                                svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, long.Parse(sc.ItemValue));
+                            break;
+                        case "运送方式":
                             if (sc.ItemValue == null)
                                 svs = SelectItem_Auto(sc.ItemCode, myclassname, myclassitem, 0);
                             else

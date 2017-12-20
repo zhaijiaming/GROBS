@@ -1262,3 +1262,34 @@ ERROR 2017-12-19 17:07:22,555 28164ms AppLog                 SearchValueString  
 ERROR 2017-12-19 17:07:22,999 28608ms AppLog                 SearchValueString  - search condition init fail,索引超出了数组界限。
 ERROR 2017-12-19 17:08:13,109 78718ms AppLog                 SearchValueString  - search condition init fail,索引超出了数组界限。
 ERROR 2017-12-19 17:08:28,121 93730ms AppLog                 SearchValueString  - search condition init fail,索引超出了数组界限。
+INFO  2017-12-19 18:31:29,290 10261ms 14                     MoveNext           - ruikang login at 2017/12/19 18:31:29!
+INFO  2017-12-19 18:52:58,974 33910ms 14                     MoveNext           - ruikang login at 2017/12/19 18:52:58!
+INFO  2017-12-19 19:21:39,987  8271ms 14                     MoveNext           - ruikang login at 2017/12/19 19:21:39!
+INFO  2017-12-19 19:24:59,185  6168ms 14                     MoveNext           - ruikang login at 2017/12/19 19:24:59!
+INFO  2017-12-19 19:30:04,334  6846ms 14                     MoveNext           - ruikang login at 2017/12/19 19:30:04!
+INFO  2017-12-19 19:41:04,799  6223ms 14                     MoveNext           - ruikang login at 2017/12/19 19:41:04!
+INFO  2017-12-19 19:50:09,908  6735ms 14                     MoveNext           - ruikang login at 2017/12/19 19:50:09!
+INFO  2017-12-19 19:57:56,193  9496ms 14                     MoveNext           - ruikang login at 2017/12/19 19:57:56!
+INFO  2017-12-19 20:31:39,423  6357ms 14                     MoveNext           - ruikang login at 2017/12/19 20:31:39!
+INFO  2017-12-19 20:45:03,899 26957ms 14                     MoveNext           - ruikang login at 2017/12/19 20:45:03!
+INFO  2017-12-19 21:46:55,363  7980ms 14                     MoveNext           - ruikang login at 2017/12/19 21:46:55!
+INFO  2017-12-19 22:07:08,232  5686ms 14                     MoveNext           - ruikang login at 2017/12/19 22:07:08!
+INFO  2017-12-19 22:09:43,664  7919ms 14                     MoveNext           - ruikang login at 2017/12/19 22:09:43!
+INFO  2017-12-20 08:58:05,490 25940ms 14                     MoveNext           - ruikang login at 2017/12/20 8:58:05!
+INFO  2017-12-20 09:14:29,677 31528ms 14                     MoveNext           - ruikang login at 2017/12/20 9:14:29!
+INFO  2017-12-20 09:28:12,109 13081ms 14                     MoveNext           - ruikang login at 2017/12/20 9:28:12!
+INFO  2017-12-20 09:38:27,944 16198ms 14                     MoveNext           - ruikang login at 2017/12/20 9:38:27!
+ERROR 2017-12-20 09:46:28,405 496659ms AppLog                 SearchValueString  - search condition init fail,未将对象引用设置到对象的实例。
+INFO  2017-12-20 09:54:57,285  7782ms 14                     MoveNext           - ruikang login at 2017/12/20 9:54:57!
+INFO  2017-12-20 10:04:41,316 76091ms 14                     MoveNext           - ruikang login at 2017/12/20 10:04:41!
+INFO  2017-12-20 10:05:05,999  4940ms 14                     MoveNext           - ruikang login at 2017/12/20 10:05:05!
+INFO  2017-12-20 10:07:14,433 133374ms 14                     MoveNext           - ruikang login at 2017/12/20 10:07:14!
+ERROR 2017-12-20 10:08:19,891 198832ms AppLog                 SearchValueString  - search condition init fail,基础提供程序在 Open 上失败。
+ERROR 2017-12-20 10:10:04,367 303308ms AppLog                 SearchValueString  - search condition init fail,未将对象引用设置到对象的实例。
+INFO  2017-12-20 10:14:33,383 11499ms 14                     MoveNext           - ruikang login at 2017/12/20 10:14:33!
+INFO  2017-12-20 10:18:39,494  6109ms 14                     MoveNext           - ruikang login at 2017/12/20 10:18:39!
+INFO  2017-12-20 10:23:21,604  5526ms 14                     MoveNext           - ruikang login at 2017/12/20 10:23:21!
+INFO  2017-12-20 10:32:19,494  6404ms 14                     MoveNext           - ruikang login at 2017/12/20 10:32:19!
+INFO  2017-12-20 10:36:59,821  5322ms 14                     MoveNext           - ruikang login at 2017/12/20 10:36:59!
+INFO  2017-12-20 10:58:19,326  7601ms 14                     MoveNext           - ruikang login at 2017/12/20 10:58:19!
+INFO  2017-12-20 11:06:39,907  5286ms 14                     MoveNext           - ruikang login at 2017/12/20 11:06:39!

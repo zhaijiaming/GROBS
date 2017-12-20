@@ -52,6 +52,30 @@
         scm.ItemTitle = "发货单号";
         scm.ItemType = "System.String";
         scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "DDBH";
+        scm.ItemTitle = "订单编号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "ChukuRQ";
+        scm.ItemTitle = "发货日期";
+        scm.ItemType = "System.DateTime";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "YunsongFS";
+        scm.ItemTitle = "运送方式";
+        scm.ItemType = "运送方式.运送方式";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Kddanhao";
+        scm.ItemTitle = "快递单号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
     }
     else
     {
@@ -61,6 +85,66 @@
             SearchConditionModel scm = new SearchConditionModel();
             scm.ItemCode = "ChukudanBH";
             scm.ItemTitle = "发货单号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "DDBH";
+            scm.ItemTitle = "订单编号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "ChukuRQ";
+            scm.ItemTitle = "发货日期";
+            scm.ItemType = "System.DateTime";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "YunsongFS";
+            scm.ItemTitle = "运送方式";
+            scm.ItemType = "运送方式.运送方式";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Kddanhao";
+            scm.ItemTitle = "快递单号";
             scm.ItemType = "System.String";
             if (scs.Length > 1)
             {
@@ -86,7 +170,7 @@
         </ul>
     </div>*@
 <div class="page-content">
-    @Html.Search_Condition((int)Session["user_id"], "发货单_条件组合查询", "/ord_fahuodan/index", "ord_fahuodan_index", scms)
+    @Html.Search_Condition((int)Session["user_id"], "发货单_条件组合查询", "/ord_fahuodan/fahuodanlist", "ord_fahuodan_fahuodanlist", scms)
     <div class="page-header" style="text-align:center">
         <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
         @*<button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_addInfo" onclick="AddInfo()"><i class="icon-adn"></i>新增</button>
