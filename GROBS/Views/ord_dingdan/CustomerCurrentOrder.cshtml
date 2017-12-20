@@ -408,16 +408,16 @@
                                 <thead>
                                     <tr>
                                         <td></td>
-                                        <td data-align="right" data-sortable="false">编号</td>
-                                        <td data-search="true" data-sortable="false">状态</td>
-                                        <td>产品线</td>
-                                        <td>订单类型</td>
-                                        <td>客户单号</td>
-                                        <td>下单日期</td>
+                                        <td data-align="right" data-sortable="false">@Html.ActionLink("编号", "CustomerCurrentOrder", new { sortOrder = ViewBag.BianhaoParm }) </td>
+                                        <td data-search="true" data-sortable="false">@Html.ActionLink("状态", "CustomerCurrentOrder", new { sortOrder = ViewBag.ZhuangtaiParm }) </td>
+                                        <td>@Html.ActionLink("产品线", "CustomerCurrentOrder", new { sortOrder = ViewBag.MingchengParm })</td>
+                                        <td>@Html.ActionLink("订单类型", "CustomerCurrentOrder", new { sortOrder = ViewBag.CGLXParm })</td>
+                                        <td>@Html.ActionLink("客户单号", "CustomerCurrentOrder", new { sortOrder = ViewBag.KehuDHParm })</td>
+                                        <td>@Html.ActionLink("下单日期", "CustomerCurrentOrder", new { sortOrder = ViewBag.XiadanRQParm })</td>
                                         @*<td>联系人</td>
                                             <td>联系电话</td>
                                             <td>送货地址</td>*@
-                                        <td>采购总数</td>
+                                        <td>@Html.ActionLink("采购总数", "CustomerCurrentOrder", new { sortOrder = ViewBag.ZongshuCGParm })</td>
                                         @*<td>待发数量</td>*@
                                         <td>已发数量</td>
                                         <td>欠货数量</td>

@@ -197,13 +197,13 @@
             <thead>
                 <tr>
                     <td></td>
-                    <td>编号</td>
-                    <td>状态</td>
-                    <td>客户</td>
-                    <td>产品线</td>
-                    <td>采购类型</td>
-                    <td>客户单号</td>
-                    <td>下单日期</td>
+                    <td>@Html.ActionLink("编号", "CustomerOrderList", new { sortOrder = ViewBag.BianhaoParm })</td>
+                    <td>@Html.ActionLink("状态", "CustomerOrderList", new { sortOrder = ViewBag.ZhuangtaiParm })</td>
+                    <td>@Html.ActionLink("客户", "CustomerOrderList", new { sortOrder = ViewBag.KehuMCParm })</td>
+                    <td>@Html.ActionLink("产品线", "CustomerOrderList", new { sortOrder = ViewBag.MingchengParm })</td>
+                    <td>@Html.ActionLink("采购类型", "CustomerOrderList", new { sortOrder = ViewBag.CGLXParm })</td>
+                    <td>@Html.ActionLink("客户单号", "CustomerOrderList", new { sortOrder = ViewBag.KehuDHParm })</td>
+                    <td>@Html.ActionLink("下单日期", "CustomerOrderList", new { sortOrder = ViewBag.XiadanRQParm })</td>
                     <td>联系人</td>
                     <td>联系电话</td>
                     <td>送货地址</td>

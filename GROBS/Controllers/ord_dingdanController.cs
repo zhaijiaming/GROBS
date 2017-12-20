@@ -358,7 +358,7 @@ namespace GROBS.Controllers
         }
 
         [OutputCache(Duration = 30)]
-        public ActionResult CustomerOrderList(string page)
+        public ActionResult CustomerOrderList(string page, string sortOrder)
         {
             if (string.IsNullOrEmpty(page))
                 page = "1";
@@ -488,12 +488,70 @@ namespace GROBS.Controllers
             where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
 
             var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+
+
+            #region 排序
+
+            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : "Bianhao_desc";
+            ViewBag.ZhuangtaiParm = sortOrder == "Zhuangtai" ? "Zhuangtai_desc" : "Zhuangtai";
+            ViewBag.MingchengParm = sortOrder == "Mingcheng" ? "Mingcheng_desc" : "Mingcheng";
+            ViewBag.CGLXParm = sortOrder == "CGLX" ? "CGLX_desc" : "CGLX";
+            ViewBag.KehuDHParm = sortOrder == "KehuDH" ? "KehuDH_desc" : "KehuDH";
+            ViewBag.XiadanRQParm = sortOrder == "XiadanRQ" ? "XiadanRQ_desc" : "XiadanRQ";
+            ViewBag.ZongshuCGParm = sortOrder == "ZongshuCG" ? "ZongshuCG_desc" : "ZongshuCG";
+            switch (sortOrder)
+            {
+                case "Mingcheng_desc":
+                    tempData = tempData.OrderByDescending(p => p.Mingcheng).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Mingcheng":
+                    tempData = tempData.OrderBy(p => p.Mingcheng).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "CGLX_desc":
+                    tempData = tempData.OrderByDescending(p => p.CGLX).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "CGLX":
+                    tempData = tempData.OrderBy(p => p.CGLX).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "KehuDH_desc":
+                    tempData = tempData.OrderByDescending(p => p.KehuDH).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "KehuDH":
+                    tempData = tempData.OrderBy(p => p.KehuDH).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "XiadanRQ_desc":
+                    tempData = tempData.OrderByDescending(p => p.XiadanRQ).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "XiadanRQ":
+                    tempData = tempData.OrderBy(p => p.XiadanRQ).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "ZongshuCG_desc":
+                    tempData = tempData.OrderByDescending(p => p.ZongshuCG).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "ZongshuCG":
+                    tempData = tempData.OrderBy(p => p.ZongshuCG).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Bianhao":
+                    tempData = tempData.OrderBy(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Zhuangtai_desc":
+                    tempData = tempData.OrderByDescending(p => p.Zhuangtai).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Zhuangtai":
+                    tempData = tempData.OrderBy(p => p.Zhuangtai).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                default:
+                    tempData = tempData.OrderByDescending(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+            }
+
+            #endregion
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
         }
         [HttpPost]
         [OutputCache(Duration = 30)]
-        public ActionResult CustomerOrderList()
+        public ActionResult CustomerOrderList(string sortOrder)
         {
             int userid = (int)Session["user_id"];
             int custid = (int)Session["customer_id"];
@@ -528,6 +586,8 @@ namespace GROBS.Controllers
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
+                #region MyRegion
+
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
@@ -663,153 +723,345 @@ namespace GROBS.Controllers
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
 
                 searchconditionService.GetInstance().AddEntity(sc);
+
+                #endregion
             }
             else
             {
-                sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(bianhao))
+                if (!string.IsNullOrEmpty(sortOrder))
                 {
-                    if (bianhaoequal.Equals("="))
-                    {
-                        if (bianhaoand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
-                    }
-                    if (bianhaoequal.Equals("like"))
-                    {
-                        if (bianhaoand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
-                    }
+                    where = GetOrderListSearchCondition(where, sc);
                 }
-                if (!string.IsNullOrEmpty(bianhao))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
-
-                //订单状态
-                if (!string.IsNullOrEmpty(Zhuangtai))
                 {
-                    if (Zhuangtaiequal.Equals("="))
+                    #region MyRegion
+                    sc.ConditionInfo = "";
+                    if (!string.IsNullOrEmpty(bianhao))
                     {
-                        if (Zhuangtaiand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                        if (bianhaoequal.Equals("="))
+                        {
+                            if (bianhaoand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        }
+                        if (bianhaoequal.Equals("like"))
+                        {
+                            if (bianhaoand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        }
                     }
-                    if (Zhuangtaiequal.Equals("like"))
+                    if (!string.IsNullOrEmpty(bianhao))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+
+                    //订单状态
+                    if (!string.IsNullOrEmpty(Zhuangtai))
                     {
-                        if (Zhuangtaiand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai.ToString().Contains(Zhuangtai));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai.ToString().Contains(Zhuangtai));
+                        if (Zhuangtaiequal.Equals("="))
+                        {
+                            if (Zhuangtaiand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                        }
+                        if (Zhuangtaiequal.Equals("like"))
+                        {
+                            if (Zhuangtaiand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Zhuangtai.ToString().Contains(Zhuangtai));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai.ToString().Contains(Zhuangtai));
+                        }
                     }
+                    if (!string.IsNullOrEmpty(Zhuangtai))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", Zhuangtai, Zhuangtaiequal, Zhuangtaiand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", "", Zhuangtaiequal, Zhuangtaiand);
+
+                    //产品线
+                    if (!string.IsNullOrEmpty(Mingcheng))
+                    {
+                        if (Mingchengequal.Equals("="))
+                        {
+                            if (Mingchengand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                        }
+                        if (Mingchengequal.Equals("like"))
+                        {
+                            if (Mingchengand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Mingcheng.Contains(Mingcheng));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Mingcheng.Contains(Mingcheng));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Mingcheng))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", Mingcheng, Mingchengequal, Mingchengand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", "", Mingchengequal, Mingchengand);
+
+                    //订单类型
+                    if (!string.IsNullOrEmpty(CGLX))
+                    {
+                        if (CGLXequal.Equals("="))
+                        {
+                            if (CGLXand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                        }
+                        if (CGLXequal.Equals("like"))
+                        {
+                            if (CGLXand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.CGLX.ToString().Contains(CGLX));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.CGLX.ToString().Contains(CGLX));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(CGLX))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", CGLX, CGLXequal, CGLXand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", "", CGLXequal, CGLXand);
+
+                    //客户单号
+                    if (!string.IsNullOrEmpty(KehuDH))
+                    {
+                        if (KehuDHequal.Equals("="))
+                        {
+                            if (KehuDHand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                        }
+                        if (KehuDHequal.Equals("like"))
+                        {
+                            if (KehuDHand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(KehuDH))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", KehuDH, KehuDHequal, KehuDHand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", "", KehuDHequal, KehuDHand);
+
+                    //下单日期
+                    if (!string.IsNullOrEmpty(XiadanRQ))
+                    {
+                        if (XiadanRQequal.Equals("="))
+                        {
+                            if (XiadanRQand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(XiadanRQ))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
+
+
+                    searchconditionService.GetInstance().UpdateEntity(sc);
+
+                    #endregion
                 }
-                if (!string.IsNullOrEmpty(Zhuangtai))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", Zhuangtai, Zhuangtaiequal, Zhuangtaiand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", "", Zhuangtaiequal, Zhuangtaiand);
-
-                //产品线
-                if (!string.IsNullOrEmpty(Mingcheng))
-                {
-                    if (Mingchengequal.Equals("="))
-                    {
-                        if (Mingchengand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
-                    }
-                    if (Mingchengequal.Equals("like"))
-                    {
-                        if (Mingchengand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Mingcheng.Contains(Mingcheng));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Mingcheng.Contains(Mingcheng));
-                    }
-                }
-                if (!string.IsNullOrEmpty(Mingcheng))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", Mingcheng, Mingchengequal, Mingchengand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", "", Mingchengequal, Mingchengand);
-
-                //订单类型
-                if (!string.IsNullOrEmpty(CGLX))
-                {
-                    if (CGLXequal.Equals("="))
-                    {
-                        if (CGLXand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
-                    }
-                    if (CGLXequal.Equals("like"))
-                    {
-                        if (CGLXand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.CGLX.ToString().Contains(CGLX));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.CGLX.ToString().Contains(CGLX));
-                    }
-                }
-                if (!string.IsNullOrEmpty(CGLX))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", CGLX, CGLXequal, CGLXand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", "", CGLXequal, CGLXand);
-
-                //客户单号
-                if (!string.IsNullOrEmpty(KehuDH))
-                {
-                    if (KehuDHequal.Equals("="))
-                    {
-                        if (KehuDHand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
-                    }
-                    if (KehuDHequal.Equals("like"))
-                    {
-                        if (KehuDHand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
-                    }
-                }
-                if (!string.IsNullOrEmpty(KehuDH))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", KehuDH, KehuDHequal, KehuDHand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", "", KehuDHequal, KehuDHand);
-
-                //下单日期
-                if (!string.IsNullOrEmpty(XiadanRQ))
-                {
-                    if (XiadanRQequal.Equals("="))
-                    {
-                        if (XiadanRQand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
-                    }
-                }
-                if (!string.IsNullOrEmpty(XiadanRQ))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
-
-
-                searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
             where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
 
             var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+
+            #region 排序
+
+            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : "Bianhao_desc";
+            ViewBag.ZhuangtaiParm = sortOrder == "Zhuangtai" ? "Zhuangtai_desc" : "Zhuangtai";
+            ViewBag.MingchengParm = sortOrder == "Mingcheng" ? "Mingcheng_desc" : "Mingcheng";
+            ViewBag.CGLXParm = sortOrder == "CGLX" ? "CGLX_desc" : "CGLX";
+            ViewBag.KehuDHParm = sortOrder == "KehuDH" ? "KehuDH_desc" : "KehuDH";
+            ViewBag.XiadanRQParm = sortOrder == "XiadanRQ" ? "XiadanRQ_desc" : "XiadanRQ";
+            ViewBag.KehuMCParm = sortOrder == "KehuMC" ? "KehuMC_desc" : "KehuMC";
+            switch (sortOrder)
+            {
+                case "Mingcheng_desc":
+                    tempData = tempData.OrderByDescending(p => p.Mingcheng).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Mingcheng":
+                    tempData = tempData.OrderBy(p => p.Mingcheng).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "CGLX_desc":
+                    tempData = tempData.OrderByDescending(p => p.CGLX).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "CGLX":
+                    tempData = tempData.OrderBy(p => p.CGLX).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "KehuDH_desc":
+                    tempData = tempData.OrderByDescending(p => p.KehuDH).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "KehuDH":
+                    tempData = tempData.OrderBy(p => p.KehuDH).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "XiadanRQ_desc":
+                    tempData = tempData.OrderByDescending(p => p.XiadanRQ).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "XiadanRQ":
+                    tempData = tempData.OrderBy(p => p.XiadanRQ).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "KehuMC_desc":
+                    tempData = tempData.OrderByDescending(p => p.KehuMC).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "KehuMC":
+                    tempData = tempData.OrderBy(p => p.KehuMC).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Bianhao":
+                    tempData = tempData.OrderBy(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Zhuangtai_desc":
+                    tempData = tempData.OrderByDescending(p => p.Zhuangtai).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Zhuangtai":
+                    tempData = tempData.OrderBy(p => p.Zhuangtai).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                default:
+                    tempData = tempData.OrderByDescending(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+            }
+
+            #endregion
+
             ViewBag.ord_dingdan = tempData;
             return View(tempData);
 
         }
+
+        private static Expression<Func<ord_ordermain_v, bool>> GetOrderListSearchCondition(Expression<Func<ord_ordermain_v, bool>> where, searchcondition sc)
+        {
+            string[] sclist = sc.ConditionInfo.Split(';');
+            foreach (string scl in sclist)
+            {
+                string[] scld = scl.Split(',');
+                switch (scld[0])
+                {
+                    case "bianhao":
+                        string bianhao = scld[1];
+                        string bianhaoequal = scld[2];
+                        string bianhaoand = scld[3];
+                        if (!string.IsNullOrEmpty(bianhao))
+                        {
+                            if (bianhaoequal.Equals("="))
+                            {
+                                if (bianhaoand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                            }
+                            if (bianhaoequal.Equals("like"))
+                            {
+                                if (bianhaoand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                            }
+                        }
+                        break;
+                    case "Zhuangtai":
+                        string Zhuangtai = scld[1];
+                        string Zhuangtaiequal = scld[2];
+                        string mingchengand = scld[3];
+                        if (!string.IsNullOrEmpty(Zhuangtai))
+                        {
+                            if (Zhuangtaiequal.Equals("="))
+                            {
+                                if (mingchengand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                            }
+                        }
+                        break;
+                    case "Mingcheng":
+                        string Mingcheng = scld[1];
+                        string Mingchengequal = scld[2];
+                        string Mingchengand = scld[3];
+                        if (!string.IsNullOrEmpty(Mingcheng))
+                        {
+                            if (Mingchengequal.Equals("="))
+                            {
+                                if (Mingchengand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                            }
+                        }
+                        break;
+                    case "CGLX":
+                        string CGLX = scld[1];
+                        string CGLXequal = scld[2];
+                        string CGLXand = scld[3];
+                        if (!string.IsNullOrEmpty(CGLX))
+                        {
+                            if (CGLXequal.Equals("="))
+                            {
+                                if (CGLXand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                            }
+                        }
+                        break;
+                    case "KehuDH":
+                        string KehuDH = scld[1];
+                        string KehuDHequal = scld[2];
+                        string KehuDHand = scld[3];
+                        if (!string.IsNullOrEmpty(KehuDH))
+                        {
+                            if (KehuDHequal.Equals("="))
+                            {
+                                if (KehuDHand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                            }
+                            if (KehuDHequal.Equals("like"))
+                            {
+                                if (KehuDHand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                            }
+                        }
+                        break;
+                    case "XiadanRQ":
+                        string XiadanRQ = scld[1];
+                        string XiadanRQequal = scld[2];
+                        string XiadanRQand = scld[3];
+                        if (!string.IsNullOrEmpty(XiadanRQ))
+                        {
+                            if (XiadanRQequal.Equals("="))
+                            {
+                                if (XiadanRQand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
+            return where;
+        }
+
+
         [OutputCache(Duration = 30)]
-        public ActionResult CustomerCurrentOrder()
+        public ActionResult CustomerCurrentOrder(string sortOrder)
         {
             int _userid = (int)Session["user_id"];
             var _acct = (string)Session["account"];
@@ -845,6 +1097,9 @@ namespace GROBS.Controllers
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == _userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
+                #region MyRegion
+
+
                 sc = new searchcondition();
                 sc.UserID = _userid;
                 sc.PageBrief = pagetag;
@@ -973,134 +1228,149 @@ namespace GROBS.Controllers
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
 
                 searchconditionService.GetInstance().AddEntity(sc);
+
+                #endregion
             }
             else
             {
-                sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(bianhao))
-                {
-                    if (bianhaoequal.Equals("="))
-                    {
-                        if (bianhaoand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
-                    }
-                    if (bianhaoequal.Equals("like"))
-                    {
-                        if (bianhaoand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
-                    }
-                }
-                if (!string.IsNullOrEmpty(bianhao))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
 
-                //订单状态
-                if (!string.IsNullOrEmpty(Zhuangtai))
+                if (!string.IsNullOrEmpty(sortOrder))
                 {
-                    if (Zhuangtaiequal.Equals("="))
-                    {
-                        if (Zhuangtaiand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
-                    }
+                    where = GetSearchCondition(where, sc);
                 }
-                if (!string.IsNullOrEmpty(Zhuangtai))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", Zhuangtai, Zhuangtaiequal, Zhuangtaiand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", "", Zhuangtaiequal, Zhuangtaiand);
-
-                //产品线
-                if (!string.IsNullOrEmpty(Mingcheng))
                 {
-                    if (Mingchengequal.Equals("="))
-                    {
-                        if (Mingchengand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
-                    }
-                }
-                if (!string.IsNullOrEmpty(Mingcheng))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", Mingcheng, Mingchengequal, Mingchengand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", "", Mingchengequal, Mingchengand);
+                    #region 界面获取
 
-                //订单类型
-                if (!string.IsNullOrEmpty(CGLX))
-                {
-                    if (CGLXequal.Equals("="))
-                    {
-                        if (CGLXand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
-                    }
-                }
-                if (!string.IsNullOrEmpty(CGLX))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", CGLX, CGLXequal, CGLXand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", "", CGLXequal, CGLXand);
 
-                //客户单号
-                if (!string.IsNullOrEmpty(KehuDH))
-                {
-                    if (KehuDHequal.Equals("="))
+                    sc.ConditionInfo = "";
+                    if (!string.IsNullOrEmpty(bianhao))
                     {
-                        if (KehuDHand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                        if (bianhaoequal.Equals("="))
+                        {
+                            if (bianhaoand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        }
+                        if (bianhaoequal.Equals("like"))
+                        {
+                            if (bianhaoand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        }
                     }
-                    if (KehuDHequal.Equals("like"))
-                    {
-                        if (KehuDHand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
-                    }
-                }
-                if (!string.IsNullOrEmpty(KehuDH))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", KehuDH, KehuDHequal, KehuDHand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", "", KehuDHequal, KehuDHand);
-
-                //下单日期
-                if (!string.IsNullOrEmpty(XiadanRQ))
-                {
-                    if (XiadanRQequal.Equals("="))
-                    {
-                        if (XiadanRQand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
-                    }
-                    else if (XiadanRQequal.Equals(">"))
-                    {
-                        if (XiadanRQand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
-                    }
+                    if (!string.IsNullOrEmpty(bianhao))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
                     else
-                    {
-                        if (XiadanRQand.Equals("and"))
-                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
-                        else
-                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
-                    }
-                }
-                if (!string.IsNullOrEmpty(XiadanRQ))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
 
-                searchconditionService.GetInstance().UpdateEntity(sc);
+                    //订单状态
+                    if (!string.IsNullOrEmpty(Zhuangtai))
+                    {
+                        if (Zhuangtaiequal.Equals("="))
+                        {
+                            if (Zhuangtaiand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Zhuangtai))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", Zhuangtai, Zhuangtaiequal, Zhuangtaiand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", "", Zhuangtaiequal, Zhuangtaiand);
+
+                    //产品线
+                    if (!string.IsNullOrEmpty(Mingcheng))
+                    {
+                        if (Mingchengequal.Equals("="))
+                        {
+                            if (Mingchengand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Mingcheng))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", Mingcheng, Mingchengequal, Mingchengand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", "", Mingchengequal, Mingchengand);
+
+                    //订单类型
+                    if (!string.IsNullOrEmpty(CGLX))
+                    {
+                        if (CGLXequal.Equals("="))
+                        {
+                            if (CGLXand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(CGLX))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", CGLX, CGLXequal, CGLXand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", "", CGLXequal, CGLXand);
+
+                    //客户单号
+                    if (!string.IsNullOrEmpty(KehuDH))
+                    {
+                        if (KehuDHequal.Equals("="))
+                        {
+                            if (KehuDHand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                        }
+                        if (KehuDHequal.Equals("like"))
+                        {
+                            if (KehuDHand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(KehuDH))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", KehuDH, KehuDHequal, KehuDHand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", "", KehuDHequal, KehuDHand);
+
+                    //下单日期
+                    if (!string.IsNullOrEmpty(XiadanRQ))
+                    {
+                        if (XiadanRQequal.Equals("="))
+                        {
+                            if (XiadanRQand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                        }
+                        else if (XiadanRQequal.Equals(">"))
+                        {
+                            if (XiadanRQand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                        }
+                        else
+                        {
+                            if (XiadanRQand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(XiadanRQ))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
+
+                    searchconditionService.GetInstance().UpdateEntity(sc);
+
+                    #endregion
+                }
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
 
@@ -1123,7 +1393,61 @@ namespace GROBS.Controllers
             }
 
             //var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
-            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid, where.Compile()).OrderByDescending(p => p.Bianhao).ToList<ord_ordermain_v>();
+            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid, where.Compile()).ToList<ord_ordermain_v>();
+
+            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : "Bianhao_desc";
+            ViewBag.ZhuangtaiParm = sortOrder == "Zhuangtai" ? "Zhuangtai_desc" : "Zhuangtai";
+            ViewBag.MingchengParm = sortOrder == "Mingcheng" ? "Mingcheng_desc" : "Mingcheng";
+            ViewBag.CGLXParm = sortOrder == "CGLX" ? "CGLX_desc" : "CGLX";
+            ViewBag.KehuDHParm = sortOrder == "KehuDH" ? "KehuDH_desc" : "KehuDH";
+            ViewBag.XiadanRQParm = sortOrder == "XiadanRQ" ? "XiadanRQ_desc" : "XiadanRQ";
+            ViewBag.KehuMCParm = sortOrder == "KehuMC" ? "KehuMC_desc" : "KehuMC";
+            switch (sortOrder)
+            {
+                case "Mingcheng_desc":
+                    tempData = tempData.OrderByDescending(p => p.Mingcheng).ToList<ord_ordermain_v>();
+                    break;
+                case "Mingcheng":
+                    tempData = tempData.OrderBy(p => p.Mingcheng).ToList<ord_ordermain_v>();
+                    break;
+                case "CGLX_desc":
+                    tempData = tempData.OrderByDescending(p => p.CGLX).ToList<ord_ordermain_v>();
+                    break;
+                case "CGLX":
+                    tempData = tempData.OrderBy(p => p.CGLX).ToList<ord_ordermain_v>();
+                    break;
+                case "KehuDH_desc":
+                    tempData = tempData.OrderByDescending(p => p.KehuDH).ToList<ord_ordermain_v>();
+                    break;
+                case "KehuDH":
+                    tempData = tempData.OrderBy(p => p.KehuDH).ToList<ord_ordermain_v>();
+                    break;
+                case "XiadanRQ_desc":
+                    tempData = tempData.OrderByDescending(p => p.XiadanRQ).ToList<ord_ordermain_v>();
+                    break;
+                case "XiadanRQ":
+                    tempData = tempData.OrderBy(p => p.XiadanRQ).ToList<ord_ordermain_v>();
+                    break;
+                case "KehuMC_desc":
+                    tempData = tempData.OrderByDescending(p => p.KehuMC).ToList<ord_ordermain_v>();
+                    break;
+                case "KehuMC":
+                    tempData = tempData.OrderBy(p => p.KehuMC).ToList<ord_ordermain_v>();
+                    break;
+                case "Bianhao":
+                    tempData = tempData.OrderBy(p => p.Bianhao).ToList<ord_ordermain_v>();
+                    break;
+                case "Zhuangtai_desc":
+                    tempData = tempData.OrderByDescending(p => p.Zhuangtai).ToList<ord_ordermain_v>();
+                    break;
+                case "Zhuangtai":
+                    tempData = tempData.OrderBy(p => p.Zhuangtai).ToList<ord_ordermain_v>();
+                    break;
+                default:
+                    tempData = tempData.OrderByDescending(p => p.Bianhao).ToList<ord_ordermain_v>();
+                    break;
+            }
+
             ViewBag.ord_dingdan = tempData;
             List<string> fh = new List<string>();
             List<string> df = new List<string>();
@@ -1164,6 +1488,141 @@ namespace GROBS.Controllers
             ViewBag.fhsl = fh;
             return View();
         }
+
+        private static Expression<Func<ord_ordermain_v, bool>> GetSearchCondition(Expression<Func<ord_ordermain_v, bool>> where, searchcondition sc)
+        {
+            string[] sclist = sc.ConditionInfo.Split(';');
+            foreach (string scl in sclist)
+            {
+                string[] scld = scl.Split(',');
+                switch (scld[0])
+                {
+                    case "bianhao":
+                        string bianhao = scld[1];
+                        string bianhaoequal = scld[2];
+                        string bianhaoand = scld[3];
+                        if (!string.IsNullOrEmpty(bianhao))
+                        {
+                            if (bianhaoequal.Equals("="))
+                            {
+                                if (bianhaoand.Equals("and"))
+                                    where = where.And(ord_ordermain_v => ord_ordermain_v.Bianhao == bianhao);
+                                else
+                                    where = where.Or(ord_ordermain_v => ord_ordermain_v.Bianhao == bianhao);
+                            }
+                            if (bianhaoequal.Equals("like"))
+                            {
+                                if (bianhaoand.Equals("and"))
+                                    where = where.And(ord_ordermain_v => ord_ordermain_v.Bianhao.Contains(bianhao));
+                                else
+                                    where = where.Or(ord_ordermain_v => ord_ordermain_v.Bianhao.Contains(bianhao));
+                            }
+                        }
+                        break;
+                    case "Zhuangtai":
+                        string Zhuangtai = scld[1];
+                        string Zhuangtaiequal = scld[2];
+                        string Zhuangtaiand = scld[3];
+                        if (!string.IsNullOrEmpty(Zhuangtai))
+                        {
+                            if (Zhuangtaiequal.Equals("="))
+                            {
+                                if (Zhuangtaiand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                            }
+                        }
+                        break;
+                    case "Mingcheng":
+                        string Mingcheng = scld[1];
+                        string Mingchengequal = scld[2];
+                        string Mingchengand = scld[3];
+                        if (!string.IsNullOrEmpty(Mingcheng))
+                        {
+                            if (Mingchengequal.Equals("="))
+                            {
+                                if (Mingchengand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                            }
+                        }
+                        break;
+                    case "CGLX":
+                        string CGLX = scld[1];
+                        string CGLXequal = scld[2];
+                        string CGLXand = scld[3];
+                        if (!string.IsNullOrEmpty(CGLX))
+                        {
+                            if (CGLXequal.Equals("="))
+                            {
+                                if (CGLXand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                            }
+                        }
+                        break;
+                    case "KehuDH":
+                        string KehuDH = scld[1];
+                        string KehuDHequal = scld[2];
+                        string KehuDHand = scld[3];
+                        if (!string.IsNullOrEmpty(KehuDH))
+                        {
+                            if (KehuDHequal.Equals("="))
+                            {
+                                if (KehuDHand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                            }
+                            if (KehuDHequal.Equals("like"))
+                            {
+                                if (KehuDHand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                            }
+                        }
+                        break;
+                    case "XiadanRQ":
+                        string XiadanRQ = scld[1];
+                        string XiadanRQequal = scld[2];
+                        string XiadanRQand = scld[3];
+                        if (!string.IsNullOrEmpty(XiadanRQ))
+                        {
+                            if (XiadanRQequal.Equals("="))
+                            {
+                                if (XiadanRQand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                            }
+                            else if (XiadanRQequal.Equals(">"))
+                            {
+                                if (XiadanRQand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                            }
+                            else
+                            {
+                                if (XiadanRQand.Equals("and"))
+                                    where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                                else
+                                    where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0);
+            return where;
+        }
+
         public ActionResult CustomerAdd()
         {
             int userid = (int)Session["user_id"];
