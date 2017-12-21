@@ -419,53 +419,53 @@ namespace GROBS.Controllers
             switch (sortOrder)
             {
                 case "Niandu_desc":
-                    tempData = tempData.OrderByDescending(p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Niandu":
-                    tempData = tempData.OrderBy(p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FafangSF_desc":
-                    tempData = tempData.OrderByDescending(p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FafangSF":
-                    tempData = tempData.OrderBy(p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FLFFJE_desc":
-                    tempData = tempData.OrderByDescending(p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FLFFJE":
-                    tempData = tempData.OrderBy(p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FLSQJE_desc":
-                    tempData = tempData.OrderByDescending(p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FLSQJE":
-                    tempData = tempData.OrderBy(p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Dachenglv_desc":
-                    tempData = tempData.OrderByDescending(p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Dachenglv":
-                    tempData = tempData.OrderBy(p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
 
                 case "Yeji_desc":
-                    tempData = tempData.OrderByDescending(p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Yeji":
-                    tempData = tempData.OrderBy(p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Zhibiao_desc":
-                    tempData = tempData.OrderByDescending(p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Zhibiao":
-                    tempData = tempData.OrderBy(p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Yuefen":
-                    tempData = tempData.OrderBy(p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 default:
-                    tempData = tempData.OrderByDescending(p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
             }
 
@@ -699,53 +699,52 @@ namespace GROBS.Controllers
             switch (sortOrder)
             {
                 case "Niandu_desc":
-                    tempData = tempData.OrderByDescending(p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Niandu":
-                    tempData = tempData.OrderBy(p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FafangSF_desc":
-                    tempData = tempData.OrderByDescending(p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FafangSF":
-                    tempData = tempData.OrderBy(p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FLFFJE_desc":
-                    tempData = tempData.OrderByDescending(p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FLFFJE":
-                    tempData = tempData.OrderBy(p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FLSQJE_desc":
-                    tempData = tempData.OrderByDescending(p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "FLSQJE":
-                    tempData = tempData.OrderBy(p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Dachenglv_desc":
-                    tempData = tempData.OrderByDescending(p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Dachenglv":
-                    tempData = tempData.OrderBy(p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
-
                 case "Yeji_desc":
-                    tempData = tempData.OrderByDescending(p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Yeji":
-                    tempData = tempData.OrderBy(p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Zhibiao_desc":
-                    tempData = tempData.OrderByDescending(p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Zhibiao":
-                    tempData = tempData.OrderBy(p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Yuefen":
-                    tempData = tempData.OrderBy(p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), false, p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 default:
-                    tempData = tempData.OrderByDescending(p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
             }
 
