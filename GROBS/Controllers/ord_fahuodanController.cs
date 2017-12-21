@@ -415,6 +415,13 @@ namespace GROBS.Controllers
                                     else
                                         where = where.Or(ord_fahuodan => ord_fahuodan.YunsongFS == YunsongFS);
                                 }
+                                if (YunsongFSequal.Equals("like"))
+                                {
+                                    if (YunsongFSand.Equals("and"))
+                                        where = where.And(ord_fahuodan => ord_fahuodan.YunsongFS.Contains(YunsongFS));
+                                    else
+                                        where = where.Or(ord_fahuodan => ord_fahuodan.YunsongFS.Contains(YunsongFS));
+                                }
                             }
                             break;
 
@@ -454,7 +461,7 @@ namespace GROBS.Controllers
 
             #region ≈≈–Ú
 
-            ViewBag.ChukudanBHParm = string.IsNullOrEmpty(sortOrder) ? "ChukudanBH" : "ChukudanBH_desc";
+            ViewBag.ChukudanBHParm = string.IsNullOrEmpty(sortOrder) ? "ChukudanBH" : sortOrder.Equals("ChukudanBH_desc") ? "ChukudanBH" : "ChukudanBH_desc";
             ViewBag.DDBHParm = sortOrder == "DDBH" ? "DDBH_desc" : "DDBH";
             ViewBag.ChukuRQParm = sortOrder == "ChukuRQ" ? "ChukuRQ_desc" : "ChukuRQ";
             ViewBag.YunsongFSParm = sortOrder == "YunsongFS" ? "YunsongFS_desc" : "YunsongFS";
@@ -618,6 +625,13 @@ namespace GROBS.Controllers
                         else
                             where = where.Or(ord_fahuodan => ord_fahuodan.YunsongFS == YunsongFS);
                     }
+                    if (YunsongFSequal.Equals("like"))
+                    {
+                        if (YunsongFSand.Equals("and"))
+                            where = where.And(ord_fahuodan => ord_fahuodan.YunsongFS.Contains(YunsongFS));
+                        else
+                            where = where.Or(ord_fahuodan => ord_fahuodan.YunsongFS.Contains(YunsongFS));
+                    }
                 }
                 if (!string.IsNullOrEmpty(YunsongFS))
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "YunsongFS", YunsongFS, YunsongFSequal, YunsongFSand);
@@ -744,6 +758,13 @@ namespace GROBS.Controllers
                             else
                                 where = where.Or(ord_fahuodan => ord_fahuodan.YunsongFS == YunsongFS);
                         }
+                        if (YunsongFSequal.Equals("like"))
+                        {
+                            if (YunsongFSand.Equals("and"))
+                                where = where.And(ord_fahuodan => ord_fahuodan.YunsongFS.Contains(YunsongFS));
+                            else
+                                where = where.Or(ord_fahuodan => ord_fahuodan.YunsongFS.Contains(YunsongFS));
+                        }
                     }
                     if (!string.IsNullOrEmpty(YunsongFS))
                         sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "YunsongFS", YunsongFS, YunsongFSequal, YunsongFSand);
@@ -787,7 +808,7 @@ namespace GROBS.Controllers
 
             #region ≈≈–Ú
 
-            ViewBag.ChukudanBHParm = string.IsNullOrEmpty(sortOrder) ? "ChukudanBH" : "ChukudanBH_desc";
+            ViewBag.ChukudanBHParm = string.IsNullOrEmpty(sortOrder) ? "ChukudanBH" : sortOrder.Equals("ChukudanBH_desc") ? "ChukudanBH" : "ChukudanBH_desc";
             ViewBag.DDBHParm = sortOrder == "DDBH" ? "DDBH_desc" : "DDBH";
             ViewBag.ChukuRQParm = sortOrder == "ChukuRQ" ? "ChukuRQ_desc" : "ChukuRQ";
             ViewBag.YunsongFSParm = sortOrder == "YunsongFS" ? "YunsongFS_desc" : "YunsongFS";

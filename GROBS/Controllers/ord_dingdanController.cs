@@ -491,14 +491,13 @@ namespace GROBS.Controllers
 
 
             #region ÅÅÐò
-
-            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : "Bianhao_desc";
+            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : sortOrder.Equals("Bianhao_desc") ? "Bianhao" : "Bianhao_desc";
             ViewBag.ZhuangtaiParm = sortOrder == "Zhuangtai" ? "Zhuangtai_desc" : "Zhuangtai";
             ViewBag.MingchengParm = sortOrder == "Mingcheng" ? "Mingcheng_desc" : "Mingcheng";
             ViewBag.CGLXParm = sortOrder == "CGLX" ? "CGLX_desc" : "CGLX";
             ViewBag.KehuDHParm = sortOrder == "KehuDH" ? "KehuDH_desc" : "KehuDH";
             ViewBag.XiadanRQParm = sortOrder == "XiadanRQ" ? "XiadanRQ_desc" : "XiadanRQ";
-            ViewBag.ZongshuCGParm = sortOrder == "ZongshuCG" ? "ZongshuCG_desc" : "ZongshuCG";
+
             switch (sortOrder)
             {
                 case "Mingcheng_desc":
@@ -525,20 +524,14 @@ namespace GROBS.Controllers
                 case "XiadanRQ":
                     tempData = tempData.OrderBy(p => p.XiadanRQ).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
-                case "ZongshuCG_desc":
-                    tempData = tempData.OrderByDescending(p => p.ZongshuCG).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-                    break;
-                case "ZongshuCG":
-                    tempData = tempData.OrderBy(p => p.ZongshuCG).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-                    break;
-                case "Bianhao":
-                    tempData = tempData.OrderBy(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-                    break;
                 case "Zhuangtai_desc":
                     tempData = tempData.OrderByDescending(p => p.Zhuangtai).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Zhuangtai":
                     tempData = tempData.OrderBy(p => p.Zhuangtai).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Bianhao":
+                    tempData = tempData.OrderBy(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 default:
                     tempData = tempData.OrderByDescending(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
@@ -878,14 +871,13 @@ namespace GROBS.Controllers
             var tempData = ob_ord_dingdanservice.LoadCustomerOverOrders(custid, where.Compile()).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
 
             #region ÅÅÐò
-
-            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : "Bianhao_desc";
+            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : sortOrder.Equals("Bianhao_desc") ? "Bianhao" : "Bianhao_desc";
             ViewBag.ZhuangtaiParm = sortOrder == "Zhuangtai" ? "Zhuangtai_desc" : "Zhuangtai";
             ViewBag.MingchengParm = sortOrder == "Mingcheng" ? "Mingcheng_desc" : "Mingcheng";
             ViewBag.CGLXParm = sortOrder == "CGLX" ? "CGLX_desc" : "CGLX";
             ViewBag.KehuDHParm = sortOrder == "KehuDH" ? "KehuDH_desc" : "KehuDH";
             ViewBag.XiadanRQParm = sortOrder == "XiadanRQ" ? "XiadanRQ_desc" : "XiadanRQ";
-            ViewBag.KehuMCParm = sortOrder == "KehuMC" ? "KehuMC_desc" : "KehuMC";
+
             switch (sortOrder)
             {
                 case "Mingcheng_desc":
@@ -912,20 +904,14 @@ namespace GROBS.Controllers
                 case "XiadanRQ":
                     tempData = tempData.OrderBy(p => p.XiadanRQ).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
-                case "KehuMC_desc":
-                    tempData = tempData.OrderByDescending(p => p.KehuMC).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-                    break;
-                case "KehuMC":
-                    tempData = tempData.OrderBy(p => p.KehuMC).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-                    break;
-                case "Bianhao":
-                    tempData = tempData.OrderBy(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
-                    break;
                 case "Zhuangtai_desc":
                     tempData = tempData.OrderByDescending(p => p.Zhuangtai).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 case "Zhuangtai":
                     tempData = tempData.OrderBy(p => p.Zhuangtai).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Bianhao":
+                    tempData = tempData.OrderBy(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
                     break;
                 default:
                     tempData = tempData.OrderByDescending(p => p.Bianhao).ToPagedList<ord_ordermain_v>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
@@ -1395,15 +1381,17 @@ namespace GROBS.Controllers
             //var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid).OrderByDescending(p => p.Bianhao);
             var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid, where.Compile()).ToList<ord_ordermain_v>();
 
-            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : "Bianhao_desc";
+            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : sortOrder.Equals("Bianhao_desc") ? "Bianhao" : "Bianhao_desc";
             ViewBag.ZhuangtaiParm = sortOrder == "Zhuangtai" ? "Zhuangtai_desc" : "Zhuangtai";
             ViewBag.MingchengParm = sortOrder == "Mingcheng" ? "Mingcheng_desc" : "Mingcheng";
             ViewBag.CGLXParm = sortOrder == "CGLX" ? "CGLX_desc" : "CGLX";
             ViewBag.KehuDHParm = sortOrder == "KehuDH" ? "KehuDH_desc" : "KehuDH";
             ViewBag.XiadanRQParm = sortOrder == "XiadanRQ" ? "XiadanRQ_desc" : "XiadanRQ";
-            ViewBag.KehuMCParm = sortOrder == "KehuMC" ? "KehuMC_desc" : "KehuMC";
             switch (sortOrder)
             {
+                case "Bianhao":
+                    tempData = tempData.OrderBy(p => p.Bianhao).ToList<ord_ordermain_v>();
+                    break;
                 case "Mingcheng_desc":
                     tempData = tempData.OrderByDescending(p => p.Mingcheng).ToList<ord_ordermain_v>();
                     break;
@@ -1427,15 +1415,6 @@ namespace GROBS.Controllers
                     break;
                 case "XiadanRQ":
                     tempData = tempData.OrderBy(p => p.XiadanRQ).ToList<ord_ordermain_v>();
-                    break;
-                case "KehuMC_desc":
-                    tempData = tempData.OrderByDescending(p => p.KehuMC).ToList<ord_ordermain_v>();
-                    break;
-                case "KehuMC":
-                    tempData = tempData.OrderBy(p => p.KehuMC).ToList<ord_ordermain_v>();
-                    break;
-                case "Bianhao":
-                    tempData = tempData.OrderBy(p => p.Bianhao).ToList<ord_ordermain_v>();
                     break;
                 case "Zhuangtai_desc":
                     tempData = tempData.OrderByDescending(p => p.Zhuangtai).ToList<ord_ordermain_v>();

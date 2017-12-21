@@ -265,7 +265,7 @@ namespace GROBS.Controllers
             if (!string.IsNullOrEmpty(req_xf_date_s))
                 where = where.And(p => p.MakeDate >= DateTime.Parse(req_xf_date_s));
             if (!string.IsNullOrEmpty(req_xf_date_e))
-                where = where.And(p => p.MakeDate <= DateTime.Parse(req_xf_date_e));
+                where = where.And(p => p.MakeDate <= DateTime.Parse(req_xf_date_e).AddDays(1));
 
             var tempData = ServiceFactory.ord_fanlixfservice.LoadFanlixf(int.Parse(khid), where.Compile()).ToList<ord_fanlixflist_v>();
 
@@ -323,7 +323,7 @@ namespace GROBS.Controllers
             if (!string.IsNullOrEmpty(req_xf_date_s))
                 where = where.And(p => p.MakeDate >= DateTime.Parse(req_xf_date_s));
             if (!string.IsNullOrEmpty(req_xf_date_e))
-                where = where.And(p => p.MakeDate <= DateTime.Parse(req_xf_date_e));
+                where = where.And(p => p.MakeDate <= DateTime.Parse(req_xf_date_e).AddDays(1));
 
             var tempData = ServiceFactory.ord_fanlixfservice.LoadFanlixf(int.Parse(khid), where.Compile()).ToList<ord_fanlixflist_v>();
             DataTable dt = new DataTable();

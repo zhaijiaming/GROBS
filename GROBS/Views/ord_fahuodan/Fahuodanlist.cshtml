@@ -68,7 +68,7 @@
         scm = new SearchConditionModel();
         scm.ItemCode = "YunsongFS";
         scm.ItemTitle = "运送方式";
-        scm.ItemType = "运送方式.运送方式";
+        scm.ItemType = "System.String";
         scms.Add(scm);
 
         scm = new SearchConditionModel();
@@ -121,14 +121,10 @@
             scm = new SearchConditionModel();
             scm.ItemCode = "YunsongFS";
             scm.ItemTitle = "运送方式";
-            scm.ItemType = "运送方式.运送方式";
+            scm.ItemType = "System.String";
             if (scs.Length > 1)
             {
                 scm.ItemValue = scs[3].Split(',')[1];
-                if (scm.ItemValue.Length == 0)
-                {
-                    scm.ItemValue = "0";
-                }
                 scm.ItemOpValue = scs[3].Split(',')[2];
                 scm.ItemJion = scs[3].Split(',')[3];
             }

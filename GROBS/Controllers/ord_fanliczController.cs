@@ -336,7 +336,7 @@ namespace GROBS.Controllers
             if (!string.IsNullOrEmpty(req_fl_date_s))
                 where = where.And(p => p.MakeDate >= DateTime.Parse(req_fl_date_s));
             if (!string.IsNullOrEmpty(req_fl_date_e))
-                where = where.And(p => p.MakeDate <= DateTime.Parse(req_fl_date_e));
+                where = where.And(p => p.MakeDate <= DateTime.Parse(req_fl_date_e).AddDays(1));
 
             where = where.And(p => p.IsDelete == false);
 
@@ -401,7 +401,7 @@ namespace GROBS.Controllers
             if (!string.IsNullOrEmpty(req_fl_date_s))
                 where = where.And(p => p.MakeDate >= DateTime.Parse(req_fl_date_s));
             if (!string.IsNullOrEmpty(req_fl_date_e))
-                where = where.And(p => p.MakeDate <= DateTime.Parse(req_fl_date_e));
+                where = where.And(p => p.MakeDate <= DateTime.Parse(req_fl_date_e).AddDays(1));
             where = where.And(p => p.IsDelete == false);
 
             var tempData = ServiceFactory.ord_fanliczservice.LoadSortEntities(where.Compile(), true, p => p.KHID).ToList<ord_fanlicz>();

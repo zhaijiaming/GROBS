@@ -942,8 +942,11 @@ namespace GROBS.App_Code
                             {
                                 if (sc.ItemValue.Equals("True"))
                                     svs = string.Format("<select class=\"width-100 form-control\" name=\"{0}\"><option value=\"\"></option><option value=\"yes\" selected=\"selected\">是</option><option value=\"no\">否</option></select>", sc.ItemCode);
+                                else if (sc.ItemValue.Equals("ALL"))
+                                    svs = string.Format("<select class=\"width-100 form-control\" name=\"{0}\"><option value=\"\"></option><option value=\"yes\">是</option><option value=\"no\">否</option></select>", sc.ItemCode);
                                 else
                                     svs = string.Format("<select class=\"width-100 form-control\" name=\"{0}\"><option value=\"\"></option><option value=\"yes\">是</option><option value=\"no\" selected=\"selected\">否</option></select>", sc.ItemCode);
+
                             }
                             break;
                         default:

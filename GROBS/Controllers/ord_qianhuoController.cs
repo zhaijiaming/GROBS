@@ -315,7 +315,7 @@ namespace GROBS.Controllers
 
             #region ≈≈–Ú
 
-            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : "Bianhao_desc";
+            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : sortOrder.Equals("Bianhao_desc") ? "Bianhao" :"Bianhao_desc";
             ViewBag.ZhuangtaiParm = sortOrder == "Zhuangtai" ? "Zhuangtai_desc" : "Zhuangtai";
             ViewBag.MingchengParm = sortOrder == "Mingcheng" ? "Mingcheng_desc" : "Mingcheng";
             ViewBag.CGLXParm = sortOrder == "CGLX" ? "CGLX_desc" : "CGLX";
@@ -688,7 +688,7 @@ namespace GROBS.Controllers
 
             #region ≈≈–Ú
 
-            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : "Bianhao_desc";
+            ViewBag.BianhaoParm = string.IsNullOrEmpty(sortOrder) ? "Bianhao" : sortOrder.Equals("Bianhao_desc") ? "Bianhao" : "Bianhao_desc";
             ViewBag.ZhuangtaiParm = sortOrder == "Zhuangtai" ? "Zhuangtai_desc" : "Zhuangtai";
             ViewBag.MingchengParm = sortOrder == "Mingcheng" ? "Mingcheng_desc" : "Mingcheng";
             ViewBag.CGLXParm = sortOrder == "CGLX" ? "CGLX_desc" : "CGLX";
