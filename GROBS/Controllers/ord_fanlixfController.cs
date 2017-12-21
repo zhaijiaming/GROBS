@@ -253,6 +253,8 @@ namespace GROBS.Controllers
             string req_xf_date_s = Request["req_xf_date_s"] ?? "";
             string req_xf_date_e = Request["req_xf_date_e"] ?? "";
 
+            string sortOrder = Request["sortOrder"] ?? "";
+
             Expression<Func<ord_fanlixflist_v, bool>> where = PredicateExtensionses.True<ord_fanlixflist_v>();
             if (!string.IsNullOrEmpty(khid))
                 where = where.And(p => p.KHID == int.Parse(khid));
@@ -266,6 +268,37 @@ namespace GROBS.Controllers
                 where = where.And(p => p.MakeDate <= DateTime.Parse(req_xf_date_e));
 
             var tempData = ServiceFactory.ord_fanlixfservice.LoadFanlixf(int.Parse(khid), where.Compile()).ToList<ord_fanlixflist_v>();
+
+            #region ÅÅÐò
+
+            ViewBag.DDIDParm = string.IsNullOrEmpty(sortOrder) ? "DDID" : "DDID_desc";
+            ViewBag.XFJEParm = sortOrder == "XFJE" ? "XFJE_desc" : "XFJE";
+            ViewBag.MakeDatePar = sortOrder == "MakeDate" ? "MakeDate_desc" : "MakeDate";
+
+            switch (sortOrder)
+            {
+                case "MakeDate_desc":
+                    tempData = tempData.OrderByDescending(p => p.MakeDate).ToList<ord_fanlixflist_v>();
+                    break;
+                case "MakeDate":
+                    tempData = tempData.OrderBy(p => p.MakeDate).ToList<ord_fanlixflist_v>();
+                    break;
+                case "XFJE_desc":
+                    tempData = tempData.OrderByDescending(p => p.XFJE).ToList<ord_fanlixflist_v>();
+                    break;
+                case "XFJE":
+                    tempData = tempData.OrderBy(p => p.XFJE).ToList<ord_fanlixflist_v>();
+                    break;
+                case "DDID":
+                    tempData = tempData.OrderBy(p => p.DDID).ToList<ord_fanlixflist_v>();
+                    break;
+                default:
+                    tempData = tempData.OrderByDescending(p => p.DDID).ToList<ord_fanlixflist_v>();
+                    break;
+            }
+
+            #endregion
+
             if (tempData == null)
                 return Json(-1);
             return Json(tempData);

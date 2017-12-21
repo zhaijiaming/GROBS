@@ -278,6 +278,21 @@ namespace GROBS.Controllers
                 page = "1";
             int userid = (int)Session["user_id"];
             string pagetag = "ord_fanli_customerprofit";
+
+
+            #region 排序使用
+            string sortOrder = Request["sortOrder"] ?? "";
+            ViewBag.DDIDParm = string.IsNullOrEmpty(sortOrder) ? "DDID" : "DDID_desc";
+            ViewBag.XFJEParm = sortOrder == "XFJE" ? "XFJE_desc" : "XFJE";
+            ViewBag.MakeDatePar = sortOrder == "MakeDate" ? "MakeDate_desc" : "MakeDate";
+
+            @ViewBag.CZJEParm = sortOrder == "CZJE" ? "CZJE_desc" : "CZJE";
+            @ViewBag.FFYFParm = sortOrder == "FFYF" ? "FFYF_desc" : "FFYF";
+            @ViewBag.KYSFParm = sortOrder == "KYSF" ? "KYSF_desc" : "KYSF";
+            @ViewBag.flcz_MakeDateParm = sortOrder == "flcz_MakeDate" ? "flcz_MakeDate_desc" : "flcz_MakeDate";
+
+            #endregion
+
             Expression<Func<ord_fanli, bool>> where = PredicateExtensionses.True<ord_fanli>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
@@ -342,6 +357,20 @@ namespace GROBS.Controllers
             string khid = Request["khid"] ?? "";
             string khidequal = Request["khidequal"] ?? "";
             string khidand = Request["khidand"] ?? "";
+
+            #region 排序使用
+            string sortOrder = Request["sortOrder"] ?? "";
+            ViewBag.DDIDParm = string.IsNullOrEmpty(sortOrder) ? "DDID" : "DDID_desc";
+            ViewBag.XFJEParm = sortOrder == "XFJE" ? "XFJE_desc" : "XFJE";
+            ViewBag.MakeDatePar = sortOrder == "MakeDate" ? "MakeDate_desc" : "MakeDate";
+
+            @ViewBag.CZJEParm = sortOrder == "CZJE" ? "CZJE_desc" : "CZJE";
+            @ViewBag.FFYFParm = sortOrder == "FFYF" ? "FFYF_desc" : "FFYF";
+            @ViewBag.KYSFParm = sortOrder == "KYSF" ? "KYSF_desc" : "KYSF";
+            @ViewBag.flcz_MakeDateParm = sortOrder == "flcz_MakeDate" ? "flcz_MakeDate_desc" : "flcz_MakeDate";
+
+            #endregion
+
             Expression<Func<ord_fanli, bool>> where = PredicateExtensionses.True<ord_fanli>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
@@ -419,6 +448,7 @@ namespace GROBS.Controllers
             ViewBag.ord_fanli = tempData;
             return View(tempData);
         }
+
         public JsonResult GetTotalNumber()
         {
             var _cust = Request["cust"] ?? "";

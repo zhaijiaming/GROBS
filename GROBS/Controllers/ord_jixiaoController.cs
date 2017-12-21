@@ -301,7 +301,7 @@ namespace GROBS.Controllers
             return RedirectToAction("Index");
         }
         [OutputCache(Duration = 30)]
-        public ActionResult CustomerTarget(string page)
+        public ActionResult CustomerTarget(string page, string sortOrder)
         {
             if (string.IsNullOrEmpty(page))
                 page = "1";
@@ -404,12 +404,79 @@ namespace GROBS.Controllers
             where = where.And(p => p.KHID == _khid);
 
             var tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, ord_jixiao => ord_jixiao.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+
+            #region ÅÅÐò
+
+            ViewBag.YuefenParm = string.IsNullOrEmpty(sortOrder) ? "Yuefen" : "Yuefen_desc";
+            ViewBag.NianduParm = sortOrder == "Niandu" ? "Niandu_desc" : "Niandu";
+            ViewBag.ZhibiaoParm = sortOrder == "Zhibiao" ? "Zhibiao_desc" : "Zhibiao";
+            ViewBag.YejiParm = sortOrder == "Yeji" ? "Yeji_desc" : "Yeji";
+            ViewBag.DachenglvParm = sortOrder == "Dachenglv" ? "Dachenglv_desc" : "Dachenglv";
+            ViewBag.FLSQJEParm = sortOrder == "FLSQJE" ? "FLSQJE_desc" : "FLSQJE";
+            ViewBag.FLFFJEParm = sortOrder == "FLFFJE" ? "FLFFJE_desc" : "FLFFJE";
+            ViewBag.FafangSFParm = sortOrder == "FafangSF" ? "FafangSF_desc" : "FafangSF";
+
+            switch (sortOrder)
+            {
+                case "Niandu_desc":
+                    tempData = tempData.OrderByDescending(p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Niandu":
+                    tempData = tempData.OrderBy(p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FafangSF_desc":
+                    tempData = tempData.OrderByDescending(p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FafangSF":
+                    tempData = tempData.OrderBy(p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FLFFJE_desc":
+                    tempData = tempData.OrderByDescending(p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FLFFJE":
+                    tempData = tempData.OrderBy(p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FLSQJE_desc":
+                    tempData = tempData.OrderByDescending(p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FLSQJE":
+                    tempData = tempData.OrderBy(p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Dachenglv_desc":
+                    tempData = tempData.OrderByDescending(p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Dachenglv":
+                    tempData = tempData.OrderBy(p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+
+                case "Yeji_desc":
+                    tempData = tempData.OrderByDescending(p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Yeji":
+                    tempData = tempData.OrderBy(p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Zhibiao_desc":
+                    tempData = tempData.OrderByDescending(p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Zhibiao":
+                    tempData = tempData.OrderBy(p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Yuefen":
+                    tempData = tempData.OrderBy(p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                default:
+                    tempData = tempData.OrderByDescending(p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+            }
+
+            #endregion
+
             ViewBag.ord_jixiao = tempData;
             return View(tempData);
         }
         [HttpPost]
         [OutputCache(Duration = 30)]
-        public ActionResult CustomerTarget()
+        public ActionResult CustomerTarget(string sortOrder)
         {
             int userid = (int)Session["user_id"];
             var _khid = (int)Session["customer_id"];
@@ -437,6 +504,8 @@ namespace GROBS.Controllers
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
+                #region MyRegion
+
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
@@ -516,93 +585,264 @@ namespace GROBS.Controllers
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
 
                 searchconditionService.GetInstance().AddEntity(sc);
+
+                #endregion
             }
             else
             {
-                sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(khid))
+
+                if (!string.IsNullOrEmpty(sortOrder))
                 {
-                    if (khidequal.Equals("="))
-                    {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
-                    }
-                    if (khidequal.Equals(">"))
-                    {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
-                    }
-                    if (khidequal.Equals("<"))
-                    {
-                        if (khidand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
-                    }
+                    where = GetSearchCondition(where, sc);
                 }
-                if (!string.IsNullOrEmpty(khid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", khid, khidequal, khidand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", "", khidequal, khidand);
-                if (!string.IsNullOrEmpty(Niandu))
                 {
-                    if (Nianduequal.Equals("="))
+                    #region MyRegion
+
+                    sc.ConditionInfo = "";
+                    if (!string.IsNullOrEmpty(khid))
                     {
-                        if (Nianduand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                        if (khidequal.Equals("="))
+                        {
+                            if (khidand.Equals("and"))
+                                where = where.And(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
+                            else
+                                where = where.Or(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
+                        }
+                        if (khidequal.Equals(">"))
+                        {
+                            if (khidand.Equals("and"))
+                                where = where.And(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
+                            else
+                                where = where.Or(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
+                        }
+                        if (khidequal.Equals("<"))
+                        {
+                            if (khidand.Equals("and"))
+                                where = where.And(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
+                            else
+                                where = where.Or(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
+                        }
                     }
-                }
-                if (!string.IsNullOrEmpty(Niandu))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Niandu", Niandu, Nianduequal, Nianduand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Niandu", "", Nianduequal, Nianduand);
+                    if (!string.IsNullOrEmpty(khid))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", khid, khidequal, khidand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "khid", "", khidequal, khidand);
+                    if (!string.IsNullOrEmpty(Niandu))
+                    {
+                        if (Nianduequal.Equals("="))
+                        {
+                            if (Nianduand.Equals("and"))
+                                where = where.And(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                            else
+                                where = where.Or(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Niandu))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Niandu", Niandu, Nianduequal, Nianduand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Niandu", "", Nianduequal, Nianduand);
 
 
-                if (!string.IsNullOrEmpty(Yuefen))
-                {
-                    if (Yuefenequal.Equals("="))
+                    if (!string.IsNullOrEmpty(Yuefen))
                     {
-                        if (Yuefenand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                        if (Yuefenequal.Equals("="))
+                        {
+                            if (Yuefenand.Equals("and"))
+                                where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                            else
+                                where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                        }
                     }
-                }
-                if (!string.IsNullOrEmpty(Yuefen))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", Yuefen, Yuefenequal, Yuefenand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", "", Yuefenequal, Yuefenand);
+                    if (!string.IsNullOrEmpty(Yuefen))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", Yuefen, Yuefenequal, Yuefenand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", "", Yuefenequal, Yuefenand);
 
-                if (!string.IsNullOrEmpty(FafangSF))
-                {
-                    if (FafangSFequal.Equals("="))
+                    if (!string.IsNullOrEmpty(FafangSF))
                     {
-                        if (FafangSFand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                        if (FafangSFequal.Equals("="))
+                        {
+                            if (FafangSFand.Equals("and"))
+                                where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                            else
+                                where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                        }
                     }
-                }
-                if (!string.IsNullOrEmpty(FafangSF))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", FafangSF, FafangSFequal, FafangSFand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
+                    if (!string.IsNullOrEmpty(FafangSF))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", FafangSF, FafangSFequal, FafangSFand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
 
-                searchconditionService.GetInstance().UpdateEntity(sc);
+                    searchconditionService.GetInstance().UpdateEntity(sc);
+                    #endregion
+                }
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
             where = where.And(ord_jixiao => ord_jixiao.IsDelete == false);
             where = where.And(p => p.KHID == _khid);
 
             var tempData = ob_ord_jixiaoservice.LoadSortEntities(where.Compile(), true, ord_jixiao => ord_jixiao.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+
+
+            #region ÅÅÐò
+
+            ViewBag.YuefenParm = string.IsNullOrEmpty(sortOrder) ? "Yuefen" : "Yuefen_desc";
+            ViewBag.NianduParm = sortOrder == "Niandu" ? "Niandu_desc" : "Niandu";
+            ViewBag.ZhibiaoParm = sortOrder == "Zhibiao" ? "Zhibiao_desc" : "Zhibiao";
+            ViewBag.YejiParm = sortOrder == "Yeji" ? "Yeji_desc" : "Yeji";
+            ViewBag.DachenglvParm = sortOrder == "Dachenglv" ? "Dachenglv_desc" : "Dachenglv";
+            ViewBag.FLSQJEParm = sortOrder == "FLSQJE" ? "FLSQJE_desc" : "FLSQJE";
+            ViewBag.FLFFJEParm = sortOrder == "FLFFJE" ? "FLFFJE_desc" : "FLFFJE";
+            ViewBag.FafangSFParm = sortOrder == "FafangSF" ? "FafangSF_desc" : "FafangSF";
+
+            switch (sortOrder)
+            {
+                case "Niandu_desc":
+                    tempData = tempData.OrderByDescending(p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Niandu":
+                    tempData = tempData.OrderBy(p => p.Niandu).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FafangSF_desc":
+                    tempData = tempData.OrderByDescending(p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FafangSF":
+                    tempData = tempData.OrderBy(p => p.FafangSF).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FLFFJE_desc":
+                    tempData = tempData.OrderByDescending(p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FLFFJE":
+                    tempData = tempData.OrderBy(p => p.FLFFJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FLSQJE_desc":
+                    tempData = tempData.OrderByDescending(p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "FLSQJE":
+                    tempData = tempData.OrderBy(p => p.FLSQJE).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Dachenglv_desc":
+                    tempData = tempData.OrderByDescending(p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Dachenglv":
+                    tempData = tempData.OrderBy(p => p.Dachenglv).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+
+                case "Yeji_desc":
+                    tempData = tempData.OrderByDescending(p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Yeji":
+                    tempData = tempData.OrderBy(p => p.Yeji).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Zhibiao_desc":
+                    tempData = tempData.OrderByDescending(p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Zhibiao":
+                    tempData = tempData.OrderBy(p => p.Zhibiao).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                case "Yuefen":
+                    tempData = tempData.OrderBy(p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+                default:
+                    tempData = tempData.OrderByDescending(p => p.Yuefen).ToPagedList<ord_jixiao>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+                    break;
+            }
+
+            #endregion
+
             ViewBag.ord_jixiao = tempData;
             return View(tempData);
+        }
+
+        private static Expression<Func<ord_jixiao, bool>> GetSearchCondition(Expression<Func<ord_jixiao, bool>> where, searchcondition sc)
+        {
+            string[] sclist = sc.ConditionInfo.Split(';');
+            foreach (string scl in sclist)
+            {
+                string[] scld = scl.Split(',');
+                switch (scld[0])
+                {
+                    case "khid":
+                        string khid = scld[1];
+                        string khidequal = scld[2];
+                        string khidand = string.IsNullOrEmpty(scld[3]) ? "and" : scld[3];
+                        if (!string.IsNullOrEmpty(khid))
+                        {
+                            if (khidequal.Equals("="))
+                            {
+                                if (khidand.Equals("and"))
+                                    where = where.And(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
+                                else
+                                    where = where.Or(ord_jixiao => ord_jixiao.KHID == int.Parse(khid));
+                            }
+                            if (khidequal.Equals(">"))
+                            {
+                                if (khidand.Equals("and"))
+                                    where = where.And(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
+                                else
+                                    where = where.Or(ord_jixiao => ord_jixiao.KHID > int.Parse(khid));
+                            }
+                            if (khidequal.Equals("<"))
+                            {
+                                if (khidand.Equals("and"))
+                                    where = where.And(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
+                                else
+                                    where = where.Or(ord_jixiao => ord_jixiao.KHID < int.Parse(khid));
+                            }
+                        }
+                        break;
+                    case "Niandu":
+                        string Niandu = scld[1];
+                        string Nianduequal = scld[2];
+                        string Nianduand = string.IsNullOrEmpty(scld[3]) ? "and" : scld[3];
+                        if (!string.IsNullOrEmpty(Niandu))
+                        {
+                            if (Nianduequal.Equals("="))
+                            {
+                                if (Nianduand.Equals("and"))
+                                    where = where.And(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                                else
+                                    where = where.Or(ord_jixiao => ord_jixiao.Niandu == int.Parse(Niandu));
+                            }
+                        }
+                        break;
+                    case "Yuefen":
+                        string Yuefen = scld[1];
+                        string Yuefenequal = scld[2];
+                        string Yuefenand = string.IsNullOrEmpty(scld[3]) ? "and" : scld[3];
+                        if (!string.IsNullOrEmpty(Yuefen))
+                        {
+                            if (Yuefenequal.Equals("="))
+                            {
+                                if (Yuefenand.Equals("and"))
+                                    where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                                else
+                                    where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                            }
+                        }
+                        break;
+                    case "FafangSF":
+                        string FafangSF = scld[1];
+                        string FafangSFequal = scld[2];
+                        string FafangSFand = string.IsNullOrEmpty(scld[3]) ? "and" : scld[3];
+                        if (!string.IsNullOrEmpty(FafangSF))
+                        {
+                            if (FafangSFequal.Equals("="))
+                            {
+                                if (FafangSFand.Equals("and"))
+                                    where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                                else
+                                    where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return where;
         }
 
         public ActionResult ExportCustomerTarget()
@@ -735,7 +975,7 @@ namespace GROBS.Controllers
             return new EmptyResult();
         }
 
-        public ActionResult CustomerTargetNow()
+        public ActionResult CustomerTargetNow(string sortOrder)
         {
             string thisYear = DateTime.Now.Year.ToString();
             var khid = (int)Session["customer_id"];
@@ -794,38 +1034,50 @@ namespace GROBS.Controllers
             }
             else
             {
-                sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(Yuefen))
+                if (!string.IsNullOrEmpty(sortOrder))
                 {
-                    if (Yuefenequal.Equals("="))
-                    {
-                        if (Yuefenand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
-                    }
+                    where = GetOrderListSearchCondition(where, sc);
                 }
-                if (!string.IsNullOrEmpty(Yuefen))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", Yuefen, Yuefenequal, Yuefenand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", "", Yuefenequal, Yuefenand);
-
-                if (!string.IsNullOrEmpty(FafangSF))
                 {
-                    if (FafangSFequal.Equals("="))
-                    {
-                        if (FafangSFand.Equals("and"))
-                            where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
-                        else
-                            where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
-                    }
-                }
-                if (!string.IsNullOrEmpty(FafangSF))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", FafangSF, FafangSFequal, FafangSFand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
+                    #region MyRegion
 
-                searchconditionService.GetInstance().UpdateEntity(sc);
+
+                    sc.ConditionInfo = "";
+                    if (!string.IsNullOrEmpty(Yuefen))
+                    {
+                        if (Yuefenequal.Equals("="))
+                        {
+                            if (Yuefenand.Equals("and"))
+                                where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                            else
+                                where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(Yuefen))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", Yuefen, Yuefenequal, Yuefenand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Yuefen", "", Yuefenequal, Yuefenand);
+
+                    if (!string.IsNullOrEmpty(FafangSF))
+                    {
+                        if (FafangSFequal.Equals("="))
+                        {
+                            if (FafangSFand.Equals("and"))
+                                where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                            else
+                                where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(FafangSF))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", FafangSF, FafangSFequal, FafangSFand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "FafangSF", "", FafangSFequal, FafangSFand);
+
+                    searchconditionService.GetInstance().UpdateEntity(sc);
+
+                    #endregion
+                }
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
 
@@ -834,8 +1086,116 @@ namespace GROBS.Controllers
             where = where.And(p => p.IsDelete == false);
 
             var tempdata = ServiceFactory.ord_jixiaoservice.LoadSortEntities(where.Compile(), true, p => p.Yuefen).ToList<ord_jixiao>();
+
+            #region ÅÅÐò
+
+            ViewBag.YuefenParm = string.IsNullOrEmpty(sortOrder) ? "Yuefen" : "Yuefen_desc";
+            ViewBag.ZhibiaoParm = sortOrder == "Zhibiao" ? "Zhibiao_desc" : "Zhibiao";
+            ViewBag.YejiParm = sortOrder == "Yeji" ? "Yeji_desc" : "Yeji";
+            ViewBag.DachenglvParm = sortOrder == "Dachenglv" ? "Dachenglv_desc" : "Dachenglv";
+            ViewBag.FLSQJEParm = sortOrder == "FLSQJE" ? "FLSQJE_desc" : "FLSQJE";
+            ViewBag.FLFFJEParm = sortOrder == "FLFFJE" ? "FLFFJE_desc" : "FLFFJE";
+            ViewBag.FafangSFParm = sortOrder == "FafangSF" ? "FafangSF_desc" : "FafangSF";
+
+            switch (sortOrder)
+            {
+                case "FafangSF_desc":
+                    tempdata = tempdata.OrderByDescending(p => p.FafangSF).ToList<ord_jixiao>();
+                    break;
+                case "FafangSF":
+                    tempdata = tempdata.OrderBy(p => p.FafangSF).ToList<ord_jixiao>();
+                    break;
+                case "FLFFJE_desc":
+                    tempdata = tempdata.OrderByDescending(p => p.FLFFJE).ToList<ord_jixiao>();
+                    break;
+                case "FLFFJE":
+                    tempdata = tempdata.OrderBy(p => p.FLFFJE).ToList<ord_jixiao>();
+                    break;
+                case "FLSQJE_desc":
+                    tempdata = tempdata.OrderByDescending(p => p.FLSQJE).ToList<ord_jixiao>();
+                    break;
+                case "FLSQJE":
+                    tempdata = tempdata.OrderBy(p => p.FLSQJE).ToList<ord_jixiao>();
+                    break;
+                case "Dachenglv_desc":
+                    tempdata = tempdata.OrderByDescending(p => p.Dachenglv).ToList<ord_jixiao>();
+                    break;
+                case "Dachenglv":
+                    tempdata = tempdata.OrderBy(p => p.Dachenglv).ToList<ord_jixiao>();
+                    break;
+
+                case "Yeji_desc":
+                    tempdata = tempdata.OrderByDescending(p => p.Yeji).ToList<ord_jixiao>();
+                    break;
+                case "Yeji":
+                    tempdata = tempdata.OrderBy(p => p.Yeji).ToList<ord_jixiao>();
+                    break;
+                case "Zhibiao_desc":
+                    tempdata = tempdata.OrderByDescending(p => p.Zhibiao).ToList<ord_jixiao>();
+                    break;
+                case "Zhibiao":
+                    tempdata = tempdata.OrderBy(p => p.Zhibiao).ToList<ord_jixiao>();
+                    break;
+                case "Yuefen":
+                    tempdata = tempdata.OrderBy(p => p.Yuefen).ToList<ord_jixiao>();
+                    break;
+                default:
+                    tempdata = tempdata.OrderByDescending(p => p.Yuefen).ToList<ord_jixiao>();
+                    break;
+            }
+
+            #endregion
+
             ViewBag.thisYearDate = tempdata;
             return View();
+        }
+
+
+        private static Expression<Func<ord_jixiao, bool>> GetOrderListSearchCondition(Expression<Func<ord_jixiao, bool>> where, searchcondition sc)
+        {
+            string[] sclist = sc.ConditionInfo.Split(';');
+            foreach (string scl in sclist)
+            {
+                string[] scld = scl.Split(',');
+                switch (scld[0])
+                {
+                    case "Yuefen":
+                        string Yuefen = scld[1];
+                        string Yuefenequal = scld[2];
+                        string Yuefenand = scld[3];
+                        if (!string.IsNullOrEmpty(Yuefen))
+                        {
+                            if (Yuefenequal.Equals("="))
+                            {
+                                if (Yuefenand.Equals("and"))
+                                    where = where.And(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                                else
+                                    where = where.Or(ord_jixiao => ord_jixiao.Yuefen == int.Parse(Yuefen));
+                            }
+                        }
+
+                        break;
+                    case "FafangSF":
+                        string FafangSF = scld[1];
+                        string FafangSFequal = scld[2];
+                        string FafangSFand = scld[3];
+                        if (!string.IsNullOrEmpty(FafangSF))
+                        {
+                            if (FafangSFequal.Equals("="))
+                            {
+                                if (FafangSFand.Equals("and"))
+                                    where = where.And(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                                else
+                                    where = where.Or(ord_jixiao => ord_jixiao.FafangSF == Boolean.Parse(FafangSF == "yes" ? "True" : "False"));
+                            }
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+            return where;
         }
 
         public ActionResult customerTargetNowExport()

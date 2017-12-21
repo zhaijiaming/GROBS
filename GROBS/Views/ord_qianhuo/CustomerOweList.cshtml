@@ -195,14 +195,14 @@
             <thead>
                 <tr>
                     <td></td>
-                    <td>编号</td>
-                    <td>状态</td>
+                    <td>@Html.ActionLink("编号", "customerowelist", new { sortOrder = ViewBag.BianhaoParm })</td>
+                    <td>@Html.ActionLink("状态", "customerowelist", new { sortOrder = ViewBag.ZhuangtaiParm })</td>
                     <td>客户</td>
-                    <td>产品线</td>
-                    <td>采购类型</td>
-                    <td>客户单号</td>
-                    <td>下单日期</td>
-                    <td>存货编码</td>
+                    <td>@Html.ActionLink("产品线", "customerowelist", new { sortOrder = ViewBag.MingchengParm })</td>
+                    <td>@Html.ActionLink("采购类型", "customerowelist", new { sortOrder = ViewBag.CGLXParm })</td>
+                    <td>@Html.ActionLink("客户单号", "customerowelist", new { sortOrder = ViewBag.KehuDHParm })</td>
+                    <td>@Html.ActionLink("下单日期", "customerowelist", new { sortOrder = ViewBag.XiadanRQParm })</td>
+                    <td>@Html.ActionLink("存货编码", "customerowelist", new { sortOrder = ViewBag.SPBMParm })</td>
                     <td>采购数量</td>
                     <td>欠货数量</td>
                     <td>销售单价</td>

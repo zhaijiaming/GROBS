@@ -132,14 +132,14 @@
                         @*列表*@
                         <table class="table table-bordered table-hover" id="table_thisYearJiXiao">
                             <tr>
-                                <th>年度</th>
-                                <th>月份</th>
-                                <th>目标(元)</th>
-                                <th>业绩</th>
-                                <th>达成率</th>
-                                <th>返利申请金额</th>
-                                <th>返利发放金额</th>
-                                <th>返利是否发放</th>
+                                <th>@Html.ActionLink("年度", "CustomerTarget", new { sortOrder = ViewBag.NianduParm })</th>
+                                <th>@Html.ActionLink("月份", "CustomerTarget", new { sortOrder = ViewBag.YuefenParm })</th>
+                                <th>@Html.ActionLink("目标(元)", "CustomerTarget", new { sortOrder = ViewBag.ZhibiaoParm })</th>
+                                <th>@Html.ActionLink("业绩", "CustomerTarget", new { sortOrder = ViewBag.YejiParm })</th>
+                                <th>@Html.ActionLink("达成率", "CustomerTarget", new { sortOrder = ViewBag.DachenglvParm })</th>
+                                <th>@Html.ActionLink("返利申请金额", "CustomerTarget", new { sortOrder = ViewBag.FLSQJEParm })</th>
+                                <th>@Html.ActionLink("返利发放金额", "CustomerTarget", new { sortOrder = ViewBag.FLFFJEParm })</th>
+                                <th>@Html.ActionLink("返利是否发放", "CustomerTarget", new { sortOrder = ViewBag.FafangSFParm })</th>
                             </tr>
                             <tbody>
                                 @foreach (var item in ViewBag.ord_jixiao)

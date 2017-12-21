@@ -324,6 +324,7 @@ namespace GROBS.Controllers
             string req_kysf = Request["req_kysf"] ?? "";
             string req_fl_date_s = Request["req_fl_date_s"] ?? "";
             string req_fl_date_e = Request["req_fl_date_e"] ?? "";
+            string sortOrder = Request["sortOrder"] ?? "";
 
             Expression<Func<ord_fanlicz, bool>> where = PredicateExtensionses.True<ord_fanlicz>();
             if (!string.IsNullOrEmpty(khid))
@@ -340,6 +341,43 @@ namespace GROBS.Controllers
             where = where.And(p => p.IsDelete == false);
 
             var tempData = ServiceFactory.ord_fanliczservice.LoadSortEntities(where.Compile(), true, p => p.KHID).ToList<ord_fanlicz>();
+            #region ÅÅÐò
+
+            @ViewBag.CZJEParm = sortOrder == "CZJE" ? "CZJE_desc" : "CZJE";
+            @ViewBag.FFYFParm = sortOrder == "FFYF" ? "FFYF_desc" : "FFYF";
+            @ViewBag.KYSFParm = sortOrder == "KYSF" ? "KYSF_desc" : "KYSF";
+            @ViewBag.flcz_MakeDateParm = sortOrder == "flcz_MakeDate" ? "flcz_MakeDate_desc" : "flcz_MakeDate";
+
+            switch (sortOrder)
+            {
+                case "flcz_MakeDate_desc":
+                    tempData = tempData.OrderByDescending(p => p.MakeDate).ToList<ord_fanlicz>();
+                    break;
+                case "flcz_MakeDate":
+                    tempData = tempData.OrderBy(p => p.MakeDate).ToList<ord_fanlicz>();
+                    break;
+                case "KYSF_desc":
+                    tempData = tempData.OrderByDescending(p => p.KYSF).ToList<ord_fanlicz>();
+                    break;
+                case "KYSF":
+                    tempData = tempData.OrderBy(p => p.KYSF).ToList<ord_fanlicz>();
+                    break;
+                case "FFYF_desc":
+                    tempData = tempData.OrderByDescending(p => p.FFYF).ToList<ord_fanlicz>();
+                    break;
+                case "FFYF":
+                    tempData = tempData.OrderBy(p => p.FFYF).ToList<ord_fanlicz>();
+                    break;
+                case "CZJE":
+                    tempData = tempData.OrderBy(p => p.CZJE).ToList<ord_fanlicz>();
+                    break;
+                default:
+                    tempData = tempData.OrderByDescending(p => p.CZJE).ToList<ord_fanlicz>();
+                    break;
+            }
+
+            #endregion
+
             if (tempData == null)
                 return Json(-1);
             return Json(tempData);

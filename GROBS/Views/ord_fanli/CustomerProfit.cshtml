@@ -84,6 +84,200 @@
 
             window.open("/ord_fanlicz/exportFanliChongZhiWith?khid=" + _khid + "&" + "req_ffyf=" + _req_ffyf + "&" + "req_kysf=" + _req_kysf + "&" + "req_fl_date_s=" + _req_fl_date_s + "&" + "req_fl_date_e=" + _req_fl_date_e, "_self");
         });
+
+        //消费记录排序
+        $(".flxfsortOrder").click(function () {
+            var _khid = $("#khid").val();
+            var _req_ddid = "";
+            var _req_bianhao = $("#req_bianhao").val().trim();
+            console.log(_req_bianhao);
+            $("#tbody_flxf tr").each(function () {
+                console.log($(this).find(".bianhao_flxf").html());
+                if ($(this).find(".bianhao_flxf").html() == _req_bianhao) {
+                    _req_ddid = $(this).find(".ddid_flxf").html();
+                }
+            });
+            var _req_xfje = $("#req_xfje").val();
+            var _req_xf_date_s = $("#req_xf_date_s").val();
+            var _req_xf_date_e = $("#req_xf_date_e").val();
+            var _sortOrder = $(this).attr("sortOrder");
+
+            if (_sortOrder == "DDID") {
+                $(this).attr({ "sortOrder": "DDID_desc" });
+            }
+            else if (_sortOrder == "DDID_desc") {
+                $(this).attr({ "sortOrder": "DDID" });
+            }
+            else if (_sortOrder == "XFJE") {
+                $(this).attr({ "sortOrder": "XFJE_desc" });
+            }
+            else if (_sortOrder == "XFJE_desc") {
+                $(this).attr({ "sortOrder": "XFJE" });
+            }
+            else if (_sortOrder == "MakeDate") {
+                $(this).attr({ "sortOrder": "MakeDate_desc" });
+            }
+            else if (_sortOrder == "MakeDate_desc") {
+                $(this).attr({ "sortOrder": "MakeDate" });
+            }
+
+            var str = "";
+
+            //数据千分制
+            function toThousands(s, n) {
+                /*
+                 * 参数说明：
+                 * s：要格式化的数字
+                 * n：保留几位小数
+                 * */
+                n = n > 0 && n <= 20 ? n : 2;
+                s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+                var l = s.split(".")[0].split("").reverse(),
+                    r = s.split(".")[1];
+                t = "";
+                for (i = 0; i < l.length; i++) {
+                    t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+                }
+                return t.split("").reverse().join("") + "." + r;
+            }
+
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/ord_fanlixf/getFanliXiaoFeiWithQuery",
+                data: {
+                    khid: _khid,
+                    req_ddid: _req_ddid,
+                    req_xfje: _req_xfje,
+                    req_xf_date_s: _req_xf_date_s,
+                    req_xf_date_e: _req_xf_date_e,
+                    sortOrder: _sortOrder
+                },
+                success: function (data) {
+                    var _xh = 0;
+                    for (var i in data) {
+                        _xh++;
+                        str += [
+                            '<tr>',
+                            '<td><input type="hidden" value="' + data[i].ID + '">' + _xh + '</td>',
+                            '<td><a href="/ord_dingdan/customerorderinfo/' + data[i].DDID + '"><span class="bianhao_flxf">' + data[i].Bianhao + '</a></span><span class="ddid_flxf" style="display:none;">' + data[i].DDID + '</span></td>',
+                            '<td><span class="xfje_flxf">' + toThousands((data[i].XFJE), 2) + '</span></td>',
+                            '<td><span class="makedate">' + data[i].MakeDate.toDate().Format("yyyy-MM-dd") + '</span></td>',
+                            '</tr>'
+                        ].join();
+                    }
+                    $("#tbody_flxf").html(str);
+                }
+            });
+        });
+
+        //返利记录排序
+        $(".flczsortOrder").click(function () {
+            //数据千分制
+            function toThousands(s, n) {
+                /*
+                 * 参数说明：
+                 * s：要格式化的数字
+                 * n：保留几位小数
+                 * */
+                n = n > 0 && n <= 20 ? n : 2;
+                s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+                var l = s.split(".")[0].split("").reverse(),
+                    r = s.split(".")[1];
+                t = "";
+                for (i = 0; i < l.length; i++) {
+                    t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+                }
+                return t.split("").reverse().join("") + "." + r;
+            }
+
+
+            var _khid = $("#khid").val();
+            var _req_ffyf = $("#req_ffyf").val();
+            var _req_kysf = $("#req_kysf").val();
+            if (_req_kysf == "是") {
+                _req_kysf = "true";
+            } else if (_req_kysf == "否") {
+                _req_kysf = "false";
+            } else {
+                _req_kysf = "";
+            }
+            var _req_fl_date_s = $("#req_fl_date_s").val();
+            var _req_fl_date_e = $("#req_fl_date_e").val();
+
+            var _sortOrder = $(this).attr("sortOrder");
+            if (_sortOrder == "CZJE") {
+                $(this).attr({ "sortOrder": "CZJE_desc" });
+            }
+            else if (_sortOrder == "CZJE_desc") {
+                $(this).attr({ "sortOrder": "CZJE" });
+            }
+
+            else if (_sortOrder == "FFYF") {
+                $(this).attr({ "sortOrder": "FFYF_desc" });
+            }
+            else if (_sortOrder == "FFYF_desc") {
+                $(this).attr({ "sortOrder": "FFYF" });
+            }
+
+            else if (_sortOrder == "flcz_MakeDate") {
+                $(this).attr({ "sortOrder": "flcz_MakeDate_desc" });
+            }
+            else if (_sortOrder == "flcz_MakeDate_desc") {
+                $(this).attr({ "sortOrder": "flcz_MakeDate" });
+            }
+
+            else if (_sortOrder == "KYSF") {
+                $(this).attr({ "sortOrder": "KYSF_desc" });
+            }
+            else if (_sortOrder == "KYSF_desc") {
+                $(this).attr({ "sortOrder": "KYSF" });
+            }
+
+            var str = "";
+            $.ajax({
+                async: true,
+                beforeSend: function () {
+                    ShowWait();
+                },
+                complete: function () {
+                    HiddenWait();
+                },
+                type: "POST",
+                url: "/ord_fanlicz/getFanliChongZhiWithQuery",
+                data: {
+                    khid: _khid,
+                    req_ffyf: _req_ffyf,
+                    req_kysf: _req_kysf,
+                    req_fl_date_s: _req_fl_date_s,
+                    req_fl_date_e: _req_fl_date_e,
+                    sortOrder: _sortOrder
+                },
+                success: function (data) {
+                    var _xh = 0;
+                    for (var i in data) {
+                        _xh++;
+                        str += [
+                            '<tr>',
+                            '<td><input type="hidden" value="' + data[i].ID + '">' + _xh + '</td>',
+                            '<td><span class="czje_flxf">' + toThousands((data[i].CZJE), 2) + '</span></td>',
+                            '<td><span class="ffyf_flxf">' + data[i].FFYF + '</span></td>',
+                            '<td><span class="kysf_flxf">' + data[i].KYSF + '</span></td>',
+                            '<td><span class="makedate">' + data[i].MakeDate.toDate().Format("yyyy-MM-dd") + '</span></td>',
+                            '</tr>'
+                        ].join();
+                    }
+                    $("#tbody_flcz").html(str);
+                    formatBoolToCHinese();//'是否'格式化
+                }
+            });
+        });
     });
 
     //格式化是否
@@ -289,6 +483,59 @@
         });
     }
 
+    //    //数据千分制
+    //    function toThousands(s, n) {
+    //        /*
+    //         * 参数说明：
+    //         * s：要格式化的数字
+    //         * n：保留几位小数
+    //         * */
+    //        n = n > 0 && n <= 20 ? n : 2;
+    //        s = parseFloat((s + "").replace(/[^\d\.-]/g, "")).toFixed(n) + "";
+    //        var l = s.split(".")[0].split("").reverse(),
+    //            r = s.split(".")[1];
+    //        t = "";
+    //        for (i = 0; i < l.length; i++) {
+    //            t += l[i] + ((i + 1) % 3 == 0 && (i + 1) != l.length ? "," : "");
+    //        }
+    //        return t.split("").reverse().join("") + "." + r;
+    //    }
+
+    //    $.ajax({
+    //        async: true,
+    //        beforeSend: function () {
+    //            ShowWait();
+    //        },
+    //        complete: function () {
+    //            HiddenWait();
+    //        },
+    //        type: "POST",
+    //        url: "/ord_fanlixf/getFanliXiaoFeiWithQuery",
+    //        data: {
+    //            khid: _khid,
+    //            req_ddid: _req_ddid,
+    //            req_xfje: _req_xfje,
+    //            req_xf_date_s: _req_xf_date_s,
+    //            req_xf_date_e: _req_xf_date_e,
+    //            sortOrder: _sortOrder
+    //        },
+    //        success: function (data) {
+    //            var _xh = 0;
+    //            for (var i in data) {
+    //                _xh++;
+    //                str += [
+    //                    '<tr>',
+    //                    '<td><input type="hidden" value="' + data[i].ID + '">' + _xh + '</td>',
+    //                    '<td><a href="/ord_dingdan/customerorderinfo/' + data[i].DDID + '"><span class="bianhao_flxf">' + data[i].Bianhao + '</a></span><span class="ddid_flxf" style="display:none;">' + data[i].DDID + '</span></td>',
+    //                    '<td><span class="xfje_flxf">' + toThousands((data[i].XFJE), 2) + '</span></td>',
+    //                    '<td><span class="makedate">' + data[i].MakeDate.toDate().Format("yyyy-MM-dd") + '</span></td>',
+    //                    '</tr>'
+    //                ].join();
+    //            }
+    //            $("#tbody_flxf").html(str);
+    //        }
+    //    });
+    //}
 
 </script>
 
@@ -413,9 +660,9 @@
                                             <table class="table table-bordered table-hover" id="table_flxf">
                                                 <tr>
                                                     <th></th>
-                                                    <th>订单编号</th>
-                                                    <th>消费金额</th>
-                                                    <th>消费日期</th>
+                                                    <th><a style="cursor:pointer;" sortOrder="@ViewBag.DDIDParm" class="flxfsortOrder">订单编号</a></th>
+                                                    <th><a style="cursor:pointer;" sortOrder="@ViewBag.XFJEParm" class="flxfsortOrder">消费金额</a></th>
+                                                    <th><a style="cursor:pointer;" sortOrder="@ViewBag.MakeDatePar" class="flxfsortOrder">消费日期</a></th>
                                                 </tr>
                                                 <tbody id="tbody_flxf"></tbody>
                                             </table>
@@ -474,10 +721,10 @@
                                             <table class="table table-bordered table-hover" id="table_flcz">
                                                 <tr>
                                                     <th></th>
-                                                    <th>返利金额</th>
-                                                    <th>返利月份</th>
-                                                    <th>是否可用</th>
-                                                    <th>返利日期</th>
+                                                    <th><a style="cursor:pointer;" sortOrder="@ViewBag.CZJEParm" class="flczsortOrder">返利金额</a></th>
+                                                    <th><a style="cursor:pointer;" sortOrder="@ViewBag.FFYFParm" class="flczsortOrder">返利月份</a></th>
+                                                    <th><a style="cursor:pointer;" sortOrder="@ViewBag.KYSFParm" class="flczsortOrder">是否可用</a></th>
+                                                    <th><a style="cursor:pointer;" sortOrder="@ViewBag.flcz_MakeDateParm" class="flczsortOrder">返利日期</a></th>
                                                 </tr>
                                                 <tbody id="tbody_flcz"></tbody>
                                             </table>

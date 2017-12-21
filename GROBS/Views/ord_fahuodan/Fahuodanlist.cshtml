@@ -181,16 +181,16 @@
                     <table class="table table-bordered table-condensed" id="mydatatable">
                         <tr>
                             <th></th>
-                            <th>发货单号</th>
-                            <th>订单编号</th>
+                            <th>@Html.ActionLink("发货单号", "fahuodanlist", new { sortOrder = ViewBag.ChukudanBHParm })</th>
+                            <th>@Html.ActionLink("订单编号", "fahuodanlist", new { sortOrder = ViewBag.DDBHParm })</th>
                             <th>运送地址</th>
-                            <th>发货日期</th>
+                            <th>@Html.ActionLink("发货日期", "fahuodanlist", new { sortOrder = ViewBag.ChukuRQParm })</th>
                             <th>联系人</th>
                             <th>联系电话</th>
                             <th>备注</th>
                             <th>仓库</th>
-                            <th>运送方式</th>
-                            <th>快递单号</th>
+                            <th>@Html.ActionLink("运送方式", "fahuodanlist", new { sortOrder = ViewBag.YunsongFSParm })</th>
+                            <th>@Html.ActionLink("快递单号", "fahuodanlist", new { sortOrder = ViewBag.KddanhaoParm })</th>
                         </tr>
                         <tbody>
                             @foreach (var item in ViewBag.ord_fahuodan)
