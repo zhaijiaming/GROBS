@@ -1067,6 +1067,18 @@ namespace GROBS.Controllers
             return new EmptyResult();
         }
 
+        //欠货数量统计
+        public ActionResult customerowelistQty(int id)
+        {
+            int userid = (int)Session["user_id"];
+            int custid = (int)Session["customer_id"];
+
+            var tempData = ob_ord_dingdanservice.LoadCustomerActiveOwe(custid, p => p.DDID == id).ToList<ord_ordermain_vsss>();
+
+            ViewBag.ord_qianhuoData = tempData;
+            return View(tempData);
+        }
+
         public ActionResult Add()
         {
             ViewBag.userid = (int)Session["user_id"];

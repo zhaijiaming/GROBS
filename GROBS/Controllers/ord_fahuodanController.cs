@@ -1167,11 +1167,6 @@ namespace GROBS.Controllers
         //发货数量统计
         public ActionResult fahuodanlistQty(int id)
         {
-            int userid = (int)Session["user_id"];
-            int custid = (int)Session["customer_id"];
-
-            string strBianHao = Request.QueryString["strBianhao"] ?? "";
-
             var tempData = ob_ord_fahuodanservice.LoadEntities(ord_fahuodan => ord_fahuodan.DDID == id && ord_fahuodan.IsDelete == false).ToList<ord_fahuodan>();
 
             var fahuomxData = new List<ord_fahuomx>();

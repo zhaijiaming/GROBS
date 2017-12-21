@@ -1,0 +1,62 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "欠货数量";
+    Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+    var _i = 1;
+    var _pz = ViewBag.fkpz;
+}
+<div class="page-content">
+    <div class="row">
+        <p class="align-center">
+            @if (!string.IsNullOrEmpty(_pz))
+            {
+                <a href="@_pz"><i class="icon-file-text bigger-200 green"></i></a>
+            }
+            else
+            {
+                <i class="icon-file-text bigger-200 green"></i>
+            }
+            <span class="bigger-150 blue">欠货数量详情</span>
+        </p>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="dt_sp">
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>代码</td>
+                                <td>名称</td>
+                                <td>数量</td>
+                                <td>销售单价</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.ord_qianhuoData)
+                            {
+                                <tr>
+                                    <td>
+                                        <label>@string.Format("{0:d}", _i++)</label>
+                                    </td>
+                                    <td>@item.SPBM</td>
+                                    <td>@item.Mingcheng</td>
+                                    <td>@item.QHSL</td>
+                                    <td>@String.Format("{0:N}", item.XSDJ)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
