@@ -1,0 +1,70 @@
+﻿@using GROBS.App_Code
+@using GROBS.Models
+@using X.PagedList
+@using X.PagedList.Mvc
+@{
+    ViewBag.Title = "已发数量";
+    Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
+    var _i = 1;
+    var _pz = ViewBag.fkpz;
+}
+<div class="page-content">
+    <div class="row">
+        <p class="align-center">
+            @if (!string.IsNullOrEmpty(_pz))
+            {
+                <a href="@_pz"><i class="icon-file-text bigger-200 green"></i></a>
+            }
+            else
+            {
+                <i class="icon-file-text bigger-200 green"></i>
+            }
+            <span class="bigger-150 blue">已发数量详情</span>
+        </p>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="table-wapper-all">
+                <div class="fixed-table-wapper">
+                    <table class="table table-bordered table-condensed fixed-table-header"></table>
+                </div>
+                <div class="table-wapper">
+                    <table class="table table-bordered table-condensed" id="dt_sp">
+                        @*<caption><i class="icon-edit"></i>采购商品列表</caption>*@
+                        <thead>
+                            <tr>
+                                <td></td>
+                                <td>代码</td>
+                                <td>注册证</td>
+                                <td>规格</td>
+                                <td>生产日期</td>
+                                <td>发货数量</td>
+                                <td>套包号</td>
+                                <td>批号</td>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in ViewBag.ord_fahuomx)
+                            {
+                                <tr>
+                                    <td>
+                                        <label>@string.Format("{0:d}", _i++)</label>
+                                    </td>
+                                    <td>@item.ShangpinDM </td>
+                                    <td>@item.Zhucezheng</td>
+                                    <td>@item.Guige</td>
+                                    <td>@item.ShengchanRQ</td>
+                                    <td>@item.ChukuSL</td>
+                                    <td>@item.Taobaohao</td>
+                                    <td>@item.Pihao</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

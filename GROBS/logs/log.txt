@@ -1390,3 +1390,7 @@ INFO  2017-12-21 10:49:48,664  9752ms 14                     MoveNext           
 INFO  2017-12-21 11:33:12,565  6159ms 14                     MoveNext           - ruikang login at 2017/12/21 11:33:12!
 INFO  2017-12-21 11:42:39,704  8920ms 14                     MoveNext           - ruikang login at 2017/12/21 11:42:39!
 INFO  2017-12-21 11:49:09,735 45392ms 14                     MoveNext           - ruikang login at 2017/12/21 11:49:09!
+INFO  2017-12-21 12:36:59,067 19540ms 14                     MoveNext           - ruikang login at 2017/12/21 12:36:59!
+INFO  2017-12-21 13:42:06,050  6214ms 14                     MoveNext           - ruikang login at 2017/12/21 13:42:06!
+INFO  2017-12-21 13:48:44,153 14597ms 14                     MoveNext           - ruikang login at 2017/12/21 13:48:44!
+INFO  2017-12-21 13:52:08,049  5130ms 14                     MoveNext           - ruikang login at 2017/12/21 13:52:08!

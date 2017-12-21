@@ -99,6 +99,7 @@
         $("#bt_sendInfo").click(function () {
             window.open("/ord_fahuodan/fahuodanlist", "_blank");
         });
+
         $("#bt_collect").click(function () {
             var _sid = 0;
             var _sst = 0;
@@ -445,8 +446,8 @@
                                                     <td>@item.LianxiDH</td>
                                                     <td>@item.SonghuoDZ</td>*@
                                                 <td>@item.ZongshuCG</td>
-                                                <td>@ViewBag.fhsl[i]</td>
-                                                <td>@String.Format("{0:N0}", ViewBag.fhsl[i] == "" ? "" : (item.ZongshuCG - float.Parse(ViewBag.fhsl[i])))</td>
+                                                <td><a style="cursor:pointer;" href="/ord_fahuodan/fahuodanlistQty/@item.ID" target="_blank">@String.Format("{0:N0}", ViewBag.fhsl[i] == "0" ? "" : @ViewBag.fhsl[i])</a></td>
+                                                <td><a style="cursor:pointer;" href="/ord_qianhuo/customerowelistQty/@item.ID" target="_blank">@String.Format("{0:N0}", ViewBag.fhsl[i] == "" ? "" : (item.ZongshuCG - float.Parse(ViewBag.fhsl[i])))</a></td>
                                                 <td>@String.Format("{0:N}", item.Zongjine)</td>
                                                 <td>@String.Format("{0:N}", item.ZhekouJE)</td>
                                                 <td>@String.Format("{0:C}", item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE))</td>

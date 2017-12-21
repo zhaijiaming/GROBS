@@ -916,6 +916,7 @@
     <Content Include="Views\ord_fahuodan\Fahuodanlist.cshtml" />
     <Content Include="Views\ord_dingdan\CustomerOrderEdit.cshtml" />
     <Content Include="Views\ord_qianhuo\CustomerOweList.cshtml" />
+    <Content Include="Views\ord_fahuodan\fahuodanlistQty.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
