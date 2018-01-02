@@ -188,6 +188,7 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -464,6 +465,11 @@
     <Compile Include="Models\searchconditionViewModel.cs" />
     <Compile Include="Models\userinfoViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Service References\U8WebService\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -683,6 +689,16 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Service References\U8WebService\GROBS.U8WebService.GetCurrentStockResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Content>
+    <None Include="Service References\U8WebService\MStock.disco" />
+    <None Include="Service References\U8WebService\configuration91.svcinfo" />
+    <None Include="Service References\U8WebService\configuration.svcinfo" />
+    <None Include="Service References\U8WebService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
     <Content Include="Views\Shared\_Layout1.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -918,6 +934,7 @@
     <Content Include="Views\ord_qianhuo\CustomerOweList.cshtml" />
     <Content Include="Views\ord_fahuodan\fahuodanlistQty.cshtml" />
     <Content Include="Views\ord_qianhuo\customerowelistQty.cshtml" />
+    <None Include="Service References\U8WebService\MStock.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -938,6 +955,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="reports\rptQuanxian.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\U8WebService\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
