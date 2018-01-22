@@ -224,7 +224,7 @@ namespace GROBS.Controllers
             {
                 ord_fanlicz ob_ord_fanlicz = new ord_fanlicz();
                 ob_ord_fanlicz.KHID = khid == "" ? 0 : int.Parse(khid);
-                ob_ord_fanlicz.CZJE = czje == "" ? 0 : float.Parse(czje);
+                ob_ord_fanlicz.CZJE = czje == "" ? 0 : decimal.Parse(czje);
                 ob_ord_fanlicz.FFYF = ffyf.Trim();
                 ob_ord_fanlicz.KYSF = kysf == "" ? false : Boolean.Parse(kysf);
                 ob_ord_fanlicz.BZ = bz.Trim();
@@ -282,7 +282,7 @@ namespace GROBS.Controllers
             {
                 ord_fanlicz p = ob_ord_fanliczservice.GetEntityById(ord_fanlicz => ord_fanlicz.ID == uid);
                 p.KHID = khid == "" ? 0 : int.Parse(khid);
-                p.CZJE = czje == "" ? 0 : float.Parse(czje);
+                p.CZJE = czje == "" ? 0 : decimal.Parse(czje);
                 p.FFYF = ffyf.Trim();
                 p.KYSF = kysf == "" ? false : Boolean.Parse(kysf);
                 p.BZ = bz.Trim();

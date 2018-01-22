@@ -22,12 +22,17 @@
             //}
         });
         //返回上一页
-
+        
         $("#bt_return").click(function () {
             window.location.href = "/ord_dingdan/customercurrentorder";
         })
 
         $("#bt_add").click(function () {
+            var zk = Number($("#tx_zk").val());
+            if (zk != 0) {
+                alert("请先将返利金额设为0，再添加或删除货品，谢谢！")
+                return;
+            }
             var _type = Number($("#sel_type").val());
             var _line = Number($("#sel_line").val());
             if (_line == 0 || _type == 0) {
@@ -107,7 +112,9 @@
                         _filltr = _filltr + '</td><td>';
                         _filltr = _filltr + data.JiaXS;
                         _filltr = _filltr + '</td><td>';
-                        _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
+                        _filltr = _filltr + data.JiaXS;
+                        _filltr = _filltr + '</td><td>';
+                        _filltr = _filltr + (Number(_sl) * Number(data.JiaXS)).toFixed(2);
                         _filltr = _filltr + '</td>';
                         _filltr = _filltr + '</tr>';
                         $("#dt_sp tbody").append(_filltr);
@@ -118,6 +125,11 @@
             });
         });
         $("#dt_sp").on("click", ".icon-minus-sign", function () {
+            var zk = Number($("#tx_zk").val());
+            if (zk != 0) {
+                alert("请先将返利金额设为0，再添加或删除货品，谢谢！")
+                return;
+            }
             var _dtr = $(this).parent().parent();
             _dtr.remove();
             DatarowCount();
@@ -191,7 +203,9 @@
                         _filltr = _filltr + "</td><td>";
                         _filltr = _filltr + data.JiaXS;
                         _filltr = _filltr + "</td><td>";
-                        _filltr = _filltr + Number(_sl) * Number(data.JiaXS);
+                        _filltr = _filltr + data.JiaXS;
+                        _filltr = _filltr + "</td><td>";
+                        _filltr = _filltr + (Number(_sl) * Number(data.JiaXS)).toFixed(2);
                         _filltr = _filltr + "</td>";
                         _filltr = _filltr + "</tr>";
                         $("#dt_sp tbody").append(_filltr);
@@ -295,6 +309,8 @@
                             _filltr = _filltr + '</td><td>';
                             _filltr = _filltr + data[i].JiaXS;
                             _filltr = _filltr + '</td><td>';
+                            _filltr = _filltr + data[i].JiaXS;
+                            _filltr = _filltr + '</td><td>';
                             _filltr = _filltr + data[i].Jine;
                             _filltr = _filltr + '</td>';
                             _filltr = _filltr + '</tr>';
@@ -308,7 +324,9 @@
         });
         $("#pl_fl").draggable({ handle: ".panel-heading" });
         $("#bt_com").click(function () {
-            var _zje = $("#tx_zje").val();//订单金额
+            DatarowCount();
+            //var _zje = $("#tx_zje").val();//订单金额
+            var _zje = $("#col1").val();//订单金额
             $.ajax({
                 async: false,
                 beforeSend: function () {
@@ -355,7 +373,7 @@
             $("#pl_fl").show();
         });
         $("#pl_fl_ok").click(function () {
-            if (!$.isNumeric($("#pl_fl_sy").val())) {
+            if (!$.isNumeric($("#pl_fl_sy").val()) && $("#pl_fl_sy").val() != "") {
                 alert("使用返利金额的录入不正确！");
                 return;
             }
@@ -365,7 +383,28 @@
             }
             $("#sel_zk").val("1");
             $("#tx_zk").val($("#pl_fl_sy").val());
+            if ($("#pl_fl_sy").val() == "")
+            {
+                $("#tx_zk").val("0").val();
+            }
             $("#pl_fl").hide();
+            var zongje = $("#tx_zje").val();
+            var zhekouje = $("#tx_zk").val();
+            var _zkl = 1 - zhekouje / zongje;
+            $("#dt_sp tbody tr").each(function () {
+                var _rtd = $(this).find("td");
+                var _sl = _rtd.eq(4).text();
+                var _dj = _rtd.eq(5).text();
+                //var _ndj = (Number(_dj) * Number(_zkl)).toFixed(2)
+                //_rtd.eq(6).text(_ndj);
+                //_rtd.eq(7).text((Number(_ndj) * Number(_sl)).toFixed(2));
+                var _ndj = Number(_dj) * Number(1 - zhekouje / zongje);
+                _rtd.eq(6).text(Number(_ndj).toFixed(2));
+                _rtd.eq(7).text((Number(_ndj) * Number(_sl)).toFixed(2));
+            });
+            DatarowCount();
+            var je = (Number($("#col1").val()) - Number(zhekouje)).toFixed(2);
+            $("#tx_zje").val(je);
         });
         $("#pl_fl_close").click(function () {
             $("#sel_zk").val("0");
@@ -417,7 +456,7 @@
                 var _sp = _rtd.eq(0).find("input").val();
                 var _sl = _rtd.eq(4).text();
                 var _dj = _rtd.eq(5).text();
-                var _je = _rtd.eq(6).text();
+                var _je = _rtd.eq(7).text();
                 _dt = _dt + _sp + "," + _sl + "," + _dj + "," + _je + ";";
             });
             if (_dt.length > 10) {
@@ -463,6 +502,8 @@
             else
                 alert("请录入需要购买的商品！");
         });
+
+
     });
     //套包商品明细
     function getTaobaoDetail(tbId) {
@@ -486,7 +527,7 @@
                                '<td>' + data[i].Guige + '</td>',
                                '<td>' + data[i].Danwei + '</td>',
                                '<td><span class="tbsp_jiaxs">' + data[i].JiaXS + '</span></td>',
-                               '<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
+                               //'<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
                                '<td><span class="tbsp_shuliang">' + data[i].Shuliang + '</span></td>',
                                '</tr>'
                            ].join("");
@@ -504,14 +545,16 @@
         var _tsl = 0;
         $("#dt_sp tbody tr").each(function () {
             _rc++;
-            var _je = $(this).find("td").eq(6).text();
+            //var _je = $(this).find("td").eq(6).text();
+            var _je = $(this).find("td").eq(5).text();
             var _sl = $(this).find("td").eq(4).text();
-            _tje = _tje + Number(_je);
+            _tje = (Number(_tje) + Number(_je) * Number(_sl)).toFixed(2);
             _tsl = _tsl + Number(_sl);
         });
-        $("#tx_zje").val(Math.round(Number(_tje) * 100) / 100);
+        $("#tx_zje").val(_tje);
+        $("#col1").val(_tje);
         $("#tx_zsl").val(_tsl);
-        $("#tx_zk").val("0");
+        //$("#tx_zk").val("0");
         if (_rc == 0) {
             $("#cpx").attr("disabled", false);
             $("#ordertype").attr("disabled", false);
@@ -522,6 +565,7 @@
         }
         return _rc;
     }
+   
 </script>
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
 <div class="page-content">
@@ -531,6 +575,7 @@
     <input type="hidden" id="sel_zk" value="0" />
     <input type="hidden" id="cust" value="@ViewBag.customer" />
     <input type="hidden" id="cdm" value="@ViewBag.custcode" />
+    <input type="hidden" id="col1" />
     <div class="row">
         <p class="align-center">
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_add"><i class="icon-adn"></i>添加商品</button>
@@ -595,23 +640,43 @@
     </div>
     <div class="row">
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>联系人</label>
+            <label><i class="red"></i>联系人</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" id="tx_lxr" value="@ViewBag.lxr" placeholder="收货联系人" />
+            <input class="form-control" type="text" id="tx_lxr" readonly value="@ViewBag.lxr" placeholder="收货联系人" />
         </div>
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>联系电话</label>
+            <label><i class="red"></i>联系电话</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" id="tx_lxdh" value="@ViewBag.lxdh" placeholder="收货联系电话" />
+            <input class="form-control" type="text" id="tx_lxdh" readonly value="@ViewBag.lxdh" placeholder="收货联系电话" />
         </div>
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>收货地址</label>
+            <label><i class="red"></i>收货地址</label>
         </div>
         <div class="col-sm-5">
-            <input class="form-control" type="text" id="tx_shdz" value="@ViewBag.shdz" placeholder="收货详细地址" />
+            <input class="form-control" type="text" id="tx_shdz" readonly value="@ViewBag.shdz" placeholder="收货详细地址" />
         </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label><i class="red"></i>订单号</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" readonly value="@ViewBag.Bianhao" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="red"></i>发运方式</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.Col2" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="red"></i>结算方式</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.Col3" />
+        </div>  
     </div>
     <div class="row">
         <div class="col-sm-12">
@@ -629,7 +694,8 @@
                                 <td>规格</td>
                                 <td>描述</td>
                                 <td>数量</td>
-                                <td>单价</td>
+                                <td>销售报价</td>
+                                <td>销售单价</td>
                                 <td>金额</td>
                             </tr>
                         </thead>
@@ -639,13 +705,21 @@
                                 <tr>
                                     <td>
                                         @*<label>@string.Format("{0:d}", _i++)</label>*@
-                                        <i class="icon-minus-sign bigger-150 red"></i><input type="hidden" value="@item.SPID">
+                                        <i class="icon-minus-sign bigger-150 red"></i><input type="hidden" id='tbid' value="@item.SPID">
                                     </td>
-                                    <td>@item.SPBM</td>
+                                    @if ((int)ViewBag.cglx == 2)
+                                    {
+                                        <td class="link_tb"><span class="spbm"><button class="btn btn-link" style="padding:0px!important;">@item.SPBM</button></span></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.SPBM</td>
+                                    }
                                     <td>@item.Guige</td>
                                     <td>@item.SPMC</td>
                                     <td>@item.CGSL</td>
                                     <td>@item.XSBJ</td>
+                                    <td>@item.Danjia</td>
                                     <td>@item.Jine</td>
                                 </tr>
                             }
@@ -769,7 +843,7 @@
 @*套包明细*@
 <div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;z-index:99;">
     <div class="panel-heading">
-        <h3 class="panel-title"><b>套包商品</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
+        <h3 class="panel-title"><b>套包信息</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
     </div>
     <div class="panel-body">
         <div class="container-fluid">
@@ -789,7 +863,7 @@
                                                 <th>规格</th>
                                                 <th>基本单位</th>
                                                 <th>销售价</th>
-                                                <th>采购价</th>
+                                                @*<th>采购价</th>*@
                                                 <th>数量</th>
                                             </tr>
                                             <tbody id="tbody_tbsp"></tbody>

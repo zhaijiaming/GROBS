@@ -158,10 +158,10 @@ namespace GROBS.Controllers
                             where = where.Or(ord_fahuodan => ord_fahuodan.DDBH.Contains(ddbh));
                     }
                 }
-                if (!string.IsNullOrEmpty(chukudanbh))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "chukudanbh", chukudanbh, chukudanbhequal, chukudanbhand);
+                if (!string.IsNullOrEmpty(ddbh))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddbh", ddbh, ddbhequal, ddbhand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "chukudanbh", "", chukudanbhequal, chukudanbhand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "ddbh", "", ddbhequal, ddbhand);
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
@@ -1122,26 +1122,30 @@ namespace GROBS.Controllers
             DataTable dt = new DataTable();
             dt.Columns.Add("ChukudanBH", typeof(string));
             dt.Columns.Add("DDBH", typeof(string));
+            dt.Columns.Add("KehuDH", typeof(string));
             dt.Columns.Add("Yunsongdizhi", typeof(string));
             dt.Columns.Add("ChukuRQ", typeof(string));
             dt.Columns.Add("Lianxiren", typeof(string));
             dt.Columns.Add("LianxiDH", typeof(string));
             dt.Columns.Add("Beizhu", typeof(string));
-            dt.Columns.Add("CKCode", typeof(string));
+            //dt.Columns.Add("CKCode", typeof(string));
             dt.Columns.Add("YunsongFS", typeof(string));
+            dt.Columns.Add("Col1", typeof(string));
             dt.Columns.Add("Kddanhao", typeof(string));
             foreach (var item in tempData)
             {
                 DataRow row = dt.NewRow();
                 row["ChukudanBH"] = item.ChukudanBH;
                 row["DDBH"] = item.DDBH;
+                row["KehuDH"] = item.KehuDH;
                 row["Yunsongdizhi"] = item.Yunsongdizhi;
                 row["ChukuRQ"] = item.ChukuRQ == null ? "" : Convert.ToDateTime(item.ChukuRQ).ToString("yyyy-MM-dd");
                 row["Lianxiren"] = item.Lianxiren;
                 row["LianxiDH"] = item.LianxiDH;
                 row["Beizhu"] = item.Beizhu;
-                row["CKCode"] = item.CKCode;
+                //row["CKCode"] = item.CKCode;
                 row["YunsongFS"] = item.YunsongFS;
+                row["Col1"] = item.Col1;
                 row["Kddanhao"] = item.Kddanhao;
                 dt.Rows.Add(row);
             }
@@ -1179,33 +1183,62 @@ namespace GROBS.Controllers
             ViewBag.lxdh = _dd.LianxiDH;
             //运送地址
             ViewBag.ysdz = _dd.Yunsongdizhi;
+            //采购入库
+            ViewBag.cglx = _dd.CGLX;
             var _fhmx = ServiceFactory.ord_fahuomxservice.LoadSortEntities(p => p.ChukuID == _dd.ID && p.IsDelete == false, true, s => s.ShangpinDM).ToList();
             ViewBag.ord_fahuomx = _fhmx;
             return View();
         }
-
-
         //发货数量统计
+        //public ActionResult fahuodanlistQty(int id)
+        //{
+        //    var tempData = ob_ord_fahuodanservice.LoadEntities(ord_fahuodan => ord_fahuodan.DDID == id && ord_fahuodan.IsDelete == false).ToList<ord_fahuodan>();
+
+        //    var fahuomxData = new List<ord_fahuomx>();
+
+        //    foreach (var ord_fahuodan in tempData)
+        //    {
+        //        var _fhmx = ServiceFactory.ord_fahuomxservice.LoadEntities(p => p.ChukuID == ord_fahuodan.ID && p.IsDelete == false).ToList();
+
+        //        foreach (var item in _fhmx)
+        //        {
+        //            fahuomxData.Add(item);
+        //        }
+        //    }
+
+        //    ViewBag.ord_fahuomx = fahuomxData;
+        //    return View(fahuomxData);
+        //}
         public ActionResult fahuodanlistQty(int id)
         {
-            var tempData = ob_ord_fahuodanservice.LoadEntities(ord_fahuodan => ord_fahuodan.DDID == id && ord_fahuodan.IsDelete == false).ToList<ord_fahuodan>();
-
-            var fahuomxData = new List<ord_fahuomx>();
-
-            foreach (var ord_fahuodan in tempData)
-            {
-                var _fhmx = ServiceFactory.ord_fahuomxservice.LoadEntities(p => p.ChukuID == ord_fahuodan.ID && p.IsDelete == false).ToList();
-
-                foreach (var item in _fhmx)
-                {
-                    fahuomxData.Add(item);
-                }
-            }
-
-            ViewBag.ord_fahuomx = fahuomxData;
-            return View(fahuomxData);
+            //string _custid = (string)Session["customer_id"];
+            var _dd = ob_ord_fahuodanservice.GetEntityById(p => p.DDID == id && p.IsDelete == false);
+            if (_dd == null)
+                return View();
+            //发货单号
+            ViewBag.fhdh = _dd.ChukudanBH;
+            //销售单号
+            ViewBag.xsdh = _dd.KehuDH;
+            //订单序号
+            ViewBag.ddxh = _dd.DDID;
+            //定单编号
+            ViewBag.ddbh = _dd.DDBH;
+            //发货日期
+            ViewBag.fhrq = Convert.ToDateTime(_dd.ChukuRQ).ToString("yyyy-MM-dd");
+            //备注
+            ViewBag.bz = _dd.Beizhu;
+            //制单日期
+            ViewBag.zdrq = Convert.ToDateTime(_dd.MakeDate).ToString("yyyy-MM-dd");
+            //联系人
+            ViewBag.lxr = _dd.Lianxiren;
+            //联系电话
+            ViewBag.lxdh = _dd.LianxiDH;
+            //运送地址
+            ViewBag.ysdz = _dd.Yunsongdizhi;
+            var _fhmx = ServiceFactory.ord_fahuomxservice.LoadSortEntities(p => p.ChukuID == _dd.ID && p.IsDelete == false, true, s => s.ShangpinDM).ToList();
+            ViewBag.ord_fahuomx = _fhmx;
+            return View();
         }
-
 
         [HttpPost]
         [ValidateAntiForgeryToken]

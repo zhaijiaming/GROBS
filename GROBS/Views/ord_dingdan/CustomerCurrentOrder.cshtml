@@ -52,16 +52,20 @@
         });
         $("#bt_deleteInfo").click(function () {
             var sDel = "";
+            var isreturn = false;
             $("#dt_active tr input[type=checkbox]").each(function () {
                 if (this.checked) {
                     var _st = $(this).data("state");
                     if (Number(_st) > 10) {
                         alert("只有新建的订单才能删除，如需删除其他状态订单，需联络平台客服！");
+                        isreturn = true;
                         return;
                     }
                     sDel = sDel + ", " + $(this).val()
                 }
             });
+            if (isreturn)
+            { return;}
             if (sDel.length < 2) {
                 alert("请选择需要删除的订单！");
                 return;
@@ -132,6 +136,10 @@
             window.open("/ord_dingdan/uploadbankticket/" + _sid, "_parent");
         });
         $("#bt_refer").click(function () {
+            if (confirm("确定要提交订单吗？(提交以后将无法修改订单)")) {
+            } else {
+                return;
+            }
             var _sid = "";
             var _sst = 0;
             $("#dt_active tbody tr input[type=checkbox]").each(function () {
@@ -382,20 +390,46 @@
             </div>
             <div class="row">
                 <p class="align-center">
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_addInfo"><i class="icon-adn"></i>新增</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo"><i class="icon-edit"></i><b>编辑</b></button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_deleteInfo"><i class="icon-remove"></i>作废</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_refer"><i class="icon-hand-up"></i>提交</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_collect"><i class="icon-upload"></i>结算</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_recieve"><i class="icon-shopping-cart"></i>收货</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_sendInfo"><i class="icon-plane"></i>发货</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_qianInfo"><i class="icon-truck"></i>欠货</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
-                    <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_export" onclick="javascript: window.open('/ord_dingdan/CustomerCurrentOrderExportFile')"><i class="icon-inbox"></i>导出</button>
+                    @*<div class="col-sm-12">*@
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_addInfo"><i class="icon-adn"></i>订单新增</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo"><i class="icon-edit"></i><b>订单编辑</b></button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_deleteInfo"><i class="icon-remove"></i>订单作废</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_refer"><i class="icon-hand-up"></i>订单提交</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_collect"><i class="icon-upload"></i>凭证上传</button>
+                    @*</div>*@
+                    @*<button type="button" class="btn btn-primary btn-xs btn-app" id="bt_recieve"><i class="icon-shopping-cart"></i>收货</button>*@
+                    @*<div class="col-sm-4">
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_export" onclick="javascript: window.open('/ord_dingdan/CustomerCurrentOrderExportFile')"><i class="icon-inbox"></i>导出</button>
+                    </div>
+                    <div class="col-sm-3">
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_sendInfo"><i class="icon-plane"></i>发货清单</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_qianInfo"><i class="icon-truck"></i>缺货</button>
+                    </div>*@
+
                 </p>
             </div>
+            <div class="row">
+                <p class="align-center">
+                    @*<div class="col-sm-12">*@
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_searchInfo" data-toggle="modal" data-target="#myModal"><i class="icon-search"></i>查询</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_export" onclick="javascript: window.open('/ord_dingdan/CustomerCurrentOrderExportFile')"><i class="icon-inbox"></i>导出</button>
+                    @*</div>*@
+                </p>
+            </div>
+            <div class="row">
+                <p class="align-center">
+                    @*<div class="col-sm-12">*@
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_historyInfo"><i class="icon-list"></i>历史</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_sendInfo"><i class="icon-plane"></i>发货清单</button>
+                        <button type="button" class="btn btn-primary btn-xs btn-app" id="bt_qianInfo"><i class="icon-truck"></i>缺货</button>
+                    @*</div>*@
+                </p>
+            </div>
+
             <hr />
             <div class="row">
                 <div class="col-sm-12">
@@ -416,13 +450,14 @@
                                         <td>@Html.ActionLink("客户单号", "CustomerCurrentOrder", new { sortOrder = ViewBag.KehuDHParm })</td>
                                         <td>@Html.ActionLink("下单日期", "CustomerCurrentOrder", new { sortOrder = ViewBag.XiadanRQParm })</td>
                                         @*<td>联系人</td>
-                                            <td>联系电话</td>
-                                            <td>送货地址</td>*@
+                                        <td>联系电话</td>
+                                        <td>送货地址</td>*@
                                         <td>采购总数</td>
                                         @*<td>待发数量</td>*@
                                         <td>已发数量</td>
+                                        <td>待发数量</td>
                                         <td>欠货数量</td>
-                                        <td>采购金额</td>
+                                        @*<td>采购金额</td>*@
                                         <td>折扣金额</td>
                                         <td>实付金额</td>
                                         <td>备注</td>
@@ -443,14 +478,16 @@
                                                 <td>@item.KehuDH</td>
                                                 <td>@item.XiadanRQ</td>
                                                 @*<td>@item.Lianxiren</td>
-                                                    <td>@item.LianxiDH</td>
-                                                    <td>@item.SonghuoDZ</td>*@
+                                                <td>@item.LianxiDH</td>
+                                                <td>@item.SonghuoDZ</td>*@
                                                 <td>@item.ZongshuCG</td>
                                                 <td><a style="cursor:pointer;" href="/ord_fahuodan/fahuodanlistQty/@item.ID" target="_blank">@String.Format("{0:N0}", ViewBag.fhsl[i] == "0" ? "" : @ViewBag.fhsl[i])</a></td>
-                                                <td><a style="cursor:pointer;" href="/ord_qianhuo/customerowelistQty/@item.ID" target="_blank">@String.Format("{0:N0}", ViewBag.fhsl[i] == "" ? "" : (item.ZongshuCG - float.Parse(ViewBag.fhsl[i])))</a></td>
-                                                <td>@String.Format("{0:N}", item.Zongjine)</td>
+                                                <td>@String.Format("{0:N0}", ViewBag.fhsl[i] == "" ? "" : (item.ZongshuCG - float.Parse(ViewBag.fhsl[i]) - float.Parse(ViewBag.qhsl[i])))</td>
+                                                <td><a style="cursor:pointer;" href="/ord_qianhuo/customerowelistQty/@item.ID" target="_blank">@String.Format("{0:N0}", ViewBag.fhsl[i] == "" ? "" : @ViewBag.qhsl[i])</a></td>
+                                                @*<td>@String.Format("{0:N}", item.Zongjine)</td>*@
                                                 <td>@String.Format("{0:N}", item.ZhekouJE)</td>
-                                                <td>@String.Format("{0:C}", item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE))</td>
+                                                @*<td>@String.Format("{0:C}", item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE))</td>*@
+                                                <td>@String.Format("{0:C}", item.Zongjine)</td>
                                                 <td>@item.Beizhu</td>
                                             </tr>
                                             i++;
@@ -463,5 +500,6 @@
                 </div>
             </div>
         </div>
+
     </div>
 </div>

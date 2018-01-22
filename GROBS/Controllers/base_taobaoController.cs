@@ -156,8 +156,8 @@ namespace GROBS.Controllers
                 ob_base_taobao.Daima = daima.Trim();
                 ob_base_taobao.Mingcheng = mingcheng.Trim();
                 ob_base_taobao.Miaoshu = miaoshu.Trim();
-                ob_base_taobao.JiaXS = jiaxs == "" ? 0 : float.Parse(jiaxs);
-                ob_base_taobao.JiaCG = jiacg == "" ? 0 : float.Parse(jiacg);
+                ob_base_taobao.JiaXS = jiaxs == "" ? 0 : decimal.Parse(jiaxs);
+                ob_base_taobao.JiaCG = jiacg == "" ? 0 : decimal.Parse(jiacg);
                 ob_base_taobao.XSDW = xsdw.Trim();
                 ob_base_taobao.TingyongSF = tingyongsf == "" ? false : Boolean.Parse(tingyongsf);
                 ob_base_taobao.KongzhiSF = kongzhisf == "" ? false : Boolean.Parse(kongzhisf);
@@ -230,8 +230,8 @@ namespace GROBS.Controllers
                 p.Daima = daima.Trim();
                 p.Mingcheng = mingcheng.Trim();
                 p.Miaoshu = miaoshu.Trim();
-                p.JiaXS = jiaxs == "" ? 0 : float.Parse(jiaxs);
-                p.JiaCG = jiacg == "" ? 0 : float.Parse(jiacg);
+                p.JiaXS = jiaxs == "" ? 0 : decimal.Parse(jiaxs);
+                p.JiaCG = jiacg == "" ? 0 : decimal.Parse(jiacg);
                 p.XSDW = xsdw.Trim();
                 p.TingyongSF = tingyongsf == "" ? false : Boolean.Parse(tingyongsf);
                 p.KongzhiSF = kongzhisf == "" ? false : Boolean.Parse(kongzhisf);
@@ -344,7 +344,7 @@ namespace GROBS.Controllers
                     _pro.JiaXS = _sp.JiaXS;
                     _pro.Mingcheng = _sp.Mingcheng;
                     _pro.Shuliang = _sl;
-                    _pro.Jine = _pro.JiaXS * _pro.Shuliang;
+                    _pro.Jine = _pro.JiaXS * (decimal)_pro.Shuliang;
                     _products.Add(_pro);
                 }
                 return Json(_products);

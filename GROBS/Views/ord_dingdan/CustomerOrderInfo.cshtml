@@ -3,7 +3,7 @@
 @using X.PagedList
 @using X.PagedList.Mvc
 @{
-    ViewBag.Title = "采购单";
+    ViewBag.Title = "订单处理";
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
     var _i = 1;
     var _pz = ViewBag.fkpz;
@@ -11,17 +11,144 @@
 <script type="text/javascript">
     $(document).ready(function () {
         $("tr").bind("dblclick", function () {
-            var u_id = $(this).find('td').eq(0).find('input').val();
+            var u_id = $(this).find('td').eq(1).find('input').val();
             //if (u_id != null) {
             //    var url_go = "/ord_dingdan/Edit/" + u_id;
             //    location.href = url_go;
             //}
         });
-
+        $(".zhekoulv").hide();
+        $(".spid").hide();
         $("#bt_return").click(function () {
             window.history.back(-1);
         })
+
+        DatarowCount("all");
+        $("#dt_sp .col").attr("style", "color:red;");
+
+        /*
+         采购类型 == 2
+         查看套包商品
+        */
+        $("#containerTbsp").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#dt_sp tbody").on("click", "tr", function (e) {
+            if (e.target.tagName == "BUTTON") {
+                var _tbid = $(this).find("#tbid").val();
+                $("#containerTbsp").show();
+                getTaobaoDetail(_tbid);
+            }
+        });
+        $("#container_close_tbsp").on("click", function () {
+            $("#containerTbsp").hide();
+        });
     });
+
+    //function DatarowCount() {
+    //    var _rc = 0;
+    //    var _tje = 0;
+    //    var _tsl = 0;
+    //    var _hang = 0;
+    //    var _zhe = 0;
+    //    $("#dt_sp tbody tr").each(function () {
+    //        _rc++;
+    //        if ($(this).find("td").eq(8).text() != "") {
+    //            var _je = $(this).find("td").eq(9).text();
+    //            var _sl = $(this).find("td").eq(8).text();
+    //            var _z = Number($(this).find("td").eq(11).text());
+    //            var reg = /,/g;
+    //            _je = _je.replace(reg, '');
+    //            _hang = (Math.round( Number(_je) * 100) / 100)*(Math.round(Number(_sl) * 100) / 100);
+    //            $(this).find("td").eq(10).text(toThousands(_hang));
+    //            _tje = _tje + Number(_je) * Number(_sl);
+    //            _tsl = _tsl + Number(_sl);
+    //            if(_z != "1")
+    //            {
+    //                _zhe = _zhe + (1 - _z) / _z * Number(_je) * Number(_sl);
+    //            }
+    //        }
+    //    });
+    //    $("#tx_zk").val(toThousands(Math.round(_zhe * 100) / 100));
+    //    $("#tx_zje").val(toThousands(Math.round((Number(_tje) + _zhe) * 100) / 100));
+    //    if (_rc == 0) {
+    //        $("#cpx").attr("disabled", false);
+    //        $("#ordertype").attr("disabled", false);
+    //    }
+    //    if (_rc >= 1) {
+    //        $("#cpx").attr("disabled", true);
+    //        $("#ordertype").attr("disabled", true);
+    //    }
+    //    return _rc;
+    //}
+    function DatarowCount(payway) {
+        var _hang = 0;
+        $("#dt_sp tbody tr").each(function () {
+            if ($(this).find("td").eq(8).text() != "" && Number(@ViewBag.Zhuangtai) < 16)
+            {
+                var _je = $(this).find("td").eq(9).text();
+                var a_sl = $(this).find("td").eq(5).text();
+                var p_sl = $(this).find("td").eq(8).text();
+                var reg = /,/g;
+                _je = _je.replace(reg, '');
+                $("#tx_zk").val(toThousands(@ViewBag.zhe_all));
+                $("#tx_zje").val(toThousands(@ViewBag.zong_all));
+                if (payway == "all") {
+                    _hang = (Number(_je) * Number(a_sl)).toFixed(2);
+            }
+            //else if (payway == "part") {
+            //    _hang = (Math.round(Number(_je) * 100) / 100) * (Math.round(Number(p_sl) * 100) / 100);
+            //}
+            $(this).find("td").eq(10).text(toThousands(_hang));
+        }
+        });
+    }
+    //套包商品明细
+    function getTaobaoDetail(tbId) {
+        var str = "";
+        var tbId = tbId;
+        $.post(
+            "/base_taobaosp/getdetail",
+                {
+                    tbId: tbId
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       var serialNum = 0;
+                       for (var i in data) {
+                           serialNum++;
+                           str += [
+                               '<tr>',
+                               '<td><input type="hidden" value="' + data[i].ID + '">' + serialNum + '</td>',
+                               '<td><span class="daima_tbsp">' + data[i].Daima + '</span></td>',
+                               '<td><span class="mingcheng_tbsp">' + data[i].Mingcheng + '</span></td>',
+                               '<td>' + data[i].Guige + '</td>',
+                               '<td>' + data[i].Danwei + '</td>',
+                               '<td><span class="tbsp_jiaxs">' + data[i].JiaXS + '</span></td>',
+                               //'<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
+                               '<td><span class="tbsp_shuliang">' + data[i].Shuliang + '</span></td>',
+                               '</tr>'
+                           ].join("");
+                       }
+                       $("#tbody_tbsp").html(str);
+                   } else {
+                       $("#tbody_tbsp").empty();
+                   }
+               }
+            );
+    }
+    function toThousands(num) //值：num
+    {
+        var source = String(num).split(".");//按小数点分成2部分
+        source[0] = source[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");//只将整数部分进行都好分割
+        var _num = source.join(".");//再将小数部分合并进来
+        if (_num.indexOf(".") <= -1)
+        {
+            _num = _num + ".00"
+        }
+        if (_num.length - _num.lastIndexOf(".") == 2) {
+            _num = _num + "0"
+        }
+        return _num;
+    };
 </script>
 
 
@@ -37,7 +164,7 @@
             <i class="icon-file-text bigger-200 green"></i>
         }
         <span class="bigger-150 blue">订单详情</span>
-            <button type="button" class="btn btn-primary btn-xs btn-dingdan" id="bt_return"><i class="icon-circle-arrow-left"></i>返回</button>
+            <button type="button" class="btn btn-primary btn-xs btn-dingdan" style="float:right;height:40px;width:60px;" id="bt_return"><i class="icon-circle-arrow-left" ></i>返回</button>
         </p>
     </div>
     <hr />
@@ -64,7 +191,7 @@
             <label>订单金额</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@string.Format("{0:N}", ViewBag.je)" />
+            <input class="form-control" type="text" id="tx_zje" readonly value="@string.Format("{0:N}", ViewBag.je)" />
         </div>
     </div>
     <div class="row">
@@ -84,28 +211,48 @@
             <label>折扣金额</label>
         </div>
         <div class="col-sm-2">
-            <input class="form-control" type="text" readonly value="@ViewBag.zk" />
+            <input class="form-control" type="text" id="tx_zk" readonly value="@ViewBag.zk" />
         </div>
     </div>   
     <div class="row">
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>联系人</label>
+            <label><i class="red"></i>联系人</label>
         </div>
         <div class="col-sm-2">
             <input class="form-control" type="text" readonly value="@ViewBag.lxr" />
         </div>
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>联系电话</label>
+            <label><i class="red"></i>联系电话</label>
         </div>
         <div class="col-sm-2">
             <input class="form-control" type="text" readonly value="@ViewBag.lxdh" />
         </div>
         <div class="col-sm-1">
-            <label><i class="icon-star red"></i>收货地址</label>
+            <label><i class="red"></i>收货地址</label>
         </div>
         <div class="col-sm-5">
             <input class="form-control" type="text" readonly value="@ViewBag.shdz" />
         </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label><i class="red"></i>订单号</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" readonly value="@ViewBag.Bianhao" />
+        </div>     
+        <div class="col-sm-1">
+            <label><i class="red"></i>发运方式</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.Col2" />
+        </div>   
+        <div class="col-sm-1">
+            <label><i class="red"></i>结算方式</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.Col3" />
+        </div>   
     </div>
     <div class="row">
         <div class="col-sm-12">
@@ -118,36 +265,87 @@
                         <caption><i class="icon-edit"></i>采购商品列表</caption>
                         <thead>
                             <tr>
+                                <td class="spid">id</td>
                                 <td></td>
                                 <td>代码</td>
                                 <td>规格</td>
                                 <td>描述</td>
                                 <td>数量</td>
-                                <td>单价</td>
+                                <td>销售报价</td>
+                                <td>销售单价</td>
                                 <td>批复数量</td>
                                 <td>批复单价</td>
                                 <td>金额</td>
+                                @*<td class="zhekoulv">折扣率</td>*@
                             </tr>
                         </thead>
                         <tbody>
                             @foreach (var item in ViewBag.ord_dingdanmx)
                             {
                                 <tr>
+                                    <td class="spid"><i class='icon-minus-sign bigger-150 red'></i><input type='hidden' id='tbid' value='@item.SPID'/></td>
                                     <td>
-                                        <label>@string.Format("{0:d}",_i++)</label>
+                                        <label>@string.Format("{0:d}", _i++)</label>
                                     </td>
-                                    <td>@item.SPBM</td>
+                                    @if ((int)ViewBag.cglx == 2)
+                                    {
+                                        <td class="link_tb"><span class="spbm"><button class="btn btn-link" style="padding:0px!important;">@item.SPBM</button></span></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.SPBM</td>
+                                    }
                                     <td>@item.Guige</td>
                                     <td>@item.SPMC</td>
                                     <td>@item.CGSL</td>
                                     <td>@string.Format("{0:N}", item.XSBJ)</td>
-                                    <td>@item.Col1</td>
-                                    <td>@(item.XSDJ==null?"":string.Format("{0:N}", item.XSDJ))</td>
-                                    <td>@string.Format("{0:N}", item.Jine)</td>
+                                    <td>@string.Format("{0:N}", item.Danjia)</td>
+                                    <td class="col">@item.PFSL</td>
+                                    <td class="col">@(item.XSDJ == null ? "" : string.Format("{0:N}", item.XSDJ))</td>
+                                    <td class="col">@string.Format("{0:N}", item.Jine)</td>
+                                    @*<td class="zhekoulv">@item.Zhekoulv</td>*@
                                 </tr>
                             }
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*套包明细*@
+<div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;z-index:99;">
+    <div class="panel-heading">
+        <h3 class="panel-title"><b>套包信息</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:310px;min-height:100px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>商品代码</th>
+                                                <th>商品名称</th>
+                                                <th>规格</th>
+                                                <th>基本单位</th>
+                                                <th>销售价</th>
+                                                @*<th>采购价</th>*@
+                                                <th>数量</th>
+                                            </tr>
+                                            <tbody id="tbody_tbsp"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

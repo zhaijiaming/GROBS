@@ -1270,7 +1270,7 @@ namespace GROBS.Controllers
                     _pro.JiaXS = _sp.First().JiaXS;
                     _pro.Mingcheng = _sp.First().Mingcheng;
                     _pro.Shuliang = _sl;
-                    _pro.Jine = _pro.JiaXS * _pro.Shuliang;
+                    _pro.Jine = _pro.JiaXS * (decimal)_pro.Shuliang;
                     _products.Add(_pro);
                 }
                 return Json(_products);

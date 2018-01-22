@@ -10,13 +10,13 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("tr").bind("dblclick", function () {
-            var u_id = $(this).find('td').eq(0).find('input').val();
-            if (u_id != null) {
-                var url_go = "/ord_fahuodan/Edit/" + u_id;
-                location.href = url_go;
-            }
-        });
+        //$("tr").bind("dblclick", function () {
+        //    var u_id = $(this).find('td').eq(0).find('input').val();
+        //    if (u_id != null) {
+        //        var url_go = "/ord_fahuodan/Edit/" + u_id;
+        //        location.href = url_go;
+        //    }
+        //});
         //table样式
         table_config(mydatatable);
         trResize();//初始化表头
@@ -179,13 +179,15 @@
                             <th></th>
                             <th>@Html.ActionLink("发货单号", "fahuodanlist", new { sortOrder = ViewBag.ChukudanBHParm })</th>
                             <th>@Html.ActionLink("订单编号", "fahuodanlist", new { sortOrder = ViewBag.DDBHParm })</th>
+                            <th>客户单号</th>
                             <th>运送地址</th>
                             <th>@Html.ActionLink("发货日期", "fahuodanlist", new { sortOrder = ViewBag.ChukuRQParm })</th>
                             <th>联系人</th>
                             <th>联系电话</th>
                             <th>备注</th>
-                            <th>仓库</th>
+                            @*<th>仓库</th>*@
                             <th>@Html.ActionLink("运送方式", "fahuodanlist", new { sortOrder = ViewBag.YunsongFSParm })</th>
+                            <th>结算方式</th>
                             <th>@Html.ActionLink("快递单号", "fahuodanlist", new { sortOrder = ViewBag.KddanhaoParm })</th>
                         </tr>
                         <tbody>
@@ -196,15 +198,17 @@
                                     <td>
                                         <label><input type="checkbox" value="@item.ID"></label>
                                     </td>
-                                    <td><a href="/ord_fahuodan/fahuodandetails/@item.ID">@item.ChukudanBH</a></td>
+                                    <td><a href="/ord_fahuodan/fahuodandetails/@item.ID" target="_blank">@item.ChukudanBH</a></td>
                                     <td>@*<a href="/ord_dingdan/customerorderinfo/@item.DDID">*@@item.DDBH@*</a>*@</td>
-                                    <td>@item.Yunsongdizhi</td>
+                                    <td>@item.KehuDH</td>
+                                    <td>@item.Yunsongdizhi</td>                                
                                     <td>@item.ChukuRQ.ToString("yyyy-MM-dd")</td>
                                     <td>@item.Lianxiren</td>
                                     <td>@item.LianxiDH</td>
                                     <td>@item.Beizhu</td>
-                                    <td>@item.CKCode</td>
+                                    @*<td>@item.CKCode</td>*@
                                     <td>@item.YunsongFS</td>
+                                    <td>@item.Col1</td>
                                     <td>@item.Kddanhao</td>
                                 </tr>
                             }

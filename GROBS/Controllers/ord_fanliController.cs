@@ -186,8 +186,8 @@ namespace GROBS.Controllers
             {
                 ord_fanli ob_ord_fanli = new ord_fanli();
                 ob_ord_fanli.KHID = khid == "" ? 0 : int.Parse(khid);
-                ob_ord_fanli.Zonge = zonge == "" ? 0 : float.Parse(zonge);
-                ob_ord_fanli.Keyong = keyong == "" ? 0 : float.Parse(keyong);
+                ob_ord_fanli.Zonge = zonge == "" ? 0 : decimal.Parse(zonge);
+                ob_ord_fanli.Keyong = keyong == "" ? 0 : decimal.Parse(keyong);
                 ob_ord_fanli.Col1 = col1.Trim();
                 ob_ord_fanli.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_ord_fanli.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
@@ -238,8 +238,8 @@ namespace GROBS.Controllers
             {
                 ord_fanli p = ob_ord_fanliservice.GetEntityById(ord_fanli => ord_fanli.ID == uid);
                 p.KHID = khid == "" ? 0 : int.Parse(khid);
-                p.Zonge = zonge == "" ? 0 : float.Parse(zonge);
-                p.Keyong = keyong == "" ? 0 : float.Parse(keyong);
+                p.Zonge = zonge == "" ? 0 : decimal.Parse(zonge);
+                p.Keyong = keyong == "" ? 0 : decimal.Parse(keyong);
                 p.Col1 = col1.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);

@@ -21,9 +21,9 @@ namespace GROBS.Models
         [Display(Name = "销售单位")]
         public string XSDW { get; set; }
         [Display(Name = "销售价")]
-        public float? JiaXS { get; set; }
+        public decimal? JiaXS { get; set; }
         [Display(Name = "采购价")]
-        public float? JiaCG { get; set; }
+        public decimal? JiaCG { get; set; }
         [Display(Name = "机动1")]
         public string Col1 { get; set; }
         [Display(Name = "制单日期")]

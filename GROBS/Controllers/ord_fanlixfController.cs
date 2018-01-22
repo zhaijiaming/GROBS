@@ -162,7 +162,7 @@ namespace GROBS.Controllers
                 ord_fanlixf ob_ord_fanlixf = new ord_fanlixf();
                 ob_ord_fanlixf.DDID = ddid == "" ? 0 : int.Parse(ddid);
                 ob_ord_fanlixf.KHID = khid == "" ? 0 : int.Parse(khid);
-                ob_ord_fanlixf.XFJE = xfje == "" ? 0 : float.Parse(xfje);
+                ob_ord_fanlixf.XFJE = xfje == "" ? 0 : decimal.Parse(xfje);
                 ob_ord_fanlixf.Col1 = col1.Trim();
                 ob_ord_fanlixf.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_ord_fanlixf.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
@@ -214,7 +214,7 @@ namespace GROBS.Controllers
                 ord_fanlixf p = ob_ord_fanlixfservice.GetEntityById(ord_fanlixf => ord_fanlixf.ID == uid);
                 p.DDID = ddid == "" ? 0 : int.Parse(ddid);
                 p.KHID = khid == "" ? 0 : int.Parse(khid);
-                p.XFJE = xfje == "" ? 0 : float.Parse(xfje);
+                p.XFJE = xfje == "" ? 0 : decimal.Parse(xfje);
                 p.Col1 = col1.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);

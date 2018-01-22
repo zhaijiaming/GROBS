@@ -13,7 +13,7 @@ namespace GROBS.Models
         [Display(Name = "客户序号")]
         public int? KHID { get; set; }
         [Display(Name = "消费金额")]
-        public float? XFJE { get; set; }
+        public decimal? XFJE { get; set; }
         [Display(Name = "机动1")]
         public string Col1 { get; set; }
         [Display(Name = "制单日期")]

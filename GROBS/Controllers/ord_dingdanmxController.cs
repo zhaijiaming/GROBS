@@ -16,6 +16,10 @@ namespace GROBS.Controllers
     public class ord_dingdanmxController : Controller
     {
         private Iord_dingdanmxService ob_ord_dingdanmxservice = ServiceFactory.ord_dingdanmxservice;
+        private Ibase_taobaospService ob_base_taobaospservice = ServiceFactory.base_taobaospservice;
+        private Ibase_shangpinxxService ob_base_shangpinxxservice = ServiceFactory.base_shangpinxxservice;
+
+
         [OutputCache(Duration = 30)]
         public ActionResult Index(string page)
         {
@@ -197,8 +201,11 @@ namespace GROBS.Controllers
             string hsl = Request["hsl"] ?? "";
             string hsbm = Request["hsbm"] ?? "";
             string jbdw = Request["jbdw"] ?? "";
-            string xsdw = Request["xsdw"] ?? ""; 
-            string col1 = Request["col1"] ?? "";       //批复数量         
+            string xsdw = Request["xsdw"] ?? "";
+            string col1 = Request["col1"] ?? "";        
+            string pfsl = Request["PFSL"] ?? "";       //批复数量
+            string col3 = Request["col3"] ?? "";
+            string col4 = Request["col4"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
             int _id = int.Parse(ddid);
@@ -212,16 +219,19 @@ namespace GROBS.Controllers
                 ob_ord_dingdanmx.Guige = guige.Trim();
                 ob_ord_dingdanmx.CGSL = cgsl == "" ? 0 : float.Parse(cgsl);
                 ob_ord_dingdanmx.FHSL = fhsl == "" ? 0 : float.Parse(fhsl);
-                ob_ord_dingdanmx.XSBJ = xsbj == "" ? 0 : float.Parse(xsbj);
-                ob_ord_dingdanmx.XSDJ = xsdj == "" ? 0 : float.Parse(xsdj);
-                ob_ord_dingdanmx.Jine = jine == "" ? 0 : float.Parse(jine);
-                ob_ord_dingdanmx.Zhekou = zhekou == "" ? 0 : float.Parse(zhekou);
+                ob_ord_dingdanmx.XSBJ = xsbj == "" ? 0 : decimal.Parse(xsbj);
+                ob_ord_dingdanmx.XSDJ = xsdj == "" ? 0 : decimal.Parse(xsdj);
+                ob_ord_dingdanmx.Jine = jine == "" ? 0 : decimal.Parse(jine);
+                ob_ord_dingdanmx.Zhekou = zhekou == "" ? 0 : decimal.Parse(zhekou);
                 ob_ord_dingdanmx.Zhekoulv = zhekoulv == "" ? 0 : float.Parse(zhekoulv);
                 ob_ord_dingdanmx.HSL = hsl == "" ? 0 : float.Parse(hsl);
                 ob_ord_dingdanmx.HSBM = hsbm.Trim();
                 ob_ord_dingdanmx.JBDW = jbdw.Trim();
                 ob_ord_dingdanmx.XSDW = xsdw.Trim();
-                ob_ord_dingdanmx.Col1 = col1 == "" ? "0" : col1;
+                ob_ord_dingdanmx.Col1 = col1.Trim();
+                ob_ord_dingdanmx.PFSL = pfsl == "" ? 0 : float.Parse(pfsl);
+                ob_ord_dingdanmx.Col3 = col3.Trim();
+                ob_ord_dingdanmx.Col4 = col4.Trim();
                 ob_ord_dingdanmx.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_ord_dingdanmx.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdanmx = ob_ord_dingdanmxservice.AddEntity(ob_ord_dingdanmx);
@@ -241,6 +251,8 @@ namespace GROBS.Controllers
             ViewBag.cpx = cpx;
             string cglx = Request["cglx"] ?? "";
             ViewBag.cglx = cglx;
+            string kysl = Request["kysl"] ?? "";
+            ViewBag.kysl = kysl;
 
             ord_dingdanmx tempData = ob_ord_dingdanmxservice.GetEntityById(ord_dingdanmx => ord_dingdanmx.ID == id && ord_dingdanmx.IsDelete == false);
             ViewBag.ord_dingdanmx = tempData;
@@ -258,6 +270,7 @@ namespace GROBS.Controllers
                 ord_dingdanmxviewmodel.CGSL = tempData.CGSL;
                 ord_dingdanmxviewmodel.FHSL = tempData.FHSL;
                 ord_dingdanmxviewmodel.XSBJ = tempData.XSBJ;
+                ord_dingdanmxviewmodel.Danjia = tempData.Danjia;
                 ord_dingdanmxviewmodel.XSDJ = tempData.XSDJ;
                 ord_dingdanmxviewmodel.Jine = tempData.Jine;
                 ord_dingdanmxviewmodel.Zhekou = tempData.Zhekou;
@@ -267,6 +280,9 @@ namespace GROBS.Controllers
                 ord_dingdanmxviewmodel.JBDW = tempData.JBDW;
                 ord_dingdanmxviewmodel.XSDW = tempData.XSDW;
                 ord_dingdanmxviewmodel.Col1 = tempData.Col1;
+                ord_dingdanmxviewmodel.PFSL = tempData.PFSL;
+                ord_dingdanmxviewmodel.Col3 = tempData.Col3;
+                ord_dingdanmxviewmodel.Col4 = tempData.Col4;
                 ord_dingdanmxviewmodel.MakeDate = tempData.MakeDate;
                 ord_dingdanmxviewmodel.MakeMan = tempData.MakeMan;
                 return View(ord_dingdanmxviewmodel);
@@ -290,11 +306,15 @@ namespace GROBS.Controllers
             string jine = Request["jine"] ?? "";
             string zhekou = Request["zhekou"] ?? "";
             string zhekoulv = Request["zhekoulv"] ?? "";
+            string zhekoulv_percent = Request["zhekoulv_percent"] ?? "";
             string hsl = Request["hsl"] ?? "";
             string hsbm = Request["hsbm"] ?? "";
             string jbdw = Request["jbdw"] ?? "";
             string xsdw = Request["xsdw"] ?? "";
             string col1 = Request["col1"] ?? "";
+            string pfsl = Request["pfsl"] ?? "";
+            string col3 = Request["col3"] ?? "";
+            string col4 = Request["col4"] ?? "";
             string makedate = Request["makedate"] ?? "";
             string makeman = Request["makeman"] ?? "";
             int uid = int.Parse(id);
@@ -302,26 +322,43 @@ namespace GROBS.Controllers
             try
             {
                 ord_dingdanmx p = ob_ord_dingdanmxservice.GetEntityById(ord_dingdanmx => ord_dingdanmx.ID == uid);
-                p.DDID = ddid == "" ? 0 : int.Parse(ddid);
-                p.SPID = spid == "" ? 0 : int.Parse(spid);
-                p.SPBM = spbm.Trim();
-                p.SPMC = spmc.Trim();
-                p.Guige = guige.Trim();
-                p.CGSL = cgsl == "" ? 0 : float.Parse(cgsl);
-                p.FHSL = fhsl == "" ? 0 : float.Parse(fhsl);
-                p.XSBJ = xsbj == "" ? 0 : float.Parse(xsbj);
-                p.XSDJ = xsdj == "" ? 0 : float.Parse(xsdj);
-                p.Jine = jine == "" ? 0 : float.Parse(jine);
-                p.Zhekou = zhekou == "" ? 0 : float.Parse(zhekou);
-                p.Zhekoulv = zhekoulv == "" ? 0 : float.Parse(zhekoulv);
-                p.HSL = hsl == "" ? 0 : float.Parse(hsl);
-                p.HSBM = hsbm.Trim();
-                p.JBDW = jbdw.Trim();
-                p.XSDW = xsdw.Trim();
-                p.Col1 = col1 == "" ? "0" : col1;
+                //p.DDID = ddid == "" ? 0 : int.Parse(ddid);
+                //p.SPID = spid == "" ? 0 : int.Parse(spid);
+                //p.SPBM = spbm.Trim();
+                //p.SPMC = spmc.Trim();
+                //p.Guige = guige.Trim();
+                //p.CGSL = cgsl == "" ? 0 : float.Parse(cgsl);
+                //p.FHSL = fhsl == "" ? 0 : float.Parse(fhsl);
+                //p.XSBJ = xsbj == "" ? 0 : float.Parse(xsbj);
+                p.XSDJ = xsdj == "" ? 0 : decimal.Parse(xsdj);
+                ////p.Jine = jine == "" ? 0 : float.Parse(jine);
+                ////p.Zhekou = zhekou == "" ? 0 : float.Parse(zhekou);
+                if (decimal.Parse(xsdj) == p.Danjia)
+                {
+                    p.Jine = decimal.Parse(jine);
+                    p.Zhekou = decimal.Parse(zhekou);
+                }
+                else
+                {
+                    p.Jine = decimal.Parse(xsdj) * decimal.Parse(cgsl);
+                    p.Zhekou = (decimal.Parse(xsbj) - decimal.Parse(xsdj)) * decimal.Parse(cgsl);                  
+                }
+                p.Zhekoulv = zhekoulv_percent == "" ? 0 : (float.Parse(zhekoulv_percent) / 100);
+                //p.HSL = hsl == "" ? 0 : float.Parse(hsl);
+                //p.HSBM = hsbm.Trim();
+                //p.JBDW = jbdw.Trim();
+                //p.XSDW = xsdw.Trim();
+                //p.Col1 = col1.Trim();
+                p.PFSL = pfsl == "" ? 0 : float.Parse(pfsl);
+                //p.Col3 = col3.Trim();
+                //p.Col4 = col4.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdanmxservice.UpdateEntity(p);
+                if (cgsl != pfsl || xsbj != xsdj)
+                {
+
+                }
                 ViewBag.saveok = ViewAddTag.ModifyOk;
             }
             catch (Exception ex)
@@ -369,11 +406,94 @@ namespace GROBS.Controllers
         public JsonResult getDingdanMingXiWithDDID()
         {
             string _ddid = Request["ddid"] ?? "";
+            string _kehudm = Request["kehudm"] ?? "";
+            string _cglx = Request["cglx"] ?? "";
+            WebReference.MStock xcl = new WebReference.MStock();
             if (!string.IsNullOrEmpty(_ddid))
             {
                 var tempdata = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == int.Parse(_ddid) && p.IsDelete == false, true, p => p.DDID).ToList<ord_dingdanmx>();
                 if(tempdata != null)
                 {
+                    foreach (ord_dingdanmx ddmx in tempdata)
+                    {
+                        //不属于套包
+                        if (int.Parse(_cglx) != 2)
+                        {
+                            float u8 = (float)xcl.GetCurrentStock(_kehudm, ddmx.SPBM);
+                            float num = 0;
+                            float num_tb = 0;
+                            try
+                            {
+                                var temp = ServiceFactory.ord_dingdanmxservice.LoadByItemCode(ddmx.SPBM).ToList<ord_lockquantity_v>(); ;
+                                var temp1 = ServiceFactory.ord_dingdanmxservice.LoadByItemCode_TB(ddmx.SPBM).ToList<ord_lockquantitytb_v>(); ;
+                                if (temp == null || temp[0].SPBM == null)
+                                {
+                                    num = 0;
+                                    //ddmx.KYSL = u8;
+                                }
+                                else
+                                {
+                                    num = float.Parse(temp[0].SPBM);
+                                }
+                                if (temp1 == null || temp1[0].SPBM == null)
+                                {
+                                    num_tb = 0;
+                                }
+                                else
+                                {
+                                    num_tb = float.Parse(temp1[0].SPBM);
+                                    //ddmx.KYSL = u8 - float.Parse(temp[0].SPBM);
+                                }
+                                ddmx.KYSL = u8 - num - num_tb;
+                            }
+                            catch
+                            {
+                                //ddmx.KYSL = u8;
+                                ddmx.KYSL = 0;
+                            }
+                        }
+                        //属于套包
+                        else if(int.Parse(_cglx) == 2)
+                        {
+                            try
+                            {
+                                var tempData = ServiceFactory.base_taobaospservice.LoadPackageDetailByID(ddmx.SPID).ToList<base_taobaosp_v>();
+                                string tp1 = "";
+                                string tp2 = "";
+                                foreach (var td in tempData)
+                                {
+                                    float u8 = (float)xcl.GetCurrentStock(_kehudm, td.Daima);
+                                    float num = 0;
+                                    float num_tb = 0;
+                                    var temp = ServiceFactory.ord_dingdanmxservice.LoadByItemCode(td.Daima).ToList<ord_lockquantity_v>(); ;
+                                    var temp1 = ServiceFactory.ord_dingdanmxservice.LoadByItemCode_TB(td.Daima).ToList<ord_lockquantitytb_v>(); ;
+                                    if (temp == null || temp[0].SPBM == null)
+                                    {
+                                        num = 0;
+                                    }
+                                    else
+                                    {
+                                        num = float.Parse(temp[0].SPBM);
+                                    }
+                                    if (temp1 == null || temp1[0].SPBM == null)
+                                    {
+                                        num_tb = 0;
+                                    }
+                                    else
+                                    {
+                                        num_tb = float.Parse(temp1[0].SPBM);
+                                    }
+                                    tp1 = tp1 + (u8 - num - num_tb).ToString() + ",";
+                                    tp2 = tp2 + td.Shuliang.ToString() + ",";
+                                }
+                                ddmx.KYSL = getavli_tb(tp1, tp2);
+                            }
+                            catch(Exception ex)
+                            {
+                                ddmx.KYSL = 0;
+                            }
+                        }
+                    }
                     return Json(tempdata);
                 }
                 else
@@ -385,6 +505,18 @@ namespace GROBS.Controllers
             {
                 return Json(-1);
             }
+        }
+        public int getavli_tb(string tp1, string tp2)
+        {
+            string[] str1 = tp1.Split(',');
+            string[] str2 = tp2.Split(',');
+            int nn = 100000;
+            for (int i = 0; i < str1.Length - 1; i++)
+            {
+                int gr = int.Parse(str1[i]) / int.Parse(str2[i]);
+                nn = nn > gr ? gr : nn;
+            }
+            return nn;
         }
         public JsonResult GetCommodityPrice()
         {
@@ -432,7 +564,7 @@ namespace GROBS.Controllers
                         ob_ord_dingdanmx.FHSL = 0;
                         ob_ord_dingdanmx.XSBJ = _taobao.JiaXS;
                         ob_ord_dingdanmx.XSDJ = _taobao.JiaXS;
-                        ob_ord_dingdanmx.Jine = _taobao.JiaXS * float.Parse(_sl);
+                        ob_ord_dingdanmx.Jine = _taobao.JiaXS * decimal.Parse(_sl);
                         ob_ord_dingdanmx.Zhekou = 0;
                         ob_ord_dingdanmx.Zhekoulv = 0;
                         ob_ord_dingdanmx.HSL = 0;
@@ -440,6 +572,9 @@ namespace GROBS.Controllers
                         ob_ord_dingdanmx.JBDW = "";
                         ob_ord_dingdanmx.XSDW = "";
                         ob_ord_dingdanmx.Col1 = "";
+                        ob_ord_dingdanmx.PFSL = 0;
+                        ob_ord_dingdanmx.Col3 = "";
+                        ob_ord_dingdanmx.Col4 = "";
                         ob_ord_dingdanmx.MakeDate = DateTime.Now;
                         ob_ord_dingdanmx.MakeMan = (int)Session["user_id"];
                         ob_ord_dingdanmx = ob_ord_dingdanmxservice.AddEntity(ob_ord_dingdanmx);
@@ -485,7 +620,7 @@ namespace GROBS.Controllers
                         ob_ord_dingdanmx.FHSL = 0;
                         ob_ord_dingdanmx.XSBJ = _spxx.First().JiaXS;
                         ob_ord_dingdanmx.XSDJ = _spxx.First().JiaXS;
-                        ob_ord_dingdanmx.Jine = ob_ord_dingdanmx.XSBJ * ob_ord_dingdanmx.CGSL;
+                        ob_ord_dingdanmx.Jine = ob_ord_dingdanmx.XSBJ * (decimal)ob_ord_dingdanmx.CGSL;
                         ob_ord_dingdanmx.Zhekou = 0;
                         ob_ord_dingdanmx.Zhekoulv = 0;
                         ob_ord_dingdanmx.HSL = _spxx.First().Huansuanlv;
@@ -493,6 +628,9 @@ namespace GROBS.Controllers
                         ob_ord_dingdanmx.JBDW = _spxx.First().Danwei;
                         ob_ord_dingdanmx.XSDW = _spxx.First().BaozhuangDW;
                         ob_ord_dingdanmx.Col1 = "";
+                        ob_ord_dingdanmx.PFSL = 0;
+                        ob_ord_dingdanmx.Col3 = "";
+                        ob_ord_dingdanmx.Col4 = "";
                         ob_ord_dingdanmx.MakeDate = DateTime.Now;
                         ob_ord_dingdanmx.MakeMan = (int)Session["user_id"];
                         ob_ord_dingdanmx = ob_ord_dingdanmxservice.AddEntity(ob_ord_dingdanmx);

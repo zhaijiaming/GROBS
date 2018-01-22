@@ -16,6 +16,26 @@
             //    location.href = url_go;
             //}
         });
+        DatarowCount("all");
+        $(".mxid").hide();
+        $(".spid").hide();
+        $("#dt_sp .colred").attr("style", "color:red;");
+        $("#dt_sp .colall").attr("style", "color:red;");
+        /*
+        采购类型 == 2
+        查看套包商品
+       */
+        $("#containerTbsp").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#dt_sp tbody").on("click", "tr", function (e) {
+            if (e.target.tagName == "BUTTON") {
+                var _tbid = $(this).find("#tbid").val();
+                $("#containerTbsp").show();
+                getTaobaoDetail(_tbid);
+            }
+        });
+        $("#container_close_tbsp").on("click", function () {
+            $("#containerTbsp").hide();
+        });
         //照片的点击事件
         $(".zcz_browse").click(function () {
             var img_url = $("#zcz a").attr('href');
@@ -26,12 +46,37 @@
         });
         $("#bt_up").click(function () {
             var _file = $("#fkpz").val();
+            var str = "";
+            var val=$('input:radio[name="radio1"]:checked').val();
+            if (val == null)
+            {
+                alert("请先选择付款方式！");
+                return;
+            }
+            if (confirm("付款方式为：" + val + "|总金额：" + $("#je").val() + "\n" + "发运方式：" + $("#col2").val() + "|结算方式：" + $("#col3").val() + "\n" + "是否确认？")) {
+            } else {
+                return;
+            }
+            if (val == "全额付款") {
+                $("#dt_sp tbody tr").each(function () {
+                    var a_sl = $(this).find("td").eq(4).text();
+                    var p_sl = $(this).find("td").eq(7).text();
+                    if (a_sl != p_sl) {
+                        str = str + $(this).find("td").eq(10).text() + "," + (Number(a_sl) - Number(p_sl)).toString() + ";";
+                    }
+                    else if (a_sl < p_sl) {
+                        alert("批复数量不能大于采购数量");
+                        return;
+                    }
+                });
+                val = "1";
+            }
+            else { val = "0"; }
             if(_file=="")
             {
                 alert("请选择需要上传的凭证！");
                 return;
             }
-            
             $.ajax({
                 async: true,
                 beforeSend: function () {
@@ -44,7 +89,12 @@
                 url: "/ord_dingdan/ticketupload",
                 data: {
                     did: $("#ddid").val(),
-                    dfl:$("#fkpz").val()
+                    dfl: $("#fkpz").val(),
+                    payway: val,
+                    zje: $("#je").val(),
+                    zk: $("#zk").val(),
+                    sl: $("#sl").val(),
+                    str: str
                 },
                 success: function (data) {
                     if (data == 1) {
@@ -65,7 +115,111 @@
                 }
             });
         });
+        $('input:radio[name="radio1"]').change(function () {
+            if ($(this).is(":checked")) {
+                if ($(this).val() == "全额付款")
+                {
+                    $("#dt_sp .colall").attr("style", "color:red;");
+                    $("#dt_sp .colpart").attr("style", "color:black;");
+                    $("#je").val(toThousands(@ViewBag.zong_all));
+                    $("#zk").val(toThousands(@ViewBag.zhe_all));
+                    DatarowCount("all")
+                }
+                else if ($(this).val() == "部分付款")
+                {
+                    $("#dt_sp .colall").attr("style", "color:black;");
+                    $("#dt_sp .colpart").attr("style", "color:red;");
+                    $("#je").val(toThousands(@ViewBag.zong_part));
+                    $("#zk").val(toThousands(@ViewBag.zhe_part));
+                    DatarowCount("part")
+                }
+            } else {
+                alert(0);
+            }
+        });
+        
     });
+    function DatarowCount(payway) {
+        //var _rc = 0;
+        var _hang = 0;
+        var sl = 0;
+        $("#dt_sp tbody tr").each(function () {
+            //_rc++;
+            var _je = $(this).find("td").eq(8).text();
+            var a_sl = $(this).find("td").eq(4).text();
+            var p_sl = $(this).find("td").eq(7).text();
+            var reg = /,/g;
+            _je = _je.replace(reg, '');
+            if (payway == "all")
+            {
+                sl = Number(sl) + Number(a_sl);
+                _hang = (Number(_je) * Number(a_sl)).toFixed(2);
+            }
+            else if (payway == "part")
+            {
+                sl = Number(sl) + Number(p_sl);
+                _hang = (Number(_je) * Number(p_sl)).toFixed(2);
+            }
+            $(this).find("td").eq(9).text(toThousands(_hang));
+            $("#sl").val(sl);
+        });
+        //if (_rc == 0) {
+        //    $("#cpx").attr("disabled", false);
+        //    $("#ordertype").attr("disabled", false);
+        //}
+        //if (_rc >= 1) {
+        //    $("#cpx").attr("disabled", true);
+        //    $("#ordertype").attr("disabled", true);
+        //}
+        //return _rc;
+    }
+    function toThousands(num) //值：num 
+    {
+        var source = String(num).split(".");//按小数点分成2部分
+        source[0] = source[0].replace(new RegExp('(\\d)(?=(\\d{3})+$)', 'ig'), "$1,");//只将整数部分进行都好分割
+        var _num = source.join(".");//再将小数部分合并进来
+        if (_num.indexOf(".") <= -1) {
+            _num = _num + ".00"
+        }
+        if (_num.length - _num.lastIndexOf(".") == 2) {
+            _num = _num + "0"
+        }
+        return _num;
+    };
+    //套包商品明细
+    function getTaobaoDetail(tbId) {
+        var str = "";
+        var tbId = tbId;
+        $.post(
+            "/base_taobaosp/getdetail",
+                {
+                    tbId: tbId
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       var serialNum = 0;
+                       for (var i in data) {
+                           serialNum++;
+                           str += [
+                               '<tr>',
+                               '<td><input type="hidden" value="' + data[i].ID + '">' + serialNum + '</td>',
+                               '<td><span class="daima_tbsp">' + data[i].Daima + '</span></td>',
+                               '<td><span class="mingcheng_tbsp">' + data[i].Mingcheng + '</span></td>',
+                               '<td>' + data[i].Guige + '</td>',
+                               '<td>' + data[i].Danwei + '</td>',
+                               '<td><span class="tbsp_jiaxs">' + data[i].JiaXS + '</span></td>',
+                               //'<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
+                               '<td><span class="tbsp_shuliang">' + data[i].Shuliang + '</span></td>',
+                               '</tr>'
+                           ].join("");
+                       }
+                       $("#tbody_tbsp").html(str);
+                   } else {
+                       $("#tbody_tbsp").empty();
+                   }
+               }
+            );
+    }
 </script>
 @Html.GetFileUpload("fkpz", "zcz", "z", "ubt", 1, 0, new Dictionary<string, string>() { { "zcz", "fkpz" } })
 <div id="loading"><img src="~/Imgs/wait.gif" alt="" />...系统正在加载数据,请耐心等待...</div>
@@ -79,56 +233,165 @@
             <hr />
             <div class="row">
                 <div class="col-sm-1">
-                    <label><i class="icon-star red"></i>订单编号</label>
-                </div>
-                <div class="col-sm-3">
-                    <input class="form-control" type="text" readonly value="@ViewBag.ddbh" />
-                </div>
-                <div class="col-sm-1">
                     <label><i class="icon-star red"></i>产品线</label>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <input class="form-control" type="text" readonly value="@ViewBag.cpx" />
                 </div>
                 <div class="col-sm-1">
                     <label><i class="icon-star red"></i>订单类型</label>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <input class="form-control" type="text" readonly value="@Html.GetCommonValue_ID("订单类型",(int)ViewBag.cglx)" />
                 </div>
-            </div>
-            <div class="row">
                 <div class="col-sm-1">
                     <label>商品数量</label>
                 </div>
-                <div class="col-sm-3">
-                    <input class="form-control" type="text" readonly value="@ViewBag.sl" />
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="sl" readonly value="@ViewBag.sl" />
                 </div>
                 <div class="col-sm-1">
                     <label>订单金额</label>
                 </div>
+                <div class="col-sm-2">
+                    @*<input class="form-control" type="text" id="je" readonly value="@ViewBag.je" />*@
+                    <input class="form-control" type="text" id="je" readonly value="@string.Format("{0:N}", ViewBag.zong_all)" />
+                </div>
+                @*<div class="col-sm-1">
+                    <label><i class="icon-star red"></i>订单编号</label>
+                </div>
                 <div class="col-sm-3">
-                    <input class="form-control" type="text" readonly value="@ViewBag.je" />
-                </div>
-                <div class="col-sm-1">
-                    <label>折扣金额</label>
-                </div>
-                <div class="col-sm-3">
-                    <input class="form-control" type="text" readonly value="@ViewBag.zk" />
-                </div>
+                    <input class="form-control" type="text" readonly value="@ViewBag.ddbh" />
+                </div>*@                             
             </div>
+            @*<div class="row">                                   
+            </div>*@
             <div class="row">
                 <div class="col-sm-1">
                     <label>客户单号</label>
                 </div>
-                <div class="col-sm-3">
+                <div class="col-sm-2">
                     <input class="form-control" type="text" readonly value="@ViewBag.khdh" />
                 </div>
                 <div class="col-sm-1">
                     <label>备注</label>
                 </div>
-                <div class="col-sm-7">
+                <div class="col-sm-5">
                     <input class="form-control" type="text" readonly value="@ViewBag.bz" />
+                </div>
+                <div class="col-sm-1">
+                    <label>折扣金额</label>
+                </div>
+                <div class="col-sm-2">
+                    @*<input class="form-control" type="text" id="zk" readonly value="@ViewBag.zk" />*@
+                    <input class="form-control" type="text" id="zk" readonly value="@string.Format("{0:N}", ViewBag.zhe_all)" />
+                </div>
+            </div>
+            <div class="row">            
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>联系人</label>
+                </div>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" readonly value="@ViewBag.lxr" />
+                </div>
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>联系电话</label>
+                </div>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" readonly value="@ViewBag.lxdh" />
+                </div>
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>收货地址</label>
+                </div>
+                <div class="col-sm-5">
+                    <input class="form-control" type="text" readonly value="@ViewBag.shdz" />
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>订单号</label>
+                </div>
+                <div class="col-sm-5">
+                    <input class="form-control" type="text" readonly value="@ViewBag.ddbh" />
+                </div>
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>发运方式</label>
+                </div>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="col2" readonly value="@ViewBag.Col2" />
+                </div>
+                <div class="col-sm-1">
+                    <label><i class="icon-star red"></i>结算方式</label>
+                </div>
+                <div class="col-sm-2">
+                    <input class="form-control" type="text" id="col3" readonly value="@ViewBag.Col3" />
+                </div> 
+            </div>
+            @*<div class="row">
+                <div class="col-sm-1">
+                    <label>付款方式</label>
+                </div>
+                <div class="col-sm-3">
+                    <p><input type="radio" id="pay_all" name="radio1" value="全额付款">全额付款</p>
+                    <p><input type="radio" id="pay_part" name="radio1" value="部分付款">部分付款</p>
+                </div>
+            </div>*@
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="table-wapper-all">
+                        <div class="fixed-table-wapper">
+                            <table class="table table-bordered table-condensed fixed-table-header"></table>
+                        </div>
+                        <div class="table-wapper">
+                            <table class="table table-bordered table-condensed" id="dt_sp">
+                                <caption><i class="icon-edit"></i>采购商品列表</caption>
+                                <thead>
+                                    <tr>
+                                        <td></td>
+                                        <td>代码</td>
+                                        <td>规格</td>
+                                        <td>描述</td>
+                                        <td>数量</td>
+                                        <td>销售报价</td>
+                                        <td>销售单价</td>
+                                        <td>批复数量</td>
+                                        <td>批复单价</td>
+                                        <td>金额</td>
+                                        <td class="mxid">ID</td>
+                                        <td class="spid">id</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in ViewBag.ord_dingdanmx)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <label>@string.Format("{0:d}", _i++)</label>
+                                            </td>
+                                            @if ((int)ViewBag.cglx == 2)
+                                            {
+                                                <td class="link_tb"><span class="spbm"><button class="btn btn-link" style="padding:0px!important;">@item.SPBM</button></span></td>
+                                            }
+                                            else
+                                            {
+                                                <td>@item.SPBM</td>
+                                            }
+                                            <td>@item.Guige</td>
+                                            <td>@item.SPMC</td>
+                                            <td class="colall">@item.CGSL</td>
+                                            <td>@string.Format("{0:N}", item.XSBJ)</td>
+                                            <td>@string.Format("{0:N}", item.Danjia)</td>
+                                            <td class="colpart">@item.PFSL</td>
+                                            <td class="colred">@(item.XSDJ == null ? "" : string.Format("{0:N}", item.XSDJ))</td>
+                                            <td class="colred">@string.Format("{0:N}", item.Jine)</td>
+                                            <td class="mxid">@item.ID</td>
+                                            <td class="spid"><i class='icon-minus-sign bigger-150 red'></i><input type='hidden' id='tbid' value='@item.SPID' /></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
             <hr />
@@ -160,10 +423,59 @@
             <hr />
             <div class="row">
                 <div class="col-sm-3"></div>
-                <div class="col-sm-6 center">
+                <div class="col-sm-3">
+                    <div class="col-sm-4">
+                        <label style="font-size:16px;">付款方式:</label>
+                    </div>
+                    <div class="col-sm-8" >
+                        @*<p><input type="radio" id="pay_all" name="radio1" value="全额付款">全额付款</p>*@
+                        @*<p><input type="radio" id="pay_part" name="radio1" value="部分付款">部分付款</p>*@
+                        <input type="radio" id="pay_all" name="radio1" value="全额付款" style="height:30px;width:30px;"><label for="pay_all" style="height:30px;width:120px;font-size:20px;">全额付款</label><br>
+                        <input type="radio" id="pay_part" name="radio1" value="部分付款" style="height:30px;width:30px;"><label for="pay_part" style="height:30px;width:120px;font-size:20px;">部分付款</label>
+                    </div>
+                </div>
+                <div class="col-sm-4">
                         <button class="btn btn-primary btn-app" id="bt_up"><i class="icon-upload-alt bigger-120"></i>上传凭证</button>
                 </div>
-                <div class="col-sm-3"></div>
+                <div class="col-sm-2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+@*套包明细*@
+<div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;z-index:99;">
+    <div class="panel-heading">
+        <h3 class="panel-title"><b>套包信息</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:310px;min-height:100px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>商品代码</th>
+                                                <th>商品名称</th>
+                                                <th>规格</th>
+                                                <th>基本单位</th>
+                                                <th>销售价</th>
+                                                @*<th>采购价</th>*@
+                                                <th>数量</th>
+                                            </tr>
+                                            <tbody id="tbody_tbsp"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

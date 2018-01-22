@@ -11,11 +11,11 @@ namespace GROBS.Models
         [Display(Name = "商品序号")]
         public int? SPID { get; set; }
         [Display(Name = "销售价")]
-        public float? JiaXS { get; set; }
+        public decimal? JiaXS { get; set; }
         [Display(Name = "采购价")]
-        public float? JiaCG { get; set; }
+        public decimal? JiaCG { get; set; }
         [Display(Name = "内部价")]
-        public float? JiaNB { get; set; }
+        public decimal? JiaNB { get; set; }
         [Display(Name = "机动1")]
         public string Col1 { get; set; }
         [Display(Name = "制单日期")]

@@ -183,8 +183,8 @@ namespace GROBS.Controllers
                 ob_base_taobaosp.HSL = hsl == "" ? 0 : float.Parse(hsl);
                 ob_base_taobaosp.JBDW = jbdw.Trim();
                 ob_base_taobaosp.XSDW = xsdw.Trim();
-                ob_base_taobaosp.JiaXS = jiaxs == "" ? 0 : float.Parse(jiaxs);
-                ob_base_taobaosp.JiaCG = jiacg == "" ? 0 : float.Parse(jiacg);
+                ob_base_taobaosp.JiaXS = jiaxs == "" ? 0 : decimal.Parse(jiaxs);
+                ob_base_taobaosp.JiaCG = jiacg == "" ? 0 : decimal.Parse(jiacg);
                 ob_base_taobaosp.Col1 = col1.Trim();
                 ob_base_taobaosp.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_base_taobaosp.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
@@ -255,8 +255,8 @@ namespace GROBS.Controllers
                 p.HSL = hsl == "" ? 0 : float.Parse(hsl);
                 p.JBDW = jbdw.Trim();
                 p.XSDW = xsdw.Trim();
-                p.JiaXS = jiaxs == "" ? 0 : float.Parse(jiaxs);
-                p.JiaCG = jiacg == "" ? 0 : float.Parse(jiacg);
+                p.JiaXS = jiaxs == "" ? 0 : decimal.Parse(jiaxs);
+                p.JiaCG = jiacg == "" ? 0 : decimal.Parse(jiacg);
                 p.Col1 = col1.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);

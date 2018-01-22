@@ -683,11 +683,12 @@ namespace GROBS.Common
                 headerRow.CreateCell(5).SetCellValue("下单日期");
                 headerRow.CreateCell(6).SetCellValue("采购总数");
                 headerRow.CreateCell(7).SetCellValue("已发数量");
-                headerRow.CreateCell(8).SetCellValue("欠货数量");
-                headerRow.CreateCell(9).SetCellValue("采购金额");
-                headerRow.CreateCell(10).SetCellValue("折扣金额");
-                headerRow.CreateCell(11).SetCellValue("实付金额");
-                headerRow.CreateCell(12).SetCellValue("备注");
+                headerRow.CreateCell(8).SetCellValue("待发数量");
+                headerRow.CreateCell(9).SetCellValue("欠货数量");
+                headerRow.CreateCell(10).SetCellValue("采购金额");
+                headerRow.CreateCell(11).SetCellValue("折扣金额");
+                headerRow.CreateCell(12).SetCellValue("实付金额");
+                headerRow.CreateCell(13).SetCellValue("备注");
                 //设置列宽度
                 for (int index = 0; index < dtSource.Columns.Count; index++)
                 {
@@ -788,14 +789,16 @@ namespace GROBS.Common
             {
                 headerRow.CreateCell(0).SetCellValue("发货单号");
                 headerRow.CreateCell(1).SetCellValue("订单编号");
-                headerRow.CreateCell(2).SetCellValue("运送地址");
-                headerRow.CreateCell(3).SetCellValue("发货日期");
-                headerRow.CreateCell(4).SetCellValue("联系人");
-                headerRow.CreateCell(5).SetCellValue("联系电话");
-                headerRow.CreateCell(6).SetCellValue("备注");
-                headerRow.CreateCell(7).SetCellValue("仓库");
+                headerRow.CreateCell(2).SetCellValue("客户单号");
+                headerRow.CreateCell(3).SetCellValue("运送地址");
+                headerRow.CreateCell(4).SetCellValue("发货日期");
+                headerRow.CreateCell(5).SetCellValue("联系人");
+                headerRow.CreateCell(6).SetCellValue("联系电话");
+                headerRow.CreateCell(7).SetCellValue("备注");
+                //headerRow.CreateCell(7).SetCellValue("仓库");
                 headerRow.CreateCell(8).SetCellValue("运送方式");
-                headerRow.CreateCell(9).SetCellValue("快递单号");
+                headerRow.CreateCell(9).SetCellValue("结算方式");
+                headerRow.CreateCell(10).SetCellValue("快递单号");
                 //设置列宽度
                 for (int index = 0; index < dtSource.Columns.Count; index++)
                 {

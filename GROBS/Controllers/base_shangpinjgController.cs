@@ -186,9 +186,9 @@ namespace GROBS.Controllers
             {
                 base_shangpinjg ob_base_shangpinjg = new base_shangpinjg();
                 ob_base_shangpinjg.SPID = spid == "" ? 0 : int.Parse(spid);
-                ob_base_shangpinjg.JiaXS = jiaxs == "" ? 0 : float.Parse(jiaxs);
-                ob_base_shangpinjg.JiaCG = jiacg == "" ? 0 : float.Parse(jiacg);
-                ob_base_shangpinjg.JiaNB = jianb == "" ? 0 : float.Parse(jianb);
+                ob_base_shangpinjg.JiaXS = jiaxs == "" ? 0 : decimal.Parse(jiaxs);
+                ob_base_shangpinjg.JiaCG = jiacg == "" ? 0 : decimal.Parse(jiacg);
+                ob_base_shangpinjg.JiaNB = jianb == "" ? 0 : decimal.Parse(jianb);
                 ob_base_shangpinjg.Col1 = col1.Trim();
                 ob_base_shangpinjg.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 ob_base_shangpinjg.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
@@ -241,9 +241,9 @@ namespace GROBS.Controllers
             {
                 base_shangpinjg p = ob_base_shangpinjgservice.GetEntityById(base_shangpinjg => base_shangpinjg.ID == uid);
                 p.SPID = spid == "" ? 0 : int.Parse(spid);
-                p.JiaXS = jiaxs == "" ? 0 : float.Parse(jiaxs);
-                p.JiaCG = jiacg == "" ? 0 : float.Parse(jiacg);
-                p.JiaNB = jianb == "" ? 0 : float.Parse(jianb);
+                p.JiaXS = jiaxs == "" ? 0 : decimal.Parse(jiaxs);
+                p.JiaCG = jiacg == "" ? 0 : decimal.Parse(jiacg);
+                p.JiaNB = jianb == "" ? 0 : decimal.Parse(jianb);
                 p.Col1 = col1.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
                 p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);

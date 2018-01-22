@@ -18,14 +18,15 @@ namespace GROBS.Controllers
     {
         private Iord_qianhuoService ob_ord_qianhuoservice = ServiceFactory.ord_qianhuoservice;
         private Iord_dingdanService ob_ord_dingdanservice = ServiceFactory.ord_dingdanservice;
+        private Iord_dingdanmxService ob_ord_dingdanmxservice = ServiceFactory.ord_dingdanmxservice;
         [OutputCache(Duration = 30)]
         public ActionResult Index(string page)
         {
             if (string.IsNullOrEmpty(page))
                 page = "1";
             int userid = (int)Session["user_id"];
-            string pagetag = "ord_qianhuo_index";
-            Expression<Func<ord_qianhuo, bool>> where = PredicateExtensionses.True<ord_qianhuo>();
+            string pagetag = "ord_dingdan_customerowelist";
+            Expression<Func<ord_ordermain_vsss, bool>> where = PredicateExtensionses.True<ord_ordermain_vsss>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc != null && sc.ConditionInfo != null)
             {
@@ -35,45 +36,212 @@ namespace GROBS.Controllers
                     string[] scld = scl.Split(',');
                     switch (scld[0])
                     {
-                        case "mxid":
-                            string mxid = scld[1];
-                            string mxidequal = scld[2];
-                            string mxidand = scld[3];
-                            if (!string.IsNullOrEmpty(mxid))
+                        case "bianhao":
+                            string bianhao = scld[1];
+                            string bianhaoequal = scld[2];
+                            string bianhaoand = scld[3];
+                            if (!string.IsNullOrEmpty(bianhao))
                             {
-                                if (mxidequal.Equals("="))
+                                if (bianhaoequal.Equals("="))
                                 {
-                                    if (mxidand.Equals("and"))
-                                        where = where.And(ord_qianhuo => ord_qianhuo.MXID == int.Parse(mxid));
+                                    if (bianhaoand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
                                     else
-                                        where = where.Or(ord_qianhuo => ord_qianhuo.MXID == int.Parse(mxid));
+                                        where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
                                 }
-                                if (mxidequal.Equals(">"))
+                                if (bianhaoequal.Equals("like"))
                                 {
-                                    if (mxidand.Equals("and"))
-                                        where = where.And(ord_qianhuo => ord_qianhuo.MXID > int.Parse(mxid));
+                                    if (bianhaoand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
                                     else
-                                        where = where.Or(ord_qianhuo => ord_qianhuo.MXID > int.Parse(mxid));
+                                        where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
                                 }
-                                if (mxidequal.Equals("<"))
+                            }
+                            break;
+                        case "Zhuangtai":
+                            string Zhuangtai = scld[1];
+                            string Zhuangtaiequal = scld[2];
+                            string Zhuangtaiand = scld[3];
+                            if (!string.IsNullOrEmpty(Zhuangtai))
+                            {
+                                if (Zhuangtaiequal.Equals("="))
                                 {
-                                    if (mxidand.Equals("and"))
-                                        where = where.And(ord_qianhuo => ord_qianhuo.MXID < int.Parse(mxid));
+                                    if (Zhuangtaiand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
                                     else
-                                        where = where.Or(ord_qianhuo => ord_qianhuo.MXID < int.Parse(mxid));
+                                        where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                                }
+                            }
+                            break;
+                        case "Mingcheng":
+                            string Mingcheng = scld[1];
+                            string Mingchengequal = scld[2];
+                            string Mingchengand = scld[3];
+                            if (!string.IsNullOrEmpty(Mingcheng))
+                            {
+                                if (Mingchengequal.Equals("="))
+                                {
+                                    if (Mingchengand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                                }
+                            }
+                            break;
+                        case "CGLX":
+                            string CGLX = scld[1];
+                            string CGLXequal = scld[2];
+                            string CGLXand = scld[3];
+                            if (!string.IsNullOrEmpty(CGLX))
+                            {
+                                if (CGLXequal.Equals("="))
+                                {
+                                    if (CGLXand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                                }
+                            }
+                            break;
+                        case "KehuDH":
+                            string KehuDH = scld[1];
+                            string KehuDHequal = scld[2];
+                            string KehuDHand = scld[3];
+                            if (!string.IsNullOrEmpty(KehuDH))
+                            {
+                                if (KehuDHequal.Equals("="))
+                                {
+                                    if (KehuDHand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                                }
+                                if (KehuDHequal.Equals("like"))
+                                {
+                                    if (KehuDHand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                                }
+                            }
+                            break;
+                        case "XiadanRQ":
+                            string XiadanRQ = scld[1];
+                            string XiadanRQequal = scld[2];
+                            string XiadanRQand = scld[3];
+                            if (!string.IsNullOrEmpty(XiadanRQ))
+                            {
+                                if (XiadanRQequal.Equals("="))
+                                {
+                                    if (XiadanRQand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                                }
+                                else if (XiadanRQequal.Equals(">"))
+                                {
+                                    if (XiadanRQand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                                }
+                                else
+                                {
+                                    if (XiadanRQand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
                                 }
                             }
                             break;
                         default:
                             break;
                     }
+
                 }
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0 && ord_dingdan.QHSL != 0);
 
-            where = where.And(ord_qianhuo => ord_qianhuo.IsDelete == false);
-
-            var tempData = ob_ord_qianhuoservice.LoadSortEntities(where.Compile(), false, ord_qianhuo => ord_qianhuo.ID).ToPagedList<ord_qianhuo>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_dingdanservice.LoadOweAll(where.Compile()).ToPagedList<ord_ordermain_vsss>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            foreach (var td in tempData)
+            {
+                WebReference.MStock xcl = new WebReference.MStock();
+                //不属于套包
+                if (td.CGLX != 2)
+                {
+                    float u8 = (float)xcl.GetCurrentStock(td.KehuDM, td.SPBM);
+                    float num = 0;
+                    float num_tb = 0;
+                    try
+                    {
+                        var temp = ServiceFactory.ord_dingdanmxservice.LoadByItemCode(td.SPBM).ToList<ord_lockquantity_v>(); ;
+                        var temp1 = ServiceFactory.ord_dingdanmxservice.LoadByItemCode_TB(td.SPBM).ToList<ord_lockquantitytb_v>(); ;
+                        if (temp == null || temp[0].SPBM == null)
+                        {
+                            num = 0;
+                        }
+                        else
+                        {
+                            num = float.Parse(temp[0].SPBM);
+                        }
+                        if (temp1 == null || temp1[0].SPBM == null)
+                        {
+                            num_tb = 0;
+                        }
+                        else
+                        {
+                            num_tb = float.Parse(temp1[0].SPBM);
+                        }
+                        td.KYSL = u8 - num - num_tb;
+                    }
+                    catch
+                    {
+                        td.KYSL = 0;
+                    }
+                }
+                //属于套包
+                else if (td.CGLX == 2)
+                {
+                    try
+                    {
+                        var tb = ServiceFactory.base_taobaospservice.LoadPackageDetailByID(td.SPID).ToList<base_taobaosp_v>();
+                        string tp1 = "";
+                        string tp2 = "";
+                        foreach (var tbs in tb)
+                        {
+                            float u8 = (float)xcl.GetCurrentStock(td.KehuDM, tbs.Daima);
+                            float num = 0;
+                            float num_tb = 0;
+                            var temp = ServiceFactory.ord_dingdanmxservice.LoadByItemCode(tbs.Daima).ToList<ord_lockquantity_v>(); ;
+                            var temp1 = ServiceFactory.ord_dingdanmxservice.LoadByItemCode_TB(tbs.Daima).ToList<ord_lockquantitytb_v>(); ;
+                            if (temp == null || temp[0].SPBM == null)
+                            {
+                                num = 0;
+                            }
+                            else
+                            {
+                                num = float.Parse(temp[0].SPBM);
+                            }
+                            if (temp1 == null || temp1[0].SPBM == null)
+                            {
+                                num_tb = 0;
+                            }
+                            else
+                            {
+                                num_tb = float.Parse(temp1[0].SPBM);
+                            }
+                            tp1 = tp1 + (u8 - num - num_tb).ToString() + ",";
+                            tp2 = tp2 + tbs.Shuliang.ToString() + ",";
+                        }
+                        td.KYSL = getavli_tb(tp1, tp2);
+                    }
+                    catch (Exception ex)
+                    {
+                        td.KYSL = 0;
+                    }
+                }
+            }
             ViewBag.ord_qianhuo = tempData;
             return View(tempData);
         }
@@ -83,85 +251,382 @@ namespace GROBS.Controllers
         public ActionResult Index()
         {
             int userid = (int)Session["user_id"];
-            string pagetag = "ord_qianhuo_index";
+            string pagetag = "ord_dingdan_customerowelist";
             string page = "1";
-            string mxid = Request["mxid"] ?? "";
-            string mxidequal = Request["mxidequal"] ?? "";
-            string mxidand = Request["mxidand"] ?? "";
-            Expression<Func<ord_qianhuo, bool>> where = PredicateExtensionses.True<ord_qianhuo>();
+            //编号
+            string bianhao = Request["bianhao"] ?? "";
+            string bianhaoequal = Request["bianhaoequal"] ?? "";
+            string bianhaoand = Request["bianhaoand"] ?? "and";
+            //订单状态
+            string Zhuangtai = Request["Zhuangtai"] ?? "";
+            string Zhuangtaiequal = Request["ZhuangtaiEqual"] ?? "";
+            string Zhuangtaiand = Request["Zhuangtaiand"] ?? "and";
+            //产品线
+            string Mingcheng = Request["Mingcheng"] ?? "";
+            string Mingchengequal = Request["Mingchengequal"] ?? "";
+            string Mingchengand = Request["Mingchengand"] ?? "and";
+            //订单类型
+            string CGLX = Request["CGLX"] ?? "";
+            string CGLXequal = Request["CGLXequal"] ?? "";
+            string CGLXand = Request["CGLXand"] ?? "and";
+            //客户单号
+            string KehuDH = Request["KehuDH"] ?? "";
+            string KehuDHequal = Request["KehuDHequal"] ?? "";
+            string KehuDHand = Request["KehuDHand"] ?? "and";
+            //下单日期
+            string XiadanRQ = Request["XiadanRQ"] ?? "";
+            string XiadanRQequal = Request["XiadanRQequal"] ?? "";
+            string XiadanRQand = Request["XiadanRQand"] ?? "and";
+            Expression<Func<ord_ordermain_vsss, bool>> where = PredicateExtensionses.True<ord_ordermain_vsss>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
+
+                #region MyRegion
+
                 sc = new searchcondition();
                 sc.UserID = userid;
                 sc.PageBrief = pagetag;
-                if (!string.IsNullOrEmpty(mxid))
+                if (!string.IsNullOrEmpty(bianhao))
                 {
-                    if (mxidequal.Equals("="))
+                    if (bianhaoequal.Equals("="))
                     {
-                        if (mxidand.Equals("and"))
-                            where = where.And(ord_qianhuo => ord_qianhuo.MXID == int.Parse(mxid));
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_ordermain_vsss => ord_ordermain_vsss.Bianhao == bianhao);
                         else
-                            where = where.Or(ord_qianhuo => ord_qianhuo.MXID == int.Parse(mxid));
+                            where = where.Or(ord_ordermain_vsss => ord_ordermain_vsss.Bianhao == bianhao);
                     }
-                    if (mxidequal.Equals(">"))
+                    if (bianhaoequal.Equals("like"))
                     {
-                        if (mxidand.Equals("and"))
-                            where = where.And(ord_qianhuo => ord_qianhuo.MXID > int.Parse(mxid));
+                        if (bianhaoand.Equals("and"))
+                            where = where.And(ord_ordermain_vsss => ord_ordermain_vsss.Bianhao.Contains(bianhao));
                         else
-                            where = where.Or(ord_qianhuo => ord_qianhuo.MXID > int.Parse(mxid));
-                    }
-                    if (mxidequal.Equals("<"))
-                    {
-                        if (mxidand.Equals("and"))
-                            where = where.And(ord_qianhuo => ord_qianhuo.MXID < int.Parse(mxid));
-                        else
-                            where = where.Or(ord_qianhuo => ord_qianhuo.MXID < int.Parse(mxid));
+                            where = where.Or(ord_ordermain_vsss => ord_ordermain_vsss.Bianhao.Contains(bianhao));
                     }
                 }
-                if (!string.IsNullOrEmpty(mxid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mxid", mxid, mxidequal, mxidand);
+                if (!string.IsNullOrEmpty(bianhao))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mxid", "", mxidequal, mxidand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+
+                //订单状态
+                if (!string.IsNullOrEmpty(Zhuangtai))
+                {
+                    if (Zhuangtaiequal.Equals("="))
+                    {
+                        if (Zhuangtaiand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Zhuangtai))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", Zhuangtai, Zhuangtaiequal, Zhuangtaiand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", "", Zhuangtaiequal, Zhuangtaiand);
+
+                //产品线
+                if (!string.IsNullOrEmpty(Mingcheng))
+                {
+                    if (Mingchengequal.Equals("="))
+                    {
+                        if (Mingchengand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                    }
+                }
+                if (!string.IsNullOrEmpty(Mingcheng))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", Mingcheng, Mingchengequal, Mingchengand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", "", Mingchengequal, Mingchengand);
+
+                //订单类型
+                if (!string.IsNullOrEmpty(CGLX))
+                {
+                    if (CGLXequal.Equals("="))
+                    {
+                        if (CGLXand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                    }
+                }
+                if (!string.IsNullOrEmpty(CGLX))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", CGLX, CGLXequal, CGLXand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", "", CGLXequal, CGLXand);
+
+                //客户单号
+                if (!string.IsNullOrEmpty(KehuDH))
+                {
+                    if (KehuDHequal.Equals("="))
+                    {
+                        if (KehuDHand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                    }
+                    if (KehuDHequal.Equals("like"))
+                    {
+                        if (KehuDHand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                    }
+                }
+                if (!string.IsNullOrEmpty(KehuDH))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", KehuDH, KehuDHequal, KehuDHand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", "", KehuDHequal, KehuDHand);
+
+                //下单日期
+                if (!string.IsNullOrEmpty(XiadanRQ))
+                {
+                    if (XiadanRQequal.Equals("="))
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                    }
+                    else if (XiadanRQequal.Equals(">"))
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                    }
+                    else
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                    }
+
+                }
+                if (!string.IsNullOrEmpty(XiadanRQ))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
+
                 searchconditionService.GetInstance().AddEntity(sc);
+
+                #endregion
+
             }
             else
             {
-                sc.ConditionInfo = "";
-                if (!string.IsNullOrEmpty(mxid))
-                {
-                    if (mxidequal.Equals("="))
+                    #region MyRegion
+
+                    sc.ConditionInfo = "";
+                    if (!string.IsNullOrEmpty(bianhao))
                     {
-                        if (mxidand.Equals("and"))
-                            where = where.And(ord_qianhuo => ord_qianhuo.MXID == int.Parse(mxid));
-                        else
-                            where = where.Or(ord_qianhuo => ord_qianhuo.MXID == int.Parse(mxid));
+                        if (bianhaoequal.Equals("="))
+                        {
+                            if (bianhaoand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Bianhao == bianhao);
+                        }
+                        if (bianhaoequal.Equals("like"))
+                        {
+                            if (bianhaoand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Bianhao.Contains(bianhao));
+                        }
                     }
-                    if (mxidequal.Equals(">"))
+                    if (!string.IsNullOrEmpty(bianhao))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+
+                    //订单状态
+                    if (!string.IsNullOrEmpty(Zhuangtai))
                     {
-                        if (mxidand.Equals("and"))
-                            where = where.And(ord_qianhuo => ord_qianhuo.MXID > int.Parse(mxid));
-                        else
-                            where = where.Or(ord_qianhuo => ord_qianhuo.MXID > int.Parse(mxid));
+                        if (Zhuangtaiequal.Equals("="))
+                        {
+                            if (Zhuangtaiand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                        }
                     }
-                    if (mxidequal.Equals("<"))
+                    if (!string.IsNullOrEmpty(Zhuangtai))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", Zhuangtai, Zhuangtaiequal, Zhuangtaiand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", "", Zhuangtaiequal, Zhuangtaiand);
+
+                    //产品线
+                    if (!string.IsNullOrEmpty(Mingcheng))
                     {
-                        if (mxidand.Equals("and"))
-                            where = where.And(ord_qianhuo => ord_qianhuo.MXID < int.Parse(mxid));
-                        else
-                            where = where.Or(ord_qianhuo => ord_qianhuo.MXID < int.Parse(mxid));
+                        if (Mingchengequal.Equals("="))
+                        {
+                            if (Mingchengand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.Mingcheng == Mingcheng);
+                        }
                     }
-                }
-                if (!string.IsNullOrEmpty(mxid))
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mxid", mxid, mxidequal, mxidand);
-                else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "mxid", "", mxidequal, mxidand);
-                searchconditionService.GetInstance().UpdateEntity(sc);
+                    if (!string.IsNullOrEmpty(Mingcheng))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", Mingcheng, Mingchengequal, Mingchengand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", "", Mingchengequal, Mingchengand);
+
+                    //订单类型
+                    if (!string.IsNullOrEmpty(CGLX))
+                    {
+                        if (CGLXequal.Equals("="))
+                        {
+                            if (CGLXand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(CGLX))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", CGLX, CGLXequal, CGLXand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", "", CGLXequal, CGLXand);
+
+                    //客户单号
+                    if (!string.IsNullOrEmpty(KehuDH))
+                    {
+                        if (KehuDHequal.Equals("="))
+                        {
+                            if (KehuDHand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                        }
+                        if (KehuDHequal.Equals("like"))
+                        {
+                            if (KehuDHand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(KehuDH))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", KehuDH, KehuDHequal, KehuDHand);
+                    else
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", "", KehuDHequal, KehuDHand);
+
+                    //下单日期
+                    if (!string.IsNullOrEmpty(XiadanRQ))
+                    {
+                        if (XiadanRQequal.Equals("="))
+                        {
+                            if (XiadanRQand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                        }
+                        else if (XiadanRQequal.Equals(">"))
+                        {
+                            if (XiadanRQand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                        }
+                        else
+                        {
+                            if (XiadanRQand.Equals("and"))
+                                where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                            else
+                                where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                        }
+                    }
+                    if (!string.IsNullOrEmpty(XiadanRQ))
+                        sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
+
+                    searchconditionService.GetInstance().UpdateEntity(sc);
+
+                    #endregion
+                
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            where = where.And(ord_qianhuo => ord_qianhuo.IsDelete == false);
+            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai != 0 && ord_dingdan.QHSL != 0);
 
-            var tempData = ob_ord_qianhuoservice.LoadSortEntities(where.Compile(), false, ord_qianhuo => ord_qianhuo.ID).ToPagedList<ord_qianhuo>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            var tempData = ob_ord_dingdanservice.LoadOweAll(where.Compile()).ToPagedList<ord_ordermain_vsss>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
+            foreach (var td in tempData)
+            {
+                WebReference.MStock xcl = new WebReference.MStock();
+                //不属于套包
+                if (td.CGLX != 2)
+                {
+                    float u8 = (float)xcl.GetCurrentStock(td.KehuDM, td.SPBM);
+                    float num = 0;
+                    float num_tb = 0;
+                    try
+                    {
+                        var temp = ServiceFactory.ord_dingdanmxservice.LoadByItemCode(td.SPBM).ToList<ord_lockquantity_v>(); ;
+                        var temp1 = ServiceFactory.ord_dingdanmxservice.LoadByItemCode_TB(td.SPBM).ToList<ord_lockquantitytb_v>(); ;
+                        if (temp == null || temp[0].SPBM == null)
+                        {
+                            num = 0;
+                        }
+                        else
+                        {
+                            num = float.Parse(temp[0].SPBM);
+                        }
+                        if (temp1 == null || temp1[0].SPBM == null)
+                        {
+                            num_tb = 0;
+                        }
+                        else
+                        {
+                            num_tb = float.Parse(temp1[0].SPBM);
+                        }
+                        td.KYSL = u8 - num - num_tb;
+                    }
+                    catch
+                    {
+                        td.KYSL = 0;
+                    }
+                }
+                //属于套包
+                else if (td.CGLX == 2)
+                {
+                    try
+                    {
+                        var tb = ServiceFactory.base_taobaospservice.LoadPackageDetailByID(td.SPID).ToList<base_taobaosp_v>();
+                        string tp1 = "";
+                        string tp2 = "";
+                        foreach (var tbs in tb)
+                        {
+                            float u8 = (float)xcl.GetCurrentStock(td.KehuDM, tbs.Daima);
+                            float num = 0;
+                            float num_tb = 0;
+                            var temp = ServiceFactory.ord_dingdanmxservice.LoadByItemCode(tbs.Daima).ToList<ord_lockquantity_v>(); ;
+                            var temp1 = ServiceFactory.ord_dingdanmxservice.LoadByItemCode_TB(tbs.Daima).ToList<ord_lockquantitytb_v>(); ;
+                            if (temp == null || temp[0].SPBM == null)
+                            {
+                                num = 0;
+                            }
+                            else
+                            {
+                                num = float.Parse(temp[0].SPBM);
+                            }
+                            if (temp1 == null || temp1[0].SPBM == null)
+                            {
+                                num_tb = 0;
+                            }
+                            else
+                            {
+                                num_tb = float.Parse(temp1[0].SPBM);
+                            }
+                            tp1 = tp1 + (u8 - num - num_tb).ToString() + ",";
+                            tp2 = tp2 + tbs.Shuliang.ToString() + ",";
+                        }
+                        td.KYSL = getavli_tb(tp1, tp2);
+                    }
+                    catch (Exception ex)
+                    {
+                        td.KYSL = 0;
+                    }
+                }
+            }
             ViewBag.ord_qianhuo = tempData;
             return View(tempData);
         }
@@ -1193,6 +1658,91 @@ namespace GROBS.Controllers
                 }
             }
             return RedirectToAction("Index");
+        }
+
+        public JsonResult Ddmake()
+        {
+            int _userid = (int)Session["user_id"];
+            var sid = Request["sid"] ?? "";
+            var kedh = Request["kedh"] ?? "";
+            var sl = Request["sl"] ?? "";
+            var je = Request["je"] ?? "";
+            var ddbh = Request["ddbh"] ?? "";
+            var bz = Request["bz"] ?? "";
+            string[] mxid = sid.Split(',');
+             
+            if (string.IsNullOrEmpty(sid) || string.IsNullOrEmpty(kedh))
+                return Json(-1);
+            ord_dingdan dingdan = ob_ord_dingdanservice.GetEntityById(p => p.Bianhao == ddbh && p.IsDelete ==false);
+            if (dingdan == null)
+            { return Json(-2); }
+            //ord_dingdan dingdan_n = new ord_dingdan();
+            dingdan.ZongshuCG = float.Parse(sl);
+            dingdan.Zongjine = decimal.Parse(je);
+            dingdan.XiadanRQ = DateTime.Now;
+            dingdan.ZhekouJE = 0;
+            dingdan.Beizhu = bz;
+            dingdan.Zhuangtai = 30;
+            dingdan.MakeDate = DateTime.Now;
+            dingdan.MakeMan = _userid;
+            dingdan.ShenheSJ = DateTime.Now;
+            dingdan.ShenheTG = true;
+            dingdan.HH = mxid.Count() - 1;
+            dingdan.Col1 = "1";
+            dingdan = ob_ord_dingdanservice.AddEntity(dingdan);
+            try
+            {
+                foreach (string sD in sid.Split(','))
+                {
+                    if (sD.Length > 0)
+                    {
+                        ord_qianhuo qianhuo = ob_ord_qianhuoservice.GetEntityById(ord_qianhuo => ord_qianhuo.ID == int.Parse(sD) && ord_qianhuo.IsDelete == false);
+                        if (qianhuo == null)
+                        {
+                            return Json(-1);
+                        }
+                        else
+                        {
+                            ord_dingdanmx dingdanmx = ob_ord_dingdanmxservice.GetEntityById(p => p.ID == qianhuo.MXID && p.IsDelete == false);
+                            //ord_dingdanmx _mx = new ord_dingdanmx();
+                            float? num = dingdanmx.CGSL - dingdanmx.PFSL;
+                            dingdanmx.DDID = dingdan.ID;
+                            dingdanmx.CGSL = num;
+                            dingdanmx.PFSL = num;
+                            dingdanmx.FHSL = 0;
+                            dingdanmx.Danjia = dingdanmx.XSDJ;
+                            dingdanmx.Jine = (decimal)num * dingdanmx.XSDJ;
+                            dingdanmx.Zhekou = 0;
+                            dingdanmx.Zhekoulv = 1;
+                            dingdanmx.MakeDate = DateTime.Now;
+                            dingdanmx.MakeMan = _userid;
+                            dingdanmx = ServiceFactory.ord_dingdanmxservice.AddEntity(dingdanmx);
+
+                            qianhuo.QHSL = 0;
+                            ob_ord_qianhuoservice.UpdateEntity(qianhuo);
+                        }
+                    }
+                }
+                return Json(1);
+            }
+            catch (Exception ex)
+            {
+                dingdan.IsDelete = true;
+                ob_ord_dingdanservice.UpdateEntity(dingdan);
+                return Json(-3);
+            }          
+        }
+        public int getavli_tb(string tp1, string tp2)
+        {
+            string[] str1 = tp1.Split(',');
+            string[] str2 = tp2.Split(',');
+            int nn = 100000;
+            for (int i = 0; i < str1.Length - 1; i++)
+            {
+                int gr = int.Parse(str1[i]) / int.Parse(str2[i]);
+                nn = nn > gr ? gr : nn;
+            }
+            return nn;
         }
     }
 }

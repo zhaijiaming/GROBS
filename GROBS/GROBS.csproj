@@ -349,6 +349,7 @@
     <Compile Include="Controllers\ord_xiaoshouController.cs" />
     <Compile Include="Controllers\ord_xiaoshoumxController.cs" />
     <Compile Include="Controllers\rmd_myreminderController.cs" />
+    <Compile Include="Models\ord_ordermain_vsssViewModel.cs" />
     <Compile Include="Models\auth_gongsiViewModel.cs" />
     <Compile Include="Models\auth_kehuViewModel.cs" />
     <Compile Include="Models\base_bumenViewModel.cs" />
@@ -379,6 +380,11 @@
     <Compile Include="Models\ord_xiaoshouViewModel.cs" />
     <Compile Include="Models\rmd_myreminderViewModel.cs" />
     <Compile Include="Models\rmd_remindlistViewModel.cs" />
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
     <Compile Include="reports\ReportDataSet.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -390,6 +396,11 @@
     </Compile>
     <Compile Include="reports\ReportNow.aspx.designer.cs">
       <DependentUpon>ReportNow.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Web References\WebReference\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.map</DependentUpon>
     </Compile>
     <Content Include="App_Code\HtmlHelperExtensions.cs" />
     <Compile Include="App_Start\BundleConfig.cs" />
@@ -662,6 +673,10 @@
     <Content Include="reports\ReportDataSet.xsc">
       <DependentUpon>ReportDataSet.xsd</DependentUpon>
     </Content>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="reports\ReportDataSet.xsd">
       <SubType>Designer</SubType>
       <Generator>MSDataSetGenerator</Generator>
@@ -684,6 +699,8 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Views\Shared\_Layout1.cshtml" />
+    <Content Include="Views\ord_fahuodan\fahuodanlistQty.cshtml" />
+    <None Include="Web References\WebReference\MStock.disco" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -916,8 +933,13 @@
     <Content Include="Views\ord_fahuodan\Fahuodanlist.cshtml" />
     <Content Include="Views\ord_dingdan\CustomerOrderEdit.cshtml" />
     <Content Include="Views\ord_qianhuo\CustomerOweList.cshtml" />
-    <Content Include="Views\ord_fahuodan\fahuodanlistQty.cshtml" />
+    <Content Include="Views\ord_fahuodan\fahuodanlistQty-1.cshtml" />
     <Content Include="Views\ord_qianhuo\customerowelistQty.cshtml" />
+    <None Include="Web References\WebReference\MStock.wsdl" />
+    <Content Include="Web References\WebReference\Reference.map">
+      <Generator>MSDiscoCodeGenerator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
@@ -938,6 +960,22 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="reports\rptQuanxian.rdlc" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferences Include="Web References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WebReferenceUrl Include="http://192.168.1.117:85/MStock.asmx">
+      <UrlBehavior>Dynamic</UrlBehavior>
+      <RelPath>Web References\WebReference\</RelPath>
+      <UpdateFromURL>http://192.168.1.117:85/MStock.asmx</UpdateFromURL>
+      <ServiceLocationURL>
+      </ServiceLocationURL>
+      <CachedDynamicPropName>
+      </CachedDynamicPropName>
+      <CachedAppSettingsObjectName>Settings</CachedAppSettingsObjectName>
+      <CachedSettingsPropName>GROBS_WebReference_MStock</CachedSettingsPropName>
+    </WebReferenceUrl>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

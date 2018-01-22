@@ -453,6 +453,7 @@ namespace GROBS
             OrderType.Add(3, "促销");
 
             OrderState = new Dictionary<int, string>();
+            OrderState.Add(-1, "客服作废");
             OrderState.Add(0, "作废");
             OrderState.Add(10, "新建");
             OrderState.Add(12, "提交");

@@ -11,7 +11,7 @@ namespace GROBS.Models
         [Display(Name = "客户序号")]
         public int? KHID { get; set; }
         [Display(Name = "充值金额")]
-        public float? CZJE { get; set; }
+        public decimal? CZJE { get; set; }
         [Display(Name = "发放月份")]
         public string FFYF { get; set; }
         [Display(Name = "是否可用")]

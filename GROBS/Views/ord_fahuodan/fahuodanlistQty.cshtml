@@ -3,11 +3,26 @@
 @using X.PagedList
 @using X.PagedList.Mvc
 @{
-    ViewBag.Title = "已发数量";
+    ViewBag.Title = "订单处理";
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
     var _i = 1;
     var _pz = ViewBag.fkpz;
 }
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("tr").bind("dblclick", function () {
+            var u_id = $(this).find('td').eq(0).find('input').val();
+            //if (u_id != null) {
+            //    var url_go = "/ord_dingdan/Edit/" + u_id;
+            //    location.href = url_go;
+            //}
+        });
+
+        $("#bt_return").click(function () {
+            window.history.back(-1);
+        })
+    });
+</script>
 <div class="page-content">
     <div class="row">
         <p class="align-center">
@@ -19,10 +34,77 @@
             {
                 <i class="icon-file-text bigger-200 green"></i>
             }
-            <span class="bigger-150 blue">已发数量详情</span>
+            <span class="bigger-150 blue">发货单详情</span>
+            @*<button type="button" class="btn btn-primary btn-xs btn-dingdan" id="bt_return"><i class="icon-circle-arrow-left"></i>返回</button>*@
         </p>
     </div>
     <hr />
+    <div class="row">
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>发货单号</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.fhdh" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>销售单号</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.xsdh" />
+        </div>
+        <div class="col-sm-1">
+            <label>订单序号</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.ddxh" />
+        </div>
+        <div class="col-sm-1">
+            <label>订单编号</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.ddbh " />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label>发货日期</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.fhrq" />
+        </div>
+        <div class="col-sm-1">
+            <label>备注</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" readonly value="@ViewBag.bz" />
+        </div>
+        <div class="col-sm-1">
+            <label>制单日期</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.zdrq" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>联系人</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.lxr" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>联系电话</label>
+        </div>
+        <div class="col-sm-2">
+            <input class="form-control" type="text" readonly value="@ViewBag.lxdh" />
+        </div>
+        <div class="col-sm-1">
+            <label><i class="icon-star red"></i>运送地址</label>
+        </div>
+        <div class="col-sm-5">
+            <input class="form-control" type="text" readonly value="@ViewBag.ysdz" />
+        </div>
+    </div>
     <div class="row">
         <div class="col-sm-12">
             <div class="table-wapper-all">
@@ -31,7 +113,7 @@
                 </div>
                 <div class="table-wapper">
                     <table class="table table-bordered table-condensed" id="dt_sp">
-                        @*<caption><i class="icon-edit"></i>采购商品列表</caption>*@
+                        <caption><i class="icon-edit"></i>采购商品列表</caption>
                         <thead>
                             <tr>
                                 <td></td>
@@ -42,7 +124,7 @@
                                 <td>发货数量</td>
                                 <td>套包号</td>
                                 <td>批号</td>
-
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -55,7 +137,7 @@
                                     <td>@item.ShangpinDM </td>
                                     <td>@item.Zhucezheng</td>
                                     <td>@item.Guige</td>
-                                    <td>@item.ShengchanRQ</td>
+                                    <td>@item.ShengchanRQ</td>                                    
                                     <td>@item.ChukuSL</td>
                                     <td>@item.Taobaohao</td>
                                     <td>@item.Pihao</td>

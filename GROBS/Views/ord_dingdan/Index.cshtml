@@ -50,6 +50,37 @@
         scm.ItemTitle = "编号";
         scm.ItemType = "System.String";
         scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Zhuangtai";
+        scm.ItemTitle = "订单状态";
+        scm.ItemType = "订单状态.订单状态";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Mingcheng";
+        scm.ItemTitle = "产品线";
+        scm.ItemType = "产品线.产品线";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "CGLX";
+        scm.ItemTitle = "订单类型";
+        scm.ItemType = "订单类型.订单类型";
+        scm.ItemJion = "and";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "KehuDH";
+        scm.ItemTitle = "客户单号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "XiadanRQ";
+        scm.ItemTitle = "下单日期";
+        scm.ItemType = "System.DateTime";
+        scms.Add(scm);
     }
     else
     {
@@ -65,6 +96,79 @@
                 scm.ItemValue = scs[0].Split(',')[1];
                 scm.ItemOpValue = scs[0].Split(',')[2];
                 scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Zhuangtai";
+            scm.ItemTitle = "订单状态";
+            scm.ItemType = "订单状态.订单状态";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[1].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[1].Split(',')[2];
+                scm.ItemJion = scs[1].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Mingcheng";
+            scm.ItemTitle = "产品线";
+            scm.ItemType = "产品线.产品线";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[2].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[2].Split(',')[2];
+                scm.ItemJion = scs[2].Split(',')[3];
+            }
+            scms.Add(scm);
+
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "CGLX";
+            scm.ItemTitle = "订单类型";
+            scm.ItemType = "订单类型.订单类型";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[3].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[3].Split(',')[2];
+                scm.ItemJion = scs[3].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "KehuDH";
+            scm.ItemTitle = "客户单号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[4].Split(',')[1];
+                scm.ItemOpValue = scs[4].Split(',')[2];
+                scm.ItemJion = scs[4].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "XiadanRQ";
+            scm.ItemTitle = "下单日期";
+            scm.ItemType = "System.DateTime";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[5].Split(',')[1];
+                scm.ItemOpValue = scs[5].Split(',')[2];
+                scm.ItemJion = scs[5].Split(',')[3];
             }
             scms.Add(scm);
         }

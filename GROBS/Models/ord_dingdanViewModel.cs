@@ -40,7 +40,7 @@ namespace GROBS.Models
         [Display(Name = "采购总数")]
         public float? ZongshuCG { get; set; }
         [Display(Name = "总金额")]
-        public float? Zongjine { get; set; }
+        public decimal? Zongjine { get; set; }
         [Display(Name = "是否结束")]
         public bool? JieshuSF { get; set; }
         [Display(Name = "状态")]
@@ -62,16 +62,23 @@ namespace GROBS.Models
         public bool IsDelete { get; set; }
         [Display(Name = "客户代码")]
         public string KehuDM { get; set; }
-        public float? CuoxiaoZK { get; set; }
+        public decimal? CuoxiaoZK { get; set; }
         [Display(Name = "审核时间")]
         [DataType(DataType.Date)]
         public DateTime? ShenheSJ { get; set; }
         [Display(Name ="促销折扣")]
-        public float? ZhekouJE { get; set; }
+        public decimal? ZhekouJE { get; set; }
 
 
         [Display(Name ="付款凭证")]
         public string FKPZ { get; set; }
+        [Display(Name = "付款方式")]
+        public string Fukuanfs { get; set; }
+        [Display(Name = "凭证上传时间")]
+        [DataType(DataType.Date)]
+        public DateTime? TicketUpTime { get; set; }
+        [Display(Name = "客户名称")]
+        public string CustomerName { get; set; }
     }
 }
 

@@ -19,9 +19,9 @@ namespace GROBS.Models
         [Display(Name = "套包描述")]
         public string Miaoshu { get; set; }
         [Display(Name = "销售价")]
-        public float? JiaXS { get; set; }
+        public decimal? JiaXS { get; set; }
         [Display(Name = "采购价")]
-        public float? JiaCG { get; set; }
+        public decimal? JiaCG { get; set; }
         [Display(Name = "销售单位")]
         public string XSDW { get; set; }
         [Display(Name = "是否停用")]

@@ -19,9 +19,9 @@ namespace GROBS.Models
         [Display(Name = "数量")]
         public float? Shuliang { get; set; }
         [Display(Name = "单价")]
-        public float? JiaXS { get; set; }
+        public decimal? JiaXS { get; set; }
         [Display(Name = "金额")]
-        public float? Jine { get; set; }
+        public decimal? Jine { get; set; }
         [Display(Name = "备注")]
         public string Beizhu { get; set; }
 

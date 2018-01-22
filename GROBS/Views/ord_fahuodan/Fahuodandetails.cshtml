@@ -3,7 +3,7 @@
 @using X.PagedList
 @using X.PagedList.Mvc
 @{
-    ViewBag.Title = "采购单";
+    ViewBag.Title = "订单处理";
     Layout = "~/Views/Shared/_LayoutCustomer02.cshtml";
     var _i = 1;
     var _pz = ViewBag.fkpz;
@@ -17,11 +17,60 @@
             //    location.href = url_go;
             //}
         });
-
+        $(".spid").hide();
         $("#bt_return").click(function () {
             window.history.back(-1);
         })
+        /*
+       采购类型 == 2
+       查看套包商品
+      */
+        $("#containerTbsp").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#dt_sp tbody").on("click", "tr", function (e) {
+            if (e.target.tagName == "BUTTON") {
+                var _tbid = $(this).find("#tbid").val();
+                $("#containerTbsp").show();
+                getTaobaoDetail(_tbid);
+            }
+        });
+        $("#container_close_tbsp").on("click", function () {
+            $("#containerTbsp").hide();
+        });
     });
+    //套包商品明细
+    function getTaobaoDetail(tbId) {
+        var str = "";
+        var tbId = tbId;
+        $.post(
+            "/base_taobaosp/getdetail",
+                {
+                    tbId: tbId
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       var serialNum = 0;
+                       for (var i in data) {
+                           serialNum++;
+                           str += [
+                               '<tr>',
+                               '<td><input type="hidden" value="' + data[i].ID + '">' + serialNum + '</td>',
+                               '<td><span class="daima_tbsp">' + data[i].Daima + '</span></td>',
+                               '<td><span class="mingcheng_tbsp">' + data[i].Mingcheng + '</span></td>',
+                               '<td>' + data[i].Guige + '</td>',
+                               '<td>' + data[i].Danwei + '</td>',
+                               '<td><span class="tbsp_jiaxs">' + data[i].JiaXS + '</span></td>',
+                               //'<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
+                               '<td><span class="tbsp_shuliang">' + data[i].Shuliang + '</span></td>',
+                               '</tr>'
+                           ].join("");
+                       }
+                       $("#tbody_tbsp").html(str);
+                   } else {
+                       $("#tbody_tbsp").empty();
+                   }
+               }
+            );
+    }
 </script>
 <div class="page-content">
     <div class="row">
@@ -35,7 +84,7 @@
                 <i class="icon-file-text bigger-200 green"></i>
             }
             <span class="bigger-150 blue">发货单详情</span>
-            <button type="button" class="btn btn-primary btn-xs btn-dingdan" id="bt_return"><i class="icon-circle-arrow-left"></i>返回</button>
+           @*<button type="button" class="btn btn-primary btn-xs btn-dingdan" id="bt_return"><i class="icon-circle-arrow-left"></i>返回</button>*@
         </p>
     </div>
     <hr />
@@ -116,14 +165,16 @@
                         <caption><i class="icon-edit"></i>采购商品列表</caption>
                         <thead>
                             <tr>
+                                <td class="spid">id</td>
                                 <td></td>
                                 <td>代码</td>
-                                <td>注册证</td>
+                                <td>名称</td>
+                                @*<td>注册证</td>*@
                                 <td>规格</td>
-                                <td>生产日期</td>
+                                @*<td>生产日期</td>*@
                                 <td>发货数量</td>
-                                <td>套包号</td>
-                                <td>批号</td>
+                                @*<td>套包号</td>
+                                <td>批号</td>*@
                                 
                             </tr>
                         </thead>
@@ -131,20 +182,68 @@
                             @foreach (var item in ViewBag.ord_fahuomx)
                             {
                                 <tr>
+                                    <td class="spid"><i class='icon-minus-sign bigger-150 red'></i><input type='hidden' id='tbid' value='@item.SPID' /></td>
                                     <td>
                                         <label>@string.Format("{0:d}", _i++)</label>
                                     </td>
-                                    <td>@item.ShangpinDM </td>
-                                    <td>@item.Zhucezheng</td>
+                                    @*<td>@item.ShangpinDM </td>*@
+                                    @if ((int)ViewBag.cglx == 2)
+                                    {
+                                        <td class="link_tb"><span class="spbm"><button class="btn btn-link" style="padding:0px!important;">@item.ShangpinDM</button></span></td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.ShangpinDM</td>
+                                    }
+                                    <td>@item.ShangpinMC</td>
+                                    @*<td>@item.Zhucezheng</td>*@
                                     <td>@item.Guige</td>
-                                    <td>@item.ShengchanRQ</td>                                    
+                                    @*<td>@item.ShengchanRQ</td>*@                                    
                                     <td>@item.ChukuSL</td>
-                                    <td>@item.Taobaohao</td>
-                                    <td>@item.Pihao</td>
+                                    @*<td>@item.Taobaohao</td>
+                                    <td>@item.Pihao</td>*@
                                 </tr>
                             }
                         </tbody>
                     </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@*套包明细*@
+<div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;z-index:99;">
+    <div class="panel-heading">
+        <h3 class="panel-title"><b>套包信息</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:310px;min-height:100px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>商品代码</th>
+                                                <th>商品名称</th>
+                                                <th>规格</th>
+                                                <th>基本单位</th>
+                                                <th>销售价</th>
+                                                @*<th>采购价</th>*@
+                                                <th>数量</th>
+                                            </tr>
+                                            <tbody id="tbody_tbsp"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

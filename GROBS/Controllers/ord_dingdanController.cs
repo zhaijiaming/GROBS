@@ -18,8 +18,10 @@ namespace GROBS.Controllers
     public class ord_dingdanController : Controller
     {
         private Iord_dingdanService ob_ord_dingdanservice = ServiceFactory.ord_dingdanservice;
+        private Iord_dingdanmxService ob_ord_dingdanmxservice = ServiceFactory.ord_dingdanmxservice;
         private Iord_fahuodanService ob_ord_fahuodanservice = ServiceFactory.ord_fahuodanservice;
         private Iord_fahuomxService ob_ord_fahuomxservice = ServiceFactory.ord_fahuomxservice;
+        private Iord_qianhuoService ob_ord_qianhuoservice = ServiceFactory.ord_qianhuoservice;
         [OutputCache(Duration = 30)]
         public ActionResult Index(string page)
         {
@@ -59,6 +61,102 @@ namespace GROBS.Controllers
                                 }
                             }
                             break;
+                        case "Zhuangtai":
+                            string Zhuangtai = scld[1];
+                            string Zhuangtaiequal = scld[2];
+                            string Zhuangtaiand = scld[3];
+                            if (!string.IsNullOrEmpty(Zhuangtai))
+                            {
+                                if (Zhuangtaiequal.Equals("="))
+                                {
+                                    if (Zhuangtaiand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                                }
+                            }
+                            break;
+                        case "Mingcheng":
+                            string Mingcheng = scld[1];
+                            string Mingchengequal = scld[2];
+                            string Mingchengand = scld[3];
+                            if (!string.IsNullOrEmpty(Mingcheng))
+                            {
+                                if (Mingchengequal.Equals("="))
+                                {
+                                    if (Mingchengand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.CPXID == int.Parse(Mingcheng));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.CPXID == int.Parse(Mingcheng));
+                                }
+                            }
+                            break;
+                        case "CGLX":
+                            string CGLX = scld[1];
+                            string CGLXequal = scld[2];
+                            string CGLXand = scld[3];
+                            if (!string.IsNullOrEmpty(CGLX))
+                            {
+                                if (CGLXequal.Equals("="))
+                                {
+                                    if (CGLXand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                                }
+                            }
+                            break;
+                        case "KehuDH":
+                            string KehuDH = scld[1];
+                            string KehuDHequal = scld[2];
+                            string KehuDHand = scld[3];
+                            if (!string.IsNullOrEmpty(KehuDH))
+                            {
+                                if (KehuDHequal.Equals("="))
+                                {
+                                    if (KehuDHand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                                }
+                                if (KehuDHequal.Equals("like"))
+                                {
+                                    if (KehuDHand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                                }
+                            }
+                            break;
+                        case "XiadanRQ":
+                            string XiadanRQ = scld[1];
+                            string XiadanRQequal = scld[2];
+                            string XiadanRQand = scld[3];
+                            if (!string.IsNullOrEmpty(XiadanRQ))
+                            {
+                                if (XiadanRQequal.Equals("="))
+                                {
+                                    if (XiadanRQand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                                }
+                                else if (XiadanRQequal.Equals(">"))
+                                {
+                                    if (XiadanRQand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                                }
+                                else
+                                {
+                                    if (XiadanRQand.Equals("and"))
+                                        where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                                    else
+                                        where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                                }
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -66,7 +164,7 @@ namespace GROBS.Controllers
                 ViewBag.SearchCondition = sc.ConditionInfo;
             }
 
-            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false && ord_dingdan.Zhuangtai != 0);
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false && ord_dingdan.Zhuangtai > 0);
 
             var tempData = ob_ord_dingdanservice.LoadSortEntitiesNoTracking(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
             ViewBag.ord_dingdan = tempData;
@@ -83,6 +181,21 @@ namespace GROBS.Controllers
             string bianhao = Request["bianhao"] ?? "";
             string bianhaoequal = Request["bianhaoequal"] ?? "";
             string bianhaoand = Request["bianhaoand"] ?? "";
+            string Zhuangtai = Request["Zhuangtai"] ?? "";
+            string Zhuangtaiequal = Request["Zhuangtaiequal"] ?? "";
+            string Zhuangtaiand = Request["Zhuangtaiand"] ?? "";
+            string Mingcheng = Request["Mingcheng"] ?? "";
+            string Mingchengequal = Request["Mingchengequal"] ?? "";
+            string Mingchengand = Request["Mingchengand"] ?? "";
+            string CGLX = Request["CGLX"] ?? "";
+            string CGLXequal = Request["CGLXequal"] ?? "";
+            string CGLXand = Request["CGLXand"] ?? "";
+            string KehuDH = Request["KehuDH"] ?? "";
+            string KehuDHequal = Request["KehuDHequal"] ?? "";
+            string KehuDHand = Request["KehuDHand"] ?? "";
+            string XiadanRQ = Request["XiadanRQ"] ?? "";
+            string XiadanRQequal = Request["XiadanRQequal"] ?? "";
+            string XiadanRQand = Request["XiadanRQand"] ?? "";
             Expression<Func<ord_dingdan, bool>> where = PredicateExtensionses.True<ord_dingdan>();
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
@@ -110,7 +223,105 @@ namespace GROBS.Controllers
                 if (!string.IsNullOrEmpty(bianhao))
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
                 else
-                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);                    
+                            
+                if (!string.IsNullOrEmpty(Zhuangtai))
+                {
+                    if (Zhuangtaiequal.Equals("="))
+                    {
+                        if (Zhuangtaiand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Zhuangtai))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", Zhuangtai, Zhuangtaiequal, Zhuangtaiand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", "", Zhuangtaiequal, Zhuangtaiand);
+
+                if (!string.IsNullOrEmpty(Mingcheng))
+                {
+                    if (Mingchengequal.Equals("="))
+                    {
+                        if (Mingchengand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.CPXID == int.Parse(Mingcheng));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.CPXID == int.Parse(Mingcheng));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Mingcheng))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", Mingcheng, Mingchengequal, Mingchengand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", "", Mingchengequal, Mingchengand);
+
+
+                if (!string.IsNullOrEmpty(CGLX))
+                {
+                    if (CGLXequal.Equals("="))
+                    {
+                        if (CGLXand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                    }
+                }
+                if (!string.IsNullOrEmpty(CGLX))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", CGLX, CGLXequal, CGLXand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", "", CGLXequal, CGLXand);
+
+                if (!string.IsNullOrEmpty(KehuDH))
+                {
+                    if (KehuDHequal.Equals("="))
+                    {
+                        if (KehuDHand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                    }
+                    if (KehuDHequal.Equals("like"))
+                    {
+                        if (KehuDHand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                    }
+                }
+                if (!string.IsNullOrEmpty(KehuDH))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", KehuDH, KehuDHequal, KehuDHand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", "", KehuDHequal, KehuDHand);
+
+                if (!string.IsNullOrEmpty(XiadanRQ))
+                {
+                    if (XiadanRQequal.Equals("="))
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                    }
+                    else if (XiadanRQequal.Equals(">"))
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                    }
+                    else
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                    }
+                }
+                if (!string.IsNullOrEmpty(XiadanRQ))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
+
                 searchconditionService.GetInstance().AddEntity(sc);
             }
             else
@@ -137,10 +348,108 @@ namespace GROBS.Controllers
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", bianhao, bianhaoequal, bianhaoand);
                 else
                     sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "bianhao", "", bianhaoequal, bianhaoand);
+
+                if (!string.IsNullOrEmpty(Zhuangtai))
+                {
+                    if (Zhuangtaiequal.Equals("="))
+                    {
+                        if (Zhuangtaiand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.Zhuangtai == int.Parse(Zhuangtai));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Zhuangtai))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", Zhuangtai, Zhuangtaiequal, Zhuangtaiand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Zhuangtai", "", Zhuangtaiequal, Zhuangtaiand);
+
+                if (!string.IsNullOrEmpty(Mingcheng))
+                {
+                    if (Mingchengequal.Equals("="))
+                    {
+                        if (Mingchengand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.CPXID == int.Parse(Mingcheng));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.CPXID == int.Parse(Mingcheng));
+                    }
+                }
+                if (!string.IsNullOrEmpty(Mingcheng))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", Mingcheng, Mingchengequal, Mingchengand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "Mingcheng", "", Mingchengequal, Mingchengand);
+
+
+                if (!string.IsNullOrEmpty(CGLX))
+                {
+                    if (CGLXequal.Equals("="))
+                    {
+                        if (CGLXand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.CGLX == int.Parse(CGLX));
+                    }
+                }
+                if (!string.IsNullOrEmpty(CGLX))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", CGLX, CGLXequal, CGLXand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "CGLX", "", CGLXequal, CGLXand);
+
+                if (!string.IsNullOrEmpty(KehuDH))
+                {
+                    if (KehuDHequal.Equals("="))
+                    {
+                        if (KehuDHand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH == KehuDH);
+                    }
+                    if (KehuDHequal.Equals("like"))
+                    {
+                        if (KehuDHand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.KehuDH.Contains(KehuDH));
+                    }
+                }
+                if (!string.IsNullOrEmpty(KehuDH))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", KehuDH, KehuDHequal, KehuDHand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "KehuDH", "", KehuDHequal, KehuDHand);
+
+                if (!string.IsNullOrEmpty(XiadanRQ))
+                {
+                    if (XiadanRQequal.Equals("="))
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ == DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ >= DateTime.Parse(XiadanRQ));
+                    }
+                    else if (XiadanRQequal.Equals(">"))
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ > DateTime.Parse(XiadanRQ));
+                    }
+                    else
+                    {
+                        if (XiadanRQand.Equals("and"))
+                            where = where.And(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                        else
+                            where = where.Or(ord_dingdan => ord_dingdan.XiadanRQ < DateTime.Parse(XiadanRQ));
+                    }
+                }
+                if (!string.IsNullOrEmpty(XiadanRQ))
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", XiadanRQ, XiadanRQequal, XiadanRQand);
+                else
+                    sc.ConditionInfo = sc.ConditionInfo + string.Format("{0},{1},{2},{3};", "XiadanRQ", "", XiadanRQequal, XiadanRQand);
+
                 searchconditionService.GetInstance().UpdateEntity(sc);
             }
             ViewBag.SearchCondition = sc.ConditionInfo;
-            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false && ord_dingdan.Zhuangtai != 0);
+            where = where.And(ord_dingdan => ord_dingdan.IsDelete == false && ord_dingdan.Zhuangtai > 0);
 
 
             var tempData = ob_ord_dingdanservice.LoadSortEntitiesNoTracking(where.Compile(), false, ord_dingdan => ord_dingdan.ID).ToPagedList<ord_dingdan>(int.Parse(page), int.Parse(System.Web.Configuration.WebConfigurationManager.AppSettings["ShowPerPage"]));
@@ -202,7 +511,7 @@ namespace GROBS.Controllers
                 ob_ord_dingdan.ACCID = accid == "" ? 0 : int.Parse(accid);
                 ob_ord_dingdan.ShenheTG = shenhetg == "" ? false : Boolean.Parse(shenhetg);
                 ob_ord_dingdan.ZongshuCG = zongshucg == "" ? 0 : float.Parse(zongshucg);
-                ob_ord_dingdan.Zongjine = zongjine == "" ? 0 : float.Parse(zongjine);
+                ob_ord_dingdan.Zongjine = zongjine == "" ? 0 : decimal.Parse(zongjine);
                 ob_ord_dingdan.JieshuSF = jieshusf == "" ? false : Boolean.Parse(jieshusf);
                 ob_ord_dingdan.Zhuangtai = zhuangtai == "" ? 0 : int.Parse(zhuangtai);
                 ob_ord_dingdan.Beizhu = beizhu.Trim();
@@ -213,9 +522,9 @@ namespace GROBS.Controllers
                 ob_ord_dingdan.MakeDate = DateTime.Now;
                 ob_ord_dingdan.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 ob_ord_dingdan.KehuDM = kehudm.Trim();
-                ob_ord_dingdan.CuoxiaoZK = cuoxiaozk == "" ? 0 : float.Parse(cuoxiaozk);
+                ob_ord_dingdan.CuoxiaoZK = cuoxiaozk == "" ? 0 : decimal.Parse(cuoxiaozk);
                 ob_ord_dingdan.ShenheSJ = shenhesj == "" ? DateTime.Now : DateTime.Parse(shenhesj);
-                ob_ord_dingdan.ZhekouJE = zhekouje == "" ? 0 : float.Parse(zhekouje);
+                ob_ord_dingdan.ZhekouJE = zhekouje == "" ? 0 : decimal.Parse(zhekouje);
                 ob_ord_dingdan = ob_ord_dingdanservice.AddEntity(ob_ord_dingdan);
                 id = ob_ord_dingdan.ID.ToString();
                 ViewBag.ord_dingdan = ob_ord_dingdan;
@@ -264,6 +573,7 @@ namespace GROBS.Controllers
                 ord_dingdanviewmodel.CuoxiaoZK = tempData.CuoxiaoZK;
                 ord_dingdanviewmodel.ShenheSJ = tempData.ShenheSJ;
                 ord_dingdanviewmodel.ZhekouJE = tempData.ZhekouJE;
+                ord_dingdanviewmodel.FKPZ = tempData.FKPZ;
                 return View(ord_dingdanviewmodel);
             }
         }
@@ -272,6 +582,7 @@ namespace GROBS.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Update()
         {
+            int _userid = (int)Session["user_id"];
             string id = Request["id"] ?? "";
             string bianhao = Request["bianhao"] ?? "";
             string khid = Request["khid"] ?? "";
@@ -303,20 +614,53 @@ namespace GROBS.Controllers
             try
             {
                 ord_dingdan p = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == uid);
+                //更新返利
+                var zkje = decimal.Parse(zhekouje);
+                if (!(zkje == 0 && p.ZhekouJE == 0))
+                {
+                    var _flxf = ServiceFactory.ord_fanlixfservice.GetEntityById(ord_fanlixf => ord_fanlixf.DDID == uid && ord_fanlixf.IsDelete == false);
+                    if (_flxf != null)
+                    {
+                        decimal? dif = _flxf.XFJE - zkje;
+                        var _fl = ServiceFactory.ord_fanliservice.GetEntityById(ord_fanlixf => ord_fanlixf.KHID == p.KHID && ord_fanlixf.IsDelete == false);
+                        if (_fl != null)
+                        {
+                            _fl.Zonge = _fl.Zonge + dif;
+                            _fl.Keyong = _fl.Keyong + dif;
+                            ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                        }
+                        else
+                        {
+                        }
+                        _flxf.KHID = p.KHID;
+                        _flxf.XFJE = zkje;
+                        _flxf.MakeMan = _userid;
+                        ServiceFactory.ord_fanlixfservice.UpdateEntity(_flxf);
+                    }
+                    else
+                    {
+                        ord_fanlixf _xf = new ord_fanlixf();
+                        _xf.DDID = uid;
+                        _xf.KHID = p.KHID;
+                        _xf.XFJE = zkje;
+                        _xf.MakeMan = _userid;
+                        _xf = ServiceFactory.ord_fanlixfservice.AddEntity(_xf);
+                    }
+                }
                 p.Bianhao = bianhao.Trim();
                 p.KHID = khid == "" ? 0 : int.Parse(khid);
                 p.CPXID = cpxid == "" ? 0 : int.Parse(cpxid);
                 p.CGLX = cglx == "" ? 0 : int.Parse(cglx);
                 p.KehuDH = kehudh.Trim();
-                p.XiadanRQ = xiadanrq == "" ? DateTime.Now : DateTime.Parse(xiadanrq);
+                //p.XiadanRQ = xiadanrq == "" ? DateTime.Now : DateTime.Parse(xiadanrq);
                 p.Lianxiren = lianxiren.Trim();
                 p.LianxiDH = lianxidh.Trim();
                 p.SonghuoDZ = songhuodz.Trim();
-                p.OPID = opid == "" ? 0 : int.Parse(opid);
+                p.OPID = _userid;
                 p.ACCID = accid == "" ? 0 : int.Parse(accid);
                 p.ShenheTG = shenhetg == "" ? false : Boolean.Parse(shenhetg);
                 p.ZongshuCG = zongshucg == "" ? 0 : float.Parse(zongshucg);
-                p.Zongjine = zongjine == "" ? 0 : float.Parse(zongjine);
+                p.Zongjine = zongjine == "" ? 0 : decimal.Parse(zongjine);
                 p.JieshuSF = jieshusf == "" ? false : Boolean.Parse(jieshusf);
                 p.Zhuangtai = zhuangtai == "" ? 0 : int.Parse(zhuangtai);
                 p.Beizhu = beizhu.Trim();
@@ -324,12 +668,15 @@ namespace GROBS.Controllers
                 p.Col2 = col2.Trim();
                 p.Col3 = col3.Trim();
                 p.MakeDate = makedate == "" ? DateTime.Now : DateTime.Parse(makedate);
-                p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
+                //p.MakeMan = makeman == "" ? 0 : int.Parse(makeman);
                 p.KehuDM = kehudm.Trim();
-                p.CuoxiaoZK = cuoxiaozk == "" ? 0 : float.Parse(cuoxiaozk);
-                p.ShenheSJ = shenhesj == "" ? DateTime.Now : DateTime.Parse(shenhesj);
-                p.ZhekouJE = zhekouje == "" ? 0 : float.Parse(zhekouje);
+                p.CuoxiaoZK = cuoxiaozk == "" ? 0 : decimal.Parse(cuoxiaozk);
+                //p.ShenheSJ = shenhesj == "" ? DateTime.Now : DateTime.Parse(shenhesj);
+                if(shenhesj != "")
+                    p.ShenheSJ = DateTime.Parse(shenhesj);
+                p.ZhekouJE = zhekouje == "" ? 0 : decimal.Parse(zhekouje);
                 ob_ord_dingdanservice.UpdateEntity(p);
+
                 ViewBag.saveok = ViewAddTag.ModifyOk;
             }
             catch (Exception ex)
@@ -1080,6 +1427,8 @@ namespace GROBS.Controllers
             string XiadanRQand = Request["XiadanRQand"] ?? "and";
 
             Expression<Func<ord_ordermain_v, bool>> where = PredicateExtensionses.True<ord_ordermain_v>();
+            //界面不显示欠货生成的订单
+            where = where.And(p => p.QHFLAG != "1");
             searchcondition sc = searchconditionService.GetInstance().GetEntityById(searchcondition => searchcondition.UserID == _userid && searchcondition.PageBrief == pagetag);
             if (sc == null)
             {
@@ -1429,10 +1778,28 @@ namespace GROBS.Controllers
 
             ViewBag.ord_dingdan = tempData;
             List<string> fh = new List<string>();
-            List<string> df = new List<string>();
+            List<string> qh = new List<string>();
             foreach (var ob_ord_dingdan in tempData)
             {
                 float con = 0;
+                //欠货数量
+                try
+                {
+                    var temp = ServiceFactory.ord_dingdanservice.LoadCustomerActiveOweByID(ob_ord_dingdan.ID).ToList<ord_ordermain_vsss>();
+                    if (temp == null || temp[0].QHSL == 0)
+                    {
+                        qh.Add("0");
+                    }
+                    else
+                    {
+                        qh.Add(temp[0].QHSL.ToString());
+                    }
+                }
+                catch
+                {
+                    qh.Add("0");
+                }
+                //发货数量
                 if (ob_ord_dingdan.Zhuangtai < 30)
                 {
                     fh.Add("");
@@ -1463,8 +1830,8 @@ namespace GROBS.Controllers
                 fh.Add(con.ToString());
 
             }
-
             ViewBag.fhsl = fh;
+            ViewBag.qhsl = qh;
             return View();
         }
 
@@ -1642,6 +2009,7 @@ namespace GROBS.Controllers
             ViewBag.cpxsq = cpxsq;
             ViewBag.customer = custid;
             ViewBag.user = userid;
+            ViewBag.khdh = custid + DateTime.Now.ToString("yyMMddhhmmss");
             return View();
         }
         public JsonResult AddOrderNow()
@@ -1661,6 +2029,8 @@ namespace GROBS.Controllers
             var _lxdh = Request["lxdh"] ?? "";
             var _shdz = Request["shdz"] ?? "";
             var _khdh = Request["khdh"] ?? "";
+            var _col2 = Request["col2"] ?? "";
+            var _col3 = Request["col3"] ?? "";
 
             if (string.IsNullOrEmpty(_cpx) || string.IsNullOrEmpty(_cdm) || string.IsNullOrEmpty(_cust) || string.IsNullOrEmpty(_lx)
                 || string.IsNullOrEmpty(_sps) || string.IsNullOrEmpty(_lxr) || string.IsNullOrEmpty(_lxdh)
@@ -1681,19 +2051,21 @@ namespace GROBS.Controllers
             _dd.Lianxiren = _lxr;
             _dd.SonghuoDZ = _shdz;
             _dd.XiadanRQ = DateTime.Now;
-            _dd.ZhekouJE = float.Parse(_zkje);
+            _dd.ZhekouJE = decimal.Parse(_zkje);
             _dd.Zhuangtai = 10;
-            _dd.Zongjine = float.Parse(_zje);
+            _dd.Zongjine = decimal.Parse(_zje);
             _dd.ZongshuCG = float.Parse(_zsl);
             _dd.ShenheTG = false;
             _dd.HH = _splist.Count();
             _dd.MakeMan = _userid;
+            _dd.Col2 = _col2;
+            _dd.Col3 = _col3;
             _dd = ob_ord_dingdanservice.AddEntity(_dd);
             if (_dd == null)
                 return Json(-2);
 
-            float _zkl = 1 - (float)(_dd.ZhekouJE / _dd.Zongjine);
-            _zkl = (float)Math.Round(_zkl, 4);
+            decimal _zkl = 1 - (decimal)(_dd.ZhekouJE /(_dd.Zongjine + _dd.ZhekouJE));
+            _zkl = (decimal)Math.Round(_zkl, 7);
             List<SPList> _sptemp = new List<SPList>();
             //add commodity
             foreach (var sp in _splist)
@@ -1704,8 +2076,8 @@ namespace GROBS.Controllers
                     SPList _spl = new SPList();
                     _spl.spid = int.Parse(_sp[0]);
                     _spl.spsl = float.Parse(_sp[1]);
-                    _spl.spjg = float.Parse(_sp[2]);
-                    _spl.spje = float.Parse(_sp[3]);
+                    _spl.spjg = decimal.Parse(_sp[2]);
+                    _spl.spje = decimal.Parse(_sp[3]);
                     _sptemp.Add(_spl);
                 }
             }
@@ -1734,15 +2106,16 @@ namespace GROBS.Controllers
                         _mx.JBDW = _spxx.Danwei;
                         _mx.CGSL = spg.tsl;
                         _mx.FHSL = 0;
-                        _mx.XSBJ = spg.jg * _zkl;
-                        //_mx.XSBJ = spg.jg;
+                        _mx.XSBJ = spg.jg;
+                        _mx.Danjia = Math.Round(spg.jg * _zkl, 2);
                         //_mx.XSDJ = spg.jg * _zkl;
                         _mx.XSDW = _spxx.BaozhuangDW;
                         _mx.HSL = (float)_spxx.Huansuanlv;
                         _mx.HSBM = _spxx.Col1;
                         _mx.Jine = spg.tje;
-                        _mx.Zhekou = spg.tje * (1 - _zkl);
-                        _mx.Zhekoulv = _zkl;
+                        //_mx.Zhekou = spg.tje * (1 - _zkl);
+                        _mx.Zhekou = (decimal)spg.tsl * (spg.jg - spg.jg * (1 - (_dd.ZhekouJE / (_dd.Zongjine + _dd.ZhekouJE))));
+                        _mx.Zhekoulv = (float)_zkl;
                         _mx.MakeMan = _userid;
                         _mx = ServiceFactory.ord_dingdanmxservice.AddEntity(_mx);
                     }
@@ -1761,15 +2134,16 @@ namespace GROBS.Controllers
                         _mx.JBDW = _tbxx.XSDW;
                         _mx.CGSL = spg.tsl;
                         _mx.FHSL = 0;
-                        _mx.XSBJ = spg.jg * _zkl;
-                        //_mx.XSBJ = spg.jg;
+                        _mx.XSBJ = spg.jg;
+                        _mx.Danjia = Math.Round(spg.jg * _zkl, 2);
                         //_mx.XSDJ = spg.jg * _zkl;
                         _mx.XSDW = _tbxx.XSDW;
                         _mx.HSL = 1;
                         _mx.HSBM = _tbxx.Col1;
                         _mx.Jine = spg.tje;
-                        _mx.Zhekou = spg.tje * (1 - _zkl);
-                        _mx.Zhekoulv = _zkl;
+                        //_mx.Zhekou = spg.tje * (1 - _zkl);
+                        _mx.Zhekou = (decimal)spg.tsl * (spg.jg - spg.jg * (1 - (_dd.ZhekouJE / (_dd.Zongjine + _dd.ZhekouJE))));
+                        _mx.Zhekoulv = (float)_zkl;
                         _mx.MakeMan = _userid;
                         _mx = ServiceFactory.ord_dingdanmxservice.AddEntity(_mx);
                     }
@@ -1841,9 +2215,9 @@ namespace GROBS.Controllers
             _dd.Lianxiren = _lxr;
             _dd.SonghuoDZ = _shdz;
             _dd.XiadanRQ = DateTime.Now;
-            _dd.ZhekouJE = float.Parse(_zkje);
+            _dd.ZhekouJE = decimal.Parse(_zkje);
             _dd.Zhuangtai = 10;
-            _dd.Zongjine = float.Parse(_zje);
+            _dd.Zongjine = decimal.Parse(_zje);
             _dd.ZongshuCG = float.Parse(_zsl);
             _dd.ShenheTG = false;
             _dd.HH = _splist.Count();
@@ -1852,8 +2226,8 @@ namespace GROBS.Controllers
             if (suc == false)
                 return Json(-2);
 
-            float _zkl = 1 - (float)(_dd.ZhekouJE / _dd.Zongjine);
-            _zkl = (float)Math.Round(_zkl, 4);
+            decimal _zkl = 1 - (decimal)(_dd.ZhekouJE /(_dd.Zongjine + _dd.ZhekouJE));
+            _zkl = (decimal)Math.Round(_zkl, 7);
             List<SPList> _sptemp = new List<SPList>();
             //add commodity
             foreach (var sp in _splist)
@@ -1864,8 +2238,8 @@ namespace GROBS.Controllers
                     SPList _spl = new SPList();
                     _spl.spid = int.Parse(_sp[0]);
                     _spl.spsl = float.Parse(_sp[1]);
-                    _spl.spjg = float.Parse(_sp[2]);
-                    _spl.spje = float.Parse(_sp[3]);
+                    _spl.spjg = decimal.Parse(_sp[2]);
+                    _spl.spje = decimal.Parse(_sp[3]);
                     _sptemp.Add(_spl);
                 }
             }
@@ -1902,15 +2276,15 @@ namespace GROBS.Controllers
                         _mx.JBDW = _spxx.Danwei;
                         _mx.CGSL = spg.tsl;
                         _mx.FHSL = 0;
-                        _mx.XSBJ = spg.jg * _zkl;
-                        //_mx.XSBJ = spg.jg;
+                        _mx.XSBJ = spg.jg;
+                        _mx.Danjia = Math.Round(spg.jg * _zkl, 2);
                         //_mx.XSDJ = spg.jg * _zkl;
                         _mx.XSDW = _spxx.BaozhuangDW;
                         _mx.HSL = (float)_spxx.Huansuanlv;
                         _mx.HSBM = _spxx.Col1;
                         _mx.Jine = spg.tje;
-                        _mx.Zhekou = spg.tje * (1 - _zkl);
-                        _mx.Zhekoulv = _zkl;
+                        _mx.Zhekou = (decimal)spg.tsl * (spg.jg - spg.jg * (1 - (_dd.ZhekouJE / (_dd.Zongjine + _dd.ZhekouJE))));
+                        _mx.Zhekoulv = (float)_zkl;
                         _mx.MakeMan = _userid;
                         _mx = ServiceFactory.ord_dingdanmxservice.AddEntity(_mx);
                     }
@@ -1929,15 +2303,16 @@ namespace GROBS.Controllers
                         _mx.JBDW = _tbxx.XSDW;
                         _mx.CGSL = spg.tsl;
                         _mx.FHSL = 0;
-                        _mx.XSBJ = spg.jg * _zkl;
-                        //_mx.XSBJ = spg.jg;
+                        _mx.XSBJ = spg.jg;
                         //_mx.XSDJ = spg.jg * _zkl;
+                        _mx.Danjia = Math.Round(spg.jg * _zkl, 2);
                         _mx.XSDW = _tbxx.XSDW;
                         _mx.HSL = 1;
                         _mx.HSBM = _tbxx.Col1;
                         _mx.Jine = spg.tje;
-                        _mx.Zhekou = spg.tje * (1 - _zkl);
-                        _mx.Zhekoulv = _zkl;
+                        //_mx.Zhekou = spg.tje * (1 - _zkl);
+                        _mx.Zhekou = (decimal)spg.tsl * (spg.jg - spg.jg * (1 - (_dd.ZhekouJE / (_dd.Zongjine + _dd.ZhekouJE))));
+                        _mx.Zhekoulv = (float)_zkl;
                         _mx.MakeMan = _userid;
                         _mx = ServiceFactory.ord_dingdanmxservice.AddEntity(_mx);
                     }
@@ -1947,31 +2322,56 @@ namespace GROBS.Controllers
 
                 }
             }
-            //add minus
-            if (_zkl < 1)
+            //edit minus
+            var _flxf = ServiceFactory.ord_fanlixfservice.GetEntityById(p => p.DDID == _dd.ID && p.IsDelete == false);
+            if (_flxf != null)
             {
-                ord_fanlixf _xf = new ord_fanlixf();
-                _xf.DDID = _dd.ID;
-                _xf.KHID = _dd.KHID;
-                _xf.XFJE = _dd.ZhekouJE;
-                _xf.MakeMan = _userid;
-                _xf = ServiceFactory.ord_fanlixfservice.AddEntity(_xf);
-                //if (_xf != null)
-                //{
-                //    var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == _xf.KHID && p.IsDelete == false);
-                //    if (_fl != null)
-                //    {
-                //        _fl.Zonge = _fl.Zonge - _xf.XFJE;
-                //        _fl.Keyong = _fl.Keyong - _xf.XFJE;
-                //        ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
-                //    }
-                //}
-
+                decimal? dif = _flxf.XFJE - _dd.ZhekouJE;
+                var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == _dd.KHID && p.IsDelete == false);
+                if (_fl != null)
+                {
+                    _fl.Zonge = _fl.Zonge + dif;
+                    _fl.Keyong = _fl.Keyong + dif;
+                    ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                }
+                else
+                {
+                }
+                _flxf.KHID = _dd.KHID;
+                _flxf.XFJE = _dd.ZhekouJE;
+                _flxf.MakeMan = _userid;
+                ServiceFactory.ord_fanlixfservice.UpdateEntity(_flxf);
+            }
+            else
+            {
+                if (_dd.ZhekouJE != 0)
+                {
+                    ord_fanlixf _xf = new ord_fanlixf();
+                    _xf.DDID = _dd.ID;
+                    _xf.KHID = _dd.KHID;
+                    _xf.XFJE = _dd.ZhekouJE;
+                    _xf.MakeMan = _userid;
+                    _xf = ServiceFactory.ord_fanlixfservice.AddEntity(_xf);
+                    //if (_xf != null)
+                    //{
+                    //    var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == _xf.KHID && p.IsDelete == false);
+                    //    if (_fl != null)
+                    //    {
+                    //        _fl.Zonge = _fl.Zonge - _xf.XFJE;
+                    //        _fl.Keyong = _fl.Keyong - _xf.XFJE;
+                    //        ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                    //    }
+                    //}
+                }
             }
             return Json(1);
         }
         public ActionResult CustomerOrderInfo(int id)
         {
+            decimal zong_all = 0;
+            decimal zhe_all = 0;
+            //decimal zong_part = 0;
+            //decimal zhe_part = 0;
             int _custid = (int)Session["customer_id"];
             var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.KHID == _custid && p.IsDelete == false);
             if (_dd == null)
@@ -1981,6 +2381,7 @@ namespace GROBS.Controllers
                 ViewBag.cpx = "";
             else
                 ViewBag.cpx = _cpx.Mingcheng;
+            ViewBag.Bianhao = _dd.Bianhao;
             ViewBag.cglx = _dd.CGLX;
             ViewBag.sl = _dd.ZongshuCG;
             ViewBag.je = _dd.Zongjine;
@@ -1990,11 +2391,38 @@ namespace GROBS.Controllers
             ViewBag.lxr = _dd.Lianxiren;
             ViewBag.lxdh = _dd.LianxiDH;
             ViewBag.shdz = _dd.SonghuoDZ;
+            ViewBag.Zhuangtai = _dd.Zhuangtai;
+            ViewBag.Col2 = _dd.Col2;
+            ViewBag.Col3 = _dd.Col3;
             if (_dd.FKPZ == null)
                 ViewBag.fkpz = "";
             else
                 ViewBag.fkpz = "/files/zhengzhao/" + _dd.FKPZ;
             var _ddmx = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == _dd.ID && p.IsDelete == false, true, s => s.SPBM).ToList();
+            if (_dd.Zhuangtai < 20)
+            {
+                foreach (ord_dingdanmx ddmx in _ddmx)
+                {
+                    if (ddmx.PFSL == null)
+                    {
+                        break;
+                    }
+                    zong_all = zong_all + Convert.ToDecimal(ddmx.CGSL ?? 0) * Convert.ToDecimal(ddmx.XSDJ ?? 0);
+                    zhe_all = zhe_all + (Convert.ToDecimal(1 - ddmx.Zhekoulv ?? 1)) / Convert.ToDecimal(ddmx.Zhekoulv) * Convert.ToDecimal(ddmx.CGSL ?? 0) * Convert.ToDecimal(ddmx.XSDJ ?? 0);
+                    //zong_part = zong_part + Convert.ToDecimal(ddmx.PFSL ?? 0) * Convert.ToDecimal(ddmx.XSDJ ?? 0);
+                    //zhe_part = zhe_part + (Convert.ToDecimal(1 - ddmx.Zhekoulv ?? 1)) / Convert.ToDecimal(ddmx.Zhekoulv) * Convert.ToDecimal(ddmx.PFSL ?? 0) * Convert.ToDecimal(ddmx.XSDJ ?? 0);
+
+                }
+                ViewBag.zhe_all = Math.Round(zhe_all, 2);
+                ViewBag.zong_all = Math.Round(zong_all, 2);
+                //ViewBag.zhe_part = Math.Round(zhe_part, 2);
+                //ViewBag.zong_part = Math.Round(zong_part + zhe_part, 2);
+            }
+            else
+            {
+                ViewBag.zhe_all = _dd.ZhekouJE; ;
+                ViewBag.zong_all = _dd.Zongjine;
+            }
             ViewBag.ord_dingdanmx = _ddmx;
             return View();
         }
@@ -2014,6 +2442,7 @@ namespace GROBS.Controllers
                 ViewBag.CPXDM = _cpx.ID;
             }
             ViewBag.ddid = id;
+            ViewBag.Bianhao = _dd.Bianhao;
             ViewBag.customer = _dd.KHID;
             ViewBag.custcode = _dd.KehuDM;
             ViewBag.cglx = _dd.CGLX;
@@ -2025,6 +2454,8 @@ namespace GROBS.Controllers
             ViewBag.lxr = _dd.Lianxiren;
             ViewBag.lxdh = _dd.LianxiDH;
             ViewBag.shdz = _dd.SonghuoDZ;
+            ViewBag.Col2 = _dd.Col2;
+            ViewBag.Col3 = _dd.Col3;
             if (_dd.FKPZ == null)
                 ViewBag.fkpz = "";
             else
@@ -2035,6 +2466,10 @@ namespace GROBS.Controllers
         }
         public ActionResult UploadBankTicket(int id)
         {
+            decimal zong_all = 0;
+            decimal zhe_all = 0;
+            decimal zong_part = 0;
+            decimal zhe_part = 0;
             int _custid = (int)Session["customer_id"];
             var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == id && p.KHID == _custid && p.IsDelete == false);
             if (_dd == null)
@@ -2045,6 +2480,9 @@ namespace GROBS.Controllers
             else
                 ViewBag.cpx = _cpx.Mingcheng;
             ViewBag.ddbh = _dd.Bianhao;
+            ViewBag.shdz = _dd.SonghuoDZ;
+            ViewBag.lxr = _dd.Lianxiren;
+            ViewBag.lxdh = _dd.LianxiDH;
             ViewBag.cglx = _dd.CGLX;
             ViewBag.sl = _dd.ZongshuCG;
             ViewBag.je = _dd.Zongjine;
@@ -2052,10 +2490,29 @@ namespace GROBS.Controllers
             ViewBag.bz = _dd.Beizhu;
             ViewBag.zk = _dd.ZhekouJE;
             ViewBag.ddid = _dd.ID;
+            ViewBag.Col2 = _dd.Col2;
+            ViewBag.Col3 = _dd.Col3;
             if (_dd.FKPZ == null)
                 ViewBag.upfile = "";
             else
                 ViewBag.upfile = _dd.FKPZ;
+            var _ddmx = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == _dd.ID && p.IsDelete == false, true, s => s.SPBM).ToList();
+            foreach (ord_dingdanmx ddmx in _ddmx)
+            {
+                //zong_all = zong_all + Convert.ToDecimal(ddmx.CGSL ?? 0) * Convert.ToDecimal(ddmx.XSDJ ?? 0);
+                //zhe_all = zhe_all + (Convert.ToDecimal(1 - ddmx.Zhekoulv ?? 1)) / Convert.ToDecimal(ddmx.Zhekoulv) * Convert.ToDecimal(ddmx.CGSL ?? 0) * Convert.ToDecimal(ddmx.XSDJ ?? 0);
+                zong_part = zong_part + Convert.ToDecimal(ddmx.PFSL ?? 0) * (ddmx.XSDJ ?? 0);
+                //zhe_part = zhe_part + (Convert.ToDecimal(1 - ddmx.Zhekoulv ?? 1)) / Convert.ToDecimal(ddmx.Zhekoulv) * Convert.ToDecimal(ddmx.PFSL ?? 0) * Convert.ToDecimal(ddmx.XSDJ ?? 0);
+                zhe_part = zhe_part + (decimal)(ddmx.XSBJ - ddmx.XSDJ) * Convert.ToDecimal(ddmx.PFSL ?? 0);
+
+            }
+            //ViewBag.zhe_all = Math.Round(zhe_all, 2);
+            //ViewBag.zong_all = Math.Round(zong_all, 2) ;
+            ViewBag.zhe_all = _dd.ZhekouJE;
+            ViewBag.zong_all = _dd.Zongjine;
+            ViewBag.zhe_part = Math.Round(zhe_part, 2);
+            ViewBag.zong_part = Math.Round(zong_part, 2);
+            ViewBag.ord_dingdanmx = _ddmx;
             return View();
         }
         public JsonResult TicketUpload()
@@ -2063,14 +2520,90 @@ namespace GROBS.Controllers
             int _custid = (int)Session["customer_id"];
             var _ddid = Request["did"] ?? "";
             var _ddpath = Request["dfl"] ?? "";
+            var payway = Request["payway"] ?? "";
+            var zje = Request["zje"] ?? "";
+            var zk = Request["zk"] ?? "";
+            var sl = Request["sl"] ?? "";
+            var str = Request["str"] ?? "";
 
             if (string.IsNullOrEmpty(_ddid) || string.IsNullOrEmpty(_ddpath))
                 return Json(-1);
             var _dd = ob_ord_dingdanservice.GetEntityById(p => p.ID == int.Parse(_ddid) && p.KHID == _custid && p.IsDelete == false);
             if (_dd == null)
                 return Json(-2);
+            //更新折扣
+            var zkje = decimal.Parse(zk);
+            if (payway == "0" && _dd.ZhekouJE != 0)
+            {
+                var _flxf = ServiceFactory.ord_fanlixfservice.GetEntityById(ord_fanlixf => ord_fanlixf.DDID == _dd.ID && ord_fanlixf.IsDelete == false);
+                if (_flxf != null)
+                {
+                    decimal? dif = _flxf.XFJE - zkje;
+                    var _fl = ServiceFactory.ord_fanliservice.GetEntityById(ord_fanlixf => ord_fanlixf.KHID == _dd.KHID && ord_fanlixf.IsDelete == false);
+                    if (_fl != null)
+                    {
+                        _fl.Zonge = _fl.Zonge + dif;
+                        _fl.Keyong = _fl.Keyong + dif;
+                        ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                    }
+                    else
+                    {
+                    }
+                    _flxf.KHID = _dd.KHID;
+                    _flxf.XFJE = zkje;
+                    _flxf.MakeMan = _custid;
+                    ServiceFactory.ord_fanlixfservice.UpdateEntity(_flxf);
+                }
+                else
+                {
+                    ord_fanlixf _xf = new ord_fanlixf();
+                    _xf.DDID = _dd.ID;
+                    _xf.KHID = _dd.KHID;
+                    _xf.XFJE = zkje;
+                    _xf.MakeMan = _custid;
+                    _xf = ServiceFactory.ord_fanlixfservice.AddEntity(_xf);
+                }
+            }
             _dd.FKPZ = _ddpath;
             _dd.Zhuangtai = 20;
+            _dd.TicketUpTime = DateTime.Now;
+            _dd.ZongshuCG = float.Parse(sl);
+            _dd.Zongjine = decimal.Parse(zje);
+            _dd.ZhekouJE = decimal.Parse(zk);
+            if (payway == "1")
+            {
+                if (str != "")
+                {
+                    string[] _splist = str.Split(';');
+                    foreach (var sp in _splist)
+                    {
+                        if (sp.Length > 1)
+                        {
+                            string[] _sp = sp.Split(',');
+                            ord_qianhuo ob_ord_qianhuo = new ord_qianhuo();
+                            ob_ord_qianhuo.MXID = int.Parse(_sp[0]);
+                            ob_ord_qianhuo.QHSL = float.Parse(_sp[1]);
+                            ob_ord_qianhuo.DJRQ = DateTime.Now;
+                            ob_ord_qianhuo.MakeDate = DateTime.Now;
+                            ob_ord_qianhuo.MakeMan = _custid;
+                            ob_ord_qianhuo = ob_ord_qianhuoservice.AddEntity(ob_ord_qianhuo);
+                        }
+                    }
+                }
+            }
+            else if (payway == "0")
+            {
+                var _ddmx = ServiceFactory.ord_dingdanmxservice.LoadSortEntities(p => p.DDID == _dd.ID && p.IsDelete == false, true, s => s.SPBM).ToList();
+                foreach (ord_dingdanmx ddmx in _ddmx)
+                {
+                    ddmx.CGSL = ddmx.PFSL;
+                    ddmx.Jine = Convert.ToDecimal(ddmx.PFSL) * ddmx.XSDJ;
+                    ddmx.Zhekou = Convert.ToDecimal(ddmx.PFSL) * (ddmx.XSBJ - ddmx.XSDJ);
+                    ob_ord_dingdanmxservice.UpdateEntity(ddmx);
+                }
+            }
+            else
+            { return Json(-1); }
             var _b = ob_ord_dingdanservice.UpdateEntity(_dd);
             if (!_b)
                 return Json(-3);
@@ -2105,6 +2638,46 @@ namespace GROBS.Controllers
                     var id = int.Parse(sD);
                     var ob_ord_dingdan = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == id && ord_dingdan.IsDelete == false);
                     ob_ord_dingdan.Zhuangtai = 0;
+                    ob_ord_dingdan.JieshuSF = true;
+                    ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
+
+                    if (ob_ord_dingdan.ZhekouJE != null || ob_ord_dingdan.ZhekouJE != 0)
+                    {
+                        //删除返利消费
+                        var _flxf = ServiceFactory.ord_fanlixfservice.GetEntityById(p => p.DDID == ob_ord_dingdan.ID && p.IsDelete == false);
+                        if (_flxf != null)
+                        {
+                            _flxf.IsDelete = true;
+                            ServiceFactory.ord_fanlixfservice.UpdateEntity(_flxf);
+                        }
+                        //更新返利信息
+                        //var _fl = ServiceFactory.ord_fanliservice.GetEntityById(p => p.KHID == ob_ord_dingdan.KHID && p.IsDelete == false);
+                        //if (_fl != null)
+                        //{
+                        //    _fl.Zonge = _fl.Zonge + ob_ord_dingdan.ZhekouJE;
+                        //    _fl.Keyong = _fl.Keyong + ob_ord_dingdan.ZhekouJE;
+                        //    ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                        //}
+                    }
+                }
+
+            }
+            return Json(1);
+        }
+        public JsonResult CancelOrder()
+        {
+            var _sdel = Request["sdel"] ?? "";
+            int _userid = (int)Session["user_id"];
+            if (string.IsNullOrEmpty(_sdel))
+                return Json(-1);
+            foreach (string sD in _sdel.Split(','))
+            {
+                if (sD.Length > 0)
+                {
+                    var id = int.Parse(sD);
+                    var ob_ord_dingdan = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == id && ord_dingdan.IsDelete == false);
+                    ob_ord_dingdan.Zhuangtai = -1;
+                    ob_ord_dingdan.OPID = _userid;
                     ob_ord_dingdan.JieshuSF = true;
                     ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
 
@@ -2294,10 +2867,28 @@ namespace GROBS.Controllers
             var tempData = ob_ord_dingdanservice.LoadCustomerActiveOrders(_custid, where.Compile()).OrderByDescending(p => p.Bianhao);
             ViewBag.ord_dingdan = tempData;
             List<string> fh = new List<string>();
-            List<string> df = new List<string>();
+            List<string> qh = new List<string>();
             foreach (var ob_ord_dingdan in tempData)
             {
                 float con = 0;
+                //欠货数量
+                try
+                {
+                    var temp = ServiceFactory.ord_dingdanservice.LoadCustomerActiveOweByID(ob_ord_dingdan.ID).ToList<ord_ordermain_vsss>();
+                    if (temp == null || temp[0].QHSL == 0)
+                    {
+                        qh.Add("0");
+                    }
+                    else
+                    {
+                        qh.Add(temp[0].QHSL.ToString());
+                    }
+                }
+                catch
+                {
+                    qh.Add("0");
+                }
+                //发货数量
                 if (ob_ord_dingdan.Zhuangtai < 30)
                 {
                     fh.Add("");
@@ -2338,6 +2929,7 @@ namespace GROBS.Controllers
             dt.Columns.Add("ZongshuCG", typeof(string));
 
             dt.Columns.Add("YFQty", typeof(string));
+            dt.Columns.Add("DFQty", typeof(string));
             dt.Columns.Add("QHQty", typeof(string));
 
             dt.Columns.Add("Zongjine", typeof(string));
@@ -2356,7 +2948,8 @@ namespace GROBS.Controllers
                 row["XiadanRQ"] = item.XiadanRQ;
                 row["ZongshuCG"] = item.ZongshuCG;
                 row["YFQty"] = fh[i];
-                row["QHQty"] = fh[i] == "" ? "" : (item.ZongshuCG - float.Parse(fh[i])).ToString();
+                row["DFQty"] = fh[i] == "" ? "" : (item.ZongshuCG - float.Parse(fh[i]) - float.Parse(qh[i])).ToString();
+                row["QHQty"] = fh[i] == "" ? "" : qh[i];
                 row["Zongjine"] = item.Zongjine;
                 row["ZhekouJE"] = item.ZhekouJE;
                 row["ShiFuJine"] = item.Zongjine - (item.ZhekouJE == null ? 0 : item.ZhekouJE);
@@ -2561,8 +3154,11 @@ namespace GROBS.Controllers
 
         public JsonResult check()
         {
+            int _userid = (int)Session["user_id"];
             var _ddid = Request["ddid"] ?? "";
             var _opid = Request["opid"] ?? "";
+            var _zongjine = Request["zongjine"] ?? "";
+            var _zhekouJE = Request["zhekouje"] ?? "";
 
             if (string.IsNullOrEmpty(_opid))
                 return Json(-1);
@@ -2571,8 +3167,43 @@ namespace GROBS.Controllers
                 var id = int.Parse(_ddid);
                 var opid = int.Parse(_opid);
                 var ob_ord_dingdan = ob_ord_dingdanservice.GetEntityById(ord_dingdan => ord_dingdan.ID == id && ord_dingdan.IsDelete == false);
+                //更新返利
+                var zkje = decimal.Parse(_zhekouJE);
+                if (!(zkje == 0 && ob_ord_dingdan.ZhekouJE == 0))
+                {
+                    var _flxf = ServiceFactory.ord_fanlixfservice.GetEntityById(ord_fanlixf => ord_fanlixf.DDID == id && ord_fanlixf.IsDelete == false);
+                    if (_flxf != null)
+                    {
+                        decimal? dif = _flxf.XFJE - zkje;
+                        var _fl = ServiceFactory.ord_fanliservice.GetEntityById(ord_fanlixf => ord_fanlixf.KHID == ob_ord_dingdan.KHID && ord_fanlixf.IsDelete == false);
+                        if (_fl != null)
+                        {
+                            _fl.Zonge = _fl.Zonge + dif;
+                            _fl.Keyong = _fl.Keyong + dif;
+                            ServiceFactory.ord_fanliservice.UpdateEntity(_fl);
+                        }
+                        else
+                        {
+                        }
+                        _flxf.KHID = ob_ord_dingdan.KHID;
+                        _flxf.XFJE = zkje;
+                        _flxf.MakeMan = _userid;
+                        ServiceFactory.ord_fanlixfservice.UpdateEntity(_flxf);
+                    }
+                    else
+                    {
+                        ord_fanlixf _xf = new ord_fanlixf();
+                        _xf.DDID = id;
+                        _xf.KHID = ob_ord_dingdan.KHID;
+                        _xf.XFJE = zkje;
+                        _xf.MakeMan = _userid;
+                        _xf = ServiceFactory.ord_fanlixfservice.AddEntity(_xf);
+                    }
+                }
                 ob_ord_dingdan.Zhuangtai = 16;
                 ob_ord_dingdan.OPID = opid;
+                ob_ord_dingdan.Zongjine = decimal.Parse(_zongjine);
+                ob_ord_dingdan.ZhekouJE = decimal.Parse(_zhekouJE);
                 ob_ord_dingdan.MakeDate = DateTime.Now;
                 ob_ord_dingdanservice.UpdateEntity(ob_ord_dingdan);
                 return Json(1);
@@ -2582,13 +3213,38 @@ namespace GROBS.Controllers
                 return Json(-1);
             }
         }
+        public JsonResult deliverycount()
+        {
+            string _KHID = Request["khid"] ?? "";
+            string _CPXID = Request["cpxid"] ?? "";
+            int KHID = int.Parse(_KHID);
+            int CPXID = int.Parse(_CPXID);
+            int count = 0;
+            try
+            {
+                var temp = ServiceFactory.ord_dingdanservice.getdeliverycount(KHID, CPXID).ToList<ord_deliverycount_v>(); ;
+                if (temp == null || temp[0].Col3 == null)
+                {
+                    count = 0;
+                }
+                else
+                {
+                    count = int.Parse(temp[0].Col3);
+                }
+                return Json(count);
+            }
+            catch 
+            {
+                return Json(-1);
+            }
+        }
     }
     public class SPList
     {
         public int spid { get; set; }
         public float spsl { get; set; }
-        public float spjg { get; set; }
-        public float spje { get; set; }
+        public decimal spjg { get; set; }
+        public decimal spje { get; set; }
     }
 }
 

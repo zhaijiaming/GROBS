@@ -15,6 +15,23 @@
                 location.href = url_go;
             }
         });
+        $(".ddbh").hide();
+        $(".spid").hide();
+        /*
+       采购类型 == 2
+       查看套包商品
+      */
+        $("#containerTbsp").draggable({ handle: ".panel-heading" }, { containment: [-1000, 50, 1300, 600] });
+        $("#mydatatable tbody").on("click", "tr", function (e) {
+            if (e.target.tagName == "BUTTON") {
+                var _tbid = $(this).find("#tbid").val();
+                $("#containerTbsp").show();
+                getTaobaoDetail(_tbid);
+            }
+        });
+        $("#container_close_tbsp").on("click", function () {
+            $("#containerTbsp").hide();
+        });
     });
     function AddInfo() {
         location.href = "/ord_qianhuo/Add";
@@ -36,8 +53,125 @@
         var url_go = "/ord_qianhuo/Delete/?del=" + sDel;
         location.href = url_go;
     }
+    function Ddmake() {
+        var kedh = "";
+        var sid = "";
+        var sl = 0;
+        var je = 0;
+        var ddbh = "";
+        $("#mydatatable tr input[type=checkbox]").each(function () {
+            if (this.checked)
+            {
+                sid = sid + ", " + $(this).val();
+                sl = sl + Number($(this).parent().parent().siblings().eq(8).html());
+                je = je + Number(strsub($(this).parent().parent().siblings().eq(11).html()));
+                ddbh = $(this).parent().parent().siblings().eq(13).html();
+                if (kedh == "")
+                {
+                    kedh = $(this).parent().parent().siblings().eq(5).html();
+                    return true;
+                }
+                if (kedh != $(this).parent().parent().siblings().eq(5).html())
+                {
+                    kedh = "0";
+                    return;
+                }
+            }
+        });
+        je = je.toFixed(2);
+        var bz = "订单" + ddbh + "欠货生成";
+        if (kedh == "0")
+        {
+            alert("只能从相同客户单号中生成订单");
+            return;
+        }
+        if (sid.length < 2)
+        {
+            alert("尚未选中欠货单");
+            return;
+        }
+        var url_go = "/ord_qianhuo/ddmake";
+        $.ajax({
+            async: true,
+            beforeSend: function () {
+                ShowWait();
+            },
+            complete: function () {
+                HiddenWait();
+            },
+            type: "POST",
+            url: url_go,
+            data: {
+                kedh: kedh,
+                sid: sid,
+                sl: sl,
+                je: je,
+                ddbh: ddbh,
+                bz: bz
+            },
+            success: function (data) {
+                if (data == 1) {
+                    alert("订单生成成功");
+                    location.reload();
+                }
+                else if (data == -2)
+                {
+                    alert("找不到原始订单，请与管理员联系！");
+                }
+                else if (data == -3) {
+                    alert("订单明细添加失败，请与管理员联系！");
+                }
+                else {
+                    alert("订单生成失败，请与管理员联系！");
+                }
+            }
+        });
+    }
+
+    function strsub(str)
+    {
+        str = str.substring(1, str.length);
+        var reg = /,/g;
+        str = str.replace(reg, '');
+        return str;
+    }
+    //套包商品明细
+    function getTaobaoDetail(tbId) {
+        var str = "";
+        var tbId = tbId;
+        $.post(
+            "/base_taobaosp/getdetail",
+                {
+                    tbId: tbId
+                },
+               function (data) {
+                   if (data.length > 0) {
+                       var serialNum = 0;
+                       for (var i in data) {
+                           serialNum++;
+                           str += [
+                               '<tr>',
+                               '<td><input type="hidden" value="' + data[i].ID + '">' + serialNum + '</td>',
+                               '<td><span class="daima_tbsp">' + data[i].Daima + '</span></td>',
+                               '<td><span class="mingcheng_tbsp">' + data[i].Mingcheng + '</span></td>',
+                               '<td>' + data[i].Guige + '</td>',
+                               '<td>' + data[i].Danwei + '</td>',
+                               '<td><span class="tbsp_jiaxs">' + data[i].JiaXS + '</span></td>',
+                               //'<td><span class="tbsp_jiacg">' + data[i].JiaCG + '</span></td>',
+                               '<td><span class="tbsp_shuliang">' + data[i].Shuliang + '</span></td>',
+                               '</tr>'
+                           ].join("");
+                       }
+                       $("#tbody_tbsp").html(str);
+                   } else {
+                       $("#tbody_tbsp").empty();
+                   }
+               }
+            );
+    }
+
 </script>
-@{
+@*@{
     List<SearchConditionModel> scms = new List<SearchConditionModel>();
     if (_searchcondition == null || _searchcondition == "")
     {
@@ -65,6 +199,141 @@
             scms.Add(scm);
         }
     }
+}*@
+@{
+    List<SearchConditionModel> scms = new List<SearchConditionModel>();
+    if (_searchcondition == null || _searchcondition == "")
+    {
+        SearchConditionModel scm = new SearchConditionModel();
+        scm.ItemCode = "Bianhao";
+        scm.ItemTitle = "编号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Zhuangtai";
+        scm.ItemTitle = "订单状态";
+        scm.ItemType = "订单状态.订单状态";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "Mingcheng";
+        scm.ItemTitle = "产品线";
+        scm.ItemType = "产品线.产品线（历史）";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "CGLX";
+        scm.ItemTitle = "订单类型";
+        scm.ItemType = "订单类型.订单类型";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "KehuDH";
+        scm.ItemTitle = "客户单号";
+        scm.ItemType = "System.String";
+        scms.Add(scm);
+
+        scm = new SearchConditionModel();
+        scm.ItemCode = "XiadanRQ";
+        scm.ItemTitle = "下单日期";
+        scm.ItemType = "System.DateTime";
+        scms.Add(scm);
+    }
+    else
+    {
+        string[] scs = _searchcondition.Split(';');
+        if (scs.Length > 0)
+        {
+            SearchConditionModel scm = new SearchConditionModel();
+            scm.ItemCode = "Bianhao";
+            scm.ItemTitle = "编号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[0].Split(',')[1];
+                scm.ItemOpValue = scs[0].Split(',')[2];
+                scm.ItemJion = scs[0].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Zhuangtai";
+            scm.ItemTitle = "订单状态";
+            scm.ItemType = "订单状态.订单状态";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[1].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[1].Split(',')[2];
+                scm.ItemJion = scs[1].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "Mingcheng";
+            scm.ItemTitle = "产品线";
+            scm.ItemType = "产品线.产品线（历史）";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[2].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[2].Split(',')[2];
+                scm.ItemJion = scs[2].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "CGLX";
+            scm.ItemTitle = "订单类型";
+            scm.ItemType = "订单类型.订单类型";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[3].Split(',')[1];
+                if (scm.ItemValue.Length == 0)
+                {
+                    scm.ItemValue = "0";
+                }
+                scm.ItemOpValue = scs[3].Split(',')[2];
+                scm.ItemJion = scs[3].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "KehuDH";
+            scm.ItemTitle = "客户单号";
+            scm.ItemType = "System.String";
+            if (scs.Length > 1)
+            {
+                scm.ItemValue = scs[4].Split(',')[1];
+                scm.ItemOpValue = scs[4].Split(',')[2];
+                scm.ItemJion = scs[4].Split(',')[3];
+            }
+            scms.Add(scm);
+
+            scm = new SearchConditionModel();
+            scm.ItemCode = "XiadanRQ";
+            scm.ItemTitle = "下单日期";
+            scm.ItemType = "System.DateTime";
+            if (scs.Length > 5)
+            {
+                string[] str = scs[5].Split(',');
+                if (str.Length > 1)
+                {
+                    scm.ItemValue = str[1];
+                    scm.ItemOpValue = str[2];
+                    scm.ItemJion = str[3];
+                }
+            }
+            scms.Add(scm);
+        }
+    }
 }
 
 <div class="breadcrumbs" id="breadcrumbs">
@@ -88,6 +357,7 @@
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_updateInfo" onclick="EditInfo()"><i class="icon-edit"></i>编辑</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_deleteInfo" onclick="DelInfo()"><i class="icon-remove"></i>删除</button>
             <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_refreshInfo" onclick="javascript: location.reload()"><i class="icon-refresh"></i>刷新</button>
+            <button type="button" class="btn btn-primary btn-xs btn-app radius-4" id="bt_ddmake" onclick="Ddmake()"><i class="icon-arrow-right"></i>生成订单</button>
         </p>
     </div>
     <div class="row">
@@ -96,13 +366,22 @@
             <thead>
                 <tr>
                     <td></td>
-                    <td>明细序号</td>
+                    <td>客户</td>
+                    <td>订单编号</td>
+                    <td>存货编码</td>
+                    <td>产品线</td>
+                    <td>采购类型</td>
+                    <td>客户单号</td>
+                    <td>下单日期</td>
+                    <td>采购数量</td>
                     <td>欠货数量</td>
-                    <td>登记日期</td>
-                    <td>是否采购</td>
-                    <td>采购编号</td>
-                    <td>制单日期</td>
-                    <td>制单人</td>
+                    <td>可用数量</td>
+                    <td>销售单价</td>
+                    @*<td>折扣金额</td>*@
+                    <td>总金额</td>
+                    <td>状态</td>
+                    <td class="ddbh">编号</td>
+                    <td class="spid">id</td>
                 </tr>
             </thead>
             <tbody>
@@ -112,13 +391,30 @@
                         <td>
                             <label><input type="checkbox" value="@item.ID"></label>
                         </td>
-                        <td>@item.MXID</td>
+                        <td>@item.KehuMC</td>
+                        <td><a href="/ord_dingdan/Edit/@item.DDID">@item.Bianhao</a></td>
+                        @*<td>@item.SPBM</td>*@
+                        @if ((int)item.CGLX == 2)
+                        {
+                            <td class="link_tb"><span class="spbm"><button class="btn btn-link" style="padding:0px!important;">@item.SPBM</button></span></td>
+                        }
+                        else
+                        {
+                            <td>@item.SPBM</td>
+                        }
+                        <td>@item.Mingcheng</td>
+                        <td>@Html.GetCommonValue_ID("订单类型", (int)item.CGLX)</td>
+                        <td>@item.KehuDH</td>
+                        <td>@string.Format("{0:yyyy-MM-dd}", item.XiadanRQ == null ? "" : item.XiadanRQ)</td>
+                        <td>@item.CGSL</td>
                         <td>@item.QHSL</td>
-                        <td>@item.DJRQ</td>
-                        <td>@item.CaigouSF</td>
-                        <td>@item.CaigouBH</td>
-                        <td>@item.MakeDate</td>
-                        <td>@item.MakeMan</td>
+                        <td>@item.KYSL</td>
+                        <td>@string.Format("{0:C}", item.XSDJ)</td>
+                        @*<td>@string.Format("{0:C}", item.Zhekou)</td>*@
+                        <td>@string.Format("{0:C}", item.Jine == null ? 0 : item.Jine)</td>
+                        <td class="zhuangtai">@Html.GetCommonValue_ID("订单状态", (int)item.Zhuangtai)</td>
+                        <td class="ddbh">@item.Bianhao</td>
+                        <td class="spid"><i class='icon-minus-sign bigger-150 red'></i><input type='hidden' id='tbid' value='@item.SPID' /></td>
                     </tr>
                 }
             </tbody>
@@ -126,5 +422,43 @@
     </div>
     <div class="pager">
         @Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page }))
+    </div>
+</div>
+@*套包明细*@
+<div id="containerTbsp" class="panel panel-primary" style="display:none;position:fixed;top:100px;left:250px;width:1000px;z-index:99;">
+    <div class="panel-heading">
+        <h3 class="panel-title"><b>套包信息</b><button id="container_close_tbsp" class="pull-right">X</button></h3>
+    </div>
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            @*列表*@
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div style="margin-top:10px;max-height:310px;min-height:100px;overflow:auto;">
+                                        <table class="table table-hover" id="table_data">
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>商品代码</th>
+                                                <th>商品名称</th>
+                                                <th>规格</th>
+                                                <th>基本单位</th>
+                                                <th>销售价</th>
+                                                @*<th>采购价</th>*@
+                                                <th>数量</th>
+                                            </tr>
+                                            <tbody id="tbody_tbsp"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
